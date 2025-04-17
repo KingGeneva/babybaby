@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Book, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Link } from 'react-router-dom';
 import { Ebook } from './types';
 import { ebooksData } from './ebooksData';
 import { downloadEbook } from './ebookService';
@@ -100,9 +100,12 @@ const EbooksSection: React.FC = () => {
           <Button 
             variant="link" 
             className="text-babybaby-cosmic"
+            asChild
           >
-            Voir tous nos e-books
-            <ChevronRight className="ml-2 h-4 w-4" />
+            <Link to="/ebooks">
+              Voir tous nos e-books
+              <ChevronRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
         </motion.div>
       </div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
@@ -13,6 +12,7 @@ const navLinks = [
   { title: 'Outils', href: '/tools' },
   { title: 'Communauté', href: '/community' },
   { title: 'Articles', href: '/articles' },
+  { title: 'E-books', href: '/ebooks' },
 ];
 
 const NavBar: React.FC = () => {
@@ -21,7 +21,6 @@ const NavBar: React.FC = () => {
   const [activeLink, setActiveLink] = useState('/');
   const isMobile = useIsMobile();
 
-  // Détecte le scroll pour ajouter des effets
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -34,7 +33,6 @@ const NavBar: React.FC = () => {
     };
   }, []);
 
-  // Détermine la page active
   useEffect(() => {
     setActiveLink(window.location.pathname);
   }, []);
@@ -77,7 +75,6 @@ const NavBar: React.FC = () => {
             <Logo />
           </div>
           
-          {/* Navigation desktop */}
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
@@ -98,7 +95,6 @@ const NavBar: React.FC = () => {
             ))}
           </nav>
 
-          {/* Bouton menu hamburger */}
           <button 
             className="md:hidden text-gray-800 hover:text-babybaby-cosmic transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -119,7 +115,6 @@ const NavBar: React.FC = () => {
         </div>
       </div>
 
-      {/* Menu mobile simplifié et optimisé */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
