@@ -1,10 +1,10 @@
-
 import React, { useEffect, Suspense, lazy } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import NavBar from '@/components/NavBar';
 import HeroSection from '@/components/HeroSection';
 import { useIsMobile } from '@/hooks/use-mobile';
+import ArticleSection from '@/components/articles/ArticleSection';
 
 // Utilisation du lazy loading avec prefetch prioritaire
 const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
@@ -78,7 +78,12 @@ const Index = () => {
           </div>
         </Suspense>
         
-        {/* Section des partenaires (nouvelle section) */}
+        {/* Section des articles */}
+        <Suspense fallback={<SectionLoader />}>
+          <ArticleSection />
+        </Suspense>
+
+        {/* Section des partenaires */}
         <Suspense fallback={<SectionLoader />}>
           <PartnersCarousel />
         </Suspense>
