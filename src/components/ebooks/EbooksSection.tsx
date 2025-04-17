@@ -1,105 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Book, Download, ChevronRight, ChevronLeft, AlertCircle } from 'lucide-react';
+import { Book, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useIsMobile } from '@/hooks/use-mobile';
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from '@/components/ui/sonner';
-
-interface Ebook {
-  id: number;
-  title: string;
-  description: string;
-  coverImage: string;
-  downloadUrl: string;
-  fileType: string;
-  fileSize: string;
-}
-
-// Local data for ebooks
-const ebooksData: Ebook[] = [
-  {
-    id: 1,
-    title: "Guide complet de l'alimentation de 0 à 3 ans",
-    description: "Tout ce qu'il faut savoir pour bien nourrir votre enfant durant ses premières années.",
-    coverImage: "/placeholder.svg",
-    downloadUrl: "alimentation-0-3-ans.pdf",
-    fileType: "PDF",
-    fileSize: "3.2 MB"
-  },
-  {
-    id: 2,
-    title: "Les étapes essentielles du développement",
-    description: "Comprendre et accompagner les étapes clés du développement de votre bébé.",
-    coverImage: "/placeholder.svg",
-    downloadUrl: "etapes-developpement.pdf",
-    fileType: "PDF",
-    fileSize: "2.7 MB"
-  },
-  {
-    id: 3,
-    title: "Sommeil de bébé : astuces et conseils",
-    description: "Des méthodes douces pour aider votre bébé à mieux dormir.",
-    coverImage: "/placeholder.svg",
-    downloadUrl: "sommeil-bebe-astuces.pdf",
-    fileType: "PDF",
-    fileSize: "1.8 MB"
-  },
-  {
-    id: 4,
-    title: "Activités d'éveil pour les tout-petits",
-    description: "Des idées ludiques pour stimuler le développement et l'éveil de votre bébé.",
-    coverImage: "/placeholder.svg",
-    downloadUrl: "activites-eveil.pdf",
-    fileType: "PDF",
-    fileSize: "2.5 MB"
-  },
-  {
-    id: 5,
-    title: "La diversification alimentaire pas à pas",
-    description: "Un guide complet pour introduire les aliments solides en toute sécurité.",
-    coverImage: "/placeholder.svg",
-    downloadUrl: "diversification-alimentaire.pdf",
-    fileType: "PDF",
-    fileSize: "3.0 MB"
-  },
-  {
-    id: 6,
-    title: "10 astuces pour voyager avec bébé",
-    description: "Comment préparer et profiter sereinement de vos voyages en famille.",
-    coverImage: "/placeholder.svg",
-    downloadUrl: "voyager-avec-bebe.pdf",
-    fileType: "PDF",
-    fileSize: "1.5 MB"
-  },
-  {
-    id: 7,
-    title: "Comment bien accompagner le sommeil de bébé",
-    description: "Un guide complet pour comprendre et améliorer le sommeil de votre enfant.",
-    coverImage: "/placeholder.svg",
-    downloadUrl: "accompagner-sommeil-bebe.pdf",
-    fileType: "PDF",
-    fileSize: "2.9 MB"
-  },
-  {
-    id: 8,
-    title: "Les 6 premiers mois - Guide complet BabyBaby",
-    description: "Guide essentiel pour accompagner votre bébé durant ses 6 premiers mois.",
-    coverImage: "/placeholder.svg",
-    downloadUrl: "Les_6_premiers_mois_Guide_complet_babybaby.pdf",
-    fileType: "PDF",
-    fileSize: "4.5 MB"
-  }
-];
+import { Ebook } from './types';
+import { ebooksData } from './ebooksData';
+import { downloadEbook } from './ebookService';
+import EbookCard from './EbookCard';
+import EbookCarouselControls from './EbookCarouselControls';
 
 const EbooksSection: React.FC = () => {
   const isMobile = useIsMobile();
@@ -125,48 +34,17 @@ const EbooksSection: React.FC = () => {
         : prevIndex - itemsPerPage
     );
   };
+
+  const goToPage = (pageIndex: number) => {
+    setCurrentIndex(pageIndex * itemsPerPage);
+  };
   
   const visibleEbooks = ebooks.slice(currentIndex, currentIndex + itemsPerPage);
   
-  const downloadEbook = async (ebook: Ebook) => {
-    try {
-      setIsLoading(true);
-      
-      // Generate a signed URL for the PDF file
-      const { data, error } = await supabase
-        .storage
-        .from('ebooks')
-        .createSignedUrl(ebook.downloadUrl, 60); // 60 seconds expiration
-      
-      if (error) {
-        console.error('Error generating download URL:', error);
-        toast({
-          title: "Erreur de téléchargement",
-          description: "Impossible de télécharger l'ebook pour le moment. Veuillez réessayer plus tard.",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      // Open the download link in a new tab
-      if (data?.signedUrl) {
-        window.open(data.signedUrl, '_blank');
-        
-        toast({
-          title: "Téléchargement démarré",
-          description: `"${ebook.title}" est en cours de téléchargement.`
-        });
-      }
-    } catch (err) {
-      console.error('Download error:', err);
-      toast({
-        title: "Erreur de téléchargement",
-        description: "Une erreur s'est produite. Veuillez réessayer plus tard.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleDownload = async (ebook: Ebook) => {
+    setIsLoading(true);
+    await downloadEbook(ebook);
+    setIsLoading(false);
   };
   
   return (
@@ -187,42 +65,13 @@ const EbooksSection: React.FC = () => {
         </motion.div>
 
         <div className="relative">
-          <div className="flex justify-between items-center mb-6">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              className="rounded-full border-babybaby-cosmic text-babybaby-cosmic"
-              onClick={prevSlide}
-            >
-              <ChevronLeft className="h-5 w-5" />
-              <span className="sr-only">Précédent</span>
-            </Button>
-            
-            <div className="flex gap-2 justify-center">
-              {Array.from({ length: totalPages }).map((_, idx) => (
-                <button
-                  key={idx}
-                  className={`h-2 rounded-full transition-all ${
-                    Math.floor(currentIndex / itemsPerPage) === idx 
-                      ? "w-6 bg-babybaby-cosmic" 
-                      : "w-2 bg-gray-300"
-                  }`}
-                  onClick={() => setCurrentIndex(idx * itemsPerPage)}
-                  aria-label={`Page ${idx + 1}`}
-                />
-              ))}
-            </div>
-            
-            <Button 
-              variant="outline" 
-              size="icon" 
-              className="rounded-full border-babybaby-cosmic text-babybaby-cosmic"
-              onClick={nextSlide}
-            >
-              <ChevronRight className="h-5 w-5" />
-              <span className="sr-only">Suivant</span>
-            </Button>
-          </div>
+          <EbookCarouselControls 
+            currentIndex={currentIndex}
+            totalPages={totalPages}
+            prevSlide={prevSlide}
+            nextSlide={nextSlide}
+            goToPage={goToPage}
+          />
 
           <motion.div
             className="grid grid-cols-1 md:grid-cols-3 gap-6"
@@ -231,46 +80,12 @@ const EbooksSection: React.FC = () => {
             transition={{ duration: 0.5 }}
           >
             {visibleEbooks.map((ebook) => (
-              <motion.div
-                key={ebook.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="h-full"
-              >
-                <Card className="h-full flex flex-col hover:shadow-lg transition-shadow duration-300">
-                  <CardHeader className="pb-4">
-                    <div className="aspect-[3/4] rounded-md overflow-hidden mb-4 group">
-                      <img 
-                        src={ebook.coverImage} 
-                        alt={ebook.title} 
-                        className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-300"
-                      />
-                    </div>
-                    <CardTitle className="text-lg font-semibold leading-tight">{ebook.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <CardDescription className="text-gray-600">
-                      {ebook.description}
-                    </CardDescription>
-                  </CardContent>
-                  <CardFooter className="flex flex-col space-y-3 pt-4">
-                    <div className="text-sm text-gray-500 w-full flex justify-between">
-                      <span>{ebook.fileType}</span>
-                      <span>{ebook.fileSize}</span>
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      className="w-full flex items-center justify-center gap-2 border-babybaby-cosmic text-babybaby-cosmic hover:bg-babybaby-cosmic hover:text-white"
-                      onClick={() => downloadEbook(ebook)}
-                      disabled={isLoading}
-                    >
-                      <Download className="h-4 w-4" />
-                      {isLoading ? 'Préparation...' : 'Télécharger'}
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
+              <EbookCard 
+                key={ebook.id} 
+                ebook={ebook} 
+                onDownload={handleDownload} 
+                isLoading={isLoading} 
+              />
             ))}
           </motion.div>
         </div>
