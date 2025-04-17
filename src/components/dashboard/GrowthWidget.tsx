@@ -36,7 +36,7 @@ const GrowthWidget: React.FC<GrowthWidgetProps> = ({
   // Make sure we have valid data to prevent rendering errors
   const validData = Array.isArray(data) && data.length > 0;
   
-  // Format data to ensure all values are numbers
+  // Format data to ensure all values are numbers and handle empty values
   const formattedData = validData ? 
     data.map(item => ({
       ...item,
@@ -54,48 +54,50 @@ const GrowthWidget: React.FC<GrowthWidgetProps> = ({
       <h3 className="text-lg font-bold mb-4">{title}</h3>
       <div className="h-48">
         {validData ? (
-          <ChartContainer 
-            config={{
-              [dataKey]: {
-                color: color
-              }
-            }}
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={formattedData}
-                margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(155,155,155,0.2)" />
-                <XAxis 
-                  dataKey="name" 
-                  tick={{ fill: '#333' }} 
-                  fontSize={10}
-                  tickMargin={8}
-                />
-                <YAxis 
-                  tick={{ fill: '#333' }} 
-                  fontSize={10}
-                  tickMargin={8}
-                  domain={['auto', 'auto']}
-                />
-                <ChartTooltip 
-                  content={({ active, payload }) => (
-                    <ChartTooltipContent active={active} payload={payload} />
-                  )}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey={dataKey} 
-                  stroke={color} 
-                  strokeWidth={3}
-                  dot={{ stroke: color, strokeWidth: 2, fill: 'white', r: 4 }}
-                  activeDot={{ r: 6, stroke: color, strokeWidth: 2, fill: 'white' }}
-                  isAnimationActive={true}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={formattedData}
+              margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(155,155,155,0.2)" />
+              <XAxis 
+                dataKey="name" 
+                tick={{ fill: '#333' }} 
+                fontSize={10}
+                tickMargin={8}
+              />
+              <YAxis 
+                tick={{ fill: '#333' }} 
+                fontSize={10}
+                tickMargin={8}
+                domain={['auto', 'auto']}
+              />
+              <Tooltip 
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="bg-white p-2 border border-gray-200 shadow-md rounded">
+                        <p className="text-gray-700">{`${label}`}</p>
+                        <p className="font-medium text-gray-900">
+                          {`${dataKey}: ${payload[0].value}`}
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey={dataKey} 
+                stroke={color} 
+                strokeWidth={3}
+                dot={{ stroke: color, strokeWidth: 2, fill: 'white', r: 4 }}
+                activeDot={{ r: 6, stroke: color, strokeWidth: 2, fill: 'white' }}
+                isAnimationActive={true}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         ) : (
           <div className="h-full flex items-center justify-center">
             <p className="text-muted-foreground">Aucune donnée disponible</p>

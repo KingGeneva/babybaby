@@ -27,6 +27,16 @@ const SectionLoader = () => (
   </div>
 );
 
+// Données de démonstration pour le tableau de bord sur la page d'accueil
+const demoGrowthData = [
+  { name: '1 mois', taille: 52, poids: 4.1 },
+  { name: '2 mois', taille: 56, poids: 5.2 },
+  { name: '3 mois', taille: 59, poids: 6.0 },
+  { name: '4 mois', taille: 62, poids: 6.7 },
+  { name: '5 mois', taille: 65, poids: 7.3 },
+  { name: '6 mois', taille: 67, poids: 7.8 },
+];
+
 const Index = () => {
   const controls = useAnimation();
   const [ref, inView] = useInView({
@@ -61,9 +71,11 @@ const Index = () => {
           },
         }}
       >
-        {/* Section prioritaire chargée en premier */}
+        {/* Section prioritaire chargée en premier avec données de démonstration */}
         <Suspense fallback={<SectionLoader />}>
-          <Dashboard />
+          <div className="pt-24">
+            <Dashboard demoMode={true} demoData={demoGrowthData} />
+          </div>
         </Suspense>
         
         {/* Section des partenaires (nouvelle section) */}

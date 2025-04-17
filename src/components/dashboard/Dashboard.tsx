@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import GrowthWidget from './GrowthWidget';
@@ -36,6 +35,12 @@ interface StatCardProps {
   color: string;
 }
 
+interface DashboardProps {
+  childId?: string;
+  demoMode?: boolean;
+  demoData?: GrowthData[];
+}
+
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => {
   return (
     <motion.div
@@ -68,7 +73,7 @@ const defaultMilestones = [
   { name: 'Premier mot', expectedAgeMonths: 12 },
 ];
 
-const Dashboard: React.FC<{ childId?: string }> = ({ childId }) => {
+const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoData = [] }) => {
   const params = useParams();
   const activeChildId = childId || params.childId;
   
@@ -95,6 +100,43 @@ const Dashboard: React.FC<{ childId?: string }> = ({ childId }) => {
   };
 
   useEffect(() => {
+    // Si en mode démo, utiliser les données de démo directement
+    if (demoMode) {
+      console.log('Dashboard en mode démo avec données:', demoData);
+      setGrowthData(demoData);
+      
+      // Créer un profil de démonstration
+      setChildProfile({
+        id: 'demo',
+        name: 'Bébé Exemple',
+        birth_date: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
+        gender: 'M'
+      });
+
+      // Créer des jalons de démonstration
+      const demoMilestones = defaultMilestones
+        .filter(m => m.expectedAgeMonths <= 6)
+        .map(milestone => ({
+          name: milestone.name,
+          age: `${milestone.expectedAgeMonths} mois`,
+          achieved: milestone.expectedAgeMonths < 5
+        }));
+      
+      setMilestones(demoMilestones);
+      
+      // Dernière mesure de démo
+      if (demoData.length > 0) {
+        const lastMeasure = demoData[demoData.length - 1];
+        setLatestMeasurement({
+          height_cm: lastMeasure.taille,
+          weight_kg: lastMeasure.poids
+        });
+      }
+      
+      setLoading(false);
+      return;
+    }
+    
     if (!activeChildId) return;
     
     const fetchChildData = async () => {
@@ -184,16 +226,16 @@ const Dashboard: React.FC<{ childId?: string }> = ({ childId }) => {
     };
     
     fetchChildData();
-  }, [activeChildId]);
+  }, [activeChildId, demoData, demoMode]);
 
   // Fonction pour calculer l'âge en mois
-  const calculateAgeInMonths = (birthDate: Date): number => {
+  function calculateAgeInMonths(birthDate: Date): number {
     const today = new Date();
     let months = (today.getFullYear() - birthDate.getFullYear()) * 12;
     months -= birthDate.getMonth();
     months += today.getMonth();
     return months <= 0 ? 0 : months;
-  };
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -206,7 +248,7 @@ const Dashboard: React.FC<{ childId?: string }> = ({ childId }) => {
   };
 
   // Si pas d'enfant sélectionné ou chargement en cours
-  if (loading) {
+  if (loading && !demoMode) {
     return (
       <section className="py-20 px-4">
         <div className="container mx-auto text-center">
@@ -228,7 +270,7 @@ const Dashboard: React.FC<{ childId?: string }> = ({ childId }) => {
     );
   }
 
-  if (!childProfile) {
+  if (!childProfile && !demoMode) {
     return (
       <section className="py-20 px-4">
         <div className="container mx-auto text-center">
@@ -242,9 +284,9 @@ const Dashboard: React.FC<{ childId?: string }> = ({ childId }) => {
   }
 
   // Calculer l'âge actuel du bébé
-  const birthDate = new Date(childProfile.birth_date);
-  const ageString = calculateAge(childProfile.birth_date);
-  const ageInMonths = calculateAgeInMonths(birthDate);
+  const birthDate = childProfile ? new Date(childProfile.birth_date) : new Date();
+  const ageString = childProfile ? calculateAge(childProfile.birth_date) : "6 mois";
+  const ageInMonths = childProfile ? calculateAgeInMonths(birthDate) : 6;
   
   // Comptez les jalons atteints pour déterminer le niveau d'éveil
   const achievedMilestonesCount = milestones.filter(m => m.achieved).length;
@@ -259,14 +301,14 @@ const Dashboard: React.FC<{ childId?: string }> = ({ childId }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          Suivi de Croissance - {childProfile.name}
+          {demoMode ? "Exemple de Suivi de Croissance" : `Suivi de Croissance - ${childProfile?.name}`}
         </motion.h2>
 
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, staggerChildren: 0.1 }}
         >
           <StatCard
             title="Âge"
@@ -321,39 +363,50 @@ const Dashboard: React.FC<{ childId?: string }> = ({ childId }) => {
           )}
         </div>
 
-        <motion.div
-          className="glass-card p-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <h3 className="text-lg font-bold mb-4">Jalons de Développement</h3>
-          <div className="relative">
-            <div className="absolute h-full w-1 bg-babybaby-blue/30 left-3 top-0 rounded-full"></div>
-            <div className="space-y-4">
-              {milestones.map((milestone, index) => (
-                <motion.div 
-                  key={index}
-                  className="flex items-start gap-4 ml-7"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <div className={`absolute left-2 w-2.5 h-2.5 rounded-full ${milestone.achieved ? 'bg-green-400' : 'bg-gray-300'}`}></div>
-                  <div>
-                    <p className="font-medium">{milestone.name}</p>
-                    <p className="text-sm text-gray-600">{milestone.age}</p>
-                  </div>
-                  {milestone.achieved && (
-                    <div className="flex-1 text-right">
-                      <span className="text-green-500 text-xs">✓ Acquis</span>
+        {!demoMode && (
+          <motion.div
+            className="glass-card p-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <h3 className="text-lg font-bold mb-4">Jalons de Développement</h3>
+            <div className="relative">
+              <div className="absolute h-full w-1 bg-babybaby-blue/30 left-3 top-0 rounded-full"></div>
+              <div className="space-y-4">
+                {milestones.map((milestone, index) => (
+                  <motion.div 
+                    key={index}
+                    className="flex items-start gap-4 ml-7"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <div className={`absolute left-2 w-2.5 h-2.5 rounded-full ${milestone.achieved ? 'bg-green-400' : 'bg-gray-300'}`}></div>
+                    <div>
+                      <p className="font-medium">{milestone.name}</p>
+                      <p className="text-sm text-gray-600">{milestone.age}</p>
                     </div>
-                  )}
-                </motion.div>
-              ))}
+                    {milestone.achieved && (
+                      <div className="flex-1 text-right">
+                        <span className="text-green-500 text-xs">✓ Acquis</span>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
             </div>
+          </motion.div>
+        )}
+
+        {demoMode && (
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-500">
+              Ces données sont présentées à titre d'exemple. 
+              Créez un compte pour suivre la croissance de votre bébé !
+            </p>
           </div>
-        </motion.div>
+        )}
       </div>
     </section>
   );
