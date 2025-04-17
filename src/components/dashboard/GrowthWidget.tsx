@@ -36,9 +36,16 @@ const GrowthWidget: React.FC<GrowthWidgetProps> = ({
   // Make sure we have valid data to prevent rendering errors
   const validData = Array.isArray(data) && data.length > 0;
   
+  // Format data to ensure all values are numbers
+  const formattedData = validData ? 
+    data.map(item => ({
+      ...item,
+      [dataKey]: typeof item[dataKey] === 'number' ? item[dataKey] : 0
+    })) : [];
+  
   return (
     <motion.div
-      className={cn("glass-card p-4 sm:p-6", className)}
+      className={cn("glass-card p-4 sm:p-6 shadow-md rounded-lg", className)}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -56,12 +63,22 @@ const GrowthWidget: React.FC<GrowthWidgetProps> = ({
           >
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
-                data={data}
+                data={formattedData}
                 margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(155,155,155,0.2)" />
-                <XAxis dataKey="name" tick={{ fill: '#333' }} />
-                <YAxis tick={{ fill: '#333' }} />
+                <XAxis 
+                  dataKey="name" 
+                  tick={{ fill: '#333' }} 
+                  fontSize={10}
+                  tickMargin={8}
+                />
+                <YAxis 
+                  tick={{ fill: '#333' }} 
+                  fontSize={10}
+                  tickMargin={8}
+                  domain={['auto', 'auto']}
+                />
                 <ChartTooltip 
                   content={({ active, payload }) => (
                     <ChartTooltipContent active={active} payload={payload} />
@@ -74,6 +91,7 @@ const GrowthWidget: React.FC<GrowthWidgetProps> = ({
                   strokeWidth={3}
                   dot={{ stroke: color, strokeWidth: 2, fill: 'white', r: 4 }}
                   activeDot={{ r: 6, stroke: color, strokeWidth: 2, fill: 'white' }}
+                  isAnimationActive={true}
                 />
               </LineChart>
             </ResponsiveContainer>

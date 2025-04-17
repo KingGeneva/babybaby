@@ -29,6 +29,7 @@ const ParentalDashboard = () => {
   const [activeTab, setActiveTab] = useState('profiles');
   const [growthData, setGrowthData] = useState<GrowthData[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [isLoadingData, setIsLoadingData] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -42,6 +43,7 @@ const ParentalDashboard = () => {
     if (!selectedChildId) return;
 
     const fetchGrowthData = async () => {
+      setIsLoadingData(true);
       try {
         const { data, error } = await supabase
           .from('growth_measurements')
@@ -54,22 +56,26 @@ const ParentalDashboard = () => {
         if (data && data.length > 0) {
           const formattedData = data.map(item => ({
             name: new Date(item.measurement_date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
-            taille: item.height_cm ? Number(item.height_cm) : 0,
-            poids: item.weight_kg ? Number(item.weight_kg) : 0,
-            eveil: item.head_cm ? Number(item.head_cm) : undefined,
+            taille: item.height_cm ? Number(parseFloat(item.height_cm.toString()).toFixed(1)) : 0,
+            poids: item.weight_kg ? Number(parseFloat(item.weight_kg.toString()).toFixed(1)) : 0,
+            eveil: item.head_cm ? Number(parseFloat(item.head_cm.toString()).toFixed(1)) : undefined,
           }));
           
-          console.log('ParentalDashboard - Growth data:', formattedData);
+          console.log('ParentalDashboard - Growth data formatted:', formattedData);
           setGrowthData(formattedData);
         } else {
           setGrowthData([]);
         }
       } catch (error: any) {
+        console.error('Error fetching growth data:', error);
         toast({
           title: "Erreur",
           description: "Impossible de charger les données de croissance",
           variant: "destructive",
         });
+        setGrowthData([]);
+      } finally {
+        setIsLoadingData(false);
       }
     };
 
@@ -124,33 +130,48 @@ const ParentalDashboard = () => {
           <TabsContent value="growth">
             {selectedChildId && (
               <div className="space-y-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {growthData && growthData.length > 0 ? (
-                    <>
-                      <GrowthWidget 
-                        title="Évolution du Poids (kg)" 
-                        data={growthData} 
-                        dataKey="poids" 
-                        color="#33C3F0"
-                      />
-                      <GrowthWidget 
-                        title="Évolution de la Taille (cm)" 
-                        data={growthData} 
-                        dataKey="taille" 
-                        color="#9b87f5"
-                      />
-                    </>
-                  ) : (
-                    <Card className="col-span-1 lg:col-span-2">
-                      <CardContent className="p-6 text-center">
-                        <p>Aucune mesure de croissance n'est enregistrée.</p>
-                        <p className="text-sm text-gray-500 mb-4">
-                          Ajoutez des mesures pour voir apparaître les graphiques.
-                        </p>
+                {isLoadingData ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-48">
+                    <Card className="animate-pulse">
+                      <CardContent className="p-6 h-full flex items-center justify-center">
+                        <div className="w-full h-32 bg-gray-200 rounded"></div>
                       </CardContent>
                     </Card>
-                  )}
-                </div>
+                    <Card className="animate-pulse">
+                      <CardContent className="p-6 h-full flex items-center justify-center">
+                        <div className="w-full h-32 bg-gray-200 rounded"></div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {growthData && growthData.length > 0 ? (
+                      <>
+                        <GrowthWidget 
+                          title="Évolution du Poids (kg)" 
+                          data={growthData} 
+                          dataKey="poids" 
+                          color="#33C3F0"
+                        />
+                        <GrowthWidget 
+                          title="Évolution de la Taille (cm)" 
+                          data={growthData} 
+                          dataKey="taille" 
+                          color="#9b87f5"
+                        />
+                      </>
+                    ) : (
+                      <Card className="col-span-1 lg:col-span-2">
+                        <CardContent className="p-6 text-center">
+                          <p>Aucune mesure de croissance n'est enregistrée.</p>
+                          <p className="text-sm text-gray-500 mb-4">
+                            Ajoutez des mesures pour voir apparaître les graphiques.
+                          </p>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                )}
 
                 <GrowthMeasurementForm
                   childId={selectedChildId}
