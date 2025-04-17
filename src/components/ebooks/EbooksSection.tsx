@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Book, Download, ChevronRight, ChevronLeft } from 'lucide-react';
@@ -77,6 +76,15 @@ const ebooks: Ebook[] = [
     downloadUrl: "#",
     fileType: "PDF",
     fileSize: "1.5 MB"
+  },
+  {
+    id: 7,
+    title: "Comment bien accompagner le sommeil de bébé",
+    description: "Un guide complet pour comprendre et améliorer le sommeil de votre enfant.",
+    coverImage: "/placeholder.svg",
+    downloadUrl: "#",
+    fileType: "PDF",
+    fileSize: "2.9 MB"
   }
 ];
 
