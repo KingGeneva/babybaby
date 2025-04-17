@@ -8,6 +8,7 @@ import EbookFilters from '@/components/ebooks/EbookFilters';
 import { Ebook } from '@/components/ebooks/types';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
+import { motion } from 'framer-motion';
 
 const EbooksPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,35 +24,41 @@ const EbooksPage = () => {
   }, [searchQuery, selectedFileType]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <NavBar />
       
       <main className="flex-grow pt-24 pb-16">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold text-center mb-8 text-babybaby-cosmic">
-            Bibliothèque d'E-books
-          </h1>
-          
-          <div className="flex flex-col md:flex-row gap-6 mb-8">
-            {/* Search bar */}
-            <div className="relative flex-grow">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <Input
-                type="search"
-                placeholder="Rechercher un e-book..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 w-full"
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-4xl font-bold text-center mb-8 text-babybaby-cosmic">
+              Bibliothèque d'E-books
+            </h1>
+            
+            <div className="flex flex-col md:flex-row gap-6 mb-8">
+              {/* Search bar */}
+              <div className="relative flex-grow">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Input
+                  type="search"
+                  placeholder="Rechercher un e-book..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 w-full"
+                />
+              </div>
+              
+              <EbookFilters
+                selectedFileType={selectedFileType}
+                onFileTypeChange={setSelectedFileType}
               />
             </div>
-            
-            <EbookFilters
-              selectedFileType={selectedFileType}
-              onFileTypeChange={setSelectedFileType}
-            />
-          </div>
 
-          <EbookGrid ebooks={filteredEbooks} />
+            <EbookGrid ebooks={filteredEbooks} />
+          </motion.div>
         </div>
       </main>
       

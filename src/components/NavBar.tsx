@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
 import { cn } from '@/lib/utils';
 import { MenuIcon, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const navLinks = [
@@ -18,8 +19,8 @@ const navLinks = [
 const NavBar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState('/');
   const isMobile = useIsMobile();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,12 +34,7 @@ const NavBar: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    setActiveLink(window.location.pathname);
-  }, []);
-
   const handleLinkClick = (href: string) => {
-    setActiveLink(href);
     setIsMenuOpen(false);
   };
 
@@ -84,7 +80,7 @@ const NavBar: React.FC = () => {
                 className="relative px-2 py-1 text-gray-800 hover:text-babybaby-cosmic transition-colors duration-300"
               >
                 {link.title}
-                {activeLink === link.href && (
+                {location.pathname === link.href && (
                   <motion.div
                     className="absolute bottom-0 left-0 w-full h-0.5 bg-babybaby-cosmic"
                     layoutId="activeLink"
@@ -132,7 +128,7 @@ const NavBar: React.FC = () => {
                   onClick={() => handleLinkClick(link.href)}
                   className={cn(
                     "px-3 py-2 rounded-lg transition-colors duration-200 text-sm font-medium",
-                    activeLink === link.href
+                    location.pathname === link.href
                       ? "bg-babybaby-cosmic text-white"
                       : "hover:bg-babybaby-cosmic/20"
                   )}
