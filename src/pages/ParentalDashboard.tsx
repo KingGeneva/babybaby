@@ -79,6 +79,12 @@ const ParentalDashboard = () => {
     setActiveTab('growth');
   };
 
+  const handleViewDashboard = () => {
+    if (selectedChildId) {
+      navigate(`/dashboard/${selectedChildId}`);
+    }
+  };
+
   const handleMeasurementSuccess = () => {
     setRefreshTrigger(prev => prev + 1);
     toast({
@@ -149,7 +155,7 @@ const ParentalDashboard = () => {
                   onSuccess={handleMeasurementSuccess}
                 />
 
-                <div className="flex justify-center mt-6">
+                <div className="flex justify-center mt-6 gap-4">
                   <Button 
                     variant="outline" 
                     onClick={() => {
@@ -158,6 +164,10 @@ const ParentalDashboard = () => {
                     }}
                   >
                     Retour aux profils
+                  </Button>
+                  
+                  <Button onClick={handleViewDashboard}>
+                    Voir le tableau de bord complet
                   </Button>
                 </div>
               </div>
