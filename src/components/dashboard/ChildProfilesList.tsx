@@ -95,10 +95,10 @@ const ChildProfilesList: React.FC<{
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Profils des enfants</CardTitle>
+          <CardTitle>Profils des bébés</CardTitle>
         </CardHeader>
         <CardContent className="text-center p-6">
-          <p className="mb-4">Vous n'avez pas encore créé de profil.</p>
+          <p className="mb-4">Vous n'avez pas encore créé de profil de bébé.</p>
         </CardContent>
       </Card>
     );
@@ -107,7 +107,7 @@ const ChildProfilesList: React.FC<{
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl">Profils des enfants</CardTitle>
+        <CardTitle className="text-xl">Profils des bébés</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -182,3 +182,4 @@ const ChildProfilesList: React.FC<{
 };
 
 export default ChildProfilesList;
+
