@@ -10,6 +10,7 @@ import NewsletterForm from '@/components/NewsletterForm';
 import Footer from '@/components/Footer';
 import ArticleSection from '@/components/articles/ArticleSection';
 import ProductsSection from '@/components/products/ProductsSection';
+import ContactSection from '@/components/ContactSection';
 
 const Index = () => {
   const controls = useAnimation();
@@ -42,6 +43,7 @@ const Index = () => {
         <ArticleSection />
         <ProductsSection />
         <ToolsSection />
+        <ContactSection />
         
         <section className="py-20 px-4">
           <div className="container mx-auto">

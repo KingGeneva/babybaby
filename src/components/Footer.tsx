@@ -104,7 +104,7 @@ const Footer: React.FC = () => {
         </div>
         
         <div className="text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} BabyBaby. Tous droits réservés.</p>
+          <p>&copy; {new Date().getFullYear()} BabyBaby. Tous droits réservés. babybaby.org</p>
           <p className="mt-1">Conçu avec ❤️ pour les parents du monde entier</p>
         </div>
       </div>
