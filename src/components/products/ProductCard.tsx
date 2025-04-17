@@ -90,7 +90,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
         </CardContent>
 
         <CardFooter className="flex justify-between items-center pt-0 pb-4 px-6">
-          <div className="text-lg font-bold text-babybaby-cosmic">{product.price.toFixed(2)} €</div>
+          <div className="text-lg font-bold text-babybaby-cosmic">{product.price.toFixed(2)} $</div>
           <Button 
             size="sm" 
             className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80"

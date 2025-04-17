@@ -61,7 +61,7 @@ const ContactSection: React.FC = () => {
 
   const contactInfo = [
     { icon: <Mail className="text-babybaby-cosmic h-5 w-5" />, text: "contact@babybaby.org", href: "mailto:contact@babybaby.org" },
-    { icon: <Phone className="text-babybaby-cosmic h-5 w-5" />, text: "01 23 45 67 89", href: "tel:0123456789" },
+    { icon: <Phone className="text-babybaby-cosmic h-5 w-5" />, text: "581 798-9088", href: "tel:5817989088" },
     { icon: <MessageSquare className="text-babybaby-cosmic h-5 w-5" />, text: "Chat en direct", href: "#" }
   ];
 
