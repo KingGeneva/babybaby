@@ -1,31 +1,10 @@
-import React, { useEffect, Suspense, lazy } from 'react';
+
+import React, { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import NavBar from '@/components/NavBar';
 import HeroSection from '@/components/HeroSection';
-import { useIsMobile } from '@/hooks/use-mobile';
-import ArticleSection from '@/components/articles/ArticleSection';
-
-// Utilisation du lazy loading avec prefetch prioritaire
-const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
-
-// Utilisation du lazy loading pour les nouveaux composants
-const PartnersCarousel = lazy(() => import('@/components/partners/PartnersCarousel'));
-const EbooksSection = lazy(() => import('@/components/ebooks/EbooksSection'));
-
-// Utilisation du lazy loading avec chargement différé pour les sections moins critiques
-const ToolsSection = lazy(() => import('@/components/tools/ToolsSection'));
-const NewsletterForm = lazy(() => import('@/components/NewsletterForm'));
-const Footer = lazy(() => import('@/components/Footer'));
-const ProductsSection = lazy(() => import('@/components/products/ProductsSection'));
-const ContactSection = lazy(() => import('@/components/ContactSection'));
-
-// Fallback loader pour les composants en chargement - plus compact
-const SectionLoader = () => (
-  <div className="py-6 flex justify-center items-center">
-    <div className="animate-pulse w-full max-w-2xl h-24 bg-gray-100 rounded-lg"></div>
-  </div>
-);
+import LazyLoadedSections from '@/components/home/LazyLoadedSections';
 
 // Données de démonstration pour le tableau de bord sur la page d'accueil
 const demoGrowthData = [
@@ -41,9 +20,8 @@ const Index = () => {
   const controls = useAnimation();
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0.05, // Réduit le seuil pour déclencher plus tôt
+    threshold: 0.05,
   });
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (inView) {
@@ -65,63 +43,14 @@ const Index = () => {
           visible: { 
             opacity: 1, 
             transition: { 
-              duration: 0.3, // Réduit la durée pour une transition plus rapide
-              staggerChildren: isMobile ? 0.05 : 0.1 // Réduit le délai entre les animations
+              duration: 0.3,
+              staggerChildren: 0.1
             } 
           },
         }}
       >
-        {/* Section prioritaire chargée en premier avec données de démonstration */}
-        <Suspense fallback={<SectionLoader />}>
-          <div className="pt-24">
-            <Dashboard demoMode={true} demoData={demoGrowthData} />
-          </div>
-        </Suspense>
-        
-        {/* Section des articles */}
-        <Suspense fallback={<SectionLoader />}>
-          <ArticleSection />
-        </Suspense>
-
-        {/* Section des partenaires */}
-        <Suspense fallback={<SectionLoader />}>
-          <PartnersCarousel />
-        </Suspense>
-        
-        {/* Sections moins prioritaires avec chargement conditionnel */}
-        <Suspense fallback={<SectionLoader />}>
-          <ProductsSection />
-        </Suspense>
-        
-        {/* Section ebooks (nouvelle section) */}
-        <Suspense fallback={<SectionLoader />}>
-          <EbooksSection />
-        </Suspense>
-        
-        {/* Sections à faible priorité */}
-        <Suspense fallback={isMobile ? null : <SectionLoader />}>
-          <ToolsSection />
-        </Suspense>
-        
-        <Suspense fallback={isMobile ? null : <SectionLoader />}>
-          <ContactSection />
-        </Suspense>
-        
-        {/* Newsletter avec loader minimal */}
-        <section className="py-6 px-4">
-          <div className="container mx-auto">
-            <div className="max-w-2xl mx-auto">
-              <Suspense fallback={<div className="h-16 animate-pulse bg-gray-100 rounded-lg"></div>}>
-                <NewsletterForm />
-              </Suspense>
-            </div>
-          </div>
-        </section>
+        <LazyLoadedSections demoGrowthData={demoGrowthData} />
       </motion.div>
-      
-      <Suspense fallback={<div className="h-16 bg-gray-50"></div>}>
-        <Footer />
-      </Suspense>
     </div>
   );
 };
