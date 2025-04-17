@@ -12,24 +12,9 @@ import CommunityPage from "./pages/CommunityPage";
 import AuthPage from "./pages/AuthPage";
 import ParentalDashboard from "./pages/ParentalDashboard";
 import NotFound from "./pages/NotFound";
-import { useAuth } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 const queryClient = new QueryClient();
-
-// Composant pour protéger les routes qui nécessitent une authentification
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
-  
-  if (loading) {
-    return <div className="flex items-center justify-center h-screen">Chargement...</div>;
-  }
-  
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
-  
-  return <>{children}</>;
-};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
