@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -29,22 +29,29 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [lottieAnimData, setLottieAnimData] = useState<object | null>(null);
 
-  // Fonction pour obtenir l'animation en fonction du type
-  const getLottieAnimation = (type: string) => {
-    switch (type) {
+  // Chargement différé des animations Lottie
+  useEffect(() => {
+    let animData;
+    switch (product.animationType) {
       case 'crib':
-        return babyCribAnimation;
+        animData = babyCribAnimation;
+        break;
       case 'bottle':
-        return babyBottleAnimation;
+        animData = babyBottleAnimation;
+        break;
       case 'toy':
-        return babyToyAnimation;
+        animData = babyToyAnimation;
+        break;
       case 'monitor':
-        return babyMonitorAnimation;
+        animData = babyMonitorAnimation;
+        break;
       default:
-        return babyToyAnimation;
+        animData = babyToyAnimation;
     }
-  };
+    setLottieAnimData(animData);
+  }, [product.animationType]);
 
   return (
     <motion.div
@@ -61,16 +68,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
           <HoverCard>
             <HoverCardTrigger asChild>
               <div className="w-full h-full cursor-pointer flex items-center justify-center">
-                <Lottie 
-                  animationData={getLottieAnimation(product.animationType)} 
-                  loop={true}
-                  className="w-32 h-32 object-contain"
-                  style={{ 
-                    filter: isHovered ? 'drop-shadow(0 0 8px rgba(14, 165, 233, 0.6))' : 'none',
-                    transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-                    transition: 'all 0.3s ease'
-                  }}
-                />
+                {lottieAnimData && (
+                  <Lottie 
+                    animationData={lottieAnimData} 
+                    loop={true}
+                    className="w-32 h-32 object-contain"
+                    style={{ 
+                      filter: isHovered ? 'drop-shadow(0 0 8px rgba(14, 165, 233, 0.6))' : 'none',
+                      transform: isHovered ? 'scale(1.1)' : 'scale(1)',
+                      transition: 'all 0.3s ease'
+                    }}
+                    rendererSettings={{
+                      preserveAspectRatio: 'xMidYMid slice',
+                      progressiveLoad: true
+                    }}
+                  />
+                )}
               </div>
             </HoverCardTrigger>
             <HoverCardContent className="w-80">
