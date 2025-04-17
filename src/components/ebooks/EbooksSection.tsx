@@ -89,6 +89,15 @@ const ebooksData: Ebook[] = [
     downloadUrl: "accompagner-sommeil-bebe.pdf",
     fileType: "PDF",
     fileSize: "2.9 MB"
+  },
+  {
+    id: 8,
+    title: "Les 6 premiers mois - Guide complet BabyBaby",
+    description: "Guide essentiel pour accompagner votre bébé durant ses 6 premiers mois.",
+    coverImage: "/placeholder.svg",
+    downloadUrl: "Les_6_premiers_mois_Guide_complet_babybaby.pdf",
+    fileType: "PDF",
+    fileSize: "4.5 MB"
   }
 ];
 
@@ -145,7 +154,7 @@ const EbooksSection: React.FC = () => {
         
         toast({
           title: "Téléchargement démarré",
-          description: `"${ebook.title}" est en cours de téléchargement.`,
+          description: `"${ebook.title}" est en cours de téléchargement.`
         });
       }
     } catch (err) {
