@@ -54,10 +54,12 @@ const ParentalDashboard = () => {
         if (data && data.length > 0) {
           const formattedData = data.map(item => ({
             name: new Date(item.measurement_date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
-            taille: Number(item.height_cm),
-            poids: Number(item.weight_kg)
+            taille: item.height_cm ? Number(item.height_cm) : 0,
+            poids: item.weight_kg ? Number(item.weight_kg) : 0,
+            eveil: item.head_cm ? Number(item.head_cm) : undefined,
           }));
-
+          
+          console.log('ParentalDashboard - Growth data:', formattedData);
           setGrowthData(formattedData);
         } else {
           setGrowthData([]);
@@ -123,7 +125,7 @@ const ParentalDashboard = () => {
             {selectedChildId && (
               <div className="space-y-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {growthData.length > 0 ? (
+                  {growthData && growthData.length > 0 ? (
                     <>
                       <GrowthWidget 
                         title="Évolution du Poids (kg)" 

@@ -1,8 +1,22 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer 
+} from 'recharts';
+import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { 
+  ChartContainer, 
+  ChartTooltip, 
+  ChartTooltipContent 
+} from '@/components/ui/chart';
 
 interface GrowthWidgetProps {
   title: string;
@@ -19,6 +33,9 @@ const GrowthWidget: React.FC<GrowthWidgetProps> = ({
   className,
   color = "#33C3F0"
 }) => {
+  // Make sure we have valid data to prevent rendering errors
+  const validData = Array.isArray(data) && data.length > 0;
+  
   return (
     <motion.div
       className={cn("glass-card p-4 sm:p-6", className)}
@@ -29,32 +46,43 @@ const GrowthWidget: React.FC<GrowthWidgetProps> = ({
     >
       <h3 className="text-lg font-bold mb-4">{title}</h3>
       <div className="h-48">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={data}
-            margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
+        {validData ? (
+          <ChartContainer 
+            config={{
+              [dataKey]: {
+                color: color
+              }
+            }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
-            <XAxis dataKey="name" tick={{ fill: '#333' }} />
-            <YAxis tick={{ fill: '#333' }} />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                borderRadius: '8px',
-                border: 'none',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-              }}
-            />
-            <Line 
-              type="monotone" 
-              dataKey={dataKey} 
-              stroke={color} 
-              strokeWidth={3}
-              dot={{ stroke: color, strokeWidth: 2, fill: 'white', r: 4 }}
-              activeDot={{ r: 6, stroke: color, strokeWidth: 2, fill: 'white' }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={data}
+                margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(155,155,155,0.2)" />
+                <XAxis dataKey="name" tick={{ fill: '#333' }} />
+                <YAxis tick={{ fill: '#333' }} />
+                <ChartTooltip 
+                  content={({ active, payload }) => (
+                    <ChartTooltipContent active={active} payload={payload} />
+                  )}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey={dataKey} 
+                  stroke={color} 
+                  strokeWidth={3}
+                  dot={{ stroke: color, strokeWidth: 2, fill: 'white', r: 4 }}
+                  activeDot={{ r: 6, stroke: color, strokeWidth: 2, fill: 'white' }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        ) : (
+          <div className="h-full flex items-center justify-center">
+            <p className="text-muted-foreground">Aucune donnée disponible</p>
+          </div>
+        )}
       </div>
     </motion.div>
   );

@@ -120,19 +120,23 @@ const Dashboard: React.FC<{ childId?: string }> = ({ childId }) => {
         if (measurementsError) throw measurementsError;
         
         if (measurementsData && measurementsData.length > 0) {
-          // Formatage des données pour les graphiques
+          // S'assurer que les valeurs numériques sont correctement parsées
           const formattedData: GrowthData[] = measurementsData.map(item => ({
             name: new Date(item.measurement_date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
-            taille: Number(item.height_cm),
-            poids: Number(item.weight_kg),
+            taille: item.height_cm ? Number(item.height_cm) : 0,
+            poids: item.weight_kg ? Number(item.weight_kg) : 0,
             eveil: item.head_cm ? Number(item.head_cm) : undefined,
           }));
           
+          console.log('Formatted growth data:', formattedData);
           setGrowthData(formattedData);
           
           // Récupérer la dernière mesure pour les statistiques
           const latestMeasure = measurementsData[measurementsData.length - 1];
           setLatestMeasurement(latestMeasure);
+        } else {
+          // S'assurer que growthData est un tableau vide et non undefined
+          setGrowthData([]);
         }
         
         // Récupérer les jalons atteints
@@ -291,7 +295,7 @@ const Dashboard: React.FC<{ childId?: string }> = ({ childId }) => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {growthData.length > 0 ? (
+          {growthData && growthData.length > 0 ? (
             <>
               <GrowthWidget 
                 title="Évolution du Poids (kg)" 
