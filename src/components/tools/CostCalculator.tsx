@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Calculator, PlusCircle, MinusCircle, Save } from 'lucide-react';
 import { 
@@ -100,7 +99,6 @@ const CostCalculator: React.FC<CostCalculatorProps> = ({ className }) => {
       totalCost: costs.total
     };
     
-    // Sauvegarder dans le localStorage
     const savedCalculations = JSON.parse(localStorage.getItem('babyCalculations') || '[]');
     savedCalculations.push(calculationData);
     localStorage.setItem('babyCalculations', JSON.stringify(savedCalculations));
@@ -108,6 +106,13 @@ const CostCalculator: React.FC<CostCalculatorProps> = ({ className }) => {
     toast({
       title: "Calcul sauvegardé",
       description: "Votre calcul a été sauvegardé avec succès"
+    });
+  };
+  
+  const formatPrice = (amount: number) => {
+    return amount.toLocaleString('fr-CA', {
+      style: 'currency',
+      currency: 'CAD',
     });
   };
   
@@ -119,7 +124,7 @@ const CostCalculator: React.FC<CostCalculatorProps> = ({ className }) => {
           Calculateur de coûts pour bébé
         </CardTitle>
         <CardDescription>
-          Estimez les dépenses liées à l'arrivée de votre bébé
+          Estimez les dépenses liées à l'arrivée de votre bébé (en dollars canadiens)
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -169,7 +174,7 @@ const CostCalculator: React.FC<CostCalculatorProps> = ({ className }) => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Élément</TableHead>
-                  <TableHead>Coût (€)</TableHead>
+                  <TableHead>Coût (CAD)</TableHead>
                   <TableHead>Type</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
@@ -178,7 +183,7 @@ const CostCalculator: React.FC<CostCalculatorProps> = ({ className }) => {
                 {expenses.map((expense) => (
                   <TableRow key={expense.id}>
                     <TableCell>{expense.name}</TableCell>
-                    <TableCell>{expense.cost} €</TableCell>
+                    <TableCell>{formatPrice(expense.cost)}</TableCell>
                     <TableCell>{expense.isMonthly ? 'Mensuel' : 'Unique'}</TableCell>
                     <TableCell>
                       <Button 
@@ -218,15 +223,15 @@ const CostCalculator: React.FC<CostCalculatorProps> = ({ className }) => {
         <div className="pt-4 border-t">
           <div className="flex justify-between items-center mb-2">
             <span className="font-medium">Dépenses uniques:</span>
-            <span>{costs.oneTime.toFixed(2)} €</span>
+            <span>{formatPrice(costs.oneTime)}</span>
           </div>
           <div className="flex justify-between items-center mb-2">
             <span className="font-medium">Dépenses mensuelles:</span>
-            <span>{costs.monthly.toFixed(2)} € / mois</span>
+            <span>{formatPrice(costs.monthly)} / mois</span>
           </div>
           <div className="flex justify-between items-center mb-4">
             <span className="font-medium">Total sur {months} mois:</span>
-            <span className="text-lg font-bold text-babybaby-cosmic">{costs.total.toFixed(2)} €</span>
+            <span className="text-lg font-bold text-babybaby-cosmic">{formatPrice(costs.total)}</span>
           </div>
           
           <Button onClick={saveCalculation} className="w-full">
