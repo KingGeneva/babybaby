@@ -11,6 +11,7 @@ import ToolsPage from "./pages/ToolsPage";
 import CommunityPage from "./pages/CommunityPage";
 import AuthPage from "./pages/AuthPage";
 import ParentalDashboard from "./pages/ParentalDashboard";
+import ArticlesPage from "./pages/ArticlesPage";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -26,8 +27,10 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/dashboard/:childId" element={<DashboardPage />} />
             <Route path="/tools" element={<ToolsPage />} />
             <Route path="/community" element={<CommunityPage />} />
+            <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route 
               path="/parental-dashboard" 

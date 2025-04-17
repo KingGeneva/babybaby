@@ -1,3 +1,4 @@
+
 import React, { useEffect, Suspense, lazy } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -7,6 +8,10 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 // Utilisation du lazy loading avec prefetch prioritaire
 const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
+
+// Utilisation du lazy loading pour les nouveaux composants
+const PartnersCarousel = lazy(() => import('@/components/partners/PartnersCarousel'));
+const EbooksSection = lazy(() => import('@/components/ebooks/EbooksSection'));
 
 // Utilisation du lazy loading avec chargement différé pour les sections moins critiques
 const ToolsSection = lazy(() => import('@/components/tools/ToolsSection'));
@@ -62,9 +67,19 @@ const Index = () => {
           <Dashboard />
         </Suspense>
         
+        {/* Section des partenaires (nouvelle section) */}
+        <Suspense fallback={<SectionLoader />}>
+          <PartnersCarousel />
+        </Suspense>
+        
         {/* Sections moins prioritaires avec chargement conditionnel */}
         <Suspense fallback={<SectionLoader />}>
           <ProductsSection />
+        </Suspense>
+        
+        {/* Section ebooks (nouvelle section) */}
+        <Suspense fallback={<SectionLoader />}>
+          <EbooksSection />
         </Suspense>
         
         <Suspense fallback={<SectionLoader />}>
