@@ -1,0 +1,137 @@
+
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Logo from './Logo';
+import { cn } from '@/lib/utils';
+import { MenuIcon, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+const navLinks = [
+  { title: 'Accueil', href: '/' },
+  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Outils', href: '/tools' },
+  { title: 'Communauté', href: '/community' },
+];
+
+const NavBar: React.FC = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState('/');
+
+  // Détecte le scroll pour ajouter des effets
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Détermine la page active
+  useEffect(() => {
+    setActiveLink(window.location.pathname);
+  }, []);
+
+  const handleLinkClick = (href: string) => {
+    setActiveLink(href);
+    setIsMenuOpen(false);
+  };
+
+  return (
+    <motion.header
+      className={cn(
+        "fixed w-full z-50 transition-all duration-300",
+        isScrolled ? "py-2" : "py-4"
+      )}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className={cn(
+        "container mx-auto glass rounded-full px-4 py-3 transition-all duration-500",
+        isScrolled ? "cosmic-shadow" : ""
+      )}>
+        <div className="flex justify-between items-center">
+          <Logo />
+          
+          {/* Navigation desktop */}
+          <nav className="hidden md:flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                onClick={() => handleLinkClick(link.href)}
+                className="relative px-2 py-1 text-gray-800 hover:text-babybaby-cosmic transition-colors duration-300"
+              >
+                {link.title}
+                {activeLink === link.href && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 w-full h-0.5 bg-babybaby-cosmic"
+                    layoutId="activeLink"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Bouton menu hamburger */}
+          <button 
+            className="md:hidden text-gray-800 hover:text-babybaby-cosmic transition-colors"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={isMenuOpen ? "close" : "menu"}
+                initial={{ rotate: 0, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 180, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {isMenuOpen ? <X size={24} /> : <MenuIcon size={24} />}
+              </motion.div>
+            </AnimatePresence>
+          </button>
+        </div>
+      </div>
+
+      {/* Menu mobile */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="md:hidden absolute top-full left-0 w-full glass mt-2 py-4 px-4"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <nav className="flex flex-col space-y-4">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  onClick={() => handleLinkClick(link.href)}
+                  className={cn(
+                    "px-4 py-2 rounded-lg transition-colors duration-300",
+                    activeLink === link.href
+                      ? "bg-babybaby-cosmic text-white"
+                      : "hover:bg-babybaby-cosmic/20"
+                  )}
+                >
+                  {link.title}
+                </Link>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
+  );
+};
+
+export default NavBar;
