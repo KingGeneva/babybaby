@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, Send, MessageSquare } from 'lucide-react';
+import { Mail, Phone, Send, MessageSquare, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Separator } from './ui/separator';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -15,21 +16,47 @@ const ContactSection: React.FC = () => {
     subject: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In real application, this would send the data to a server
-    console.log('Form data submitted:', formData);
-    toast({
-      title: "Message envoyé!",
-      description: "Nous vous répondrons dans les plus brefs délais.",
-    });
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    setIsSubmitting(true);
+    
+    try {
+      // Call the Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData
+      });
+
+      if (error) {
+        throw new Error(error.message || 'Une erreur est survenue lors de l\'envoi du message.');
+      }
+
+      console.log('Email sent successfully:', data);
+      
+      toast({
+        title: "Message envoyé!",
+        description: "Nous vous répondrons dans les plus brefs délais.",
+      });
+      
+      // Reset the form
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      
+    } catch (error: any) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Erreur",
+        description: error.message || "Une erreur est survenue lors de l'envoi du message.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -73,6 +100,7 @@ const ContactSection: React.FC = () => {
                   onChange={handleChange}
                   required
                   className="bg-white/50"
+                  disabled={isSubmitting}
                 />
               </div>
               <div>
@@ -84,6 +112,7 @@ const ContactSection: React.FC = () => {
                   onChange={handleChange}
                   required
                   className="bg-white/50"
+                  disabled={isSubmitting}
                 />
               </div>
               <div>
@@ -95,6 +124,7 @@ const ContactSection: React.FC = () => {
                   onChange={handleChange}
                   required
                   className="bg-white/50"
+                  disabled={isSubmitting}
                 />
               </div>
               <div>
@@ -106,15 +136,26 @@ const ContactSection: React.FC = () => {
                   onChange={handleChange}
                   required
                   className="bg-white/50"
+                  disabled={isSubmitting}
                 />
               </div>
               <div>
                 <Button 
                   type="submit" 
                   className="w-full bg-babybaby-cosmic hover:bg-sky-600 transition-colors button-glow flex gap-2 items-center justify-center"
+                  disabled={isSubmitting}
                 >
-                  <Send className="h-4 w-4" />
-                  Envoyer
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Envoi en cours...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4" />
+                      Envoyer
+                    </>
+                  )}
                 </Button>
               </div>
             </form>
