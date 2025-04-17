@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Book, Download, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Book, Download, ChevronRight, ChevronLeft, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -11,6 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useIsMobile } from '@/hooks/use-mobile';
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from '@/components/ui/sonner';
 
 interface Ebook {
   id: number;
@@ -22,13 +25,14 @@ interface Ebook {
   fileSize: string;
 }
 
-const ebooks: Ebook[] = [
+// Local data for ebooks
+const ebooksData: Ebook[] = [
   {
     id: 1,
     title: "Guide complet de l'alimentation de 0 à 3 ans",
     description: "Tout ce qu'il faut savoir pour bien nourrir votre enfant durant ses premières années.",
     coverImage: "/placeholder.svg",
-    downloadUrl: "#",
+    downloadUrl: "alimentation-0-3-ans.pdf",
     fileType: "PDF",
     fileSize: "3.2 MB"
   },
@@ -37,7 +41,7 @@ const ebooks: Ebook[] = [
     title: "Les étapes essentielles du développement",
     description: "Comprendre et accompagner les étapes clés du développement de votre bébé.",
     coverImage: "/placeholder.svg",
-    downloadUrl: "#",
+    downloadUrl: "etapes-developpement.pdf",
     fileType: "PDF",
     fileSize: "2.7 MB"
   },
@@ -46,7 +50,7 @@ const ebooks: Ebook[] = [
     title: "Sommeil de bébé : astuces et conseils",
     description: "Des méthodes douces pour aider votre bébé à mieux dormir.",
     coverImage: "/placeholder.svg",
-    downloadUrl: "#",
+    downloadUrl: "sommeil-bebe-astuces.pdf",
     fileType: "PDF",
     fileSize: "1.8 MB"
   },
@@ -55,7 +59,7 @@ const ebooks: Ebook[] = [
     title: "Activités d'éveil pour les tout-petits",
     description: "Des idées ludiques pour stimuler le développement et l'éveil de votre bébé.",
     coverImage: "/placeholder.svg",
-    downloadUrl: "#",
+    downloadUrl: "activites-eveil.pdf",
     fileType: "PDF",
     fileSize: "2.5 MB"
   },
@@ -64,7 +68,7 @@ const ebooks: Ebook[] = [
     title: "La diversification alimentaire pas à pas",
     description: "Un guide complet pour introduire les aliments solides en toute sécurité.",
     coverImage: "/placeholder.svg",
-    downloadUrl: "#",
+    downloadUrl: "diversification-alimentaire.pdf",
     fileType: "PDF",
     fileSize: "3.0 MB"
   },
@@ -73,7 +77,7 @@ const ebooks: Ebook[] = [
     title: "10 astuces pour voyager avec bébé",
     description: "Comment préparer et profiter sereinement de vos voyages en famille.",
     coverImage: "/placeholder.svg",
-    downloadUrl: "#",
+    downloadUrl: "voyager-avec-bebe.pdf",
     fileType: "PDF",
     fileSize: "1.5 MB"
   },
@@ -82,7 +86,7 @@ const ebooks: Ebook[] = [
     title: "Comment bien accompagner le sommeil de bébé",
     description: "Un guide complet pour comprendre et améliorer le sommeil de votre enfant.",
     coverImage: "/placeholder.svg",
-    downloadUrl: "#",
+    downloadUrl: "accompagner-sommeil-bebe.pdf",
     fileType: "PDF",
     fileSize: "2.9 MB"
   }
@@ -91,6 +95,8 @@ const ebooks: Ebook[] = [
 const EbooksSection: React.FC = () => {
   const isMobile = useIsMobile();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [ebooks, setEbooks] = useState<Ebook[]>(ebooksData);
+  const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = isMobile ? 1 : 3;
   
   const totalPages = Math.ceil(ebooks.length / itemsPerPage);
@@ -112,6 +118,47 @@ const EbooksSection: React.FC = () => {
   };
   
   const visibleEbooks = ebooks.slice(currentIndex, currentIndex + itemsPerPage);
+  
+  const downloadEbook = async (ebook: Ebook) => {
+    try {
+      setIsLoading(true);
+      
+      // Generate a signed URL for the PDF file
+      const { data, error } = await supabase
+        .storage
+        .from('ebooks')
+        .createSignedUrl(ebook.downloadUrl, 60); // 60 seconds expiration
+      
+      if (error) {
+        console.error('Error generating download URL:', error);
+        toast({
+          title: "Erreur de téléchargement",
+          description: "Impossible de télécharger l'ebook pour le moment. Veuillez réessayer plus tard.",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      // Open the download link in a new tab
+      if (data?.signedUrl) {
+        window.open(data.signedUrl, '_blank');
+        
+        toast({
+          title: "Téléchargement démarré",
+          description: `"${ebook.title}" est en cours de téléchargement.`,
+        });
+      }
+    } catch (err) {
+      console.error('Download error:', err);
+      toast({
+        title: "Erreur de téléchargement",
+        description: "Une erreur s'est produite. Veuillez réessayer plus tard.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   
   return (
     <section className="py-16 bg-gradient-to-b from-white to-sky-50">
@@ -206,9 +253,11 @@ const EbooksSection: React.FC = () => {
                     <Button 
                       variant="outline" 
                       className="w-full flex items-center justify-center gap-2 border-babybaby-cosmic text-babybaby-cosmic hover:bg-babybaby-cosmic hover:text-white"
+                      onClick={() => downloadEbook(ebook)}
+                      disabled={isLoading}
                     >
                       <Download className="h-4 w-4" />
-                      Télécharger
+                      {isLoading ? 'Préparation...' : 'Télécharger'}
                     </Button>
                   </CardFooter>
                 </Card>
