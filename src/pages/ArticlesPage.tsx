@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -19,7 +18,6 @@ import {
 import { cn } from '@/lib/utils';
 import P5Canvas from '@/components/P5Canvas';
 
-// Données des articles (à remplacer par des données réelles)
 const articles = [
   {
     id: 1,
@@ -33,8 +31,8 @@ const articles = [
   {
     id: 2,
     title: "Astuces pour aider bébé à mieux dormir",
-    excerpt: "Des conseils pratiques pour établir une routine de sommeil et aider votre bébé à faire ses nuits.",
-    image: "/placeholder.svg",
+    excerpt: "Le sommeil est l'un des piliers fondamentaux du développement de votre bébé. Découvrez nos conseils pratiques pour instaurer de bonnes habitudes de sommeil dès les premiers mois.",
+    image: "/lovable-uploads/e15314a2-a50b-4867-921c-6376551b5030.png",
     category: "Sommeil",
     date: "12 avril 2025",
     featured: false
@@ -110,7 +108,6 @@ const ArticlesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("Tous");
   const [searchTerm, setSearchTerm] = useState("");
   
-  // Filtrer les articles en fonction de la catégorie et du terme de recherche
   const filteredArticles = articles.filter(article => {
     const categoryMatch = selectedCategory === "Tous" || article.category === selectedCategory;
     const searchMatch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -118,7 +115,6 @@ const ArticlesPage = () => {
     return categoryMatch && searchMatch;
   });
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -147,7 +143,6 @@ const ArticlesPage = () => {
           <P5Canvas className="w-full h-full opacity-10" />
         </div>
 
-        {/* Hero Section */}
         <section className="pt-24 pb-8 relative z-10">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto">
@@ -172,12 +167,10 @@ const ArticlesPage = () => {
           </div>
         </section>
 
-        {/* Contenu principal */}
         <section className="py-8 relative z-10">
           <div className="container mx-auto px-4">
             <Tabs defaultValue="grid" className="w-full">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 space-y-4 md:space-y-0">
-                {/* Catégories */}
                 <div className="flex overflow-x-auto pb-2 md:pb-0 gap-2 md:max-w-[70%]">
                   {categories.map((category) => (
                     <Badge 
@@ -196,7 +189,6 @@ const ArticlesPage = () => {
                   ))}
                 </div>
 
-                {/* Vues */}
                 <div className="flex items-center justify-end space-x-2">
                   <TabsList>
                     <TabsTrigger value="grid" className="px-3">

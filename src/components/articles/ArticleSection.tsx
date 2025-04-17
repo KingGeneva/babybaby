@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from 'react-router-dom';
 
-// Données des articles (à remplacer par des données réelles)
+// Données des articles
 const articles = [
   {
     id: 1,
@@ -20,8 +20,8 @@ const articles = [
   {
     id: 2,
     title: "Astuces pour aider bébé à mieux dormir",
-    excerpt: "Des conseils pratiques pour établir une routine de sommeil et aider votre bébé à faire ses nuits.",
-    image: "/placeholder.svg",
+    excerpt: "Des conseils pratiques et naturels pour établir une routine de sommeil et aider votre bébé à faire ses nuits paisiblement.",
+    image: "/lovable-uploads/e15314a2-a50b-4867-921c-6376551b5030.png",
     category: "Sommeil",
     date: "12 avril 2025",
   },

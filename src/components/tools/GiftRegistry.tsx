@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Gift, Copy, Check, Trash2, Share2, Plus } from 'lucide-react';
 import { 
@@ -57,20 +56,17 @@ const GiftRegistry: React.FC<GiftRegistryProps> = ({ className }) => {
   const [activeFilter, setActiveFilter] = useState<'all' | 'needed' | 'purchased'>('all');
   
   useEffect(() => {
-    // Charger les cadeaux sauvegardés du localStorage
     const savedGifts = localStorage.getItem('babyGiftRegistry');
     if (savedGifts) {
       setGiftItems(JSON.parse(savedGifts));
     }
     
-    // Générer un lien unique pour le partage
     const uniqueId = localStorage.getItem('giftRegistryId') || `reg_${Math.random().toString(36).substring(2, 10)}`;
     localStorage.setItem('giftRegistryId', uniqueId);
     setRegistryLink(`${window.location.origin}/registry/${uniqueId}`);
   }, []);
   
   useEffect(() => {
-    // Sauvegarder les cadeaux dans le localStorage quand ils changent
     if (giftItems.length > 0) {
       localStorage.setItem('babyGiftRegistry', JSON.stringify(giftItems));
     }
@@ -160,14 +156,13 @@ const GiftRegistry: React.FC<GiftRegistryProps> = ({ className }) => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Gift className="h-5 w-5" />
-          Liste de Naissance
+          Registre de Cadeaux
         </CardTitle>
         <CardDescription>
           Créez et partagez votre liste de souhaits pour l'arrivée de bébé
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* En-tête avec statistiques */}
         <div className="flex flex-col space-y-2">
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium">Progression: {progressPercent}%</span>
@@ -176,7 +171,6 @@ const GiftRegistry: React.FC<GiftRegistryProps> = ({ className }) => {
           <Progress value={progressPercent} className="h-2" />
         </div>
         
-        {/* Filtres */}
         <div className="flex space-x-2">
           <Button 
             variant={activeFilter === 'all' ? "default" : "outline"} 
@@ -201,7 +195,6 @@ const GiftRegistry: React.FC<GiftRegistryProps> = ({ className }) => {
           </Button>
         </div>
         
-        {/* Liste des cadeaux */}
         <div className="space-y-3">
           {filteredGifts.length > 0 ? (
             filteredGifts.map((gift) => (
@@ -260,7 +253,6 @@ const GiftRegistry: React.FC<GiftRegistryProps> = ({ className }) => {
           )}
         </div>
         
-        {/* Actions du bas */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
