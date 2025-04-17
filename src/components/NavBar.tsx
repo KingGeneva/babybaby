@@ -12,6 +12,7 @@ const navLinks = [
   { title: 'Tableau de Bord', href: '/dashboard' },
   { title: 'Outils', href: '/tools' },
   { title: 'Communauté', href: '/community' },
+  { title: 'Articles', href: '/articles' },
 ];
 
 const NavBar: React.FC = () => {

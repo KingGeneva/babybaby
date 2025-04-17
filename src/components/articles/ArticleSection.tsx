@@ -5,6 +5,7 @@ import ArticleCard from './ArticleCard';
 import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Link } from 'react-router-dom';
 
 // Données des articles (à remplacer par des données réelles)
 const articles = [
@@ -85,13 +86,15 @@ const ArticleSection: React.FC = () => {
           transition={{ delay: 0.6 }}
           viewport={{ once: true }}
         >
-          <Button 
-            size={isMobile ? "default" : "lg"}
-            className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80"
-          >
-            Voir tous les articles
-            <ChevronRight className="ml-2 h-4 w-4" />
-          </Button>
+          <Link to="/articles">
+            <Button 
+              size={isMobile ? "default" : "lg"}
+              className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80"
+            >
+              Voir tous les articles
+              <ChevronRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

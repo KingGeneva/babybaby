@@ -17,7 +17,6 @@ const EbooksSection = lazy(() => import('@/components/ebooks/EbooksSection'));
 const ToolsSection = lazy(() => import('@/components/tools/ToolsSection'));
 const NewsletterForm = lazy(() => import('@/components/NewsletterForm'));
 const Footer = lazy(() => import('@/components/Footer'));
-const ArticleSection = lazy(() => import('@/components/articles/ArticleSection'));
 const ProductsSection = lazy(() => import('@/components/products/ProductsSection'));
 const ContactSection = lazy(() => import('@/components/ContactSection'));
 
@@ -80,10 +79,6 @@ const Index = () => {
         {/* Section ebooks (nouvelle section) */}
         <Suspense fallback={<SectionLoader />}>
           <EbooksSection />
-        </Suspense>
-        
-        <Suspense fallback={<SectionLoader />}>
-          <ArticleSection />
         </Suspense>
         
         {/* Sections à faible priorité */}
