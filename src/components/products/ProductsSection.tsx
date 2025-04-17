@@ -13,7 +13,7 @@ const products = [
     description: "Sécurité et confort optimal pour votre bébé avec rotation à 360°.",
     price: 229.99,
     image: "/placeholder.svg",
-    animationType: "crib"
+    animationType: "crib" as const
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const products = [
     description: "Poussette ultra-légère et compacte, parfaite pour les déplacements.",
     price: 179.99,
     image: "/placeholder.svg",
-    animationType: "toy"
+    animationType: "toy" as const
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ const products = [
     description: "Préparez les repas de bébé facilement avec ce mixeur multifonction.",
     price: 89.99,
     image: "/placeholder.svg",
-    animationType: "bottle"
+    animationType: "bottle" as const
   },
   {
     id: 4,
@@ -37,7 +37,7 @@ const products = [
     description: "Surveillance avancée du sommeil avec analyse des cycles et alertes.",
     price: 149.99,
     image: "/placeholder.svg",
-    animationType: "monitor"
+    animationType: "monitor" as const
   }
 ];
 
