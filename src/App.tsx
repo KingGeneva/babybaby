@@ -12,6 +12,7 @@ import CommunityPage from "./pages/CommunityPage";
 import AuthPage from "./pages/AuthPage";
 import ParentalDashboard from "./pages/ParentalDashboard";
 import ArticlesPage from "./pages/ArticlesPage";
+import EbooksPage from "./pages/EbooksPage";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/tools" element={<ToolsPage />} />
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/articles" element={<ArticlesPage />} />
+            <Route path="/ebooks" element={<EbooksPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route 
               path="/parental-dashboard" 
@@ -40,7 +42,6 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
