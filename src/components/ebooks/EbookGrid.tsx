@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Ebook } from './types';
 import EbookCard from './EbookCard';
 import { downloadEbook } from './ebookService';
+import { motion } from 'framer-motion';
 
 interface EbookGridProps {
   ebooks: Ebook[];
@@ -10,11 +11,14 @@ interface EbookGridProps {
 
 const EbookGrid: React.FC<EbookGridProps> = ({ ebooks }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
 
   const handleDownload = async (ebook: Ebook) => {
     setIsLoading(true);
+    setDownloadingId(ebook.id);
     await downloadEbook(ebook);
     setIsLoading(false);
+    setDownloadingId(null);
   };
 
   if (ebooks.length === 0) {
@@ -26,16 +30,27 @@ const EbookGrid: React.FC<EbookGridProps> = ({ ebooks }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <motion.div 
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, staggerChildren: 0.1 }}
+    >
       {ebooks.map((ebook) => (
-        <EbookCard 
-          key={ebook.id} 
-          ebook={ebook} 
-          onDownload={handleDownload}
-          isLoading={isLoading}
-        />
+        <motion.div
+          key={ebook.id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <EbookCard 
+            ebook={ebook} 
+            onDownload={handleDownload}
+            isLoading={isLoading && downloadingId === ebook.id}
+          />
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 };
 
