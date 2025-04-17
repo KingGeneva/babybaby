@@ -20,23 +20,38 @@ const AuthForm: React.FC = () => {
     setLoading(true);
 
     try {
+      console.log("Tentative d'authentification...");
+      
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        console.log("Résultat SignIn:", { data, error });
+        
         if (error) throw error;
-        navigate('/dashboard');
+        
         toast({
           title: "Connexion réussie",
           description: "Bienvenue sur votre tableau de bord parental",
         });
+        navigate('/parental-dashboard');
       } else {
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({ 
+          email, 
+          password,
+          options: {
+            emailRedirectTo: window.location.origin + '/auth'
+          }
+        });
+        console.log("Résultat SignUp:", { data, error });
+        
         if (error) throw error;
+        
         toast({
           title: "Inscription réussie",
           description: "Veuillez vérifier votre email pour confirmer votre compte",
         });
       }
     } catch (error: any) {
+      console.error("Erreur d'authentification:", error);
       toast({
         title: "Erreur",
         description: error.message || "Une erreur s'est produite",

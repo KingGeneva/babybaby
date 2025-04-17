@@ -18,23 +18,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
+    console.log("Initialisation du contexte d'authentification");
+    
+    // Écouter les changements d'état d'authentification en PREMIER
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log("Changement d'état d'authentification:", event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
       }
     );
 
-    // THEN check for existing session
+    // ENSUITE vérifier s'il existe déjà une session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("Session existante:", session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log("Nettoyage du listener d'authentification");
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signOut = async () => {
