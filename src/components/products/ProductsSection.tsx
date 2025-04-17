@@ -1,9 +1,16 @@
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
-import ProductCard from './ProductCard';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+
+// Import lazy du composant ProductCard
+const ProductCard = lazy(() => import('./ProductCard'));
+
+// Placeholder pour le chargement des cartes
+const ProductCardPlaceholder = () => (
+  <div className="w-full h-[300px] animate-pulse bg-gray-100 rounded-lg"></div>
+);
 
 // Données de produits recommandés
 const products = [
@@ -69,7 +76,9 @@ const ProductsSection: React.FC = () => {
             {products.map((product, index) => (
               <CarouselItem key={product.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
                 <div className="p-1">
-                  <ProductCard product={product} index={index} />
+                  <Suspense fallback={<ProductCardPlaceholder />}>
+                    <ProductCard product={product} index={index} />
+                  </Suspense>
                 </div>
               </CarouselItem>
             ))}

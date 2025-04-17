@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,28 +30,36 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [lottieAnimData, setLottieAnimData] = useState<object | null>(null);
-
-  // Chargement différé des animations Lottie
+  const [isLoading, setIsLoading] = useState(true);
+  const cardRef = useRef<HTMLDivElement>(null);
+  
+  // Optimisation du chargement des animations Lottie
   useEffect(() => {
-    let animData;
-    switch (product.animationType) {
-      case 'crib':
-        animData = babyCribAnimation;
-        break;
-      case 'bottle':
-        animData = babyBottleAnimation;
-        break;
-      case 'toy':
-        animData = babyToyAnimation;
-        break;
-      case 'monitor':
-        animData = babyMonitorAnimation;
-        break;
-      default:
-        animData = babyToyAnimation;
-    }
-    setLottieAnimData(animData);
-  }, [product.animationType]);
+    // Utilisation d'un timer pour retarder légèrement le chargement des animations
+    const timer = setTimeout(() => {
+      let animData;
+      switch (product.animationType) {
+        case 'crib':
+          animData = babyCribAnimation;
+          break;
+        case 'bottle':
+          animData = babyBottleAnimation;
+          break;
+        case 'toy':
+          animData = babyToyAnimation;
+          break;
+        case 'monitor':
+          animData = babyMonitorAnimation;
+          break;
+        default:
+          animData = babyToyAnimation;
+      }
+      setLottieAnimData(animData);
+      setIsLoading(false);
+    }, 100 * index); // Échelonne le chargement en fonction de l'index
+    
+    return () => clearTimeout(timer);
+  }, [product.animationType, index]);
 
   return (
     <motion.div
@@ -62,13 +70,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
       whileHover={{ y: -5 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
+      ref={cardRef}
     >
       <Card className="overflow-hidden h-full flex flex-col border-2 hover:border-babybaby-cosmic/50 transition-all duration-300">
         <div className="relative p-4 flex justify-center items-center h-48 bg-gradient-to-b from-sky-50 to-white">
           <HoverCard>
             <HoverCardTrigger asChild>
               <div className="w-full h-full cursor-pointer flex items-center justify-center">
-                {lottieAnimData && (
+                {isLoading ? (
+                  <div className="w-32 h-32 animate-pulse bg-gray-100 rounded-full"></div>
+                ) : lottieAnimData ? (
                   <Lottie 
                     animationData={lottieAnimData} 
                     loop={true}
@@ -83,7 +94,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
                       progressiveLoad: true
                     }}
                   />
-                )}
+                ) : null}
               </div>
             </HoverCardTrigger>
             <HoverCardContent className="w-80">
