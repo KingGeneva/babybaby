@@ -1,20 +1,19 @@
-
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import P5Canvas from './P5Canvas';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection: React.FC = () => {
   const [typedText, setTypedText] = useState('');
   const fullText = 'L\'application complète pour les parents modernes';
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   
-  // Animation d'écriture optimisée
   useEffect(() => {
     let i = 0;
-    // Accélération de l'animation
     const typingSpeed = isMobile ? 30 : 50; 
     
     const typingInterval = setInterval(() => {
@@ -29,7 +28,6 @@ const HeroSection: React.FC = () => {
     return () => clearInterval(typingInterval);
   }, [isMobile]);
 
-  // Variantes d'animation simplifiées pour performance
   const containerVariants = {
     hidden: {},
     visible: {
@@ -54,24 +52,15 @@ const HeroSection: React.FC = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Fond animé P5.js avec optimisation */}
       <div className="absolute inset-0 z-0">
         <P5Canvas className={`w-full h-full ${isMobile ? 'opacity-20' : ''}`} />
       </div>
       
-      {/* Contenu du Hero */}
       <div className="container mx-auto px-4 z-10">
-        <motion.div 
-          className="max-w-4xl mx-auto text-center"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Titre simplifié */}
+        <motion.div className="max-w-4xl mx-auto text-center">
           <motion.div variants={itemVariants}>
             <motion.h1 
               className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 text-babybaby-cosmic"
-              // Animation simplifiée pour le titre
               animate={{ 
                 textShadow: [
                   "0 0 5px rgba(14, 165, 233, 0)",
@@ -103,17 +92,15 @@ const HeroSection: React.FC = () => {
             </motion.h2>
           </motion.div>
           
-          {/* CTA */}
           <motion.div variants={itemVariants}>
             <motion.div 
               className="inline-block"
-              whileHover={{ 
-                scale: 1.03,
-              }}
+              whileHover={{ scale: 1.03 }}
             >
               <Button 
                 size={isMobile ? "default" : "lg"}
                 className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 button-glow text-white font-bold px-6 py-3 sm:px-8 sm:py-5 text-base sm:text-lg rounded-full"
+                onClick={() => navigate('/auth')}
               >
                 Commencer maintenant
                 <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />

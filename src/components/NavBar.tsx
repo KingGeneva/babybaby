@@ -9,7 +9,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 const navLinks = [
   { title: 'Accueil', href: '/' },
-  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Tableau de Bord', href: '/dashboard' },
   { title: 'Outils', href: '/tools' },
   { title: 'Communauté', href: '/community' },
 ];
