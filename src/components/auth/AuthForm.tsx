@@ -15,6 +15,29 @@ const AuthForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Fonction pour envoyer un email personnalisé
+  const sendCustomEmail = async (email: string, type: 'signup' | 'magiclink' | 'recovery', actionLink?: string) => {
+    try {
+      await fetch(`https://pxynugnbikiwbsqdgewx.supabase.co/functions/v1/send-custom-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabase.auth.session()?.access_token || ''}`,
+        },
+        body: JSON.stringify({
+          email,
+          type,
+          meta: {
+            action_link: actionLink || '',
+          }
+        }),
+      });
+      console.log(`Email personnalisé de type ${type} envoyé à ${email}`);
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de l'email personnalisé:", error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -45,6 +68,13 @@ const AuthForm: React.FC = () => {
         
         if (error) throw error;
         
+        // Si l'inscription a réussi et qu'une confirmation par email est nécessaire
+        if (data?.user && !data.session) {
+          // Nous enverrons notre propre email personnalisé
+          // Note: dans un environnement de production, il faudrait configurer Supabase pour utiliser notre webhook
+          sendCustomEmail(email, 'signup');
+        }
+        
         toast({
           title: "Inscription réussie",
           description: "Veuillez vérifier votre email pour confirmer votre compte",
@@ -70,7 +100,7 @@ const AuthForm: React.FC = () => {
             {isLogin ? 'Connexion' : 'Inscription'}
           </CardTitle>
           <CardDescription className="text-center">
-            {isLogin ? 'Accédez à votre tableau de bord parental' : 'Créez votre compte pour suivre la croissance de votre enfant'}
+            {isLogin ? 'Accédez à votre tableau de bord parental' : 'Créez votre compte pour suivre la croissance de votre bébé'}
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -3,3 +3,6 @@ project_id = "pxynugnbikiwbsqdgewx"
 
 [functions.send-contact-email]
 verify_jwt = false
+
+[functions.send-custom-email]
+verify_jwt = false
