@@ -1,4 +1,3 @@
-
 import React, { useEffect, Suspense, lazy } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -10,27 +9,12 @@ import { useIsMobile } from '@/hooks/use-mobile';
 const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
 
 // Utilisation du lazy loading avec chargement différé pour les sections moins critiques
-const ToolsSection = lazy(() => {
-  // Retarde légèrement le chargement pour prioriser les contenus critiques
-  return new Promise(resolve => {
-    setTimeout(() => resolve(import('@/components/tools/ToolsSection')), 500);
-  });
-});
-
-const NewsletterForm = lazy(() => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(import('@/components/NewsletterForm')), 300);
-  });
-});
-
+const ToolsSection = lazy(() => import('@/components/tools/ToolsSection'));
+const NewsletterForm = lazy(() => import('@/components/NewsletterForm'));
 const Footer = lazy(() => import('@/components/Footer'));
 const ArticleSection = lazy(() => import('@/components/articles/ArticleSection'));
 const ProductsSection = lazy(() => import('@/components/products/ProductsSection'));
-const ContactSection = lazy(() => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(import('@/components/ContactSection')), 800);
-  });
-});
+const ContactSection = lazy(() => import('@/components/ContactSection'));
 
 // Fallback loader pour les composants en chargement - plus compact
 const SectionLoader = () => (

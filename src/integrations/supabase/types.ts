@@ -9,7 +9,115 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      child_profiles: {
+        Row: {
+          birth_date: string
+          created_at: string
+          gender: string
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          birth_date: string
+          created_at?: string
+          gender: string
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          birth_date?: string
+          created_at?: string
+          gender?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      growth_measurements: {
+        Row: {
+          child_id: string
+          created_at: string
+          head_cm: number | null
+          height_cm: number | null
+          id: string
+          measurement_date: string
+          notes: string | null
+          weight_kg: number | null
+        }
+        Insert: {
+          child_id: string
+          created_at?: string
+          head_cm?: number | null
+          height_cm?: number | null
+          id?: string
+          measurement_date: string
+          notes?: string | null
+          weight_kg?: number | null
+        }
+        Update: {
+          child_id?: string
+          created_at?: string
+          head_cm?: number | null
+          height_cm?: number | null
+          id?: string
+          measurement_date?: string
+          notes?: string | null
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "growth_measurements_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "child_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      milestones: {
+        Row: {
+          achieved_date: string | null
+          child_id: string
+          created_at: string
+          expected_age_months: number | null
+          id: string
+          name: string
+          notes: string | null
+        }
+        Insert: {
+          achieved_date?: string | null
+          child_id: string
+          created_at?: string
+          expected_age_months?: number | null
+          id?: string
+          name: string
+          notes?: string | null
+        }
+        Update: {
+          achieved_date?: string | null
+          child_id?: string
+          created_at?: string
+          expected_age_months?: number | null
+          id?: string
+          name?: string
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestones_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "child_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
