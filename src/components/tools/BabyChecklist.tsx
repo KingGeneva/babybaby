@@ -1,6 +1,9 @@
 
-import React, { useState, useEffect } from 'react';
-import { Check, CheckSquare, Square, Plus, Save, Trash2, Undo2, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { 
+  Check, CheckSquare, Square, Plus, Save, Trash2, Undo2, CheckCircle2,
+  Filter, ListFilter, FolderTree, ListChecks, Bookmark, Tag
+} from 'lucide-react';
 import { 
   Card, 
   CardHeader, 
@@ -12,6 +15,13 @@ import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface ChecklistItem {
   id: string;
@@ -93,6 +103,8 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
   const [newItemText, setNewItemText] = useState('');
   const [newItemCategory, setNewItemCategory] = useState<string>(categories[0]);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'all' | 'todo' | 'done'>('all');
+  const [accordionExpandedValues, setAccordionExpandedValues] = useState<string[]>(categories);
   
   // Charger les items sauvegardés depuis le localStorage
   useEffect(() => {
@@ -105,6 +117,62 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
   // Sauvegarder les items dans le localStorage quand ils changent
   useEffect(() => {
     localStorage.setItem('babyChecklist', JSON.stringify(items));
+  }, [items]);
+
+  // Organiser les items par catégorie
+  const itemsByCategory = useMemo(() => {
+    const grouped: Record<string, ChecklistItem[]> = {};
+    
+    // Initialiser toutes les catégories, même vides
+    categories.forEach(category => {
+      grouped[category] = [];
+    });
+    
+    // Ajouter les items aux catégories
+    items.forEach(item => {
+      if (grouped[item.category]) {
+        grouped[item.category].push(item);
+      } else {
+        if (!grouped['Autre']) grouped['Autre'] = [];
+        grouped['Autre'].push(item);
+      }
+    });
+    
+    return grouped;
+  }, [items]);
+  
+  // Filtrer les items selon le mode de vue et la catégorie active
+  const filteredItems = useMemo(() => {
+    let filtered = [...items];
+    
+    // Filtrer par catégorie si une est sélectionnée
+    if (activeCategory) {
+      filtered = filtered.filter(item => item.category === activeCategory);
+    }
+    
+    // Filtrer selon le mode de vue
+    if (viewMode === 'todo') {
+      filtered = filtered.filter(item => !item.checked);
+    } else if (viewMode === 'done') {
+      filtered = filtered.filter(item => item.checked);
+    }
+    
+    return filtered;
+  }, [items, activeCategory, viewMode]);
+
+  // Statistiques par catégorie
+  const categoryStats = useMemo(() => {
+    const stats: Record<string, { total: number, completed: number }> = {};
+    
+    categories.forEach(category => {
+      const categoryItems = items.filter(item => item.category === category);
+      stats[category] = {
+        total: categoryItems.length,
+        completed: categoryItems.filter(item => item.checked).length
+      };
+    });
+    
+    return stats;
   }, [items]);
   
   const handleAddItem = () => {
@@ -157,115 +225,244 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
     });
   };
   
-  // Filtrer les items par catégorie active
-  const filteredItems = activeCategory
-    ? items.filter(item => item.category === activeCategory)
-    : items;
-    
-  // Calcul des statistiques
+  // Calcul des statistiques globales
   const totalItems = items.length;
   const checkedItems = items.filter(item => item.checked).length;
   const progress = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
-  
+
   // Obtenir les catégories uniques présentes dans les items
   const uniqueCategories = Array.from(new Set(items.map(item => item.category)));
   
+  // Gérer les accordions
+  const toggleAccordion = (category: string) => {
+    setAccordionExpandedValues(prev => 
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
+  
+  const toggleAllAccordions = (expand: boolean) => {
+    setAccordionExpandedValues(expand ? [...categories] : []);
+  };
+  
   return (
     <Card className={className}>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Check className="h-5 w-5" />
-          Checklist de Préparation
-        </CardTitle>
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <ListChecks className="h-5 w-5" />
+            Checklist de Préparation
+          </CardTitle>
+          <Badge variant="outline" className="font-normal">
+            {checkedItems}/{totalItems} complétés
+          </Badge>
+        </div>
       </CardHeader>
+      
       <CardContent className="space-y-6">
         {/* Progression */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <span className="text-sm font-medium">Progression</span>
+            <span className="text-sm font-medium">Progression globale</span>
             <span className="text-sm font-medium">{progress}% complété</span>
           </div>
           <Progress value={progress} className="h-2" />
-          <p className="text-sm text-muted-foreground text-right">
-            {checkedItems}/{totalItems} éléments cochés
-          </p>
         </div>
-        
-        {/* Filtres par catégorie */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Filtrer par catégorie</label>
-          <div className="flex flex-wrap gap-2">
-            <Button 
-              variant={activeCategory === null ? "default" : "outline"}
-              size="sm"
-              onClick={() => setActiveCategory(null)}
-            >
-              Tout
-            </Button>
-            {uniqueCategories.map(category => (
-              <Button
-                key={category}
-                variant={activeCategory === category ? "default" : "outline"}
-                size="sm"
-                onClick={() => setActiveCategory(category)}
-              >
-                {category}
+
+        {/* Modes de vue et filtres */}
+        <Tabs defaultValue="categories" className="w-full">
+          <div className="flex items-center justify-between mb-2">
+            <TabsList>
+              <TabsTrigger value="categories">Par catégorie</TabsTrigger>
+              <TabsTrigger value="list">Liste</TabsTrigger>
+            </TabsList>
+            
+            <div className="flex gap-1">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-8 px-2" 
+                onClick={() => toggleAllAccordions(true)}>
+                <FolderTree className="h-3.5 w-3.5 mr-1" /> Tout ouvrir
               </Button>
-            ))}
-          </div>
-        </div>
-        
-        {/* Liste d'items */}
-        <div className="space-y-2 max-h-80 overflow-y-auto pr-2">
-          {filteredItems.length > 0 ? (
-            filteredItems.map(item => (
-              <div
-                key={item.id}
-                className="flex items-center justify-between p-2 rounded-lg hover:bg-accent group"
-              >
-                <div className="flex items-center gap-2 flex-1">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() => handleToggleItem(item.id)}
-                  >
-                    {item.checked ? (
-                      <CheckSquare className="h-5 w-5 text-green-500" />
-                    ) : (
-                      <Square className="h-5 w-5" />
-                    )}
-                  </Button>
-                  <span className={`${item.checked ? 'line-through text-muted-foreground' : ''}`}>
-                    {item.text}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Badge variant="outline" className="mr-2">
-                    {item.category}
-                  </Badge>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => handleDeleteItem(item.id)}
-                  >
-                    <Trash2 className="h-4 w-4 text-destructive" />
-                  </Button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              <CheckCircle2 className="mx-auto h-12 w-12 mb-2 opacity-30" />
-              {activeCategory ? (
-                <p>Aucun élément dans la catégorie {activeCategory}</p>
-              ) : (
-                <p>Votre liste est vide</p>
-              )}
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-8 px-2" 
+                onClick={() => toggleAllAccordions(false)}>
+                <FolderTree className="h-3.5 w-3.5 mr-1" /> Tout fermer
+              </Button>
             </div>
-          )}
-        </div>
+          </div>
+
+          <div className="pt-2">
+            <div className="flex gap-2 mb-4">
+              <Button 
+                variant={viewMode === 'all' ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode('all')}
+                className="flex-1"
+              >
+                <ListFilter className="h-4 w-4 mr-1" /> Tous
+              </Button>
+              <Button 
+                variant={viewMode === 'todo' ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode('todo')}
+                className="flex-1"
+              >
+                <Square className="h-4 w-4 mr-1" /> À faire
+              </Button>
+              <Button 
+                variant={viewMode === 'done' ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode('done')}
+                className="flex-1"
+              >
+                <CheckSquare className="h-4 w-4 mr-1" /> Complété
+              </Button>
+            </div>
+            
+            <TabsContent value="categories" className="mt-0">
+              <div className="max-h-[450px] overflow-y-auto pr-2">
+                <Accordion type="multiple" value={accordionExpandedValues}>
+                  {categories.map((category) => (
+                    <AccordionItem key={category} value={category}>
+                      <AccordionTrigger 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleAccordion(category);
+                        }} 
+                        className="py-2"
+                      >
+                        <div className="flex items-center justify-between w-full pr-4">
+                          <div className="flex items-center">
+                            <Bookmark className="h-4 w-4 mr-2 text-muted-foreground" />
+                            <span>{category}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <span className="text-xs text-muted-foreground">
+                              {categoryStats[category]?.completed || 0}/{categoryStats[category]?.total || 0}
+                            </span>
+                            <div className="w-16 h-1.5 bg-gray-100 rounded-full ml-2">
+                              <div 
+                                className="h-full bg-green-500 rounded-full" 
+                                style={{ 
+                                  width: categoryStats[category]?.total 
+                                    ? `${(categoryStats[category].completed / categoryStats[category].total) * 100}%`
+                                    : '0%'
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                      
+                      <AccordionContent>
+                        {itemsByCategory[category]?.length > 0 ? (
+                          <div className="space-y-1 pl-2">
+                            {itemsByCategory[category]
+                              .filter(item => {
+                                if (viewMode === 'todo') return !item.checked;
+                                if (viewMode === 'done') return item.checked;
+                                return true;
+                              })
+                              .map(item => (
+                                <div
+                                  key={item.id}
+                                  className="flex items-center justify-between py-1.5 px-2 rounded-md hover:bg-accent group"
+                                >
+                                  <div className="flex items-center gap-2 flex-1">
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-6 w-6"
+                                      onClick={() => handleToggleItem(item.id)}
+                                    >
+                                      {item.checked ? (
+                                        <CheckSquare className="h-4 w-4 text-green-500" />
+                                      ) : (
+                                        <Square className="h-4 w-4" />
+                                      )}
+                                    </Button>
+                                    <span className={`${item.checked ? 'line-through text-muted-foreground' : ''}`}>
+                                      {item.text}
+                                    </span>
+                                  </div>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    onClick={() => handleDeleteItem(item.id)}
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                                  </Button>
+                                </div>
+                              ))}
+                          </div>
+                        ) : (
+                          <div className="text-center py-3 text-muted-foreground">
+                            <p className="text-sm">Aucun élément dans cette catégorie</p>
+                          </div>
+                        )}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="list" className="mt-0">
+              <div className="max-h-[450px] overflow-y-auto pr-2 space-y-1">
+                {filteredItems.length > 0 ? (
+                  filteredItems.map(item => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between py-2 px-3 rounded-md hover:bg-accent group border-b border-gray-100 last:border-0"
+                    >
+                      <div className="flex items-center gap-2 flex-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6"
+                          onClick={() => handleToggleItem(item.id)}
+                        >
+                          {item.checked ? (
+                            <CheckSquare className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <Square className="h-4 w-4" />
+                          )}
+                        </Button>
+                        <span className={`${item.checked ? 'line-through text-muted-foreground' : ''}`}>
+                          {item.text}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Badge variant="outline" className="h-6">
+                          {item.category}
+                        </Badge>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => handleDeleteItem(item.id)}
+                        >
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <CheckCircle2 className="mx-auto h-12 w-12 mb-2 opacity-30" />
+                    <p>Aucun élément trouvé</p>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+          </div>
+        </Tabs>
         
         {/* Ajout d'item */}
         <div className="space-y-3 pt-2 border-t">
@@ -276,6 +473,9 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
               value={newItemText}
               onChange={(e) => setNewItemText(e.target.value)}
               className="flex-1"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleAddItem();
+              }}
             />
             <select
               value={newItemCategory}

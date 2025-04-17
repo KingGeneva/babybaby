@@ -10,25 +10,67 @@ import {
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
+import { toast } from '@/components/ui/use-toast';
 
 interface Lullaby {
   id: string;
   title: string;
   artist: string;
   duration: number; // en secondes
+  audioSrc: string;
 }
 
 interface LullabyPlayerProps {
   className?: string;
 }
 
+// Simuler des fichiers audio avec des URLs fictives
+// Dans un environnement réel, ces URLs pointeraient vers de vrais fichiers audio
 const lullabies: Lullaby[] = [
-  { id: 'twinkle', title: 'Twinkle Twinkle Little Star', artist: 'Traditionnel', duration: 135 },
-  { id: 'brahms', title: 'Berceuse de Brahms', artist: 'Johannes Brahms', duration: 152 },
-  { id: 'claire', title: 'Au Clair de la Lune', artist: 'Traditionnel', duration: 118 },
-  { id: 'mozart', title: 'Petite musique de nuit', artist: 'Mozart', duration: 147 },
-  { id: 'frere', title: 'Frère Jacques', artist: 'Traditionnel', duration: 98 },
+  { 
+    id: 'twinkle', 
+    title: 'Twinkle Twinkle Little Star', 
+    artist: 'Traditionnel', 
+    duration: 135,
+    audioSrc: 'https://example.com/audio/twinkle.mp3'
+  },
+  { 
+    id: 'brahms', 
+    title: 'Berceuse de Brahms', 
+    artist: 'Johannes Brahms', 
+    duration: 152,
+    audioSrc: 'https://example.com/audio/brahms.mp3'
+  },
+  { 
+    id: 'claire', 
+    title: 'Au Clair de la Lune', 
+    artist: 'Traditionnel', 
+    duration: 118,
+    audioSrc: 'https://example.com/audio/claire.mp3'
+  },
+  { 
+    id: 'mozart', 
+    title: 'Petite musique de nuit', 
+    artist: 'Mozart', 
+    duration: 147,
+    audioSrc: 'https://example.com/audio/mozart.mp3'
+  },
+  { 
+    id: 'frere', 
+    title: 'Frère Jacques', 
+    artist: 'Traditionnel', 
+    duration: 98,
+    audioSrc: 'https://example.com/audio/frere.mp3'
+  },
 ];
+
+// Créons un élément audio pour notre simulation
+const createAudio = () => {
+  const audio = new Audio();
+  // Pour simuler, on retourne l'élément audio sans source
+  // Dans un environnement réel, on lui attribuerait une source ici
+  return audio;
+};
 
 const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
   const [currentLullabyIndex, setCurrentLullabyIndex] = useState(0);
@@ -46,11 +88,15 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
 
   // Initialiser l'audio
   useEffect(() => {
-    // Dans une application réelle, nous utiliserions de vrais fichiers audio
-    // Pour cette démo, nous simulons l'audio avec l'API Web Audio
+    if (!audioRef.current) {
+      audioRef.current = createAudio();
+    }
     
-    audioRef.current = new Audio();
-    audioRef.current.volume = volume / 100;
+    // Simulation: informer l'utilisateur
+    toast({
+      title: "Lecture simulée",
+      description: "Le lecteur de berceuses est en mode simulation",
+    });
     
     return () => {
       if (audioRef.current) {
@@ -84,7 +130,7 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
     };
   }, [isLooping]);
   
-  // Simulation de la lecture audio (dans un projet réel, ceci serait géré par l'événement 'timeupdate' de l'audio)
+  // Simulation de la lecture audio
   useEffect(() => {
     if (isPlaying) {
       progressInterval.current = window.setInterval(() => {
@@ -92,6 +138,9 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
           if (prev >= currentLullaby.duration) {
             if (progressInterval.current) {
               clearInterval(progressInterval.current);
+            }
+            if (isLooping) {
+              playNext();
             }
             return 0;
           }
@@ -109,7 +158,7 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
         clearInterval(progressInterval.current);
       }
     };
-  }, [isPlaying, currentLullaby]);
+  }, [isPlaying, currentLullaby, isLooping]);
   
   // Gérer les changements de volume
   useEffect(() => {
@@ -117,19 +166,51 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
       audioRef.current.volume = isMuted ? 0 : volume / 100;
     }
   }, [volume, isMuted]);
+
+  // Changer de berceuse
+  useEffect(() => {
+    if (audioRef.current) {
+      // Dans un environnement réel, on mettrait à jour la source audio ici
+      audioRef.current.currentTime = 0;
+      setCurrentTime(0);
+      
+      if (isPlaying) {
+        audioRef.current.play().catch(err => {
+          console.error("Erreur lors de la lecture:", err);
+          // Informer l'utilisateur de l'erreur
+          toast({
+            title: "Erreur de lecture",
+            description: "Impossible de lire la berceuse, veuillez réessayer.",
+            variant: "destructive"
+          });
+          setIsPlaying(false);
+        });
+      }
+    }
+  }, [currentLullabyIndex]);
   
   const togglePlayPause = () => {
-    // Dans un vrai lecteur, nous démarrerions ou arrêterions la lecture audio réelle
     if (isPlaying) {
       if (audioRef.current) {
         audioRef.current.pause();
       }
     } else {
       if (audioRef.current) {
-        audioRef.current.play();
+        // Simulation du play
+        audioRef.current.play().catch(err => {
+          console.error("Erreur lors de la lecture:", err);
+        });
       }
     }
     setIsPlaying(!isPlaying);
+    
+    // Feedback utilisateur
+    toast({
+      title: isPlaying ? "Berceuse mise en pause" : "Berceuse en cours de lecture",
+      description: isPlaying 
+        ? "La lecture a été mise en pause" 
+        : `"${currentLullaby.title}" est en cours de lecture`,
+    });
   };
   
   const playNext = () => {
@@ -150,11 +231,23 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
       setVolume(0);
     }
     setIsMuted(!isMuted);
+    
+    // Feedback utilisateur
+    toast({
+      title: isMuted ? "Son activé" : "Son désactivé",
+      description: isMuted 
+        ? "Le volume a été rétabli" 
+        : "Le son a été coupé",
+    });
   };
   
   const handleProgressChange = (values: number[]) => {
-    setCurrentTime(values[0]);
-    // Dans un vrai lecteur, nous changerions également la position de lecture audio
+    const newTime = values[0];
+    setCurrentTime(newTime);
+    
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime;
+    }
   };
   
   const formatTime = (seconds: number) => {
@@ -206,7 +299,7 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
           <Button 
             variant="default" 
             size="icon"
-            className="h-12 w-12 rounded-full"
+            className="h-12 w-12 rounded-full bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
             onClick={togglePlayPause}
           >
             {isPlaying ? (
@@ -268,7 +361,7 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
             >
               <div className="flex items-center gap-2">
                 {index === currentLullabyIndex && isPlaying ? (
-                  <Badge variant="default" className="w-6 h-6 flex items-center justify-center p-0">
+                  <Badge variant="default" className="w-6 h-6 flex items-center justify-center p-0 bg-babybaby-cosmic">
                     <Pause className="h-3 w-3" />
                   </Badge>
                 ) : (

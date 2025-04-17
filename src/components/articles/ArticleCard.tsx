@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Calendar, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 type Article = {
   id: number;
@@ -50,12 +51,14 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         </CardContent>
 
         <CardFooter className="pt-0">
-          <motion.button
-            className="text-babybaby-cosmic flex items-center text-sm hover:underline"
-            whileHover={{ x: 5 }}
-          >
-            Lire la suite <ChevronRight className="h-4 w-4 ml-1" />
-          </motion.button>
+          <Link to={`/articles/${article.id}`}>
+            <motion.button
+              className="text-babybaby-cosmic flex items-center text-sm hover:underline"
+              whileHover={{ x: 5 }}
+            >
+              Lire la suite <ChevronRight className="h-4 w-4 ml-1" />
+            </motion.button>
+          </Link>
         </CardFooter>
       </Card>
     </motion.div>
