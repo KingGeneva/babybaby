@@ -18,11 +18,13 @@ const AuthForm: React.FC = () => {
   // Fonction pour envoyer un email personnalisé
   const sendCustomEmail = async (email: string, type: 'signup' | 'magiclink' | 'recovery', actionLink?: string) => {
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      
       await fetch(`https://pxynugnbikiwbsqdgewx.supabase.co/functions/v1/send-custom-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabase.auth.session()?.access_token || ''}`,
+          'Authorization': `Bearer ${sessionData?.session?.access_token || ''}`,
         },
         body: JSON.stringify({
           email,
