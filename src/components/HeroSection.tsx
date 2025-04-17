@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import P5Canvas from './P5Canvas';
-import Logo from './Logo';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 
@@ -62,38 +61,6 @@ const HeroSection: React.FC = () => {
           initial="hidden"
           animate="visible"
         >
-          {/* Logo 3D flottant */}
-          <motion.div
-            className="mb-8"
-            variants={itemVariants}
-            animate={{ y: [0, -10, 0] }}
-            transition={{ 
-              repeat: Infinity, 
-              duration: 3,
-              ease: "easeInOut"
-            }}
-          >
-            <div className="inline-block relative">
-              <img 
-                src="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" 
-                alt="BabyBaby Logo" 
-                className="w-24 h-24 md:w-32 md:h-32 object-contain"
-              />
-              <motion.div
-                className="absolute inset-0 bg-babybaby-blue rounded-full mix-blend-plus-lighter opacity-30"
-                animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.5, 0.3]
-                }}
-                transition={{ 
-                  repeat: Infinity, 
-                  duration: 3,
-                  ease: "easeInOut"
-                }}
-              />
-            </div>
-          </motion.div>
-          
           {/* Titre et sous-titre */}
           <motion.div variants={itemVariants}>
             <motion.h1 
@@ -111,7 +78,7 @@ const HeroSection: React.FC = () => {
                 ease: "easeInOut"
               }}
             >
-              <Logo size="lg" className="inline-block" />
+              BabyBaby
             </motion.h1>
           </motion.div>
           

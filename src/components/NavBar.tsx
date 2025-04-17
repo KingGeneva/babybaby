@@ -56,7 +56,22 @@ const NavBar: React.FC = () => {
         isScrolled ? "cosmic-shadow" : ""
       )}>
         <div className="flex justify-between items-center">
-          <Logo />
+          <div className="flex items-center space-x-3">
+            <motion.div
+              whileHover={{ 
+                scale: 1.05,
+                rotate: [0, -5, 5, -5, 0],
+                transition: { duration: 0.5 }
+              }}
+            >
+              <img 
+                src="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" 
+                alt="BabyBaby Logo" 
+                className="w-8 h-8 md:w-10 md:h-10 object-contain"
+              />
+            </motion.div>
+            <Logo />
+          </div>
           
           {/* Navigation desktop */}
           <nav className="hidden md:flex items-center space-x-8">

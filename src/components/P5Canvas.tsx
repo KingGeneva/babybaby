@@ -1,46 +1,48 @@
 
-import React from 'react';
-import p5Types from 'p5';
-// We need to use the default import for react-p5
-import Sketch from 'react-p5';
+import React, { useRef, useEffect } from 'react';
+import p5 from 'p5';
 
-interface ParticleType {
+interface BubbleType {
   x: number;
   y: number;
   size: number;
   speed: number;
   color: string;
   alpha: number;
-  direction: number;
-  p5: p5Types;
+  targetSize: number;
+  p5: p5;
   update: () => void;
   display: () => void;
+  grow: () => void;
+  shrink: () => void;
+  isNear: (mouseX: number, mouseY: number) => boolean;
 }
 
-class Particle {
+class Bubble {
   x: number;
   y: number;
   size: number;
   speed: number;
   color: string;
   alpha: number;
+  targetSize: number;
   direction: number;
-  p5: p5Types;
+  p5: p5;
 
-  constructor(p5: p5Types) {
+  constructor(p5: p5) {
     this.p5 = p5;
     this.x = p5.random(p5.width);
     this.y = p5.random(p5.height);
-    this.size = p5.random(2, 6);
-    this.speed = p5.random(0.2, 1);
+    this.size = p5.random(5, 25);
+    this.targetSize = this.size;
+    this.speed = p5.random(0.3, 1.2);
     
-    // Palette de couleurs BabyBaby
+    // Palette de couleurs BabyBaby - Bulles bleues et roses uniquement
     const colors = [
       '#33C3F0', // bleu
       '#0EA5E9', // bleu cosmique
       '#FFDEE2', // rose
-      '#D3E4FD', // bleu clair
-      '#FFFFFF', // blanc
+      '#D946EF', // rose magenta
     ];
     
     this.color = p5.random(colors);
@@ -49,10 +51,11 @@ class Particle {
   }
 
   update() {
+    // Mouvement doux de flottement
     this.x += this.speed * this.p5.cos(this.direction);
     this.y += this.speed * this.p5.sin(this.direction);
     
-    // Change légèrement la direction pour créer un mouvement plus naturel
+    // Changement de direction pour mouvement plus organique
     this.direction += this.p5.random(-0.05, 0.05);
     
     // Rebond sur les bords
@@ -64,11 +67,11 @@ class Particle {
       this.direction = -this.direction;
     }
     
-    // Fluctuation de taille et opacité pour effet de scintillement
-    this.size += this.p5.random(-0.1, 0.1);
-    this.size = this.p5.constrain(this.size, 1.5, 6);
+    // Animation douce de la taille vers la taille cible
+    this.size = this.p5.lerp(this.size, this.targetSize, 0.1);
     
-    this.alpha += this.p5.random(-5, 5);
+    // Fluctuation légère d'opacité
+    this.alpha += this.p5.random(-2, 2);
     this.alpha = this.p5.constrain(this.alpha, 100, 200);
   }
 
@@ -78,6 +81,28 @@ class Particle {
     c.setAlpha(this.alpha);
     this.p5.fill(c);
     this.p5.ellipse(this.x, this.y, this.size);
+    
+    // Ajout d'un halo lumineux
+    const halo = this.p5.color(this.color);
+    halo.setAlpha(30);
+    this.p5.fill(halo);
+    this.p5.ellipse(this.x, this.y, this.size * 1.3);
+  }
+  
+  // Méthode pour agrandir la bulle
+  grow() {
+    this.targetSize = this.size * 1.5;
+  }
+  
+  // Méthode pour rétrécir la bulle
+  shrink() {
+    this.targetSize = this.size / 1.5;
+  }
+  
+  // Vérifier si la bulle est proche du curseur
+  isNear(mouseX: number, mouseY: number) {
+    const distance = this.p5.dist(mouseX, mouseY, this.x, this.y);
+    return distance < this.size * 2;
   }
 }
 
@@ -86,36 +111,80 @@ interface P5CanvasProps {
 }
 
 const P5Canvas: React.FC<P5CanvasProps> = ({ className }) => {
-  const particles: ParticleType[] = [];
-  const particleCount = 100;
-
-  const setup = (p5: p5Types, canvasParentRef: Element) => {
-    p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
-    
-    // Création des particules
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle(p5));
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const sketchRef = useRef<p5 | null>(null);
+  
+  useEffect(() => {
+    // Détruire l'instance p5 précédente si elle existe
+    if (sketchRef.current) {
+      sketchRef.current.remove();
     }
-  };
-
-  const draw = (p5: p5Types) => {
-    p5.clear();
     
-    // Mise à jour et affichage des particules
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update();
-      particles[i].display();
-    }
-  };
+    // Créer une nouvelle instance p5
+    const sketch = new p5((p: p5) => {
+      const bubbles: BubbleType[] = [];
+      const bubbleCount = 40; // Nombre de bulles
+      let mouseIsPressed = false;
+      
+      p.setup = () => {
+        const canvas = p.createCanvas(p.windowWidth, p.windowHeight);
+        canvas.parent(canvasRef.current!);
+        
+        // Création des bulles
+        for (let i = 0; i < bubbleCount; i++) {
+          bubbles.push(new Bubble(p));
+        }
+      };
 
-  const windowResized = (p5: p5Types) => {
-    p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
-  };
+      p.draw = () => {
+        p.clear();
+        
+        // Mise à jour et affichage des bulles
+        for (let i = 0; i < bubbles.length; i++) {
+          bubbles[i].update();
+          bubbles[i].display();
+          
+          // Vérifier l'interaction avec la souris
+          if (p.mouseX > 0 && p.mouseY > 0 && p.mouseX < p.width && p.mouseY < p.height) {
+            if (bubbles[i].isNear(p.mouseX, p.mouseY)) {
+              if (mouseIsPressed) {
+                bubbles[i].grow(); // Grandir si le curseur est proche et le bouton pressé
+              } else {
+                bubbles[i].shrink(); // Rétrécir si juste survolé
+              }
+            } else if (bubbles[i].targetSize !== bubbles[i].size) {
+              // Retour à la taille normale
+              bubbles[i].targetSize = p.random(5, 25);
+            }
+          }
+        }
+      };
+
+      p.windowResized = () => {
+        p.resizeCanvas(p.windowWidth, p.windowHeight);
+      };
+      
+      p.mousePressed = () => {
+        mouseIsPressed = true;
+      };
+      
+      p.mouseReleased = () => {
+        mouseIsPressed = false;
+      };
+    });
+    
+    sketchRef.current = sketch;
+    
+    // Cleanup
+    return () => {
+      if (sketchRef.current) {
+        sketchRef.current.remove();
+      }
+    };
+  }, []);
 
   return (
-    <div className={className}>
-      <Sketch setup={setup} draw={draw} windowResized={windowResized} />
-    </div>
+    <div ref={canvasRef} className={className} />
   );
 };
 
