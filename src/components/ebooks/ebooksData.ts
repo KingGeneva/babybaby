@@ -1,8 +1,24 @@
-
 import { Ebook } from "./types";
 
-// Local data for ebooks with proper cover images
 export const ebooksData: Ebook[] = [
+  {
+    id: 8,
+    title: "Les 6 premiers mois - Guide complet",
+    description: "Guide essentiel pour accompagner votre bébé durant ses 6 premiers mois.",
+    coverImage: "/lovable-uploads/d6e01142-6465-4a8f-b2c6-6f9f5af76410.png",
+    downloadUrl: "Les_6_premiers_mois_Guide_complet_babybaby.pdf",
+    fileType: "PDF",
+    fileSize: "4.5 MB"
+  },
+  {
+    id: 3,
+    title: "Sommeil du bébé",
+    description: "Techniques douces et efficaces pour aider votre bébé à mieux dormir.",
+    coverImage: "/lovable-uploads/4e133b06-babf-4e1f-8fb2-f539c7a5b0aa.png",
+    downloadUrl: "sommeil-bebe-techniques.pdf",
+    fileType: "PDF",
+    fileSize: "1.8 MB"
+  },
   {
     id: 1,
     title: "Guide complet de l'alimentation de 0 à 3 ans",
@@ -20,15 +36,6 @@ export const ebooksData: Ebook[] = [
     downloadUrl: "etapes-developpement.pdf",
     fileType: "PDF",
     fileSize: "2.7 MB"
-  },
-  {
-    id: 3,
-    title: "Sommeil de bébé : astuces et conseils",
-    description: "Des méthodes douces pour aider votre bébé à mieux dormir.",
-    coverImage: "https://images.unsplash.com/photo-1590374283403-fda7b5648c9e?q=80&w=450&auto=format&fit=crop",
-    downloadUrl: "sommeil-bebe-astuces.pdf",
-    fileType: "PDF",
-    fileSize: "1.8 MB"
   },
   {
     id: 4,
@@ -65,14 +72,5 @@ export const ebooksData: Ebook[] = [
     downloadUrl: "accompagner-sommeil-bebe.pdf",
     fileType: "PDF",
     fileSize: "2.9 MB"
-  },
-  {
-    id: 8,
-    title: "Les 6 premiers mois - Guide complet BabyBaby",
-    description: "Guide essentiel pour accompagner votre bébé durant ses 6 premiers mois.",
-    coverImage: "https://images.unsplash.com/photo-1516627145497-ae6968895b40?q=80&w=450&auto=format&fit=crop",
-    downloadUrl: "Les_6_premiers_mois_Guide_complet_babybaby.pdf",
-    fileType: "PDF",
-    fileSize: "4.5 MB"
   }
 ];
