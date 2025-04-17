@@ -1,6 +1,7 @@
 
 import React from 'react';
 import p5Types from 'p5';
+// We need to use the default import for react-p5
 import Sketch from 'react-p5';
 
 interface ParticleType {
