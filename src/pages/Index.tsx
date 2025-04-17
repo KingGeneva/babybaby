@@ -8,6 +8,8 @@ import Dashboard from '@/components/dashboard/Dashboard';
 import ToolsSection from '@/components/tools/ToolsSection';
 import NewsletterForm from '@/components/NewsletterForm';
 import Footer from '@/components/Footer';
+import ArticleSection from '@/components/articles/ArticleSection';
+import ProductsSection from '@/components/products/ProductsSection';
 
 const Index = () => {
   const controls = useAnimation();
@@ -37,6 +39,8 @@ const Index = () => {
         }}
       >
         <Dashboard />
+        <ArticleSection />
+        <ProductsSection />
         <ToolsSection />
         
         <section className="py-20 px-4">
