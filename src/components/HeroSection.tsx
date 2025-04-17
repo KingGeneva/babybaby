@@ -11,9 +11,12 @@ const HeroSection: React.FC = () => {
   const fullText = 'L\'application complète pour les parents modernes';
   const isMobile = useIsMobile();
   
-  // Animation d'écriture
+  // Animation d'écriture optimisée
   useEffect(() => {
     let i = 0;
+    // Accélération de l'animation
+    const typingSpeed = isMobile ? 30 : 50; 
+    
     const typingInterval = setInterval(() => {
       if (i <= fullText.length) {
         setTypedText(fullText.slice(0, i));
@@ -21,38 +24,39 @@ const HeroSection: React.FC = () => {
       } else {
         clearInterval(typingInterval);
       }
-    }, isMobile ? 50 : 100); // Plus rapide sur mobile
+    }, typingSpeed); 
     
     return () => clearInterval(typingInterval);
   }, [isMobile]);
 
-  // Variantes d'animation
+  // Variantes d'animation simplifiées pour performance
   const containerVariants = {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.3
+        staggerChildren: 0.2
       }
     }
   };
   
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 15, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 100
+        stiffness: 80,
+        damping: 16
       }
     }
   };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Fond animé P5.js avec optimisation mobile */}
+      {/* Fond animé P5.js avec optimisation */}
       <div className="absolute inset-0 z-0">
-        <P5Canvas className={`w-full h-full ${isMobile ? 'opacity-30' : ''}`} />
+        <P5Canvas className={`w-full h-full ${isMobile ? 'opacity-20' : ''}`} />
       </div>
       
       {/* Contenu du Hero */}
@@ -63,20 +67,21 @@ const HeroSection: React.FC = () => {
           initial="hidden"
           animate="visible"
         >
-          {/* Titre et sous-titre */}
+          {/* Titre simplifié */}
           <motion.div variants={itemVariants}>
             <motion.h1 
-              className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 text-babybaby-cosmic"
+              className="text-3xl md:text-5xl lg:text-6xl font-bold mb-3 text-babybaby-cosmic"
+              // Animation simplifiée pour le titre
               animate={{ 
                 textShadow: [
                   "0 0 5px rgba(14, 165, 233, 0)",
-                  "0 0 15px rgba(14, 165, 233, 0.5)",
+                  "0 0 10px rgba(14, 165, 233, 0.4)",
                   "0 0 5px rgba(14, 165, 233, 0)"
                 ] 
               }}
               transition={{ 
                 repeat: Infinity, 
-                duration: 3,
+                duration: 4,
                 ease: "easeInOut"
               }}
             >
@@ -86,7 +91,7 @@ const HeroSection: React.FC = () => {
           
           <motion.div variants={itemVariants}>
             <motion.h2 
-              className="text-lg md:text-2xl mb-6 text-gray-700 min-h-[2.5rem] font-nunito"
+              className="text-lg md:text-2xl mb-5 text-gray-700 min-h-[2rem] font-nunito"
             >
               {typedText}
               <motion.span 
@@ -103,12 +108,12 @@ const HeroSection: React.FC = () => {
             <motion.div 
               className="inline-block"
               whileHover={{ 
-                scale: 1.05,
+                scale: 1.03,
               }}
             >
               <Button 
                 size={isMobile ? "default" : "lg"}
-                className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 button-glow text-white font-bold px-6 py-4 sm:px-8 sm:py-6 text-base sm:text-lg rounded-full"
+                className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 button-glow text-white font-bold px-6 py-3 sm:px-8 sm:py-5 text-base sm:text-lg rounded-full"
               >
                 Commencer maintenant
                 <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />

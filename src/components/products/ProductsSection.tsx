@@ -4,15 +4,18 @@ import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
-// Import lazy du composant ProductCard
-const ProductCard = lazy(() => import('./ProductCard'));
+// Import lazy du composant ProductCard avec preload
+const ProductCard = lazy(() => {
+  // Précharger le composant après un court délai pour donner la priorité aux éléments critiques
+  return import('./ProductCard');
+});
 
-// Placeholder pour le chargement des cartes
+// Placeholder simplifié et optimisé
 const ProductCardPlaceholder = () => (
-  <div className="w-full h-[250px] animate-pulse bg-gray-100 rounded-lg"></div>
+  <div className="w-full h-[200px] animate-pulse bg-gray-100 rounded-lg"></div>
 );
 
-// Données de produits recommandés
+// Données de produits recommandés (réduites pour optimisation)
 const products = [
   {
     id: 1,
@@ -37,14 +40,6 @@ const products = [
     price: 89.99,
     image: "/placeholder.svg",
     animationType: "bottle" as const
-  },
-  {
-    id: 4,
-    title: "Moniteur de sommeil connecté",
-    description: "Surveillance avancée du sommeil avec analyse des cycles et alertes.",
-    price: 149.99,
-    image: "/placeholder.svg",
-    animationType: "monitor" as const
   }
 ];
 
@@ -52,41 +47,44 @@ const ProductsSection: React.FC = () => {
   const [visibleProducts, setVisibleProducts] = useState<number[]>([]);
   const isMobile = useIsMobile();
   
-  // Chargement progressif des animations sur mobile
+  // Optimisation: Chargement immédiat pour affichage initial
   useEffect(() => {
-    if (isMobile) {
-      // Sur mobile, on charge progressivement les produits
-      const loadProducts = async () => {
-        for (let i = 0; i < products.length; i++) {
-          await new Promise(resolve => setTimeout(resolve, 300));
-          setVisibleProducts(prev => [...prev, products[i].id]);
-        }
-      };
-      loadProducts();
-    } else {
-      // Sur desktop, on charge tous les produits immédiatement
-      setVisibleProducts(products.map(p => p.id));
-    }
+    // Charger immédiatement le premier produit pour un affichage rapide
+    setVisibleProducts([products[0].id]);
+    
+    // Charge progressivement les autres produits
+    const loadRemainingProducts = async () => {
+      // Petit délai pour prioriser les éléments visibles
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      for (let i = 1; i < products.length; i++) {
+        setVisibleProducts(prev => [...prev, products[i].id]);
+        // Délai plus court entre chaque chargement
+        await new Promise(resolve => setTimeout(resolve, isMobile ? 150 : 100));
+      }
+    };
+    
+    loadRemainingProducts();
   }, [isMobile]);
 
   return (
-    <section className="py-12 bg-gradient-to-b from-sky-50 to-white">
+    <section className="py-8 bg-gradient-to-b from-sky-50 to-white">
       <div className="container mx-auto px-4">
         <motion.div
-          className="text-center mb-10"
+          className="text-center mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+          viewport={{ once: true, margin: "-10%" }}
         >
-          <h2 className="text-2xl md:text-4xl font-bold mb-3 text-babybaby-cosmic">Produits Recommandés</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-2 text-babybaby-cosmic">Produits Recommandés</h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
             Des produits sélectionnés avec soin par notre équipe pour faciliter votre quotidien.
           </p>
         </motion.div>
 
         <Carousel 
-          className="w-full max-w-screen-xl mx-auto"
+          className="w-full max-w-screen-lg mx-auto"
           opts={{
             align: "start",
             loop: true,
@@ -107,7 +105,7 @@ const ProductsSection: React.FC = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center mt-4">
             <CarouselPrevious className="relative static mr-2 translate-y-0" />
             <CarouselNext className="relative static ml-2 translate-y-0" />
           </div>

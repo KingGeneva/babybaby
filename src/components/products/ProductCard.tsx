@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,14 @@ import babyCribAnimation from '@/assets/lottie/baby_crib.json';
 import babyBottleAnimation from '@/assets/lottie/baby_bottle.json';
 import babyToyAnimation from '@/assets/lottie/baby_toy.json';
 import babyMonitorAnimation from '@/assets/lottie/baby_monitor.json';
+
+// Création d'une Map pour les animations, chargées plus efficacement
+const animationMap = {
+  'crib': babyCribAnimation,
+  'bottle': babyBottleAnimation,
+  'toy': babyToyAnimation,
+  'monitor': babyMonitorAnimation
+};
 
 type Product = {
   id: number;
@@ -27,93 +35,102 @@ interface ProductCardProps {
   index: number;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
+// Utilisation de React.memo pour éviter les re-renders inutiles
+const ProductCard: React.FC<ProductCardProps> = memo(({ product, index }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [lottieAnimData, setLottieAnimData] = useState<object | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isAnimationLoaded, setIsAnimationLoaded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
-  // Optimisation du chargement des animations Lottie
+  // Observer pour charger l'animation uniquement quand la carte est visible
   useEffect(() => {
-    // Utilisation d'un timer pour retarder légèrement le chargement des animations
+    if (!cardRef.current) return;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    );
+    
+    observer.observe(cardRef.current);
+    
+    return () => observer.disconnect();
+  }, []);
+
+  // Chargement différé des animations uniquement quand la carte est visible
+  useEffect(() => {
+    if (!isVisible) return;
+    
     const timer = setTimeout(() => {
-      let animData;
-      switch (product.animationType) {
-        case 'crib':
-          animData = babyCribAnimation;
-          break;
-        case 'bottle':
-          animData = babyBottleAnimation;
-          break;
-        case 'toy':
-          animData = babyToyAnimation;
-          break;
-        case 'monitor':
-          animData = babyMonitorAnimation;
-          break;
-        default:
-          animData = babyToyAnimation;
-      }
-      setLottieAnimData(animData);
-      setIsLoading(false);
-    }, 100 * index); // Échelonne le chargement en fonction de l'index
+      setIsAnimationLoaded(true);
+    }, 100 * index);
     
     return () => clearTimeout(timer);
-  }, [product.animationType, index]);
+  }, [isVisible, index]);
+
+  // Optimisation du rendu Lottie
+  const renderLottieAnimation = () => {
+    if (!isAnimationLoaded) {
+      return <div className="w-24 h-24 animate-pulse bg-gray-100 rounded-full"></div>;
+    }
+    
+    return (
+      <Lottie 
+        animationData={animationMap[product.animationType]} 
+        loop={isHovered}
+        autoplay={isVisible}
+        className="w-24 h-24 object-contain"
+        style={{ 
+          filter: isHovered ? 'drop-shadow(0 0 4px rgba(14, 165, 233, 0.4))' : 'none',
+          transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+          transition: 'all 0.2s ease'
+        }}
+        rendererSettings={{
+          preserveAspectRatio: 'xMidYMid slice',
+          progressiveLoad: true
+        }}
+      />
+    );
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1 * index, duration: 0.5 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -5 }}
+      transition={{ delay: 0.05 * index, duration: 0.3 }}
+      viewport={{ once: true, margin: '50px' }}
+      whileHover={{ y: -3 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       ref={cardRef}
     >
-      <Card className="overflow-hidden h-full flex flex-col border-2 hover:border-babybaby-cosmic/50 transition-all duration-300">
-        <div className="relative p-4 flex justify-center items-center h-48 bg-gradient-to-b from-sky-50 to-white">
+      <Card className="overflow-hidden h-full flex flex-col border hover:border-babybaby-cosmic/50 transition-all duration-200">
+        <div className="p-3 flex justify-center items-center h-40 bg-gradient-to-b from-sky-50 to-white">
           <HoverCard>
             <HoverCardTrigger asChild>
               <div className="w-full h-full cursor-pointer flex items-center justify-center">
-                {isLoading ? (
-                  <div className="w-32 h-32 animate-pulse bg-gray-100 rounded-full"></div>
-                ) : lottieAnimData ? (
-                  <Lottie 
-                    animationData={lottieAnimData} 
-                    loop={true}
-                    className="w-32 h-32 object-contain"
-                    style={{ 
-                      filter: isHovered ? 'drop-shadow(0 0 8px rgba(14, 165, 233, 0.6))' : 'none',
-                      transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-                      transition: 'all 0.3s ease'
-                    }}
-                    rendererSettings={{
-                      preserveAspectRatio: 'xMidYMid slice',
-                      progressiveLoad: true
-                    }}
-                  />
-                ) : null}
+                {renderLottieAnimation()}
               </div>
             </HoverCardTrigger>
-            <HoverCardContent className="w-80">
-              <div className="flex justify-between">
-                <div>
-                  <h3 className="font-semibold">{product.title}</h3>
-                  <p className="text-sm text-gray-600">{product.description}</p>
-                </div>
+            <HoverCardContent className="w-64">
+              <div>
+                <h3 className="font-semibold">{product.title}</h3>
+                <p className="text-sm text-gray-600">{product.description}</p>
               </div>
             </HoverCardContent>
           </HoverCard>
         </div>
 
-        <CardContent className="pt-4 flex-grow">
-          <h3 className="font-bold text-lg mb-2">{product.title}</h3>
+        <CardContent className="pt-2 flex-grow">
+          <h3 className="font-bold text-lg mb-1">{product.title}</h3>
           <p className="text-gray-600 text-sm line-clamp-2">{product.description}</p>
         </CardContent>
 
-        <CardFooter className="flex justify-between items-center pt-0 pb-4 px-6">
+        <CardFooter className="flex justify-between items-center pt-0 pb-3 px-4">
           <div className="text-lg font-bold text-babybaby-cosmic">{product.price.toFixed(2)} $</div>
           <Button 
             size="sm" 
@@ -126,6 +143,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
       </Card>
     </motion.div>
   );
-};
+});
 
+ProductCard.displayName = 'ProductCard';
 export default ProductCard;
