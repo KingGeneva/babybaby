@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import ArticleCard from './ArticleCard';
 import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Données des articles (à remplacer par des données réelles)
 const articles = [
@@ -46,43 +47,46 @@ const sectionVariants = {
 };
 
 const ArticleSection: React.FC = () => {
+  const isMobile = useIsMobile();
+  
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-sky-50">
+    <section className="py-12 bg-gradient-to-b from-white to-sky-50">
       <div className="container mx-auto px-4">
         <motion.div
-          className="text-center mb-12"
+          className="text-center mb-8 md:mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-babybaby-cosmic">Nos derniers articles</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-2xl md:text-4xl font-bold mb-3 text-babybaby-cosmic">Nos derniers articles</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
             Découvrez nos conseils, astuces et informations pour vous accompagner dans votre aventure parentale.
           </p>
         </motion.div>
 
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {articles.map((article) => (
+          {/* Sur mobile, limiter à 2 articles pour une performance optimale */}
+          {articles.slice(0, isMobile ? 2 : articles.length).map((article) => (
             <ArticleCard key={article.id} article={article} />
           ))}
         </motion.div>
 
         <motion.div 
-          className="text-center mt-12"
+          className="text-center mt-8 md:mt-12"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
           viewport={{ once: true }}
         >
           <Button 
-            size="lg"
+            size={isMobile ? "default" : "lg"}
             className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80"
           >
             Voir tous les articles

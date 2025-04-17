@@ -4,10 +4,12 @@ import { motion } from 'framer-motion';
 import P5Canvas from './P5Canvas';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const HeroSection: React.FC = () => {
   const [typedText, setTypedText] = useState('');
   const fullText = 'L\'application complète pour les parents modernes';
+  const isMobile = useIsMobile();
   
   // Animation d'écriture
   useEffect(() => {
@@ -19,10 +21,10 @@ const HeroSection: React.FC = () => {
       } else {
         clearInterval(typingInterval);
       }
-    }, 100);
+    }, isMobile ? 50 : 100); // Plus rapide sur mobile
     
     return () => clearInterval(typingInterval);
-  }, []);
+  }, [isMobile]);
 
   // Variantes d'animation
   const containerVariants = {
@@ -47,10 +49,10 @@ const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Fond animé P5.js */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Fond animé P5.js avec optimisation mobile */}
       <div className="absolute inset-0 z-0">
-        <P5Canvas className="w-full h-full" />
+        <P5Canvas className={`w-full h-full ${isMobile ? 'opacity-30' : ''}`} />
       </div>
       
       {/* Contenu du Hero */}
@@ -64,7 +66,7 @@ const HeroSection: React.FC = () => {
           {/* Titre et sous-titre */}
           <motion.div variants={itemVariants}>
             <motion.h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-babybaby-cosmic"
+              className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 text-babybaby-cosmic"
               animate={{ 
                 textShadow: [
                   "0 0 5px rgba(14, 165, 233, 0)",
@@ -84,7 +86,7 @@ const HeroSection: React.FC = () => {
           
           <motion.div variants={itemVariants}>
             <motion.h2 
-              className="text-xl md:text-2xl mb-8 text-gray-700 min-h-[3rem] font-nunito"
+              className="text-lg md:text-2xl mb-6 text-gray-700 min-h-[2.5rem] font-nunito"
             >
               {typedText}
               <motion.span 
@@ -105,11 +107,11 @@ const HeroSection: React.FC = () => {
               }}
             >
               <Button 
-                size="lg" 
-                className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 button-glow text-white font-bold px-8 py-6 text-lg rounded-full"
+                size={isMobile ? "default" : "lg"}
+                className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 button-glow text-white font-bold px-6 py-4 sm:px-8 sm:py-6 text-base sm:text-lg rounded-full"
               >
                 Commencer maintenant
-                <ChevronRight className="ml-2 h-5 w-5" />
+                <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </motion.div>
           </motion.div>

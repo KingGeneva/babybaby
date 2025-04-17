@@ -1,7 +1,7 @@
 
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 // Import lazy du composant ProductCard
@@ -9,7 +9,7 @@ const ProductCard = lazy(() => import('./ProductCard'));
 
 // Placeholder pour le chargement des cartes
 const ProductCardPlaceholder = () => (
-  <div className="w-full h-[300px] animate-pulse bg-gray-100 rounded-lg"></div>
+  <div className="w-full h-[250px] animate-pulse bg-gray-100 rounded-lg"></div>
 );
 
 // Données de produits recommandés
@@ -49,18 +49,38 @@ const products = [
 ];
 
 const ProductsSection: React.FC = () => {
+  const [visibleProducts, setVisibleProducts] = useState<number[]>([]);
+  const isMobile = useIsMobile();
+  
+  // Chargement progressif des animations sur mobile
+  useEffect(() => {
+    if (isMobile) {
+      // Sur mobile, on charge progressivement les produits
+      const loadProducts = async () => {
+        for (let i = 0; i < products.length; i++) {
+          await new Promise(resolve => setTimeout(resolve, 300));
+          setVisibleProducts(prev => [...prev, products[i].id]);
+        }
+      };
+      loadProducts();
+    } else {
+      // Sur desktop, on charge tous les produits immédiatement
+      setVisibleProducts(products.map(p => p.id));
+    }
+  }, [isMobile]);
+
   return (
-    <section className="py-16 bg-gradient-to-b from-sky-50 to-white">
+    <section className="py-12 bg-gradient-to-b from-sky-50 to-white">
       <div className="container mx-auto px-4">
         <motion.div
-          className="text-center mb-12"
+          className="text-center mb-10"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-babybaby-cosmic">Produits Recommandés</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-2xl md:text-4xl font-bold mb-3 text-babybaby-cosmic">Produits Recommandés</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
             Des produits sélectionnés avec soin par notre équipe pour faciliter votre quotidien.
           </p>
         </motion.div>
@@ -74,16 +94,20 @@ const ProductsSection: React.FC = () => {
         >
           <CarouselContent className="-ml-2 md:-ml-4">
             {products.map((product, index) => (
-              <CarouselItem key={product.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+              <CarouselItem key={product.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
                 <div className="p-1">
-                  <Suspense fallback={<ProductCardPlaceholder />}>
-                    <ProductCard product={product} index={index} />
-                  </Suspense>
+                  {visibleProducts.includes(product.id) ? (
+                    <Suspense fallback={<ProductCardPlaceholder />}>
+                      <ProductCard product={product} index={index} />
+                    </Suspense>
+                  ) : (
+                    <ProductCardPlaceholder />
+                  )}
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-6">
             <CarouselPrevious className="relative static mr-2 translate-y-0" />
             <CarouselNext className="relative static ml-2 translate-y-0" />
           </div>

@@ -5,6 +5,7 @@ import Logo from './Logo';
 import { cn } from '@/lib/utils';
 import { MenuIcon, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const navLinks = [
   { title: 'Accueil', href: '/' },
@@ -17,6 +18,7 @@ const NavBar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('/');
+  const isMobile = useIsMobile();
 
   // Détecte le scroll pour ajouter des effets
   useEffect(() => {
@@ -45,18 +47,18 @@ const NavBar: React.FC = () => {
     <motion.header
       className={cn(
         "fixed w-full z-50 transition-all duration-300",
-        isScrolled ? "py-2" : "py-4"
+        isScrolled ? "py-1" : "py-2"
       )}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
       <div className={cn(
-        "container mx-auto glass rounded-full px-4 py-3 transition-all duration-500",
+        "container mx-auto glass rounded-full px-3 py-2 transition-all duration-500",
         isScrolled ? "cosmic-shadow" : ""
       )}>
         <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             <motion.div
               whileHover={{ 
                 scale: 1.05,
@@ -67,7 +69,8 @@ const NavBar: React.FC = () => {
               <img 
                 src="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" 
                 alt="BabyBaby Logo" 
-                className="w-8 h-8 md:w-10 md:h-10 object-contain"
+                className="w-7 h-7 md:w-10 md:h-10 object-contain"
+                loading="eager"
               />
             </motion.div>
             <Logo />
@@ -115,24 +118,24 @@ const NavBar: React.FC = () => {
         </div>
       </div>
 
-      {/* Menu mobile */}
+      {/* Menu mobile simplifié et optimisé */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="md:hidden absolute top-full left-0 w-full glass mt-2 py-4 px-4"
+            className="md:hidden absolute top-full left-0 w-full glass mt-1 py-3 px-3 z-50"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.2 }}
           >
-            <nav className="flex flex-col space-y-4">
+            <nav className="flex flex-col space-y-3">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
                   onClick={() => handleLinkClick(link.href)}
                   className={cn(
-                    "px-4 py-2 rounded-lg transition-colors duration-300",
+                    "px-3 py-2 rounded-lg transition-colors duration-200 text-sm font-medium",
                     activeLink === link.href
                       ? "bg-babybaby-cosmic text-white"
                       : "hover:bg-babybaby-cosmic/20"
