@@ -94,25 +94,32 @@ const ToolsSection: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
+              className="group relative overflow-hidden"
             >
-              <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full group">
-                <div className="p-6">
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-babybaby-cosmic transition-colors">
-                      {tool.title}
-                    </h3>
-                    <p className="text-gray-600">{tool.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {tool.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs px-2 py-1 bg-sky-50 text-babybaby-cosmic rounded-full"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <meta name="description" content={tool.seoDescription} />
+              <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group-hover:border-babybaby-cosmic/20">
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-babybaby-cosmic transition-colors">
+                    {tool.title}
+                  </h3>
+                  <p className="text-gray-600 text-lg">{tool.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {tool.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-sm px-3 py-1 bg-sky-50 text-babybaby-cosmic rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="pt-4">
+                    <Link 
+                      to={`/tools#${tool.title.toLowerCase().replace(/\s+/g, '-')}`}
+                      className="text-babybaby-cosmic hover:text-babybaby-cosmic/80 font-medium inline-flex items-center group-hover:translate-x-1 transition-transform"
+                    >
+                      Voir l'outil
+                      <ChevronRight className="ml-1 h-4 w-4" />
+                    </Link>
                   </div>
                 </div>
               </div>
