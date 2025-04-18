@@ -1,4 +1,3 @@
-
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -15,31 +14,34 @@ const ProductCardPlaceholder = () => (
   <div className="w-full h-[200px] animate-pulse bg-gray-100 rounded-lg"></div>
 );
 
-// Données de produits recommandés (réduites pour optimisation)
+// Données de produits recommandés (mises à jour avec les nouveaux produits)
 const products = [
   {
     id: 1,
-    title: "Siège auto pivotant 360°",
-    description: "Sécurité et confort optimal pour votre bébé avec rotation à 360°.",
-    price: 229.99,
-    image: "/placeholder.svg",
-    animationType: "crib" as const
+    title: "Siège auto pivotant 360° Evenflo Revolve360",
+    description: "Le siège auto Evenflo Revolve360 offre une rotation complète à 360° pour une installation et un positionnement faciles de votre bébé, avec une sécurité optimale.",
+    price: 399.99,
+    image: "/lovable-uploads/24c181aa-ed3a-4de1-b24b-776e707993d9.png",
+    animationType: "crib" as const,
+    link: "https://a.co/d/0xN2yKz"
   },
   {
     id: 2,
-    title: "Poussette légère pliable",
-    description: "Poussette ultra-légère et compacte, parfaite pour les déplacements.",
-    price: 179.99,
-    image: "/placeholder.svg",
-    animationType: "toy" as const
+    title: "Poussette légère pliable Summer Infant",
+    description: "Cette poussette Summer Infant ultra-légère et compacte est idéale pour les déplacements quotidiens, avec un pliage facile et rapide.",
+    price: 129.99,
+    image: "/lovable-uploads/d50b4331-6d8b-45e6-9e58-e8fc2d198a37.png",
+    animationType: "toy" as const,
+    link: "https://a.co/d/81ZhfsY"
   },
   {
     id: 3,
-    title: "Robot mixeur 5 en 1",
-    description: "Préparez les repas de bébé facilement avec ce mixeur multifonction.",
-    price: 89.99,
-    image: "/placeholder.svg",
-    animationType: "bottle" as const
+    title: "Couffin 3 en 1 multifonction",
+    description: "Un couffin polyvalent qui se transforme en berceau et espace de rangement, parfait pour le sommeil et le confort de bébé.",
+    price: 149.99,
+    image: "/lovable-uploads/af44cf46-3e2e-404e-9c33-6bc75e1a24a1.png",
+    animationType: "bottle" as const,
+    link: "https://a.co/d/d8LeJeN"
   }
 ];
 

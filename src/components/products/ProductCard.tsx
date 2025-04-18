@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
@@ -28,6 +27,7 @@ type Product = {
   price: number;
   image: string;
   animationType: 'crib' | 'bottle' | 'toy' | 'monitor';
+  link: string;
 };
 
 interface ProductCardProps {
@@ -131,13 +131,14 @@ const ProductCard: React.FC<ProductCardProps> = memo(({ product, index }) => {
         </CardContent>
 
         <CardFooter className="flex justify-between items-center pt-0 pb-3 px-4">
-          <div className="text-lg font-bold text-babybaby-cosmic">{product.price.toFixed(2)} $</div>
+          <div className="text-lg font-bold text-babybaby-cosmic">{product.price.toFixed(2)} €</div>
           <Button 
             size="sm" 
             className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80"
+            onClick={() => window.open(product.link, '_blank')}
           >
             <ShoppingCart className="mr-1 h-4 w-4" />
-            Acheter
+            Voir
           </Button>
         </CardFooter>
       </Card>
