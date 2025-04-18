@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -54,7 +53,7 @@ const NavBar = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <Logo size={40} />
+            <Logo size="md" />
           </Link>
 
           {/* Desktop Navigation */}

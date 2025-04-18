@@ -1,12 +1,12 @@
-
 import React, { Suspense, lazy } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 
-// Lazy loading components with prioritized prefetch
+// Lazy loading components
 const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
+const TestimonialsCarousel = lazy(() => import('@/components/testimonials/TestimonialsCarousel'));
 const PartnersCarousel = lazy(() => import('@/components/partners/PartnersCarousel'));
 const EbooksSection = lazy(() => import('@/components/ebooks/EbooksSection'));
 const ArticleSection = lazy(() => import('@/components/articles/ArticleSection'));
@@ -45,41 +45,18 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
   
   return (
     <>
-      {/* Section prioritaire chargée en premier avec données de démonstration ou de l'utilisateur */}
+      {/* Dashboard Section */}
       <Suspense fallback={<SectionLoader />}>
         <div className="pt-24 relative">
           <Dashboard demoMode={!isAuthenticated} demoData={demoGrowthData} childId={childProfileId} />
           
-          {isAuthenticated && childProfileId && (
+          {!isLoading && !isAuthenticated && (
             <div className="text-center mt-4">
-              <Button asChild variant="default" size="sm">
-                <Link to={`/dashboard/${childProfileId}`}>
-                  Voir le tableau de bord complet
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          )}
-          
-          {!isLoading && isAuthenticated && !childProfileId && (
-            <div className="text-center mt-4">
-              <p className="mb-2 text-muted-foreground">Vous n'avez pas encore créé de profil bébé</p>
-              <Button asChild variant="default" size="sm">
-                <Link to="/parental-dashboard">
-                  Créer un profil bébé
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          )}
-          
-          {!isAuthenticated && (
-            <div className="text-center mt-4">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 mb-2">
                 Ces données sont présentées à titre d'exemple. 
                 Créez un compte pour suivre la croissance de votre bébé !
               </p>
-              <Button asChild variant="default" size="sm" className="mt-2">
+              <Button asChild variant="default" size="sm">
                 <Link to="/auth">
                   Se connecter / S'inscrire
                   <ChevronRight className="ml-1 h-4 w-4" />
@@ -89,7 +66,12 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
           )}
         </div>
       </Suspense>
-      
+
+      {/* Testimonials Section */}
+      <Suspense fallback={<SectionLoader />}>
+        <TestimonialsCarousel />
+      </Suspense>
+
       {/* Section des articles */}
       <Suspense fallback={<SectionLoader />}>
         <ArticleSection />
