@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import GrowthWidget from './GrowthWidget';
@@ -6,7 +7,6 @@ import MilestonesList from './MilestonesList';
 import VaccinationCalendar from './tracking/VaccinationCalendar';
 import MealTracker from './tracking/MealTracker';
 import SleepTracker from './tracking/SleepTracker';
-import { Card, CardContent } from '@/components/ui/card';
 import { Baby, Heart, Ruler, Weight, Brain } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { calculateAge } from '@/lib/date-utils';
@@ -98,20 +98,7 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
   }, [childId, demoData, demoMode]);
 
   if (loading) {
-    return (
-      <section className="py-20 px-4">
-        <div className="container mx-auto text-center">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-24 bg-gray-200 rounded"></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    );
+    return <DashboardLoading />;
   }
 
   if (!childProfile && !demoMode) {
@@ -191,16 +178,7 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
                 color="#9b87f5"
               />
             </>
-          ) : (
-            <Card className="col-span-1 lg:col-span-2">
-              <CardContent className="p-6 text-center">
-                <p>Aucune donnée de croissance n'est enregistrée pour ce bébé.</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  Ajoutez des mesures dans l'onglet Croissance pour voir apparaître les graphiques.
-                </p>
-              </CardContent>
-            </Card>
-          )}
+          ) : null}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
