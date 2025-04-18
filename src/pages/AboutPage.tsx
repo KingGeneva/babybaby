@@ -11,7 +11,7 @@ const AboutPage = () => {
     <div className="min-h-screen">
       <SEOHead 
         title="À propos de BabyBaby" 
-        description="Découvrez l'histoire de BabyBaby, née au Québec pour accompagner les parents dans leur parcours."
+        description="Découvrez l'histoire de BabyBaby, née pour accompagner les parents dans leur parcours."
         canonicalUrl="https://babybaby.app/about"
       />
       
@@ -54,22 +54,21 @@ const AboutPage = () => {
               className="flex flex-col gap-6"
             >
               <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
-                Une approche technologique au service des parents
+                Notre histoire
               </h2>
               <p className="text-gray-600">
-                Nous croyons que la technologie peut transformer l'expérience 
-                parentale, en rendant l'accompagnement des enfants plus simple, 
-                plus intuitif et plus enrichissant.
+                Créé pour les parents, BabyBaby est né d'une ambition simple : 
+                rendre le parcours parental plus serein et épanouissant.
               </p>
               <p className="text-gray-600">
-                Notre plateforme est conçue pour offrir des outils numériques 
-                intelligents qui répondent aux défis réels des parents 
-                d'aujourd'hui, quel que soit leur contexte.
+                Le fondateur, Kevin Gagné, de Québec, fonde et développe 
+                babybaby.org en 2023, animé par une vision claire : 
+                utiliser la technologie pour soutenir les familles.
               </p>
               <p className="text-gray-600 font-medium">
-                BabyBaby incarne l'innovation technologique au service 
-                de l'accompagnement parental, avec une vision centrée sur 
-                les besoins des familles.
+                Notre mission est d'offrir des outils numériques 
+                intelligents qui simplifient et enrichissent 
+                l'expérience parentale.
               </p>
             </motion.div>
           </div>
