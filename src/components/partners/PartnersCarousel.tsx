@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
 interface Partner {
@@ -57,6 +57,12 @@ const partners: Partner[] = [
     name: "Natalys",
     logo: "/placeholder.svg", 
     url: "https://example.com/natalys"
+  },
+  {
+    id: 9,
+    name: "O030",
+    logo: "/lovable-uploads/7d0b9eea-9e79-427d-8afa-f18467a2a11d.png",
+    url: "https://o030.com"
   }
 ];
 
