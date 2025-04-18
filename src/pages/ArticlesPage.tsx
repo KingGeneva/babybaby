@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -10,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import P5Canvas from '@/components/P5Canvas';
 import ArticleCard from '@/components/articles/ArticleCard';
+import { Card } from '@/components/ui/card';
 
 import { articles } from '@/data/articles';
 
