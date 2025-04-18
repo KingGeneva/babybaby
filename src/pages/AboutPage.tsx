@@ -65,10 +65,16 @@ const AboutPage = () => {
                 babybaby.org en 2023, animé par une vision claire : 
                 utiliser la technologie pour soutenir les familles.
               </p>
+              <p className="text-gray-600">
+                En intégrant les dernières innovations technologiques, 
+                nous créons des outils qui permettent aux parents de suivre 
+                le développement de leurs enfants, de partager leurs expériences 
+                et de se connecter avec d'autres familles vivant des moments similaires.
+              </p>
               <p className="text-gray-600 font-medium">
-                Notre mission est d'offrir des outils numériques 
-                intelligents qui simplifient et enrichissent 
-                l'expérience parentale.
+                Notre mission est d'offrir une plateforme moderne où la technologie 
+                et l'entraide parentale se rencontrent, créant ainsi un espace 
+                numérique bienveillant au service des familles.
               </p>
             </motion.div>
           </div>
