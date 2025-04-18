@@ -9,6 +9,7 @@ import { Ebook } from '@/components/ebooks/types';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
+import SEOHead from '@/components/common/SEOHead';
 
 const EbooksPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,6 +26,13 @@ const EbooksPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <SEOHead 
+        title="E-books pour Parents | BabyBaby"
+        description="Découvrez notre collection d'e-books gratuits pour accompagner les parents dans leur parcours. Guides, conseils et ressources expertisées."
+        canonicalUrl="https://babybaby.app/ebooks"
+        ogImage="/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
+      />
+      
       <NavBar />
       
       <main className="flex-grow pt-24 pb-16">

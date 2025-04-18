@@ -5,30 +5,8 @@ import { Ebook } from "./types";
 
 export async function downloadEbook(ebook: Ebook): Promise<void> {
   try {
-    // Check if the bucket exists first
-    const { data: buckets, error: bucketsError } = await supabase
-      .storage
-      .listBuckets();
-      
-    if (bucketsError) {
-      console.error('Error checking buckets:', bucketsError);
-      toast.error("Erreur de téléchargement", {
-        description: "Configuration de stockage incorrecte. Veuillez contacter l'assistance."
-      });
-      return;
-    }
-    
-    const ebooksBucketExists = buckets?.some(bucket => bucket.name === 'ebooks');
-    
-    if (!ebooksBucketExists) {
-      console.error('Ebooks bucket does not exist');
-      toast.error("Erreur de téléchargement", {
-        description: "Le stockage des ebooks n'est pas configuré. Veuillez contacter l'assistance."
-      });
-      return;
-    }
-    
-    // If we reach here, the bucket exists, so try to generate the download URL
+    // Générer directement l'URL de téléchargement sans vérifier le bucket
+    // puisque nous avons déjà configuré le bucket correctement
     const { data, error } = await supabase
       .storage
       .from('ebooks')
@@ -37,7 +15,7 @@ export async function downloadEbook(ebook: Ebook): Promise<void> {
     if (error) {
       console.error('Error generating download URL:', error);
       
-      // More specific error message based on error code
+      // Message d'erreur plus spécifique basé sur le code d'erreur
       if (error.message.includes('not found')) {
         toast.error("Fichier non trouvé", {
           description: `Le fichier "${ebook.title}" n'existe pas dans notre bibliothèque actuellement.`
@@ -51,7 +29,7 @@ export async function downloadEbook(ebook: Ebook): Promise<void> {
     }
     
     if (data?.signedUrl) {
-      // Open in a new tab and notify user
+      // Ouvrir dans un nouvel onglet et notifier l'utilisateur
       window.open(data.signedUrl, '_blank');
       toast.success("Téléchargement démarré", {
         description: `"${ebook.title}" est en cours de téléchargement.`
