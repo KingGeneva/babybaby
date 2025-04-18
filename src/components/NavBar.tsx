@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -46,7 +47,9 @@ const NavBar = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/95 shadow-sm backdrop-blur-sm" : "bg-transparent"
+        isScrolled 
+          ? "bg-white/80 backdrop-blur-lg shadow-sm border-b border-gray-100" 
+          : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -94,7 +97,7 @@ const NavBar = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute left-0 mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10"
+                    className="absolute left-0 mt-1 w-48 bg-white/80 backdrop-blur-lg rounded-md shadow-lg py-1 z-10"
                   >
                     <Link
                       to="/ebooks"
@@ -172,7 +175,7 @@ const NavBar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-white shadow-lg overflow-hidden"
+            className="md:hidden bg-white/80 backdrop-blur-lg shadow-lg overflow-hidden"
           >
             <div className="px-2 pt-2 pb-3 space-y-1">
               <Link
