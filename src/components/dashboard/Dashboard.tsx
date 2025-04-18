@@ -1,9 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import GrowthWidget from './GrowthWidget';
 import StatCard from './StatCard';
 import MilestonesList from './MilestonesList';
+import VaccinationCalendar from './tracking/VaccinationCalendar';
+import MealTracker from './tracking/MealTracker';
+import SleepTracker from './tracking/SleepTracker';
 import { Card, CardContent } from '@/components/ui/card';
 import { Baby, Heart, Ruler, Weight, Brain } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -24,7 +26,6 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
   const [latestMeasurement, setLatestMeasurement] = useState<any>(null);
 
   useEffect(() => {
-    // Si en mode démo, utiliser les données de démo directement
     if (demoMode) {
       setGrowthData(demoData);
       setChildProfile({
@@ -48,7 +49,6 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
       return;
     }
 
-    // Charger les données réelles si nous avons un childId
     if (!childId) return;
 
     const fetchData = async () => {
@@ -74,7 +74,6 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
           setLatestMeasurement(measurementsData.data[measurementsData.data.length - 1]);
         }
 
-        // Gérer les jalons de développement
         if (!milestonesData.error && milestonesData.data) {
           setMilestones(milestonesData.data.map((milestone: any) => ({
             name: milestone.name,
@@ -141,7 +140,7 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {demoMode ? "Exemple de Suivi de Croissance" : `Suivi de Croissance - ${childProfile.name}`}
+          {demoMode ? "Exemple de Suivi de Croissance" : `Suivi de Croissance - ${childProfile?.name}`}
         </motion.h2>
 
         <motion.div 
@@ -204,6 +203,12 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
           )}
         </div>
 
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <VaccinationCalendar />
+          <MealTracker />
+          <SleepTracker />
+        </div>
+
         {!demoMode && milestones.length > 0 && (
           <motion.div
             className="glass-card p-6"
@@ -229,7 +234,6 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
   );
 };
 
-// Utilitaire pour calculer le niveau d'éveil
 const calculateAwarenessLevel = (achievedCount: number): string => {
   if (achievedCount >= 8) return "Exceptionnel";
   if (achievedCount >= 6) return "Excellent";
@@ -250,4 +254,3 @@ const defaultMilestones = [
 ];
 
 export default Dashboard;
-
