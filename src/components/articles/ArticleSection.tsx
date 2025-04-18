@@ -13,7 +13,7 @@ const articles = [
     id: 1,
     title: "Comment choisir le bon lait pour bébé",
     excerpt: "Guide complet pour vous aider à choisir le meilleur lait adapté aux besoins de votre bébé.",
-    image: "/placeholder.svg",
+    image: "/lovable-uploads/9ab34a8d-de13-4ad9-98ea-480f0d04a14b.png",
     category: "Nutrition",
     date: "15 avril 2025",
   },

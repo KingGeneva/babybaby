@@ -19,6 +19,12 @@ interface ArticleCardProps {
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
+  const [imageError, setImageError] = React.useState(false);
+  
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
     <motion.div
       variants={{
@@ -32,6 +38,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             src={article.image} 
             alt={article.title} 
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            onError={handleImageError}
           />
           <div className="absolute top-0 left-0 bg-babybaby-cosmic text-white px-3 py-1 m-3 rounded-full text-xs">
             {article.category}
