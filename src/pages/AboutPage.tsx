@@ -54,20 +54,22 @@ const AboutPage = () => {
               className="flex flex-col gap-6"
             >
               <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
-                Une vision québécoise de la parentalité
+                Une approche technologique au service des parents
               </h2>
               <p className="text-gray-600">
-                À Québec, nous avons développé BabyBaby avec la conviction que 
-                la technologie peut simplifier et enrichir l'expérience parentale.
+                Nous croyons que la technologie peut transformer l'expérience 
+                parentale, en rendant l'accompagnement des enfants plus simple, 
+                plus intuitif et plus enrichissant.
               </p>
               <p className="text-gray-600">
-                Notre plateforme est conçue spécifiquement pour les familles 
-                québécoises, en tenant compte des réalités locales et des besoins 
-                uniques des parents francophones.
+                Notre plateforme est conçue pour offrir des outils numériques 
+                intelligents qui répondent aux défis réels des parents 
+                d'aujourd'hui, quel que soit leur contexte.
               </p>
               <p className="text-gray-600 font-medium">
                 BabyBaby incarne l'innovation technologique au service 
-                de l'accompagnement parental, avec une approche 100% québécoise.
+                de l'accompagnement parental, avec une vision centrée sur 
+                les besoins des familles.
               </p>
             </motion.div>
           </div>
