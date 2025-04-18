@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
@@ -37,7 +38,7 @@ const NavBar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/" className="flex items-center">
-            <Logo size="md" className="max-h-12" />
+            <Logo size="md" logoSrc="/lovable-uploads/babybaby-logo.png" className="max-h-12" />
           </Link>
 
           <DesktopNav />
