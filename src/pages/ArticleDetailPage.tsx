@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
@@ -93,7 +92,7 @@ const ArticleDetailPage = () => {
       <SEOHead
         title={article.title}
         description={article.excerpt}
-        ogImage={article.image}
+        ogImage={article.image || "/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"}
         ogType="article"
         canonicalUrl={`https://babybaby.app/articles/${article.id}`}
         articleData={{

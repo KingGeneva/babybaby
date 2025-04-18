@@ -19,7 +19,7 @@ const SEOHead = ({
   title, 
   description, 
   canonicalUrl, 
-  ogImage = "https://lovable.dev/opengraph-image-p98pqg.png", 
+  ogImage = "/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png", 
   ogType = "website",
   articleData
 }: SEOProps) => {
