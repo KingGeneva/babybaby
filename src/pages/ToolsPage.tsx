@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -66,13 +67,13 @@ const ToolsPage = () => {
             
             <TabsContent value="names">
               <div className="max-w-2xl mx-auto">
-                <NameGenerator className="w-full" />
+                <NameGenerator />
               </div>
             </TabsContent>
             
             <TabsContent value="finance">
               <div className="max-w-2xl mx-auto">
-                <CostCalculator className="w-full" />
+                <CostCalculator />
               </div>
             </TabsContent>
             
@@ -85,19 +86,19 @@ const ToolsPage = () => {
             
             <TabsContent value="checklist">
               <div className="max-w-2xl mx-auto">
-                <BabyChecklist className="w-full" />
+                <BabyChecklist />
               </div>
             </TabsContent>
             
             <TabsContent value="gifts">
               <div className="max-w-2xl mx-auto">
-                <GiftRegistry className="w-full" />
+                <GiftRegistry />
               </div>
             </TabsContent>
             
             <TabsContent value="health">
               <div className="max-w-2xl mx-auto">
-                <OvulationCalculator className="w-full" />
+                <OvulationCalculator />
               </div>
             </TabsContent>
           </Tabs>

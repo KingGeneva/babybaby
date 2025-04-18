@@ -5,13 +5,14 @@ import { Music, Volume2, Calculator, Gift, Baby, Check, TabletSmartphone } from 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
 
-// Import des nouveaux outils
+// Import des outils
 import NameGenerator from './NameGenerator';
 import CostCalculator from './CostCalculator';
 import GiftRegistry from './GiftRegistry';
 import WhiteNoiseGenerator from './WhiteNoiseGenerator';
 import LullabyPlayer from './LullabyPlayer';
 import BabyChecklist from './BabyChecklist';
+import OvulationCalculator from './OvulationCalculator';
 
 const ToolsSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState('all');
@@ -42,6 +43,7 @@ const ToolsSection: React.FC = () => {
               <TabsTrigger value="all">Tous les outils</TabsTrigger>
               <TabsTrigger value="prep">Préparation</TabsTrigger>
               <TabsTrigger value="sleep">Sommeil</TabsTrigger>
+              <TabsTrigger value="health">Santé</TabsTrigger>
             </TabsList>
           </div>
 
@@ -99,14 +101,24 @@ const ToolsSection: React.FC = () => {
                 <BabyChecklist />
               </motion.div>
             </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+              >
+                <OvulationCalculator />
+              </motion.div>
+            </div>
           </TabsContent>
 
           <TabsContent value="prep" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <NameGenerator />
               <CostCalculator />
-              <GiftRegistry className="md:col-span-2" />
-              <BabyChecklist className="md:col-span-2" />
+              <GiftRegistry />
+              <BabyChecklist />
             </div>
           </TabsContent>
 
@@ -114,6 +126,12 @@ const ToolsSection: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <WhiteNoiseGenerator />
               <LullabyPlayer />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="health" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <OvulationCalculator />
             </div>
           </TabsContent>
         </Tabs>
