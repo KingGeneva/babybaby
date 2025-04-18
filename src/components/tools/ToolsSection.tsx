@@ -1,150 +1,131 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Book, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { 
+  Calendar,
+  Calculator, 
+  BabyIcon,
+  HeartPulse,
+  Music2,
+  ClipboardCheck,
+  Music,
+  Gift,
+  Binary
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-// Import des outils
-import NameGenerator from './NameGenerator';
-import CostCalculator from './CostCalculator';
-import GiftRegistry from './GiftRegistry';
-import WhiteNoiseGenerator from './WhiteNoiseGenerator';
-import LullabyPlayer from './LullabyPlayer';
-import BabyChecklist from './BabyChecklist';
-import OvulationCalculator from './OvulationCalculator';
 
 const tools = [
   {
-    component: NameGenerator,
-    title: "Générateur de prénoms",
-    description: "Trouvez le prénom parfait pour votre bébé",
-    seoDescription: "Outil de génération de prénoms de bébé avec suggestions personnalisées",
-    tags: ["Préparation", "Créativité"]
+    component: "OvulationCalculator",
+    title: "Calculateur d'ovulation",
+    icon: HeartPulse,
+    description: "Suivez votre cycle menstruel",
+    tags: ["Santé", "Planification"]
   },
   {
-    component: CostCalculator,
+    component: "CostCalculator",
     title: "Calculateur de coûts",
+    icon: Calculator,
     description: "Estimez les dépenses liées à l'arrivée de bébé",
-    seoDescription: "Calculateur des coûts et dépenses pour l'arrivée d'un bébé",
     tags: ["Finance", "Planification"]
   },
   {
-    component: GiftRegistry,
-    title: "Liste de naissance",
-    description: "Gérez votre liste de naissance en ligne",
-    seoDescription: "Créez et gérez votre liste de naissance en ligne",
-    tags: ["Organisation", "Partage"]
+    component: "NameGenerator",
+    title: "Générateur de prénoms",
+    icon: Binary,
+    description: "Trouvez le prénom parfait pour votre bébé",
+    tags: ["Préparation", "Créativité"]
   },
   {
-    component: WhiteNoiseGenerator,
+    component: "WhiteNoiseGenerator",
     title: "Bruit blanc",
+    icon: Music2,
     description: "Sons apaisants pour le sommeil de bébé",
-    seoDescription: "Générateur de bruits blancs pour aider bébé à dormir",
     tags: ["Sommeil", "Audio"]
   },
   {
-    component: LullabyPlayer,
+    component: "LullabyPlayer",
     title: "Berceuses",
+    icon: Music,
     description: "Musiques douces pour endormir bébé",
-    seoDescription: "Collection de berceuses et musiques douces pour bébé",
     tags: ["Sommeil", "Audio"]
   },
   {
-    component: BabyChecklist,
+    component: "BabyChecklist",
     title: "Liste de préparation",
+    icon: ClipboardCheck,
     description: "Préparez l'arrivée de bébé",
-    seoDescription: "Checklist complète pour préparer l'arrivée de bébé",
     tags: ["Organisation", "Planification"]
   },
   {
-    component: OvulationCalculator,
-    title: "Calculateur d'ovulation",
-    description: "Suivez votre cycle menstruel",
-    seoDescription: "Calculateur d'ovulation et suivi du cycle menstruel",
-    tags: ["Santé", "Planification"]
+    component: "GiftRegistry",
+    title: "Liste de naissance",
+    icon: Gift,
+    description: "Gérez votre liste de naissance en ligne",
+    tags: ["Organisation", "Partage"]
   }
 ];
 
-const ToolsSection: React.FC = () => {
+const ToolsSection = () => {
   return (
     <section className="py-16 bg-gradient-to-b from-white to-sky-50">
       <div className="container mx-auto px-4">
         <motion.div
-          className="text-center mb-10"
+          className="text-center mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <Book className="mx-auto h-10 w-10 text-babybaby-cosmic mb-4" />
+          <BabyIcon className="mx-auto h-12 w-12 text-babybaby-cosmic mb-4" />
           <h2 className="text-3xl md:text-4xl font-bold mb-3 text-babybaby-cosmic">
             Nos Outils Parents
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-            Des outils simples et pratiques pour vous aider dans votre quotidien de parents
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Des outils essentiels pour vous accompagner dans votre parcours parental
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((tool, index) => (
-            <motion.div
-              key={tool.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="group relative overflow-hidden"
-            >
-              <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group-hover:border-babybaby-cosmic/20">
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-babybaby-cosmic transition-colors">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {tools.map((tool, index) => {
+            const Icon = tool.icon;
+            return (
+              <motion.div
+                key={tool.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="group"
+              >
+                <Link 
+                  to={`/tools#${tool.title.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="block p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group-hover:scale-105 transform-gpu border border-gray-100 group-hover:border-babybaby-cosmic/20"
+                >
+                  <div className="mb-4 relative">
+                    <div className="w-16 h-16 mx-auto bg-gradient-to-br from-sky-100 to-sky-50 rounded-2xl flex items-center justify-center group-hover:from-sky-200 group-hover:to-sky-100 transition-colors">
+                      <Icon className="w-8 h-8 text-babybaby-cosmic" strokeWidth={1.5} />
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-babybaby-cosmic transition-colors">
                     {tool.title}
                   </h3>
-                  <p className="text-gray-600 text-lg">{tool.description}</p>
-                  <div className="flex flex-wrap gap-2">
+                  <p className="text-sm text-gray-600 mb-4">{tool.description}</p>
+                  <div className="flex flex-wrap gap-2 justify-center">
                     {tool.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-sm px-3 py-1 bg-sky-50 text-babybaby-cosmic rounded-full"
+                        className="text-xs px-2 py-1 bg-sky-50 text-babybaby-cosmic rounded-full"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <div className="pt-4">
-                    <Link 
-                      to={`/tools#${tool.title.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="text-babybaby-cosmic hover:text-babybaby-cosmic/80 font-medium inline-flex items-center group-hover:translate-x-1 transition-transform"
-                    >
-                      Voir l'outil
-                      <ChevronRight className="ml-1 h-4 w-4" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
-
-        <motion.div 
-          className="text-center mt-10"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <Button 
-            variant="link" 
-            className="text-babybaby-cosmic"
-            asChild
-          >
-            <Link to="/tools">
-              Voir tous nos outils
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </motion.div>
       </div>
     </section>
   );
