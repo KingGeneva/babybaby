@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
@@ -40,6 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = memo(({ product, index }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimationLoaded, setIsAnimationLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
   // Observer pour charger l'animation uniquement quand la carte est visible
@@ -97,6 +99,10 @@ const ProductCard: React.FC<ProductCardProps> = memo(({ product, index }) => {
     );
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -109,20 +115,31 @@ const ProductCard: React.FC<ProductCardProps> = memo(({ product, index }) => {
       ref={cardRef}
     >
       <Card className="overflow-hidden h-full flex flex-col border hover:border-babybaby-cosmic/50 transition-all duration-200">
-        <div className="p-3 flex justify-center items-center h-40 bg-gradient-to-b from-sky-50 to-white">
-          <HoverCard>
-            <HoverCardTrigger asChild>
-              <div className="w-full h-full cursor-pointer flex items-center justify-center">
-                {renderLottieAnimation()}
-              </div>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-64">
-              <div>
-                <h3 className="font-semibold">{product.title}</h3>
-                <p className="text-sm text-gray-600">{product.description}</p>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
+        <div className="p-3 flex justify-center items-center bg-gradient-to-b from-sky-50 to-white">
+          {product.image && !imageError ? (
+            <div className="h-40 w-full flex items-center justify-center">
+              <img 
+                src={product.image} 
+                alt={product.title}
+                className="h-full object-contain" 
+                onError={handleImageError}
+              />
+            </div>
+          ) : (
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <div className="w-full h-40 cursor-pointer flex items-center justify-center">
+                  {renderLottieAnimation()}
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-64">
+                <div>
+                  <h3 className="font-semibold">{product.title}</h3>
+                  <p className="text-sm text-gray-600">{product.description}</p>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          )}
         </div>
 
         <CardContent className="pt-2 flex-grow">
@@ -131,7 +148,7 @@ const ProductCard: React.FC<ProductCardProps> = memo(({ product, index }) => {
         </CardContent>
 
         <CardFooter className="flex justify-between items-center pt-0 pb-3 px-4">
-          <div className="text-lg font-bold text-babybaby-cosmic">{product.price.toFixed(2)} €</div>
+          <div className="text-lg font-bold text-babybaby-cosmic">{product.price.toFixed(2)} $CA</div>
           <Button 
             size="sm" 
             className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80"
