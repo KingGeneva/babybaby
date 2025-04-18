@@ -82,6 +82,57 @@ Le bon lait pour bébé est celui qui correspond à son âge, sa santé et ses b
     id: 2,
     title: "Astuces pour aider bébé à mieux dormir",
     excerpt: "Le sommeil est l'un des piliers fondamentaux du développement de votre bébé. Découvrez nos conseils pratiques pour instaurer de bonnes habitudes de sommeil dès les premiers mois.",
+    content: `# Astuces pour aider bébé à mieux dormir
+
+Le sommeil est l'un des piliers fondamentaux du développement de votre bébé. Un bon repos favorise non seulement sa croissance physique et cognitive, mais contribue aussi au bien-être de toute la famille. Cependant, de nombreux parents se heurtent à des nuits agitées, des réveils fréquents ou des difficultés d'endormissement. Heureusement, il existe des astuces simples et naturelles pour aider bébé à mieux dormir.
+
+## 5 conseils pratiques pour améliorer le sommeil de votre tout-petit
+
+### 1. Instaurer une routine du coucher régulière
+
+Les bébés aiment la prévisibilité. Mettre en place une routine calme et rassurante chaque soir (bain tiède, massage, histoire douce ou berceuse) aide à envoyer des signaux clairs à bébé : c'est l'heure de dormir. Une routine stable permet à l'enfant de se sentir en sécurité, ce qui facilite l'endormissement.
+
+### 2. Créer un environnement propice au sommeil
+
+Une chambre paisible, légèrement fraîche (environ 20°C), sombre et silencieuse constitue un cadre idéal pour le sommeil. Vous pouvez aussi utiliser un bruit blanc léger pour masquer les bruits ambiants qui pourraient réveiller bébé.
+
+### 3. Observer les signes de fatigue
+
+Il est important de reconnaître les premiers signes de fatigue : frottement des yeux, bâillements, agitation. Si vous attendez trop longtemps, bébé peut devenir trop fatigué et avoir plus de mal à s'endormir. Respecter son rythme naturel aide à instaurer un sommeil plus paisible.
+
+### 4. Encourager l'endormissement autonome
+
+Apprenez progressivement à bébé à s'endormir seul. Cela peut passer par le fait de le déposer dans son lit lorsqu'il est encore éveillé mais somnolent. Cela l'aide à associer son lit à un lieu de repos et à développer sa capacité à se rendormir sans assistance.
+
+### 5. Maintenir une certaine régularité
+
+Les horaires de coucher et de sieste réguliers aident à réguler l'horloge biologique de bébé. Même les fins de semaine, essayez de garder une routine stable pour ne pas perturber son rythme.
+
+## Comprendre les cycles de sommeil du bébé
+
+Le sommeil de bébé est différent de celui de l'adulte. Les nourrissons passent plus de temps en sommeil paradoxal (REM), ce qui explique pourquoi leurs périodes de sommeil sont plus courtes et leurs réveils plus fréquents. En moyenne :
+
+- Un nouveau-né dort entre 14 et 17 heures par jour
+- À 3 mois, un bébé dort environ 15 heures
+- À 6 mois, environ 14 heures
+- À 12 mois, environ 13 heures
+
+## Les erreurs à éviter pour le sommeil de bébé
+
+Certaines pratiques peuvent nuire à l'installation de bonnes habitudes de sommeil :
+
+- **Stimulation excessive avant le coucher** : évitez les jeux excitants dans l'heure précédant le sommeil
+- **Lumières vives ou écrans** : la lumière bleue des écrans perturbe la production de mélatonine, l'hormone du sommeil
+- **Températures inadaptées** : une chambre trop chaude ou trop froide peut gêner l'endormissement
+- **Réagir trop rapidement aux petits bruits** : tous les bébés font des bruits pendant leur sommeil sans pour autant être réveillés
+
+## Quand s'inquiéter ?
+
+Si malgré l'application de ces conseils, votre bébé présente des difficultés persistantes d'endormissement, des réveils très fréquents ou une agitation excessive durant son sommeil, n'hésitez pas à consulter votre médecin. Ces symptômes peuvent parfois révéler un problème sous-jacent comme des coliques, un reflux gastro-œsophagien ou une autre gêne.
+
+## Pour aller plus loin
+
+Chaque bébé est unique, avec son propre tempérament et ses propres besoins de sommeil. L'important est de rester patient et de s'adapter progressivement. N'oubliez pas que les phases difficiles sont temporaires et que des habitudes saines de sommeil s'installent généralement avec le temps et la constance.`,
     image: "/lovable-uploads/e15314a2-a50b-4867-921c-6376551b5030.png",
     category: "Sommeil",
     date: "12 avril 2025",
@@ -142,4 +193,3 @@ Le bon lait pour bébé est celui qui correspond à son âge, sa santé et ses b
     featured: false
   },
 ];
-
