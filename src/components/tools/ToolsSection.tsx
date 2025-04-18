@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Book, ChevronRight } from 'lucide-react';
+import { Book, ChevronRight, Calculator, Gift, Baby, Volume2, Music, CheckSquare, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import {
@@ -26,37 +26,51 @@ const tools = [
   {
     component: NameGenerator,
     title: "Générateur de prénoms",
-    description: "Trouvez le prénom parfait pour votre bébé"
+    description: "Trouvez le prénom parfait pour votre bébé",
+    icon: Baby,
+    seoDescription: "Outil de génération de prénoms de bébé avec suggestions personnalisées"
   },
   {
     component: CostCalculator,
     title: "Calculateur de coûts",
-    description: "Estimez les dépenses liées à l'arrivée de bébé"
+    description: "Estimez les dépenses liées à l'arrivée de bébé",
+    icon: Calculator,
+    seoDescription: "Calculateur des coûts et dépenses pour l'arrivée d'un bébé"
   },
   {
     component: GiftRegistry,
     title: "Liste de naissance",
-    description: "Gérez votre liste de naissance"
+    description: "Gérez votre liste de naissance",
+    icon: Gift,
+    seoDescription: "Créez et gérez votre liste de naissance en ligne"
   },
   {
     component: WhiteNoiseGenerator,
     title: "Bruit blanc",
-    description: "Sons apaisants pour le sommeil de bébé"
+    description: "Sons apaisants pour le sommeil de bébé",
+    icon: Volume2,
+    seoDescription: "Générateur de bruits blancs pour aider bébé à dormir"
   },
   {
     component: LullabyPlayer,
     title: "Berceuses",
-    description: "Musiques douces pour endormir bébé"
+    description: "Musiques douces pour endormir bébé",
+    icon: Music,
+    seoDescription: "Collection de berceuses et musiques douces pour bébé"
   },
   {
     component: BabyChecklist,
     title: "Liste de préparation",
-    description: "Préparez l'arrivée de bébé"
+    description: "Préparez l'arrivée de bébé",
+    icon: CheckSquare,
+    seoDescription: "Checklist complète pour préparer l'arrivée de bébé"
   },
   {
     component: OvulationCalculator,
     title: "Calculateur d'ovulation",
-    description: "Suivez votre cycle menstruel"
+    description: "Suivez votre cycle menstruel",
+    icon: Calendar,
+    seoDescription: "Calculateur d'ovulation et suivi du cycle menstruel"
   }
 ];
 
@@ -78,17 +92,19 @@ const ToolsSection: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="relative mx-auto max-w-5xl px-8">
+        <div className="relative mx-auto max-w-5xl">
           <Carousel
             opts={{
               align: "start",
-              loop: true
+              loop: true,
+              autoplay: true,
+              duration: 5000
             }}
             className="w-full"
           >
             <CarouselContent>
               {tools.map((tool, index) => {
-                const ToolComponent = tool.component;
+                const Icon = tool.icon;
                 return (
                   <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                     <motion.div
@@ -98,12 +114,16 @@ const ToolsSection: React.FC = () => {
                       viewport={{ once: true }}
                       className="p-1"
                     >
-                      <Card className="relative overflow-hidden group cursor-pointer">
-                        <div className="p-6">
+                      <Card className="relative overflow-hidden group cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                        <article className="p-6 text-center">
+                          <Icon className="mx-auto h-10 w-10 text-babybaby-cosmic mb-4" />
                           <h3 className="text-xl font-semibold mb-2">{tool.title}</h3>
                           <p className="text-gray-600 mb-4">{tool.description}</p>
-                          <ToolComponent />
-                        </div>
+                          <meta name="description" content={tool.seoDescription} />
+                          <div className="overflow-hidden transition-all duration-300 max-h-0 group-hover:max-h-96">
+                            <tool.component />
+                          </div>
+                        </article>
                       </Card>
                     </motion.div>
                   </CarouselItem>
