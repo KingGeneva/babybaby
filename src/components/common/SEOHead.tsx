@@ -7,6 +7,8 @@ interface SEOProps {
   canonicalUrl?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
+  lang?: string;
+  alternateLanguages?: { lang: string; url: string }[];
   articleData?: {
     publishedTime: string;
     modifiedTime?: string;
@@ -21,16 +23,23 @@ const SEOHead = ({
   canonicalUrl, 
   ogImage = "/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png", 
   ogType = "website",
+  lang = "fr",
+  alternateLanguages = [],
   articleData
 }: SEOProps) => {
   const siteTitle = "BabyBaby - Application de suivi de bébé";
   const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
   
   return (
-    <Helmet>
+    <Helmet htmlAttributes={{ lang }}>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+      
+      {/* Alternate language URLs */}
+      {alternateLanguages.map(({ lang, url }) => (
+        <link key={lang} rel="alternate" hrefLang={lang} href={url} />
+      ))}
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={ogType} />
@@ -59,6 +68,11 @@ const SEOHead = ({
             <meta key={index} property="article:tag" content={tag} />
           ))}
         </>
+      )}
+      
+      {/* Prevent indexation in non-production environments */}
+      {!canonicalUrl?.includes('babybaby.app') && (
+        <meta name="robots" content="noindex, nofollow" />
       )}
     </Helmet>
   );

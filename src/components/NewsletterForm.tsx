@@ -73,6 +73,7 @@ const NewsletterForm: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
+      lang="fr"
     >
       <h3 className="text-2xl font-bold mb-4 text-center">Restez Informé</h3>
       <p className="text-gray-700 mb-6 text-center">
@@ -88,6 +89,7 @@ const NewsletterForm: React.FC = () => {
             onChange={(e) => setName(e.target.value)}
             className="bg-white/50"
             disabled={submitting || submitted}
+            aria-label="Votre nom"
           />
           <Input
             type="email"
@@ -97,6 +99,7 @@ const NewsletterForm: React.FC = () => {
             className="bg-white/50"
             required
             disabled={submitting || submitted}
+            aria-label="Votre adresse email"
           />
         </div>
         
@@ -106,9 +109,10 @@ const NewsletterForm: React.FC = () => {
             checked={consent}
             onCheckedChange={(checked) => setConsent(!!checked)}
             disabled={submitting || submitted}
+            aria-required="true"
           />
           <Label htmlFor="consent" className="text-sm text-gray-600">
-            J'accepte de recevoir des emails de BabyBaby et j'ai lu et compris la <a href="#" className="text-babybaby-cosmic underline">politique de confidentialité</a>. Je peux me désinscrire à tout moment.
+            J'accepte de recevoir des emails de BabyBaby et j'ai lu et compris la <a href="/privacy-policy" className="text-babybaby-cosmic underline">politique de confidentialité</a>. Je peux me désinscrire à tout moment.
           </Label>
         </div>
         
@@ -116,11 +120,13 @@ const NewsletterForm: React.FC = () => {
           type="submit"
           className={`w-full ${submitted ? 'bg-green-500' : 'bg-babybaby-cosmic'}`}
           disabled={submitting || submitted}
+          aria-label={submitted ? 'Inscription confirmée' : 'S\'inscrire à la newsletter'}
         >
           {submitting ? (
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+              aria-hidden="true"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <circle 
@@ -138,9 +144,9 @@ const NewsletterForm: React.FC = () => {
               </svg>
             </motion.div>
           ) : submitted ? (
-            <Check size={20} />
+            <Check size={20} aria-hidden="true" />
           ) : (
-            <Send size={20} />
+            <Send size={20} aria-hidden="true" />
           )}
           <span className="ml-2">
             {submitted ? 'Inscrit' : 'S\'inscrire'}
