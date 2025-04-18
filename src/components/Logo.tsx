@@ -6,34 +6,26 @@ import { cn } from '@/lib/utils';
 interface LogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
-  logoSrc?: string;
 }
 
-const Logo: React.FC<LogoProps> = ({ 
-  className, 
-  size = 'md', 
-  logoSrc = '/lovable-uploads/babybaby-logo.png'
-}) => {
+const Logo: React.FC<LogoProps> = ({ className, size = 'md' }) => {
   const sizeClasses = {
-    sm: 'h-8 w-auto',
-    md: 'h-10 md:h-12 w-auto',
-    lg: 'h-16 md:h-20 w-auto',
+    sm: 'text-xl',
+    md: 'text-2xl md:text-3xl',
+    lg: 'text-3xl md:text-5xl',
   };
 
   return (
-    <motion.img 
-      src={logoSrc}
-      alt="BabyBaby Logo"
-      className={cn(
-        "object-contain", 
-        sizeClasses[size], 
-        className
-      )}
+    <motion.div 
+      className={cn("font-comfortaa font-bold", sizeClasses[size], className)}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       whileHover={{ scale: 1.05 }}
       transition={{ duration: 0.3 }}
-    />
+    >
+      <span className="text-babybaby-cosmic">Baby</span>
+      <span className="text-babybaby-pink">Baby</span>
+    </motion.div>
   );
 };
 
