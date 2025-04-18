@@ -118,6 +118,36 @@ export type Database = {
           },
         ]
       }
+      newsletter_subscribers: {
+        Row: {
+          consent_given: boolean
+          created_at: string
+          email: string
+          id: string
+          name: string | null
+          subscribed_at: string
+          unsubscribed_at: string | null
+        }
+        Insert: {
+          consent_given?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          name?: string | null
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Update: {
+          consent_given?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string | null
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
