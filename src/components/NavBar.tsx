@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "./Logo";
 
-const NavBar = () => {
+const NavBar = ({ logoSrc }: { logoSrc?: string }) => {
   const { user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
@@ -56,7 +55,11 @@ const NavBar = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <Logo size="md" />
+            <Logo 
+              size="md" 
+              logoSrc={logoSrc} 
+              className="max-h-12" 
+            />
           </Link>
 
           {/* Desktop Navigation */}
