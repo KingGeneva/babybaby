@@ -5,8 +5,10 @@ import { useInView } from 'react-intersection-observer';
 import NavBar from '@/components/NavBar';
 import HeroSection from '@/components/HeroSection';
 import LazyLoadedSections from '@/components/home/LazyLoadedSections';
+import ForumSection from '@/components/forum/ForumSection';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import SEOHead from '@/components/common/SEOHead';
 
 const Index = () => {
   const controls = useAnimation();
@@ -79,9 +81,50 @@ const Index = () => {
       controls.start('visible');
     }
   }, [controls, inView]);
+  
+  // Website schema structured data
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "BabyBaby",
+    "url": "https://babybaby.app",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://babybaby.app/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  // Organization schema structured data
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "BabyBaby",
+    "url": "https://babybaby.app",
+    "logo": "https://lovable.dev/opengraph-image-p98pqg.png",
+    "sameAs": [
+      "https://facebook.com/babybaby",
+      "https://twitter.com/babybaby_app",
+      "https://instagram.com/babybaby_app"
+    ]
+  };
 
   return (
     <div className="min-h-screen overflow-hidden">
+      <SEOHead 
+        title="BabyBaby - Application de suivi de bébé | Santé, Croissance, Conseil" 
+        description="BabyBaby : L'application indispensable pour les parents. Suivez la croissance, la santé et le développement de votre bébé. Outils, conseils et communauté de parents."
+        canonicalUrl="https://babybaby.app"
+      />
+      
+      {/* Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify(websiteSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(organizationSchema)}
+      </script>
+      
       <NavBar />
       <HeroSection />
       
@@ -106,6 +149,9 @@ const Index = () => {
           isAuthenticated={!!user}
           childProfileId={childProfiles[0]?.id}
         />
+        
+        {/* Forum section for social proof */}
+        <ForumSection />
       </motion.div>
     </div>
   );

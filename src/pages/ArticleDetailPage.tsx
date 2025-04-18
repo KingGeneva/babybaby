@@ -4,10 +4,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Tag } from 'lucide-react';
+import { ArrowLeft, Calendar, Tag, MessageCircle, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import Markdown from 'react-markdown';
+import SEOHead from '@/components/common/SEOHead';
+import ArticleStructuredData from '@/components/articles/ArticleStructuredData';
 
 // Import des articles (à terme, cela viendrait d'une API)
 import { articles } from '@/data/articles';
@@ -22,6 +24,10 @@ const ArticleDetailPage = () => {
   if (!article) {
     return (
       <div className="min-h-screen flex flex-col">
+        <SEOHead
+          title="Article introuvable"
+          description="L'article que vous recherchez n'existe pas ou a été supprimé."
+        />
         <NavBar />
         <div className="flex-grow flex items-center justify-center">
           <div className="text-center">
@@ -37,8 +43,35 @@ const ArticleDetailPage = () => {
     );
   }
 
+  // Format date for structured data
+  const formatDateForStructuredData = (dateString: string) => {
+    const date = new Date(dateString.split(' ')[0] + ', 2025');
+    return date.toISOString();
+  };
+
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title={article.title}
+        description={article.excerpt}
+        ogImage={article.image}
+        ogType="article"
+        canonicalUrl={`https://babybaby.app/articles/${article.id}`}
+        articleData={{
+          publishedTime: formatDateForStructuredData(article.date),
+          tags: [article.category]
+        }}
+      />
+      
+      <ArticleStructuredData
+        title={article.title}
+        description={article.excerpt}
+        image={article.image}
+        datePublished={formatDateForStructuredData(article.date)}
+        authorName="BabyBaby"
+        url={`https://babybaby.app/articles/${article.id}`}
+      />
+      
       <NavBar />
       
       <div className="pt-24 pb-16">
@@ -91,6 +124,27 @@ const ArticleDetailPage = () => {
                     {article.excerpt}
                   </p>
                 )}
+                
+                <div className="flex justify-between items-center my-8 py-4 border-t border-b border-gray-200">
+                  <div className="flex items-center gap-4">
+                    <button className="flex items-center gap-1 text-gray-500 hover:text-red-500 transition-colors">
+                      <Heart className="h-5 w-5" />
+                      <span>42</span>
+                    </button>
+                    <button className="flex items-center gap-1 text-gray-500 hover:text-babybaby-cosmic transition-colors">
+                      <MessageCircle className="h-5 w-5" />
+                      <span>12 commentaires</span>
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">
+                      Partager
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      Sauvegarder
+                    </Button>
+                  </div>
+                </div>
                 
                 <div className="bg-babybaby-lightblue/30 p-6 rounded-lg mt-8 mb-8">
                   <h3 className="text-xl font-semibold mb-3">Pour aller plus loin</h3>

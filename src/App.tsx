@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { HelmetProvider } from "react-helmet-async";
 import Index from "./pages/Index";
 import DashboardPage from "./pages/DashboardPage";
 import ToolsPage from "./pages/ToolsPage";
@@ -16,38 +17,48 @@ import ArticleDetailPage from "./pages/ArticleDetailPage";
 import EbooksPage from "./pages/EbooksPage";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import FAQPage from "./pages/FAQPage";
+import AboutPage from "./pages/AboutPage";
+import ChatbotButton from "./components/chatbot/ChatbotButton";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/dashboard/:childId" element={<DashboardPage />} />
-            <Route path="/tools" element={<ToolsPage />} />
-            <Route path="/community" element={<CommunityPage />} />
-            <Route path="/articles" element={<ArticlesPage />} />
-            <Route path="/articles/:id" element={<ArticleDetailPage />} />
-            <Route path="/ebooks" element={<EbooksPage />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route 
-              path="/parental-dashboard" 
-              element={
-                <ProtectedRoute>
-                  <ParentalDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <HelmetProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/dashboard/:childId" element={<DashboardPage />} />
+              <Route path="/tools" element={<ToolsPage />} />
+              <Route path="/community" element={<CommunityPage />} />
+              <Route path="/articles" element={<ArticlesPage />} />
+              <Route path="/articles/:id" element={<ArticleDetailPage />} />
+              <Route path="/ebooks" element={<EbooksPage />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/faq" element={<FAQPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route 
+                path="/parental-dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <ParentalDashboard />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            
+            {/* Chatbot button appears on all pages */}
+            <ChatbotButton />
+          </BrowserRouter>
+        </TooltipProvider>
+      </HelmetProvider>
     </AuthProvider>
   </QueryClientProvider>
 );
