@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Calendar, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ShareArticle from './ShareArticle';
 
 type Article = {
   id: number;
@@ -57,7 +57,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
           <CardDescription className="line-clamp-3">{article.excerpt}</CardDescription>
         </CardContent>
 
-        <CardFooter className="pt-0">
+        <CardFooter className="pt-0 flex justify-between items-center">
+          <ShareArticle article={article} />
           <Link to={`/articles/${article.id}`}>
             <motion.button
               className="text-babybaby-cosmic flex items-center text-sm hover:underline"
