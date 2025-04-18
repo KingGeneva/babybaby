@@ -6,13 +6,13 @@ import { cn } from '@/lib/utils';
 interface LogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
-  logoSrc?: string;  // New prop to allow custom logo
+  logoSrc?: string;
 }
 
 const Logo: React.FC<LogoProps> = ({ 
   className, 
   size = 'md', 
-  logoSrc = '/path/to/default/logo.png'  // Placeholder default logo path
+  logoSrc = '/lovable-uploads/babybaby-logo.png'
 }) => {
   const sizeClasses = {
     sm: 'h-8 w-auto',
