@@ -3,9 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
 import { cn } from '@/lib/utils';
-import { MenuIcon, X } from 'lucide-react';
+import { MenuIcon, X, Globe, Link2, ChevronDown } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
 
 const navLinks = [
   { title: 'Accueil', href: '/' },
@@ -14,6 +22,54 @@ const navLinks = [
   { title: 'Communauté', href: '/community' },
   { title: 'Articles', href: '/articles' },
   { title: 'E-books', href: '/ebooks' },
+];
+
+const resourceLinks = [
+  {
+    title: "Naître et grandir",
+    href: "https://naitreetgrandir.com",
+    description: "Guide complet sur le développement des enfants"
+  },
+  {
+    title: "INSPQ",
+    href: "https://inspq.qc.ca",
+    description: "Institut national de santé publique du Québec"
+  },
+  {
+    title: "Services aux familles",
+    href: "https://quebec.ca/famille",
+    description: "Portail Québec - Services aux familles"
+  },
+  {
+    title: "Clic Santé",
+    href: "https://clicsante.ca",
+    description: "Plateforme de prise de rendez-vous médicaux"
+  },
+  {
+    title: "SAAQ - Sièges d'auto",
+    href: "https://saaq.gouv.qc.ca",
+    description: "Évaluations de sièges d'auto"
+  },
+  {
+    title: "Maman pour la vie",
+    href: "https://mamanpourlavie.com",
+    description: "Communauté et ressources pour les mamans"
+  },
+  {
+    title: "Éducaloi - Parentalité",
+    href: "https://educaloi.qc.ca",
+    description: "Informations sur les droits parentaux au Québec"
+  },
+  {
+    title: "Jouer c'est magique",
+    href: "https://jouercestmagique.org",
+    description: "Ressources des CPE du Québec"
+  },
+  {
+    title: "Papa Positive",
+    href: "https://papapositive.fr",
+    description: "Ressources pour les papas"
+  }
 ];
 
 const NavBar: React.FC = () => {
@@ -89,6 +145,38 @@ const NavBar: React.FC = () => {
                 )}
               </Link>
             ))}
+
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-gray-800 hover:text-babybaby-cosmic transition-colors duration-300">
+                    <Globe className="mr-2 h-4 w-4" />
+                    Ressources
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="grid gap-3 p-6 w-[400px] md:w-[500px] lg:w-[600px]">
+                      {resourceLinks.map((resource) => (
+                        <a
+                          key={resource.href}
+                          href={resource.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Link2 className="h-4 w-4" />
+                            <div className="text-sm font-medium leading-none">{resource.title}</div>
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            {resource.description}
+                          </p>
+                        </a>
+                      ))}
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           </nav>
 
           <button 
@@ -136,6 +224,31 @@ const NavBar: React.FC = () => {
                   {link.title}
                 </Link>
               ))}
+              
+              <div className="relative px-3 py-2">
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center w-full text-sm font-medium"
+                >
+                  <Globe className="mr-2 h-4 w-4" />
+                  Ressources
+                  <ChevronDown className="ml-auto h-4 w-4" />
+                </button>
+                <div className="mt-2 space-y-2">
+                  {resourceLinks.map((resource) => (
+                    <a
+                      key={resource.href}
+                      href={resource.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block px-2 py-1.5 text-sm text-gray-600 hover:text-babybaby-cosmic"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {resource.title}
+                    </a>
+                  ))}
+                </div>
+              </div>
             </nav>
           </motion.div>
         )}
