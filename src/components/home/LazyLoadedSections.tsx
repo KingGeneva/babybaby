@@ -1,19 +1,21 @@
 
-import React, { Suspense } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
-import Dashboard from '@/components/dashboard/Dashboard';
-import TestimonialsCarousel from '@/components/testimonials/TestimonialsCarousel';
-import PartnersCarousel from '@/components/partners/PartnersCarousel';
-import EbooksSection from '@/components/ebooks/EbooksSection';
-import ArticleSection from '@/components/articles/ArticleSection';
-import ProductsSection from '@/components/products/ProductsSection';
-import ToolsSection from '@/components/tools/ToolsSection';
-import ContactSection from '@/components/ContactSection';
-import NewsletterForm from '@/components/NewsletterForm';
-import Footer from '@/components/Footer';
+
+// Lazy loading components
+const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
+const TestimonialsCarousel = lazy(() => import('@/components/testimonials/TestimonialsCarousel'));
+const PartnersCarousel = lazy(() => import('@/components/partners/PartnersCarousel'));
+const EbooksSection = lazy(() => import('@/components/ebooks/EbooksSection'));
+const ArticleSection = lazy(() => import('@/components/articles/ArticleSection'));
+const ProductsSection = lazy(() => import('@/components/products/ProductsSection'));
+const ToolsSection = lazy(() => import('@/components/tools/ToolsSection'));
+const ContactSection = lazy(() => import('@/components/ContactSection'));
+const NewsletterForm = lazy(() => import('@/components/NewsletterForm'));
+const Footer = lazy(() => import('@/components/Footer'));
 
 // Fallback loader for loading sections
 const SectionLoader = () => (

@@ -1,16 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import GrowthWidget from './GrowthWidget';
 import StatCard from './StatCard';
 import MilestonesList from './MilestonesList';
-import VaccinationCalendar from './tracking/VaccinationCalendar';
-import MealTracker from './tracking/MealTracker';
-import SleepTracker from './tracking/SleepTracker';
+import { Card, CardContent } from '@/components/ui/card';
 import { Baby, Heart, Ruler, Weight, Brain } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { calculateAge } from '@/lib/date-utils';
 import { toast } from '@/components/ui/use-toast';
-import DashboardLoading from './DashboardLoading';
 
 interface DashboardProps {
   childId?: string;
@@ -26,6 +24,7 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
   const [latestMeasurement, setLatestMeasurement] = useState<any>(null);
 
   useEffect(() => {
+    // Si en mode démo, utiliser les données de démo directement
     if (demoMode) {
       setGrowthData(demoData);
       setChildProfile({
@@ -49,6 +48,7 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
       return;
     }
 
+    // Charger les données réelles si nous avons un childId
     if (!childId) return;
 
     const fetchData = async () => {
@@ -74,6 +74,7 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
           setLatestMeasurement(measurementsData.data[measurementsData.data.length - 1]);
         }
 
+        // Gérer les jalons de développement
         if (!milestonesData.error && milestonesData.data) {
           setMilestones(milestonesData.data.map((milestone: any) => ({
             name: milestone.name,
@@ -98,7 +99,20 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
   }, [childId, demoData, demoMode]);
 
   if (loading) {
-    return <DashboardLoading />;
+    return (
+      <section className="py-20 px-4">
+        <div className="container mx-auto text-center">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="h-24 bg-gray-200 rounded"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   if (!childProfile && !demoMode) {
@@ -127,7 +141,7 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {demoMode ? "Exemple de Suivi de Croissance" : `Suivi de Croissance - ${childProfile?.name}`}
+          {demoMode ? "Exemple de Suivi de Croissance" : `Suivi de Croissance - ${childProfile.name}`}
         </motion.h2>
 
         <motion.div 
@@ -178,13 +192,16 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
                 color="#9b87f5"
               />
             </>
-          ) : null}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <VaccinationCalendar />
-          <MealTracker />
-          <SleepTracker />
+          ) : (
+            <Card className="col-span-1 lg:col-span-2">
+              <CardContent className="p-6 text-center">
+                <p>Aucune donnée de croissance n'est enregistrée pour ce bébé.</p>
+                <p className="text-sm text-gray-500 mt-2">
+                  Ajoutez des mesures dans l'onglet Croissance pour voir apparaître les graphiques.
+                </p>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {!demoMode && milestones.length > 0 && (
@@ -212,6 +229,7 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
   );
 };
 
+// Utilitaire pour calculer le niveau d'éveil
 const calculateAwarenessLevel = (achievedCount: number): string => {
   if (achievedCount >= 8) return "Exceptionnel";
   if (achievedCount >= 6) return "Excellent";
@@ -232,3 +250,4 @@ const defaultMilestones = [
 ];
 
 export default Dashboard;
+
