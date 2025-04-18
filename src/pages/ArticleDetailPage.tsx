@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
@@ -69,7 +70,7 @@ const ArticleDetailPage = () => {
                 {article.title}
               </h1>
               
-              {article.image && (
+              {article.image && article.image !== "/placeholder.svg" && (
                 <div className="mb-8">
                   <img 
                     src={article.image} 
@@ -102,7 +103,6 @@ const ArticleDetailPage = () => {
                 </div>
               </div>
             </div>
-            
           </motion.div>
         </div>
       </div>

@@ -33,11 +33,6 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
       audioRef.current = createAudio();
     }
     
-    toast({
-      title: "Lecture simulée",
-      description: "Le lecteur de berceuses est en mode simulation",
-    });
-    
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
