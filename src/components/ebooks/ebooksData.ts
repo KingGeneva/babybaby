@@ -6,7 +6,7 @@ export const ebooksData: Ebook[] = [
     title: "Les 6 premiers mois - Guide complet",
     description: "Guide essentiel pour accompagner votre bébé durant ses 6 premiers mois.",
     coverImage: "/lovable-uploads/d6e01142-6465-4a8f-b2c6-6f9f5af76410.png",
-    downloadUrl: "Les 6 premiers mois - Guide complet.pdf",
+    downloadUrl: "Les_6_premiers_mois_Guide_complet_babybaby.pdf",
     fileType: "PDF",
     fileSize: "4.5 MB"
   },
@@ -15,7 +15,7 @@ export const ebooksData: Ebook[] = [
     title: "Sommeil du bébé",
     description: "Techniques douces et efficaces pour aider votre bébé à mieux dormir.",
     coverImage: "/lovable-uploads/4e133b06-babf-4e1f-8fb2-f539c7a5b0aa.png",
-    downloadUrl: "sommeil-bebe-astuces.pdf",
+    downloadUrl: "sommeil-bebe-techniques.pdf",
     fileType: "PDF",
     fileSize: "1.8 MB"
   },
