@@ -1,10 +1,10 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Tag, MessageCircle, Heart } from 'lucide-react';
+import { ArrowLeft, Calendar, Heart, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import Markdown from 'react-markdown';
@@ -13,6 +13,7 @@ import ArticleStructuredData from '@/components/articles/ArticleStructuredData';
 
 // Import des articles (à terme, cela viendrait d'une API)
 import { articles } from '@/data/articles';
+import { toast } from '@/components/ui/use-toast';
 
 const ArticleDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +22,17 @@ const ArticleDetailPage = () => {
   const articleId = parseInt(id || '0');
   const article = articles.find(a => a.id === articleId);
   
+  useEffect(() => {
+    if (!article) {
+      toast({
+        title: "Article introuvable",
+        description: "L'article que vous recherchez n'existe pas ou a été supprimé.",
+        variant: "destructive"
+      });
+      navigate('/articles');
+    }
+  }, [article, navigate]);
+
   if (!article) {
     return (
       <div className="min-h-screen flex flex-col">

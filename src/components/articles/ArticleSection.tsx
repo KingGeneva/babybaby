@@ -7,33 +7,8 @@ import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from 'react-router-dom';
 
-// Données des articles
-const articles = [
-  {
-    id: 1,
-    title: "Comment choisir le bon lait pour bébé",
-    excerpt: "Guide complet pour vous aider à choisir le meilleur lait adapté aux besoins de votre bébé.",
-    image: "/lovable-uploads/9ab34a8d-de13-4ad9-98ea-480f0d04a14b.png",
-    category: "Nutrition",
-    date: "15 avril 2025",
-  },
-  {
-    id: 2,
-    title: "Astuces pour aider bébé à mieux dormir",
-    excerpt: "Des conseils pratiques et naturels pour établir une routine de sommeil et aider votre bébé à faire ses nuits paisiblement.",
-    image: "/lovable-uploads/e15314a2-a50b-4867-921c-6376551b5030.png",
-    category: "Sommeil",
-    date: "12 avril 2025",
-  },
-  {
-    id: 3,
-    title: "Les étapes du développement de 0 à 12 mois",
-    excerpt: "Tout ce que vous devez savoir sur les étapes clés du développement de votre enfant.",
-    image: "/placeholder.svg",
-    category: "Développement",
-    date: "10 avril 2025",
-  }
-];
+// Import articles from the shared data source
+import { articles } from '@/data/articles';
 
 // Variantes d'animation pour la section
 const sectionVariants = {
@@ -49,6 +24,9 @@ const sectionVariants = {
 
 const ArticleSection: React.FC = () => {
   const isMobile = useIsMobile();
+  
+  // Only show the first 3 articles on the homepage
+  const featuredArticles = articles.slice(0, 3);
   
   return (
     <section className="py-12 bg-gradient-to-b from-white to-sky-50">
@@ -74,7 +52,7 @@ const ArticleSection: React.FC = () => {
           viewport={{ once: true }}
         >
           {/* Sur mobile, limiter à 2 articles pour une performance optimale */}
-          {articles.slice(0, isMobile ? 2 : articles.length).map((article) => (
+          {featuredArticles.slice(0, isMobile ? 2 : featuredArticles.length).map((article) => (
             <ArticleCard key={article.id} article={article} />
           ))}
         </motion.div>

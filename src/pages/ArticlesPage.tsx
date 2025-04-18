@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -12,6 +11,7 @@ import { cn } from '@/lib/utils';
 import P5Canvas from '@/components/P5Canvas';
 import ArticleCard from '@/components/articles/ArticleCard';
 import { Card } from '@/components/ui/card';
+import { Link } from 'react-router-dom';
 
 import { articles } from '@/data/articles';
 
@@ -173,12 +173,12 @@ const ArticlesPage = () => {
                                   </div>
                                   <h3 className="text-xl font-bold mb-2">{article.title}</h3>
                                   <p className="text-gray-600 flex-grow mb-4">{article.excerpt}</p>
-                                  <Button 
-                                    variant="link" 
-                                    className="px-0 text-babybaby-cosmic self-end"
+                                  <Link 
+                                    to={`/articles/${article.id}`}
+                                    className="flex items-center text-babybaby-cosmic self-end hover:underline"
                                   >
                                     Lire l'article <ChevronRight className="ml-1 h-4 w-4" />
-                                  </Button>
+                                  </Link>
                                 </div>
                               </div>
                             </Card>

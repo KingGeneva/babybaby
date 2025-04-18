@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -60,12 +61,12 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         <CardFooter className="pt-0 flex justify-between items-center">
           <ShareArticle article={article} />
           <Link to={`/articles/${article.id}`}>
-            <motion.button
+            <motion.div
               className="text-babybaby-cosmic flex items-center text-sm hover:underline"
               whileHover={{ x: 5 }}
             >
               Lire la suite <ChevronRight className="h-4 w-4 ml-1" />
-            </motion.button>
+            </motion.div>
           </Link>
         </CardFooter>
       </Card>
