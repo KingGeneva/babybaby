@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -13,6 +12,7 @@ import GiftRegistry from '@/components/tools/GiftRegistry';
 import WhiteNoiseGenerator from '@/components/tools/WhiteNoiseGenerator';
 import LullabyPlayer from '@/components/tools/LullabyPlayer';
 import BabyChecklist from '@/components/tools/BabyChecklist';
+import OvulationCalculator from '@/components/tools/OvulationCalculator';
 
 const ToolsPage = () => {
   const [activeTab, setActiveTab] = useState('all');
@@ -48,6 +48,7 @@ const ToolsPage = () => {
                 <TabsTrigger value="sleep">Sommeil</TabsTrigger>
                 <TabsTrigger value="checklist">Liste</TabsTrigger>
                 <TabsTrigger value="gifts">Cadeaux</TabsTrigger>
+                <TabsTrigger value="health">Santé</TabsTrigger>
               </TabsList>
             </div>
             
@@ -59,6 +60,7 @@ const ToolsPage = () => {
                 <LullabyPlayer />
                 <GiftRegistry />
                 <BabyChecklist />
+                <OvulationCalculator />
               </div>
             </TabsContent>
             
@@ -90,6 +92,12 @@ const ToolsPage = () => {
             <TabsContent value="gifts">
               <div className="max-w-2xl mx-auto">
                 <GiftRegistry className="w-full" />
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="health">
+              <div className="max-w-2xl mx-auto">
+                <OvulationCalculator className="w-full" />
               </div>
             </TabsContent>
           </Tabs>
