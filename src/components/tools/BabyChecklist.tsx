@@ -145,8 +145,8 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
   return (
     <Card className={className}>
       <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <CardTitle className="flex items-center gap-2 text-lg">
             Checklist de Préparation
           </CardTitle>
           <Badge variant="outline" className="font-normal">
@@ -155,32 +155,32 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
         </div>
       </CardHeader>
       
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4">
         <ProgressBar progress={progress} />
 
         <Tabs defaultValue="categories" className="w-full">
-          <div className="flex items-center justify-between mb-2">
-            <TabsList>
-              <TabsTrigger value="categories">Par catégorie</TabsTrigger>
-              <TabsTrigger value="list">Liste</TabsTrigger>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+            <TabsList className="h-auto p-1">
+              <TabsTrigger value="categories" className="text-sm px-2 py-1">Par catégorie</TabsTrigger>
+              <TabsTrigger value="list" className="text-sm px-2 py-1">Liste</TabsTrigger>
             </TabsList>
             
-            <div className="flex gap-1">
+            <div className="flex gap-1 justify-end">
               <Button 
                 variant="ghost" 
                 size="sm"
-                className="h-8 px-2" 
+                className="h-8 px-2 text-sm" 
                 onClick={() => toggleAllAccordions(true)}
               >
-                <FolderTree className="h-3.5 w-3.5 mr-1" /> Tout ouvrir
+                <FolderTree className="h-3.5 w-3.5 mr-1" /> Tout
               </Button>
               <Button 
                 variant="ghost" 
                 size="sm"
-                className="h-8 px-2" 
+                className="h-8 px-2 text-sm" 
                 onClick={() => toggleAllAccordions(false)}
               >
-                <FolderTree className="h-3.5 w-3.5 mr-1" /> Tout fermer
+                <FolderTree className="h-3.5 w-3.5 mr-1" /> Fermer
               </Button>
             </div>
           </div>
@@ -188,39 +188,41 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
           <div className="pt-2">
             <ChecklistFilters viewMode={viewMode} onViewModeChange={setViewMode} />
             
-            <TabsContent value="categories" className="mt-0">
-              <CategoryList
-                categories={categories}
-                itemsByCategory={itemsByCategory}
-                categoryStats={categoryStats}
-                viewMode={viewMode}
-                accordionExpandedValues={accordionExpandedValues}
-                onToggleAccordion={toggleAccordion}
-                onToggleItem={handleToggleItem}
-                onDeleteItem={handleDeleteItem}
-              />
-            </TabsContent>
-            
-            <TabsContent value="list" className="mt-0">
-              <div className="max-h-[450px] overflow-y-auto pr-2 space-y-1">
-                {filteredItems.length > 0 ? (
-                  filteredItems.map(item => (
-                    <ChecklistItemComponent
-                      key={item.id}
-                      item={item}
-                      onToggle={handleToggleItem}
-                      onDelete={handleDeleteItem}
-                      showCategory={true}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <CheckCircle2 className="mx-auto h-12 w-12 mb-2 opacity-30" />
-                    <p>Aucun élément trouvé</p>
-                  </div>
-                )}
-              </div>
-            </TabsContent>
+            <div className="min-h-[300px] max-h-[450px] overflow-y-auto pr-2">
+              <TabsContent value="categories" className="mt-0">
+                <CategoryList
+                  categories={categories}
+                  itemsByCategory={itemsByCategory}
+                  categoryStats={categoryStats}
+                  viewMode={viewMode}
+                  accordionExpandedValues={accordionExpandedValues}
+                  onToggleAccordion={toggleAccordion}
+                  onToggleItem={handleToggleItem}
+                  onDeleteItem={handleDeleteItem}
+                />
+              </TabsContent>
+              
+              <TabsContent value="list" className="mt-0">
+                <div className="space-y-1">
+                  {filteredItems.length > 0 ? (
+                    filteredItems.map(item => (
+                      <ChecklistItemComponent
+                        key={item.id}
+                        item={item}
+                        onToggle={handleToggleItem}
+                        onDelete={handleDeleteItem}
+                        showCategory={true}
+                      />
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <CheckCircle2 className="mx-auto h-12 w-12 mb-2 opacity-30" />
+                      <p>Aucun élément trouvé</p>
+                    </div>
+                  )}
+                </div>
+              </TabsContent>
+            </div>
           </div>
         </Tabs>
         
