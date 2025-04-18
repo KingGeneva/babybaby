@@ -2,7 +2,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import Logo from "./Logo";
 import { DesktopNav } from "./navigation/DesktopNav";
 import { MobileNav } from "./navigation/MobileNav";
 import { AuthButtons } from "./navigation/AuthButtons";
@@ -41,7 +40,7 @@ const NavBar = () => {
             <img 
               src="/lovable-uploads/babybaby-logo.png" 
               alt="BabyBaby Logo" 
-              className="h-10 md:h-12 w-auto object-contain max-h-12" 
+              className="h-10 md:h-12 w-auto object-contain" 
             />
           </Link>
 
