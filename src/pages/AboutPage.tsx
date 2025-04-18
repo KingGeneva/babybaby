@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import NavBar from '@/components/NavBar';
@@ -30,7 +29,7 @@ const AboutPage = () => {
               Notre histoire
             </h1>
             <p className="text-xl text-gray-700 leading-relaxed">
-              Créé pour des parents par des parents québécois, BabyBaby est né d'une ambition simple : 
+              Créé pour les parents, BabyBaby est né d'une ambition simple : 
               rendre le parcours parental plus serein et épanouissant.
             </p>
           </motion.div>
@@ -58,18 +57,18 @@ const AboutPage = () => {
                 Une vision québécoise de la parentalité
               </h2>
               <p className="text-gray-600">
-                Tout a commencé en 2023 lorsque Kevin Gagné, entrepreneur de Québec, 
-                a constaté le manque d'outils numériques adaptés aux besoins des parents d'aujourd'hui.
+                En 2023, BabyBaby a été fondée à Québec avec une vision claire : 
+                développer des outils numériques innovants pour accompagner les parents.
               </p>
               <p className="text-gray-600">
-                Passionné par la technologie et motivé par sa propre expérience parentale, 
-                il a créé babybaby.org : une plateforme intuitive qui réunit tout ce dont les parents 
-                ont besoin pour suivre et célébrer le développement de leur enfant.
+                Notre plateforme babybaby.org est conçue pour offrir aux parents 
+                un espace intuitif et complet pour suivre et célébrer le développement 
+                de leurs enfants.
               </p>
               <p className="text-gray-600 font-medium">
-                Aujourd'hui, BabyBaby continue de grandir avec une mission claire : 
-                accompagner les parents québécois et francophones du monde entier dans leur 
-                parcours parental grâce à des outils simples et efficaces.
+                Aujourd'hui, BabyBaby continue de grandir avec une mission simple : 
+                accompagner les parents québécois et francophones du monde entier 
+                dans leur parcours parental grâce à des outils simples et efficaces.
               </p>
             </motion.div>
           </div>
