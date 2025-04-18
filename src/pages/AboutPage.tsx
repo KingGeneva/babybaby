@@ -57,18 +57,17 @@ const AboutPage = () => {
                 Une vision québécoise de la parentalité
               </h2>
               <p className="text-gray-600">
-                En 2023, BabyBaby a été fondée à Québec avec une vision claire : 
-                développer des outils numériques innovants pour accompagner les parents.
+                À Québec, nous avons développé BabyBaby avec la conviction que 
+                la technologie peut simplifier et enrichir l'expérience parentale.
               </p>
               <p className="text-gray-600">
-                Notre plateforme babybaby.org est conçue pour offrir aux parents 
-                un espace intuitif et complet pour suivre et célébrer le développement 
-                de leurs enfants.
+                Notre plateforme est conçue spécifiquement pour les familles 
+                québécoises, en tenant compte des réalités locales et des besoins 
+                uniques des parents francophones.
               </p>
               <p className="text-gray-600 font-medium">
-                Aujourd'hui, BabyBaby continue de grandir avec une mission simple : 
-                accompagner les parents québécois et francophones du monde entier 
-                dans leur parcours parental grâce à des outils simples et efficaces.
+                BabyBaby incarne l'innovation technologique au service 
+                de l'accompagnement parental, avec une approche 100% québécoise.
               </p>
             </motion.div>
           </div>
