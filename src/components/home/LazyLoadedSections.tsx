@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from 'react-router-dom';
@@ -49,21 +50,6 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
       <Suspense fallback={<SectionLoader />}>
         <div className="pt-24 relative">
           <Dashboard demoMode={!isAuthenticated} demoData={demoGrowthData} childId={childProfileId} />
-          
-          {!isLoading && !isAuthenticated && (
-            <div className="text-center mt-4">
-              <p className="text-sm text-gray-500 mb-2">
-                Ces données sont présentées à titre d'exemple. 
-                Créez un compte pour suivre la croissance de votre bébé !
-              </p>
-              <Button asChild variant="default" size="sm">
-                <Link to="/auth">
-                  Se connecter / S'inscrire
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          )}
         </div>
       </Suspense>
 

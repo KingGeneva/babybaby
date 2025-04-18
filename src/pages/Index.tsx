@@ -5,7 +5,6 @@ import { useInView } from 'react-intersection-observer';
 import NavBar from '@/components/NavBar';
 import HeroSection from '@/components/HeroSection';
 import LazyLoadedSections from '@/components/home/LazyLoadedSections';
-import ForumSection from '@/components/forum/ForumSection';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import SEOHead from '@/components/common/SEOHead';
@@ -149,9 +148,6 @@ const Index = () => {
           isAuthenticated={!!user}
           childProfileId={childProfiles[0]?.id}
         />
-        
-        {/* Forum section for social proof */}
-        <ForumSection />
       </motion.div>
     </div>
   );
