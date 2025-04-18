@@ -1,6 +1,8 @@
 
 import { ChecklistItem } from './types';
 
+export const categories = ["Chambre", "Vêtements", "Hygiène", "Déplacements", "Alimentation", "Éveil"];
+
 export const initialItems: ChecklistItem[] = [
   { id: "1", text: "Lit bébé", checked: false, category: "Chambre" },
   { id: "2", text: "Matelas pour lit bébé", checked: false, category: "Chambre" },
@@ -46,3 +48,5 @@ export const initialItems: ChecklistItem[] = [
   { id: "42", text: "Jouets de préhension", checked: false, category: "Éveil" },
   { id: "43", text: "Livre en tissu", checked: false, category: "Éveil" },
 ];
+
+export const defaultItems = initialItems;

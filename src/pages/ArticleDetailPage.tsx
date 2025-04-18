@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
@@ -83,9 +82,7 @@ const ArticleDetailPage = () => {
               <div className="prose prose-lg max-w-none">
                 {/* Contenu de l'article - utilisation de Markdown */}
                 {article.content ? (
-                  <Markdown
-                    className="prose prose-slate prose-headings:text-babybaby-cosmic prose-headings:font-bold prose-p:text-gray-700 prose-li:text-gray-700 prose-a:text-babybaby-cosmic" 
-                  >
+                  <Markdown>
                     {article.content}
                   </Markdown>
                 ) : (
@@ -105,6 +102,7 @@ const ArticleDetailPage = () => {
                 </div>
               </div>
             </div>
+            
           </motion.div>
         </div>
       </div>

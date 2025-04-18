@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { FolderTree, Undo2, CheckCircle2 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -27,7 +26,6 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('all');
   const [accordionExpandedValues, setAccordionExpandedValues] = useState<string[]>(categories);
 
-  // Load saved items from localStorage
   useEffect(() => {
     const savedItems = localStorage.getItem('babyChecklist');
     if (savedItems) {
@@ -35,12 +33,10 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
     }
   }, []);
 
-  // Save items to localStorage when they change
   useEffect(() => {
     localStorage.setItem('babyChecklist', JSON.stringify(items));
   }, [items]);
 
-  // Organize items by category
   const itemsByCategory = useMemo(() => {
     const grouped: Record<string, ChecklistItem[]> = {};
     categories.forEach(category => {
@@ -57,7 +53,6 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
     return grouped;
   }, [items]);
 
-  // Filter items based on view mode and active category
   const filteredItems = useMemo(() => {
     let filtered = [...items];
     if (activeCategory) {
@@ -71,7 +66,6 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
     return filtered;
   }, [items, activeCategory, viewMode]);
 
-  // Calculate category statistics
   const categoryStats = useMemo(() => {
     const stats: Record<string, { total: number, completed: number }> = {};
     categories.forEach(category => {
@@ -144,7 +138,6 @@ const BabyChecklist: React.FC<BabyChecklistProps> = ({ className }) => {
     setAccordionExpandedValues(expand ? [...categories] : []);
   };
 
-  // Calculate overall progress
   const totalItems = items.length;
   const checkedItems = items.filter(item => item.checked).length;
   const progress = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
