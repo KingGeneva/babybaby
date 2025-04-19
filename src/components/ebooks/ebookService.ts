@@ -5,62 +5,65 @@ import { Ebook } from "./types";
 
 export async function downloadEbook(ebook: Ebook): Promise<void> {
   try {
-    // On vérifie d'abord si le fichier existe en essayant de récupérer ses métadonnées
+    console.log(`Tentative de téléchargement de: ${ebook.title} (fichier: ${ebook.downloadUrl})`);
+    
+    // Récupérer les métadonnées du fichier directement au lieu de faire une recherche
     const { data: fileData, error: fileError } = await supabase
       .storage
       .from('ebooks')
-      .list('', {
-        search: ebook.downloadUrl
-      });
+      .createSignedUrl(ebook.downloadUrl, 60);
     
-    if (fileError || !fileData || fileData.length === 0) {
-      console.log('File not found in Supabase storage, using fallback method');
+    if (fileError) {
+      console.error('Erreur lors du téléchargement:', fileError);
       
-      // Puisque les fichiers ne sont pas encore dans Supabase, on utilise un lien de téléchargement direct
-      // En production, ces fichiers devraient être téléchargés dans le bucket Supabase
+      // Vérifier si nous avons les fichiers connus en Supabase
+      const knownFiles = {
+        "sommeil-bebe-techniques.pdf": "sommeil-bebe-astuces.pdf",
+        "Les_6_premiers_mois_Guide_complet_babybaby.pdf": "Les 6 premiers mois - Guide complet.pdf"
+      };
       
-      // On peut utiliser des PDF d'exemple d'Adobe pour simuler les téléchargements
+      // Vérifier si nous avons une correspondance pour ce fichier
+      const correctFileName = knownFiles[ebook.downloadUrl];
+      
+      if (correctFileName) {
+        console.log(`Tentative avec le nom de fichier correct: ${correctFileName}`);
+        
+        // Tenter à nouveau avec le nom de fichier corrigé
+        const { data, error } = await supabase
+          .storage
+          .from('ebooks')
+          .createSignedUrl(correctFileName, 60);
+        
+        if (error || !data?.signedUrl) {
+          throw new Error(`Échec avec le nom corrigé: ${error?.message}`);
+        }
+        
+        // Ouvrir dans un nouvel onglet et notifier l'utilisateur
+        window.open(data.signedUrl, '_blank');
+        toast.success("Téléchargement démarré", {
+          description: `"${ebook.title}" est en cours de téléchargement.`
+        });
+        return;
+      }
+      
+      // Utiliser le mode démo comme solution de secours
+      console.log('Utilisation du mode démo');
       const fallbackUrl = `https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf`;
       
-      // Pour être plus claire, montrer à l'utilisateur quel fichier il télécharge
       toast.info("Utilisation du mode démo", {
-        description: `Les PDF réels ne sont pas encore chargés. Un PDF d'exemple sera téléchargé à la place de "${ebook.title}".`
+        description: `Les PDF spécifiques ne sont pas trouvés. Un PDF d'exemple sera téléchargé à la place de "${ebook.title}".`
       });
       
-      // Ouvrir le lien dans un nouvel onglet
       window.open(fallbackUrl, '_blank');
-      
       toast.success("Téléchargement démarré", {
         description: `Un exemple de PDF est en cours de téléchargement.`
       });
       return;
     }
     
-    // Si le fichier existe, on génère une URL signée
-    const { data, error } = await supabase
-      .storage
-      .from('ebooks')
-      .createSignedUrl(ebook.downloadUrl, 60);
-    
-    if (error) {
-      console.error('Error generating download URL:', error);
-      
-      // Message d'erreur plus spécifique basé sur le code d'erreur
-      if (error.message.includes('not found')) {
-        toast.error("Fichier non trouvé", {
-          description: `Le fichier "${ebook.title}" n'existe pas dans notre bibliothèque actuellement.`
-        });
-      } else {
-        toast.error("Erreur de téléchargement", {
-          description: "Impossible de télécharger l'ebook pour le moment. Veuillez réessayer plus tard."
-        });
-      }
-      return;
-    }
-    
-    if (data?.signedUrl) {
+    if (fileData?.signedUrl) {
       // Ouvrir dans un nouvel onglet et notifier l'utilisateur
-      window.open(data.signedUrl, '_blank');
+      window.open(fileData.signedUrl, '_blank');
       toast.success("Téléchargement démarré", {
         description: `"${ebook.title}" est en cours de téléchargement.`
       });
@@ -70,7 +73,7 @@ export async function downloadEbook(ebook: Ebook): Promise<void> {
       });
     }
   } catch (err) {
-    console.error('Download error:', err);
+    console.error('Erreur de téléchargement:', err);
     toast.error("Erreur de téléchargement", {
       description: "Une erreur s'est produite. Veuillez réessayer plus tard."
     });
