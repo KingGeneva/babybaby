@@ -10,15 +10,17 @@ interface EbookGridProps {
 }
 
 const EbookGrid: React.FC<EbookGridProps> = ({ ebooks }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
 
   const handleDownload = async (ebook: Ebook) => {
-    setIsLoading(true);
     setDownloadingId(ebook.id);
-    await downloadEbook(ebook);
-    setIsLoading(false);
-    setDownloadingId(null);
+    
+    try {
+      await downloadEbook(ebook);
+    } finally {
+      // S'assurer que l'état de chargement est toujours réinitialisé
+      setDownloadingId(null);
+    }
   };
 
   if (ebooks.length === 0) {
@@ -46,7 +48,7 @@ const EbookGrid: React.FC<EbookGridProps> = ({ ebooks }) => {
           <EbookCard 
             ebook={ebook} 
             onDownload={handleDownload}
-            isLoading={isLoading && downloadingId === ebook.id}
+            isLoading={downloadingId === ebook.id}
           />
         </motion.div>
       ))}

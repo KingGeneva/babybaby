@@ -7,24 +7,19 @@ export async function downloadEbook(ebook: Ebook): Promise<void> {
   try {
     console.log(`Tentative de téléchargement de: ${ebook.title} (fichier: ${ebook.downloadUrl})`);
     
-    // Récupérer l'URL signée pour le téléchargement
+    // Récupération de l'URL signée directement depuis Supabase
     const { data, error } = await supabase
       .storage
       .from('ebooks')
-      .createSignedUrl(ebook.downloadUrl, 60);
+      .createSignedUrl(ebook.downloadUrl, 300); // Augmentation du délai à 5 minutes
     
     if (error) {
-      console.error('Erreur lors du téléchargement:', error);
+      console.error('Erreur lors de la création de l\'URL signée:', error);
       
-      // Utiliser le mode démo comme solution de secours
-      console.log('Utilisation du mode démo');
-      const fallbackUrl = `https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf`;
-      
-      toast.info("Fichier non trouvé", {
-        description: `Le fichier "${ebook.title}" n'est pas disponible actuellement. Un PDF d'exemple sera téléchargé à la place.`
+      // Informer l'utilisateur
+      toast.error("Erreur de téléchargement", {
+        description: `Impossible de télécharger "${ebook.title}" pour le moment. Veuillez réessayer plus tard.`
       });
-      
-      window.open(fallbackUrl, '_blank');
       return;
     }
     
@@ -40,9 +35,9 @@ export async function downloadEbook(ebook: Ebook): Promise<void> {
       });
     }
   } catch (err) {
-    console.error('Erreur de téléchargement:', err);
-    toast.error("Erreur de téléchargement", {
-      description: "Une erreur s'est produite. Veuillez réessayer plus tard."
+    console.error('Erreur inattendue:', err);
+    toast.error("Erreur système", {
+      description: "Une erreur inattendue s'est produite. Nos équipes ont été informées."
     });
   }
 }

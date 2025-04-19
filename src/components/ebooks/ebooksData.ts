@@ -7,7 +7,7 @@ export const ebooksData: Ebook[] = [
     title: "Les 6 premiers mois - Guide complet",
     description: "Guide essentiel pour accompagner votre bébé durant ses 6 premiers mois.",
     coverImage: "/lovable-uploads/d6e01142-6465-4a8f-b2c6-6f9f5af76410.png",
-    downloadUrl: "Les 6 premiers mois - Guide complet.pdf",
+    downloadUrl: "Les 6_premiers_mois_-_Guide_complet.pdf", // Format exact du nom du fichier sur Supabase
     fileType: "PDF",
     fileSize: "4.5 MB"
   },
