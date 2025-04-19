@@ -14,17 +14,24 @@ export async function downloadEbook(ebook: Ebook): Promise<void> {
       });
     
     if (fileError || !fileData || fileData.length === 0) {
-      console.error('File not found:', ebook.downloadUrl);
+      console.log('File not found in Supabase storage, using fallback method');
       
-      // Simuler un téléchargement puisque les fichiers PDF ne sont pas encore dans Supabase
-      // En production, remplacer cette partie par un lien réel vers le fichier dans Supabase
-      const mockPdfUrl = `https://pxynugnbikiwbsqdgewx.supabase.co/storage/v1/object/public/ebooks/${ebook.downloadUrl}`;
+      // Puisque les fichiers ne sont pas encore dans Supabase, on utilise un lien de téléchargement direct
+      // En production, ces fichiers devraient être téléchargés dans le bucket Supabase
       
-      // Dans cet exemple, on ouvre une URL simulée (qui ne fonctionnera pas en réalité sans les fichiers)
-      window.open(mockPdfUrl, '_blank');
+      // On peut utiliser des PDF d'exemple d'Adobe pour simuler les téléchargements
+      const fallbackUrl = `https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf`;
+      
+      // Pour être plus claire, montrer à l'utilisateur quel fichier il télécharge
+      toast.info("Utilisation du mode démo", {
+        description: `Les PDF réels ne sont pas encore chargés. Un PDF d'exemple sera téléchargé à la place de "${ebook.title}".`
+      });
+      
+      // Ouvrir le lien dans un nouvel onglet
+      window.open(fallbackUrl, '_blank');
       
       toast.success("Téléchargement démarré", {
-        description: `"${ebook.title}" est en cours de téléchargement.`
+        description: `Un exemple de PDF est en cours de téléchargement.`
       });
       return;
     }
