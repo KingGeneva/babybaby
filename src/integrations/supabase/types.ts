@@ -39,6 +39,57 @@ export type Database = {
         }
         Relationships: []
       }
+      ebook_downloads: {
+        Row: {
+          download_timestamp: string | null
+          ebook_title: string
+          email: string
+          id: number
+        }
+        Insert: {
+          download_timestamp?: string | null
+          ebook_title: string
+          email: string
+          id?: never
+        }
+        Update: {
+          download_timestamp?: string | null
+          ebook_title?: string
+          email?: string
+          id?: never
+        }
+        Relationships: []
+      }
+      ebooks: {
+        Row: {
+          description: string | null
+          file_size_mb: number | null
+          file_url: string
+          genre: string | null
+          id: number
+          publication_date: string | null
+          title: string
+        }
+        Insert: {
+          description?: string | null
+          file_size_mb?: number | null
+          file_url: string
+          genre?: string | null
+          id?: number
+          publication_date?: string | null
+          title: string
+        }
+        Update: {
+          description?: string | null
+          file_size_mb?: number | null
+          file_url?: string
+          genre?: string | null
+          id?: number
+          publication_date?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       growth_measurements: {
         Row: {
           child_id: string
