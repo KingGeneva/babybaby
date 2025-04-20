@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
@@ -8,7 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Baby, Calendar, Syringe } from 'lucide-react';
-import { MedicalAppointment, Vaccination } from '@/types/medical';
+import { MedicalAppointment, Vaccination, VACCINATION_SCHEDULE } from '@/types/medical';
 import MedicalCalendar from '@/components/medical/MedicalCalendar';
 import VaccinationTracker from '@/components/medical/VaccinationTracker';
 import { toast } from '@/components/ui/use-toast';
@@ -60,11 +59,8 @@ export default function MedicalDashboardPage() {
   
   const handleVaccinationStatusChange = async (id: string, completed: boolean, date?: string) => {
     try {
-      // For demonstration purposes since we don't have the actual tables yet
-      // This is a placeholder to show the functionality
       console.log('Updating vaccination status:', id, completed, date);
       
-      // Update local state to reflect the change
       setVaccinations(prev => 
         prev.map(v => 
           v.id === id ? { ...v, administeredDate: completed ? date : undefined } : v
@@ -87,11 +83,9 @@ export default function MedicalDashboardPage() {
     }
   };
   
-  // Generate placeholder data for demo purposes
   useEffect(() => {
     if (!childId || !childData) return;
     
-    // Generate demo appointments
     const demoAppointments: MedicalAppointment[] = [
       {
         id: '1',
@@ -115,7 +109,6 @@ export default function MedicalDashboardPage() {
       }
     ];
     
-    // Generate demo vaccinations based on the schedule
     const demoVaccinations: Vaccination[] = VACCINATION_SCHEDULE.flatMap(schedule => 
       schedule.vaccines.map((vaccine, index) => ({
         id: `${schedule.ageGroup}-${index}`,
@@ -129,7 +122,6 @@ export default function MedicalDashboardPage() {
     
     setAppointments(demoAppointments);
     setVaccinations(demoVaccinations);
-    
   }, [childId, childData]);
   
   if (loading || isLoading) {
@@ -211,7 +203,6 @@ export default function MedicalDashboardPage() {
   );
 }
 
-// Utility function to calculate age display
 function calculateAge(birthDate: string): string {
   const birth = new Date(birthDate);
   const now = new Date();
@@ -222,18 +213,15 @@ function calculateAge(birthDate: string): string {
   let years = yearDiff;
   let months = monthDiff;
   
-  // Adjust if the current date is before the birth day in the current month
   if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) {
     years--;
     months = 12 + monthDiff;
   }
   
-  // For children under 2 years, show age in months
   if (years < 2) {
     const totalMonths = years * 12 + months;
     return `${totalMonths} mois`;
   }
   
-  // For children 2 years and older
   return `${years} an${years > 1 ? 's' : ''}`;
 }

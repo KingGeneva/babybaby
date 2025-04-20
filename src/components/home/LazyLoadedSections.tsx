@@ -49,7 +49,11 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
       {/* Dashboard Section */}
       <Suspense fallback={<SectionLoader />}>
         <div className="pt-24 relative">
-          <Dashboard demoMode={!isAuthenticated} demoData={demoGrowthData} childId={childProfileId} />
+          <Dashboard 
+            childId={childProfileId || 'demo'} 
+            demoMode={!isAuthenticated} 
+            demoData={demoGrowthData} 
+          />
         </div>
       </Suspense>
 

@@ -1,110 +1,87 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer 
-} from 'recharts';
-import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { 
-  ChartContainer, 
-  ChartTooltip, 
-  ChartTooltipContent 
-} from '@/components/ui/chart';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { TrendingUp } from 'lucide-react';
 
-interface GrowthWidgetProps {
+export interface GrowthWidgetProps {
   title: string;
-  data: any[];
-  dataKey: string;
-  className?: string;
-  color?: string;
+  data: Array<{date: string; value: number}>;
+  metricType: string;
+  color: string;
+  childId?: string;
 }
 
-const GrowthWidget: React.FC<GrowthWidgetProps> = ({
-  title,
-  data,
-  dataKey,
-  className,
-  color = "#33C3F0"
-}) => {
-  // Make sure we have valid data to prevent rendering errors
-  const validData = Array.isArray(data) && data.length > 0;
+const GrowthWidget: React.FC<GrowthWidgetProps> = ({ title, data, metricType, color, childId }) => {
+  const navigate = useNavigate();
   
-  // Format data to ensure all values are numbers and handle empty values
-  const formattedData = validData ? 
-    data.map(item => ({
-      ...item,
-      [dataKey]: typeof item[dataKey] === 'number' ? item[dataKey] : 0
-    })) : [];
-  
+  const handleAddMeasurement = () => {
+    if (childId) {
+      navigate(`/dashboard/${childId}/growth/add`);
+    }
+  };
+
   return (
-    <motion.div
-      className={cn("glass-card p-4 sm:p-6 shadow-md rounded-lg", className)}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ y: -5 }}
-    >
-      <h3 className="text-lg font-bold mb-4">{title}</h3>
-      <div className="h-48">
-        {validData ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={formattedData}
-              margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(155,155,155,0.2)" />
-              <XAxis 
-                dataKey="name" 
-                tick={{ fill: '#333' }} 
-                fontSize={10}
-                tickMargin={8}
-              />
-              <YAxis 
-                tick={{ fill: '#333' }} 
-                fontSize={10}
-                tickMargin={8}
-                domain={['auto', 'auto']}
-              />
-              <Tooltip 
-                content={({ active, payload, label }) => {
-                  if (active && payload && payload.length) {
-                    return (
-                      <div className="bg-white p-2 border border-gray-200 shadow-md rounded">
-                        <p className="text-gray-700">{`${label}`}</p>
-                        <p className="font-medium text-gray-900">
-                          {`${dataKey}: ${payload[0].value}`}
-                        </p>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
-              />
-              <Line 
-                type="monotone" 
-                dataKey={dataKey} 
-                stroke={color} 
-                strokeWidth={3}
-                dot={{ stroke: color, strokeWidth: 2, fill: 'white', r: 4 }}
-                activeDot={{ r: 6, stroke: color, strokeWidth: 2, fill: 'white' }}
-                isAnimationActive={true}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+    <Card className="w-full">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-lg font-medium">{title}</CardTitle>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="h-8 text-xs flex items-center gap-1"
+          onClick={handleAddMeasurement}
+        >
+          <TrendingUp className="h-3.5 w-3.5" />
+          Ajouter
+        </Button>
+      </CardHeader>
+      <CardContent className="pt-0">
+        {data && data.length > 0 ? (
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={data}
+                margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                <XAxis 
+                  dataKey="date" 
+                  tick={{ fontSize: 12 }} 
+                  tickLine={false}
+                />
+                <YAxis 
+                  tick={{ fontSize: 12 }} 
+                  tickLine={false}
+                  domain={['auto', 'auto']}
+                  width={30}
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value} ${metricType === 'poids' ? 'kg' : 'cm'}`, metricType.charAt(0).toUpperCase() + metricType.slice(1)]}
+                  labelFormatter={(label) => `Date: ${label}`}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke={color} 
+                  strokeWidth={2.5}
+                  dot={{ r: 4, strokeWidth: 0, fill: color }}
+                  activeDot={{ r: 6, strokeWidth: 0, fill: color }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         ) : (
-          <div className="h-full flex items-center justify-center">
-            <p className="text-muted-foreground">Aucune donnée disponible</p>
+          <div className="h-64 w-full flex flex-col items-center justify-center text-center">
+            <p className="text-gray-500 mb-2">Aucune donnée disponible</p>
+            <p className="text-sm text-gray-400">
+              Ajoutez des mesures pour voir l'évolution
+            </p>
           </div>
         )}
-      </div>
-    </motion.div>
+      </CardContent>
+    </Card>
   );
 };
 

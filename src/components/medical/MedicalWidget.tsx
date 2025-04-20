@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { MedicalAppointment } from '@/types/medical';
 
 interface MedicalWidgetProps {
   childId: string;
@@ -15,38 +16,44 @@ interface MedicalWidgetProps {
 
 export default function MedicalWidget({ childId }: MedicalWidgetProps) {
   const navigate = useNavigate();
-  const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([]);
+  const [upcomingAppointments, setUpcomingAppointments] = useState<MedicalAppointment[]>([]);
   const [pendingVaccines, setPendingVaccines] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMedicalData = async () => {
       try {
-        // Fetch upcoming appointments
-        const today = format(new Date(), 'yyyy-MM-dd');
-        const { data: appointments, error: appointmentsError } = await supabase
-          .from('medical_appointments')
-          .select('*')
-          .eq('child_id', childId)
-          .gte('date', today)
-          .eq('completed', false)
-          .order('date', { ascending: true })
-          .limit(3);
-          
-        if (appointmentsError) throw appointmentsError;
-        setUpcomingAppointments(appointments || []);
+        // For demo purposes, we'll use mock data since the tables don't exist yet
+        const demoAppointments: MedicalAppointment[] = [
+          {
+            id: '1',
+            title: 'Visite des 4 mois',
+            date: '2025-05-10',
+            time: '14:30',
+            doctor: 'Dr. Martin',
+            location: 'Cabinet médical',
+            notes: 'Apporter le carnet de santé',
+            completed: false,
+            type: 'check-up',
+            childId: childId
+          },
+          {
+            id: '2',
+            title: 'Vaccination hexavalent',
+            date: '2025-05-15',
+            doctor: 'Dr. Dupont',
+            completed: false,
+            type: 'vaccination',
+            childId: childId
+          }
+        ];
         
-        // Count pending vaccines
-        const { count, error: vaccinesError } = await supabase
-          .from('vaccinations')
-          .select('*', { count: 'exact', head: true })
-          .eq('child_id', childId)
-          .is('administered_date', null);
-          
-        if (vaccinesError) throw vaccinesError;
-        setPendingVaccines(count || 0);
+        setUpcomingAppointments(demoAppointments);
+        setPendingVaccines(3); // Demo pending vaccines count
       } catch (error) {
         console.error('Error fetching medical data:', error);
+        setUpcomingAppointments([]);
+        setPendingVaccines(0);
       } finally {
         setIsLoading(false);
       }

@@ -1,6 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Baby, Ruler, Weight } from 'lucide-react';
 import { calculateAge } from '@/lib/date-utils';
 import GrowthWidget from './GrowthWidget';
 import MilestonesList from './MilestonesList';
@@ -8,7 +8,18 @@ import { supabase } from '@/integrations/supabase/client';
 import StatCard from './StatCard';
 import MedicalWidget from '@/components/medical/MedicalWidget';
 
-const Dashboard = ({ childId }: { childId: string }) => {
+interface DashboardProps {
+  childId: string;
+  demoMode?: boolean;
+  demoData?: Array<{
+    name: string;
+    taille: number;
+    poids: number;
+    eveil?: number;
+  }>;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoData }) => {
   const [childData, setChildData] = useState<{ name: string; birth_date: string } | null>(null);
   const [latestHeight, setLatestHeight] = useState<number | null>(null);
   const [latestWeight, setLatestWeight] = useState<number | null>(null);
@@ -18,7 +29,7 @@ const Dashboard = ({ childId }: { childId: string }) => {
   const [weightTrend, setWeightTrend] = useState<'up' | 'down' | 'stable'>('stable');
 
   useEffect(() => {
-    if (!childId) return;
+    if (!childId || demoMode) return;
 
     const fetchChildData = async () => {
       try {
@@ -113,7 +124,31 @@ const Dashboard = ({ childId }: { childId: string }) => {
     fetchChildData();
     fetchLatestMeasurements();
     fetchGrowthData();
-  }, [childId]);
+  }, [childId, demoMode]);
+
+  // Use demo data if in demo mode
+  useEffect(() => {
+    if (demoMode && demoData) {
+      // Set demo stats
+      setChildData({ name: "Bébé Démo", birth_date: "2024-01-01" });
+      setLatestHeight(64);
+      setLatestWeight(7.2);
+      
+      // Format demo data for charts
+      const heightData = demoData.map(item => ({
+        date: item.name,
+        value: item.taille
+      }));
+      
+      const weightData = demoData.map(item => ({
+        date: item.name,
+        value: item.poids
+      }));
+      
+      setHeightData(heightData);
+      setWeightData(weightData);
+    }
+  }, [demoMode, demoData]);
 
   return (
     <div className="container mx-auto px-4">
@@ -147,23 +182,30 @@ const Dashboard = ({ childId }: { childId: string }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <GrowthWidget
           title="Évolution de la taille (cm)"
-          childId={childId}
           data={heightData}
           metricType="taille"
           color="#9b87f5"
+          childId={childId}
         />
         <GrowthWidget
           title="Évolution du poids (kg)"
-          childId={childId}
           data={weightData}
           metricType="poids"
           color="#33C3F0"
+          childId={childId}
         />
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
         <div className="lg:col-span-2">
-          <MilestonesList childId={childId} />
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Étapes de développement</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <MilestonesList childId={childId} />
+            </CardContent>
+          </Card>
         </div>
         <div>
           <MedicalWidget childId={childId} />
