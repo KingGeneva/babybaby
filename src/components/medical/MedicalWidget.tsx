@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, ChevronRight, Pill, Vaccine } from 'lucide-react';
+import { Calendar, ChevronRight, Pill, Syringe } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -95,7 +95,7 @@ export default function MedicalWidget({ childId }: MedicalWidgetProps) {
               </div>
               <div className="bg-purple-50 rounded-lg p-3 flex flex-col items-center justify-center">
                 <div className="flex items-center mb-1">
-                  <Vaccine className="h-4 w-4 mr-1 text-purple-600" />
+                  <Syringe className="h-4 w-4 mr-1 text-purple-600" />
                   <span className="text-sm font-medium">Vaccins</span>
                 </div>
                 <p className="text-2xl font-bold text-purple-600">
@@ -112,7 +112,7 @@ export default function MedicalWidget({ childId }: MedicalWidgetProps) {
                   <div key={appointment.id} className="flex items-center border-b border-gray-100 pb-2">
                     <div className="bg-blue-100 h-8 w-8 rounded flex items-center justify-center mr-3">
                       {appointment.type === 'vaccination' ? (
-                        <Vaccine className="h-4 w-4 text-blue-600" />
+                        <Syringe className="h-4 w-4 text-blue-600" />
                       ) : (
                         <Pill className="h-4 w-4 text-blue-600" />
                       )}

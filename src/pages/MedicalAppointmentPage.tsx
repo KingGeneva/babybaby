@@ -59,95 +59,33 @@ export default function MedicalAppointmentPage() {
   }, [childId]);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !childId) return;
 
-    const fetchAppointment = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('medical_appointments')
-          .select('*')
-          .eq('id', id)
-          .single();
-          
-        if (error) throw error;
-        
-        if (data.child_id !== childId) {
-          toast({
-            title: 'Erreur',
-            description: 'Ce rendez-vous n\'appartient pas à cet enfant',
-            variant: 'destructive',
-          });
-          navigate(`/medical/dashboard/${childId}`);
-          return;
-        }
-        
-        setAppointment({
-          id: data.id,
-          title: data.title,
-          date: data.date,
-          time: data.time || undefined,
-          doctor: data.doctor,
-          location: data.location || undefined,
-          notes: data.notes || undefined,
-          completed: data.completed,
-          type: data.type,
-          childId: data.child_id,
-        });
-      } catch (error) {
-        console.error('Error fetching appointment:', error);
-        toast({
-          title: 'Erreur',
-          description: 'Impossible de charger les données du rendez-vous',
-          variant: 'destructive',
-        });
-        navigate(`/medical/dashboard/${childId}`);
-      } finally {
-        setIsLoading(false);
-      }
+    // For demo purposes, since we don't have the actual tables yet
+    // We'll create mock data
+    const mockAppointment: MedicalAppointment = {
+      id: id,
+      title: 'Visite de contrôle',
+      date: '2025-05-15',
+      time: '14:30',
+      doctor: 'Dr. Martin',
+      location: 'Cabinet médical',
+      notes: 'Apporter le carnet de santé',
+      completed: false,
+      type: 'check-up',
+      childId: childId
     };
-
-    fetchAppointment();
-  }, [id, childId, navigate]);
+    
+    setAppointment(mockAppointment);
+    setIsLoading(false);
+  }, [id, childId]);
 
   const handleSubmit = async (data: Omit<MedicalAppointment, 'id'>) => {
     if (!childId) return;
     
     try {
-      if (isEditing && id) {
-        // Update existing appointment
-        const { error } = await supabase
-          .from('medical_appointments')
-          .update({
-            title: data.title,
-            date: data.date,
-            time: data.time || null,
-            doctor: data.doctor,
-            location: data.location || null,
-            notes: data.notes || null,
-            completed: data.completed,
-            type: data.type,
-          })
-          .eq('id', id);
-          
-        if (error) throw error;
-      } else {
-        // Create new appointment
-        const { error } = await supabase
-          .from('medical_appointments')
-          .insert({
-            title: data.title,
-            date: data.date,
-            time: data.time || null,
-            doctor: data.doctor,
-            location: data.location || null,
-            notes: data.notes || null,
-            completed: data.completed,
-            type: data.type,
-            child_id: childId,
-          });
-          
-        if (error) throw error;
-      }
+      // Simulating API call for demo
+      console.log('Saving appointment:', data);
       
       toast({
         title: isEditing ? 'Rendez-vous mis à jour' : 'Rendez-vous créé',

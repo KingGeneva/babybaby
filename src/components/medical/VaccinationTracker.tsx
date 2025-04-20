@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -14,7 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Vaccination, VACCINATION_SCHEDULE } from '@/types/medical';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { Vaccine, Calendar, CalendarCheck } from 'lucide-react';
+import { Syringe, Calendar, CalendarCheck } from 'lucide-react';
 
 interface VaccinationTrackerProps {
   vaccinations: Vaccination[];
@@ -27,16 +26,13 @@ export default function VaccinationTracker({
   birthDate,
   onVaccinationStatusChange,
 }: VaccinationTrackerProps) {
-  // Convert birthdate to Date object
   const birthDateObj = new Date(birthDate);
   
-  // Calculate current age in months
   const today = new Date();
   const ageInMonths = 
     (today.getFullYear() - birthDateObj.getFullYear()) * 12 +
     (today.getMonth() - birthDateObj.getMonth());
   
-  // Calculate upcoming vaccinations based on age
   const getUpcomingVaccinations = () => {
     let upcoming: { vaccine: string; age: string }[] = [];
     
@@ -45,7 +41,6 @@ export default function VaccinationTracker({
       
       if (ageMonths > ageInMonths && ageMonths <= ageInMonths + 6) {
         schedule.vaccines.forEach(vaccine => {
-          // Check if this vaccine hasn't been administered yet
           const isAdministered = vaccinations.some(
             v => v.name === vaccine.name && v.administeredDate
           );
@@ -63,7 +58,6 @@ export default function VaccinationTracker({
     return upcoming;
   };
   
-  // Parse age string like "2 mois" or "16-18 mois" to a number in months
   const parseAgeToMonths = (ageString: string): number => {
     if (ageString === "Naissance") return 0;
     
@@ -71,10 +65,8 @@ export default function VaccinationTracker({
     if (!match) return 0;
     
     if (match[2]) {
-      // Range like "16-18 mois", we take the lower bound
       return parseInt(match[1]);
     } else {
-      // Single value like "2 mois"
       return parseInt(match[1]);
     }
   };
@@ -88,7 +80,7 @@ export default function VaccinationTracker({
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2">
-                <Vaccine className="h-5 w-5 text-babybaby-cosmic" />
+                <Syringe className="h-5 w-5 text-babybaby-cosmic" />
                 Carnet de Vaccination
               </CardTitle>
               <CardDescription>
@@ -99,7 +91,6 @@ export default function VaccinationTracker({
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Upcoming vaccinations */}
             <Card className="bg-babybaby-lightblue/20">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base flex items-center">
@@ -128,7 +119,6 @@ export default function VaccinationTracker({
               </CardContent>
             </Card>
             
-            {/* Recent vaccinations */}
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-base flex items-center">
@@ -172,7 +162,6 @@ export default function VaccinationTracker({
             </Card>
           </div>
           
-          {/* Vaccination schedule table */}
           <div className="mt-6 overflow-auto">
             <h3 className="text-lg font-medium mb-4">Calendrier vaccinal complet</h3>
             <Table>

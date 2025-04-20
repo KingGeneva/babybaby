@@ -101,10 +101,9 @@ export default function MedicalCalendar({ appointments, onDateSelect, childId }:
                   selected={date}
                   onSelect={handleDateSelect}
                   initialFocus
-                  className={cn("pointer-events-auto")}
                   components={{
                     Day: ({ date: day, ...props }) => (
-                      <button {...props} className={`${props.className}`}>
+                      <button {...props}>
                         {renderDay(day)}
                       </button>
                     ),

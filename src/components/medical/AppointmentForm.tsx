@@ -65,6 +65,10 @@ export default function AppointmentForm({ initialData, childId, initialDate, onS
         ...data,
         date: format(data.date, 'yyyy-MM-dd'),
         childId,
+        title: data.title,  // Make sure title is explicitly included
+        doctor: data.doctor, // Make sure doctor is explicitly included
+        type: data.type,    // Make sure type is explicitly included
+        completed: data.completed || false
       });
       
       toast({
@@ -157,7 +161,7 @@ export default function AppointmentForm({ initialData, childId, initialDate, onS
                       selected={field.value}
                       onSelect={field.onChange}
                       initialFocus
-                      className={cn("p-3 pointer-events-auto")}
+                      className={cn("p-3")}
                     />
                   </PopoverContent>
                 </Popover>
