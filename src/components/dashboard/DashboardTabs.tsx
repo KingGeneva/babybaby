@@ -70,15 +70,23 @@ const DashboardTabs: React.FC<DashboardTabsProps> = ({
                   <>
                     <GrowthWidget 
                       title="Évolution du Poids (kg)" 
-                      data={growthData} 
-                      dataKey="poids" 
+                      data={growthData.map(item => ({
+                        date: item.date,
+                        value: item.poids
+                      }))} 
+                      metricType="poids" 
                       color="#33C3F0"
+                      childId={selectedChildId}
                     />
                     <GrowthWidget 
                       title="Évolution de la Taille (cm)" 
-                      data={growthData} 
-                      dataKey="taille" 
+                      data={growthData.map(item => ({
+                        date: item.date,
+                        value: item.taille
+                      }))} 
+                      metricType="taille" 
                       color="#9b87f5"
+                      childId={selectedChildId}
                     />
                   </>
                 ) : (
