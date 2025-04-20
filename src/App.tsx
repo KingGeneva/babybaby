@@ -20,6 +20,8 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import FAQPage from "./pages/FAQPage";
 import AboutPage from "./pages/AboutPage";
 import ChatbotButton from "./components/chatbot/ChatbotButton";
+import MedicalDashboardPage from "./pages/MedicalDashboardPage";
+import MedicalAppointmentPage from "./pages/MedicalAppointmentPage";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +50,30 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <ParentalDashboard />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/medical/dashboard/:childId" 
+                element={
+                  <ProtectedRoute>
+                    <MedicalDashboardPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/medical/appointment/new" 
+                element={
+                  <ProtectedRoute>
+                    <MedicalAppointmentPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/medical/appointment/:id" 
+                element={
+                  <ProtectedRoute>
+                    <MedicalAppointmentPage />
                   </ProtectedRoute>
                 } 
               />

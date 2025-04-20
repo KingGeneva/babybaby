@@ -1,253 +1,176 @@
-
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import GrowthWidget from './GrowthWidget';
-import StatCard from './StatCard';
-import MilestonesList from './MilestonesList';
-import { Card, CardContent } from '@/components/ui/card';
-import { Baby, Heart, Ruler, Weight, Brain } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Baby, Ruler, Weight } from 'lucide-react';
 import { calculateAge } from '@/lib/date-utils';
-import { toast } from '@/components/ui/use-toast';
+import GrowthWidget from './GrowthWidget';
+import MilestonesList from './MilestonesList';
+import { supabase } from '@/integrations/supabase/client';
+import StatCard from './StatCard';
+import MedicalWidget from '@/components/medical/MedicalWidget';
 
-interface DashboardProps {
-  childId?: string;
-  demoMode?: boolean;
-  demoData?: any[];
-}
-
-const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoData = [] }) => {
-  const [childProfile, setChildProfile] = useState<any>(null);
-  const [growthData, setGrowthData] = useState<any[]>([]);
-  const [milestones, setMilestones] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [latestMeasurement, setLatestMeasurement] = useState<any>(null);
+const Dashboard = ({ childId }: { childId: string }) => {
+  const [childData, setChildData] = useState<{ name: string; birth_date: string } | null>(null);
+  const [latestHeight, setLatestHeight] = useState<number | null>(null);
+  const [latestWeight, setLatestWeight] = useState<number | null>(null);
+  const [heightData, setHeightData] = useState<any[]>([]);
+  const [weightData, setWeightData] = useState<any[]>([]);
+  const [heightTrend, setHeightTrend] = useState<'up' | 'down' | 'stable'>('stable');
+  const [weightTrend, setWeightTrend] = useState<'up' | 'down' | 'stable'>('stable');
 
   useEffect(() => {
-    // Si en mode démo, utiliser les données de démo directement
-    if (demoMode) {
-      setGrowthData(demoData);
-      setChildProfile({
-        id: 'demo',
-        name: 'Bébé Exemple',
-        birth_date: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
-        gender: 'M'
-      });
-      setMilestones(defaultMilestones.filter(m => m.expectedAgeMonths <= 6).map(m => ({
-        name: m.name,
-        age: `${m.expectedAgeMonths} mois`,
-        achieved: m.expectedAgeMonths < 5
-      })));
-      if (demoData.length > 0) {
-        setLatestMeasurement({
-          height_cm: demoData[demoData.length - 1].taille,
-          weight_kg: demoData[demoData.length - 1].poids
-        });
-      }
-      setLoading(false);
-      return;
-    }
-
-    // Charger les données réelles si nous avons un childId
     if (!childId) return;
 
-    const fetchData = async () => {
+    const fetchChildData = async () => {
       try {
-        const [profileData, measurementsData, milestonesData] = await Promise.all([
-          supabase.from('child_profiles').select('*').eq('id', childId).single(),
-          supabase.from('growth_measurements').select('*').eq('child_id', childId).order('measurement_date', { ascending: true }),
-          supabase.from('milestones').select('*').eq('child_id', childId)
-        ]);
+        const { data, error } = await supabase
+          .from('child_profiles')
+          .select('name, birth_date')
+          .eq('id', childId)
+          .single();
 
-        if (profileData.error) throw profileData.error;
-        setChildProfile(profileData.data);
-
-        if (measurementsData.error) throw measurementsData.error;
-        if (measurementsData.data?.length > 0) {
-          const formattedData = measurementsData.data.map(item => ({
-            name: new Date(item.measurement_date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
-            taille: Number(item.height_cm),
-            poids: Number(item.weight_kg),
-            eveil: item.head_cm ? Number(item.head_cm) : undefined,
-          }));
-          setGrowthData(formattedData);
-          setLatestMeasurement(measurementsData.data[measurementsData.data.length - 1]);
-        }
-
-        // Gérer les jalons de développement
-        if (!milestonesData.error && milestonesData.data) {
-          setMilestones(milestonesData.data.map((milestone: any) => ({
-            name: milestone.name,
-            age: milestone.expected_age_months ? `${milestone.expected_age_months} mois` : '?',
-            achieved: !!milestone.achieved_date
-          })));
-        }
-
-      } catch (error: any) {
-        console.error('Erreur lors du chargement des données:', error);
-        toast({
-          title: "Erreur",
-          description: "Impossible de charger les données du bébé",
-          variant: "destructive",
-        });
-      } finally {
-        setLoading(false);
+        if (error) throw error;
+        setChildData(data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données de l'enfant:", error);
       }
     };
 
-    fetchData();
-  }, [childId, demoData, demoMode]);
+    const fetchLatestMeasurements = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('growth_measurements')
+          .select('height_cm, weight_kg, measurement_date')
+          .eq('child_id', childId)
+          .order('measurement_date', { ascending: false })
+          .limit(2);
 
-  if (loading) {
-    return (
-      <section className="py-20 px-4">
-        <div className="container mx-auto text-center">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-24 bg-gray-200 rounded"></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+        if (error) throw error;
 
-  if (!childProfile && !demoMode) {
-    return (
-      <section className="py-20 px-4">
-        <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6 text-babybaby-cosmic">
-            Aucun bébé sélectionné
-          </h2>
-          <p>Veuillez sélectionner un profil de bébé pour voir son suivi de croissance.</p>
-        </div>
-      </section>
-    );
-  }
+        if (data && data.length > 0) {
+          setLatestHeight(data[0].height_cm);
+          setLatestWeight(data[0].weight_kg);
 
-  const birthDate = new Date(childProfile.birth_date);
-  const ageString = calculateAge(childProfile.birth_date);
-  const achievedMilestonesCount = milestones.filter((m: any) => m.achieved).length;
+          // Calcul de la tendance pour la taille
+          if (data.length > 1 && data[1].height_cm !== null && data[0].height_cm !== null) {
+            if (data[0].height_cm > data[1].height_cm) {
+              setHeightTrend('up');
+            } else if (data[0].height_cm < data[1].height_cm) {
+              setHeightTrend('down');
+            } else {
+              setHeightTrend('stable');
+            }
+          } else {
+            setHeightTrend('stable');
+          }
+
+          // Calcul de la tendance pour le poids
+          if (data.length > 1 && data[1].weight_kg !== null && data[0].weight_kg !== null) {
+            if (data[0].weight_kg > data[1].weight_kg) {
+              setWeightTrend('up');
+            } else if (data[0].weight_kg < data[1].weight_kg) {
+              setWeightTrend('down');
+            } else {
+              setWeightTrend('stable');
+            }
+          } else {
+            setWeightTrend('stable');
+          }
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des dernières mesures:", error);
+      }
+    };
+
+    const fetchGrowthData = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('growth_measurements')
+          .select('height_cm, weight_kg, measurement_date')
+          .eq('child_id', childId)
+          .order('measurement_date', { ascending: true });
+
+        if (error) throw error;
+
+        if (data) {
+          const formattedHeightData = data.map(item => ({
+            date: new Date(item.measurement_date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
+            value: item.height_cm
+          })).filter(item => item.value !== null);
+
+          const formattedWeightData = data.map(item => ({
+            date: new Date(item.measurement_date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
+            value: item.weight_kg
+          })).filter(item => item.value !== null);
+
+          setHeightData(formattedHeightData);
+          setWeightData(formattedWeightData);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données de croissance:", error);
+      }
+    };
+
+    fetchChildData();
+    fetchLatestMeasurements();
+    fetchGrowthData();
+  }, [childId]);
 
   return (
-    <section className="py-20 px-4">
-      <div className="container mx-auto">
-        <motion.h2 
-          className="text-3xl font-bold mb-8 text-center text-babybaby-cosmic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {demoMode ? "Exemple de Suivi de Croissance" : `Suivi de Croissance - ${childProfile.name}`}
-        </motion.h2>
+    <div className="container mx-auto px-4">
+      <h1 className="text-3xl font-bold mb-6 text-center text-babybaby-cosmic">
+        {childData?.name ? `Tableau de bord de ${childData.name}` : 'Chargement...'}
+      </h1>
 
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, staggerChildren: 0.1 }}
-        >
-          <StatCard
-            title="Âge"
-            value={ageString}
-            icon={<Baby className="text-white" size={24} />}
-            color="bg-babybaby-cosmic"
-          />
-          <StatCard
-            title="Poids"
-            value={latestMeasurement?.weight_kg ? `${latestMeasurement.weight_kg} kg` : "Non renseigné"}
-            icon={<Weight className="text-white" size={24} />}
-            color="bg-green-400"
-          />
-          <StatCard
-            title="Taille"
-            value={latestMeasurement?.height_cm ? `${latestMeasurement.height_cm} cm` : "Non renseigné"}
-            icon={<Ruler className="text-white" size={24} />}
-            color="bg-purple-400"
-          />
-          <StatCard
-            title="Éveil"
-            value={calculateAwarenessLevel(achievedMilestonesCount)}
-            icon={<Brain className="text-white" size={24} />}
-            color="bg-amber-400"
-          />
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {growthData && growthData.length > 0 ? (
-            <>
-              <GrowthWidget 
-                title="Évolution du Poids (kg)" 
-                data={growthData} 
-                dataKey="poids" 
-                color="#33C3F0"
-              />
-              <GrowthWidget 
-                title="Évolution de la Taille (cm)" 
-                data={growthData} 
-                dataKey="taille" 
-                color="#9b87f5"
-              />
-            </>
-          ) : (
-            <Card className="col-span-1 lg:col-span-2">
-              <CardContent className="p-6 text-center">
-                <p>Aucune donnée de croissance n'est enregistrée pour ce bébé.</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  Ajoutez des mesures dans l'onglet Croissance pour voir apparaître les graphiques.
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-
-        {!demoMode && milestones.length > 0 && (
-          <motion.div
-            className="glass-card p-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <h3 className="text-lg font-bold mb-4">Jalons de Développement</h3>
-            <MilestonesList milestones={milestones} />
-          </motion.div>
-        )}
-
-        {demoMode && (
-          <div className="text-center mt-4">
-            <p className="text-sm text-gray-500">
-              Ces données sont présentées à titre d'exemple. 
-              Créez un compte pour suivre la croissance de votre bébé !
-            </p>
-          </div>
-        )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <StatCard 
+          title="Âge" 
+          value={childData?.birth_date ? calculateAge(childData.birth_date) : '...'} 
+          description="Âge actuel" 
+          icon="baby"
+        />
+        <StatCard 
+          title="Taille" 
+          value={latestHeight ? `${latestHeight} cm` : 'N/A'} 
+          description="Dernière mesure" 
+          icon="ruler"
+          trend={heightTrend}
+        />
+        <StatCard 
+          title="Poids" 
+          value={latestWeight ? `${latestWeight} kg` : 'N/A'} 
+          description="Dernière mesure" 
+          icon="weight"
+          trend={weightTrend}
+        />
       </div>
-    </section>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <GrowthWidget
+          title="Évolution de la taille (cm)"
+          childId={childId}
+          data={heightData}
+          metricType="taille"
+          color="#9b87f5"
+        />
+        <GrowthWidget
+          title="Évolution du poids (kg)"
+          childId={childId}
+          data={weightData}
+          metricType="poids"
+          color="#33C3F0"
+        />
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+        <div className="lg:col-span-2">
+          <MilestonesList childId={childId} />
+        </div>
+        <div>
+          <MedicalWidget childId={childId} />
+        </div>
+      </div>
+    </div>
   );
 };
 
-// Utilitaire pour calculer le niveau d'éveil
-const calculateAwarenessLevel = (achievedCount: number): string => {
-  if (achievedCount >= 8) return "Exceptionnel";
-  if (achievedCount >= 6) return "Excellent";
-  if (achievedCount >= 4) return "Très bon";
-  if (achievedCount >= 2) return "Bon";
-  return "Normal";
-};
-
-const defaultMilestones = [
-  { name: 'Sourire', expectedAgeMonths: 2 },
-  { name: 'Tenir sa tête', expectedAgeMonths: 3 },
-  { name: 'Rouler', expectedAgeMonths: 4 },
-  { name: "S'asseoir", expectedAgeMonths: 6 },
-  { name: 'Ramper', expectedAgeMonths: 8 },
-  { name: 'Se tenir debout', expectedAgeMonths: 10 },
-  { name: 'Marcher', expectedAgeMonths: 12 },
-  { name: 'Premier mot', expectedAgeMonths: 12 },
-];
-
 export default Dashboard;
-
