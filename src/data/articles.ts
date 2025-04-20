@@ -1,3 +1,4 @@
+
 import { Article } from "@/types/article";
 
 export const articles: Article[] = [
@@ -142,7 +143,7 @@ Chaque bébé est unique, avec son propre tempérament et ses propres besoins de
   {
     id: 3,
     title: "Les étapes du développement de 0 à 12 mois",
-    excerpt: "Tout ce que vous devez savoir sur les étapes clés du développement de votre enfant.",
+    excerpt: "Tout ce que vous devez savoir sur les étapes clés du développement de votre enfant",
     content: `# Les étapes du développement de 0 à 12 mois
 
 Tout ce que vous devez savoir sur les étapes clés du développement de votre enfant
@@ -244,7 +245,7 @@ Astuce : Intégrez des moments de "tummy time" pour renforcer sa musculature.
 • Chaque enfant se développe à son propre rythme. Les étapes sont des repères moyens, pas des obligations strictes.
 • Si vous avez des inquiétudes sur le développement de votre bébé, n'hésitez pas à consulter un pédiatre ou un professionnel de la petite enfance.
 • Le soutien affectif, les jeux d'éveil et l'interaction quotidienne sont les meilleurs outils pour accompagner bébé.`,
-    image: "/lovable-uploads/af44cf46-3e2e-404e-9c33-6bc75e1a24a1.png",
+    image: "/lovable-uploads/f5a21dc5-5eb0-4077-b04f-d7d3f4d44ccd.png",
     category: "Développement",
     date: "10 avril 2025",
     featured: true
