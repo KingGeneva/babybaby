@@ -38,38 +38,61 @@ serve(async (req) => {
 
     console.log("Envoi de la requête à OpenAI avec", messages.length, "messages");
     
-    const openAIRes = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${openAIApiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [systemPrompt, ...messages],
-        temperature: 0.7,
-        max_tokens: 360,
-      }),
-    });
+    try {
+      const openAIRes = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${openAIApiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [systemPrompt, ...messages],
+          temperature: 0.7,
+          max_tokens: 360,
+        }),
+      });
 
-    if (!openAIRes.ok) {
-      const errBody = await openAIRes.text();
-      console.error("Erreur OpenAI:", errBody);
+      if (!openAIRes.ok) {
+        const errBody = await openAIRes.text();
+        console.error("Erreur OpenAI:", errBody);
+        
+        // Vérifier si c'est une erreur de quota
+        if (errBody.includes("quota") || errBody.includes("insufficient_quota")) {
+          return new Response(
+            JSON.stringify({ 
+              error: "Quota OpenAI dépassé. Veuillez vérifier votre compte OpenAI.", 
+              errorCode: "QUOTA_EXCEEDED" 
+            }),
+            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        
+        return new Response(
+          JSON.stringify({ error: `Erreur OpenAI: ${openAIRes.status}` }),
+          { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      const data = await openAIRes.json();
+      console.log("Réponse reçue d'OpenAI:", data.choices ? "OK" : "Pas de réponse");
+      
+      const aiResponse = data.choices?.[0]?.message?.content ?? "Je suis désolé, je n'ai pas compris. Peux-tu reformuler ?";
+
       return new Response(
-        JSON.stringify({ error: `Erreur OpenAI: ${openAIRes.status}` }),
-        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ content: aiResponse }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    } catch (openaiError) {
+      console.error("Erreur lors de la communication avec OpenAI:", openaiError);
+      return new Response(
+        JSON.stringify({ 
+          error: "Impossible de communiquer avec OpenAI. Veuillez réessayer.",
+          details: openaiError.message 
+        }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-
-    const data = await openAIRes.json();
-    console.log("Réponse reçue d'OpenAI:", data.choices ? "OK" : "Pas de réponse");
-    
-    const aiResponse = data.choices?.[0]?.message?.content ?? "Je suis désolé, je n'ai pas compris. Peux-tu reformuler ?";
-
-    return new Response(
-      JSON.stringify({ content: aiResponse }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
   } catch (e) {
     console.error("Erreur dans la fonction Edge:", e);
     return new Response(

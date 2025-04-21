@@ -53,13 +53,23 @@ export function useChatbot() {
         body: JSON.stringify({ messages: gptMessages }),
       });
       
+      const data = await response.json();
+      
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Erreur API ChatGPT:", errorText);
+        console.error("Erreur API ChatGPT:", data);
+        
+        // Gestion spécifique des erreurs selon le code
+        if (response.status === 429 && data.errorCode === "QUOTA_EXCEEDED") {
+          toast({
+            title: "Service temporairement indisponible",
+            description: "Notre assistant est très demandé. Veuillez réessayer plus tard.",
+            variant: "destructive",
+          });
+          return "Je suis désolé, mais je suis actuellement indisponible en raison d'une forte demande. Notre équipe travaille à résoudre ce problème. Veuillez réessayer plus tard ou consulter notre FAQ pour obtenir des réponses à vos questions.";
+        }
+        
         throw new Error(`Erreur API: ${response.status}`);
       }
-      
-      const data = await response.json();
       
       if (!data || !data.content) {
         throw new Error("Réponse invalide du serveur");
