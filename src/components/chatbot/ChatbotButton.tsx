@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, BabyIcon, Loader2 } from 'lucide-react';
@@ -33,85 +34,142 @@ const ChatbotButton = () => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-
-  // Cette fonction prépare l'historique et interroge l'IA sur l'Edge Function
-  const fetchAIResponse = async (history: Message[], ajoutUserMsg: string) => {
-    try {
-      // Conversion de l'historique dans le format esperado par OpenAI
-      const gptMessages = history.map((msg) => ({
-        role: msg.sender === 'user' ? 'user' : 'assistant',
-        content: msg.text,
-      })).concat([{ role: "user", content: ajoutUserMsg }]);
-
-      setIsTyping(true);
-      const response = await fetch(
-        "https://pxynugnbikiwbsqdgewx.functions.supabase.co/chatgpt-babybot",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: gptMessages }),
-        }
-      );
-      const data = await response.json();
-
-      return data.content ?? "🤖 Une erreur s'est produite. Veuillez réessayer.";
-    } catch (e) {
-      return "🤖 La connexion à l'IA a échoué. Vérifiez votre connexion et réessayez.";
-    } finally {
-      setIsTyping(false);
+  
+  // Bot responses based on keywords
+  const getBotResponse = (userMessage: string): string => {
+    const lowerCaseMessage = userMessage.toLowerCase();
+    
+    // Réponses générales sur l'application
+    if (lowerCaseMessage.includes('bonjour') || lowerCaseMessage.includes('salut')) {
+      return "Bonjour ! Comment puis-je vous aider aujourd'hui avec BabyBaby ?";
     }
+    
+    if (lowerCaseMessage.includes('comment') && lowerCaseMessage.includes('fonctionne')) {
+      return "BabyBaby est une application complète pour suivre le développement de votre enfant. Elle propose un tableau de bord personnalisé, un suivi de croissance, un calendrier médical, un carnet de vaccination, des articles informatifs, des outils pratiques comme le générateur de prénoms et le bruit blanc, et bien plus encore !";
+    }
+    
+    // Profils de bébé
+    if (lowerCaseMessage.includes('profil') || lowerCaseMessage.includes('ajouter bébé')) {
+      return "Pour ajouter un profil de bébé, connectez-vous à votre compte, puis cliquez sur 'Ajouter un profil' dans le tableau de bord. Vous pourrez renseigner le prénom, la date de naissance, le genre et une photo optionnelle. Ces informations permettront de personnaliser le suivi de votre enfant.";
+    }
+    
+    // Suivi de croissance
+    if (lowerCaseMessage.includes('croissance') || lowerCaseMessage.includes('poids') || lowerCaseMessage.includes('taille')) {
+      return "Le suivi de croissance vous permet d'enregistrer la taille, le poids et le périmètre crânien de votre bébé. Les données sont visualisées sur des courbes de croissance comparées aux normes de référence. Pour ajouter une mesure, allez dans le tableau de bord de votre enfant et cliquez sur 'Ajouter une mesure'.";
+    }
+    
+    // Étapes de développement / Jalon
+    if (lowerCaseMessage.includes('étape') || lowerCaseMessage.includes('développement') || lowerCaseMessage.includes('jalon') || lowerCaseMessage.includes('milestone')) {
+      return "BabyBaby vous permet de suivre les étapes clés du développement de votre enfant. Notre liste d'étapes couvre le développement moteur, cognitif et social de 0 à 36 mois. Vous pouvez marquer les étapes comme accomplies et recevoir des conseils adaptés à chaque période.";
+    }
+    
+    // Calendrier médical et vaccination
+    if (lowerCaseMessage.includes('médical') || lowerCaseMessage.includes('docteur') || lowerCaseMessage.includes('pédiatre') || lowerCaseMessage.includes('rendez-vous')) {
+      return "Le calendrier médical vous permet de planifier et suivre tous les rendez-vous médicaux de votre enfant. Vous pouvez ajouter des rendez-vous avec différents spécialistes, configurer des rappels et noter les observations importantes. Accédez-y depuis le tableau de bord de votre enfant en cliquant sur 'Calendrier médical'.";
+    }
+    
+    if (lowerCaseMessage.includes('vaccin') || lowerCaseMessage.includes('vaccination')) {
+      return "Le carnet de vaccination numérique vous aide à suivre tous les vaccins de votre enfant. L'application vous rappelle les vaccinations à venir selon le calendrier officiel, et vous permet d'enregistrer les vaccins administrés avec leurs dates et lots. Vous pouvez même télécharger un récapitulatif pour votre médecin.";
+    }
+    
+    // Articles
+    if (lowerCaseMessage.includes('article') || lowerCaseMessage.includes('blog')) {
+      return "BabyBaby propose une bibliothèque d'articles rédigés par des experts sur la parentalité, le développement, la santé et le bien-être des bébés. Vous pouvez filtrer les articles par catégorie, rechercher des sujets spécifiques et sauvegarder vos articles préférés pour les consulter plus tard.";
+    }
+    
+    // Outils
+    if (lowerCaseMessage.includes('outil') || lowerCaseMessage.includes('fonction')) {
+      return "BabyBaby propose plusieurs outils pratiques : calculateur d'ovulation, générateur de prénoms, bruit blanc pour aider bébé à dormir, berceuses, checklist pour préparer l'arrivée de bébé, registre de cadeaux, et calculateur de coûts. Vous pouvez accéder à tous ces outils depuis la section 'Outils' dans le menu principal.";
+    }
+    
+    if (lowerCaseMessage.includes('bruit blanc') || lowerCaseMessage.includes('berceuse') || lowerCaseMessage.includes('dormir')) {
+      return "Notre application propose un générateur de bruit blanc avec différents sons (pluie, ventilateur, océan...) et un lecteur de berceuses pour aider votre bébé à s'endormir. Vous pouvez régler le volume, programmer un arrêt automatique et même créer des playlists personnalisées.";
+    }
+    
+    if (lowerCaseMessage.includes('prénom') || lowerCaseMessage.includes('nom')) {
+      return "Le générateur de prénoms vous aide à trouver l'inspiration ! Filtrez par origine, genre, longueur ou initiale. Vous pouvez sauvegarder vos préférés et les partager avec votre partenaire. L'outil propose également la signification et l'origine de chaque prénom.";
+    }
+    
+    if (lowerCaseMessage.includes('checklist') || lowerCaseMessage.includes('liste')) {
+      return "Notre checklist pour l'arrivée de bébé vous guide dans les préparatifs avant la naissance. Les items sont organisés par catégorie (vêtements, matériel de puériculture, hygiène...) et vous pouvez suivre votre progression, ajouter vos propres items et recevoir des rappels pour les achats importants.";
+    }
+    
+    // Compte et inscription
+    if (lowerCaseMessage.includes('compte') || lowerCaseMessage.includes('inscription') || lowerCaseMessage.includes('connexion')) {
+      return "Pour créer un compte, cliquez sur 'Se connecter' en haut à droite, puis 'Créer un compte'. L'inscription est gratuite et sécurisée. Vous pourrez ajouter plusieurs profils d'enfants et accéder à toutes les fonctionnalités de base de l'application. Vos données sont protégées et ne sont jamais partagées sans votre consentement.";
+    }
+    
+    // Paiement et abonnement
+    if (lowerCaseMessage.includes('paiement') || lowerCaseMessage.includes('abonnement') || lowerCaseMessage.includes('premium')) {
+      return "BabyBaby propose une version gratuite avec toutes les fonctionnalités essentielles, et une version premium avec des options avancées (plus d'espace de stockage, export de données, absence de publicités, etc.). Vous pouvez consulter les différentes offres dans la section 'Abonnement' après vous être connecté.";
+    }
+    
+    // Confidentialité et sécurité
+    if (lowerCaseMessage.includes('confidentialité') || lowerCaseMessage.includes('données') || lowerCaseMessage.includes('sécurité')) {
+      return "Chez BabyBaby, la sécurité des données est notre priorité. Toutes les informations sont chiffrées, stockées sur des serveurs sécurisés et jamais partagées avec des tiers sans votre consentement. Vous pouvez à tout moment consulter, exporter ou supprimer vos données depuis les paramètres de votre compte.";
+    }
+    
+    // Support technique
+    if (lowerCaseMessage.includes('problème') || lowerCaseMessage.includes('bug') || lowerCaseMessage.includes('aide') || lowerCaseMessage.includes('support')) {
+      return "Si vous rencontrez un problème technique, vous pouvez contacter notre support à support@babybaby.app ou via le formulaire de contact accessible depuis les paramètres. Notre équipe est disponible du lundi au vendredi, de 9h à 18h et vous répondra sous 24h.";
+    }
+    
+    // Réponse par défaut
+    return "Je ne suis pas sûr de comprendre votre question. Pourriez-vous la reformuler ou choisir l'un des sujets suggérés ci-dessous ? Vous pouvez me demander des informations sur le suivi de croissance, le calendrier médical, les vaccinations, les articles, ou les différents outils disponibles dans l'application.";
   };
-
-  // Lorsque l'utilisateur envoie un message
-  const handleSendMessage = async () => {
+  
+  const handleSendMessage = () => {
     if (inputValue.trim() === '') return;
-
+    
+    // Add user message
     const userMessage: Message = {
       id: messages.length + 1,
       text: inputValue,
       sender: 'user',
       timestamp: new Date()
     };
-
+    
     setMessages([...messages, userMessage]);
     setInputValue('');
     setIsTyping(true);
-
-    // On interroge l'agent IA via l'Edge Function
-    const aiText = await fetchAIResponse(messages, inputValue);
-    const botResponse: Message = {
-      id: messages.length + 2,
-      text: aiText,
-      sender: 'bot',
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, botResponse]);
-    setIsTyping(false);
+    
+    // Simulate bot typing and response
+    setTimeout(() => {
+      const botResponse: Message = {
+        id: messages.length + 2,
+        text: getBotResponse(inputValue),
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, botResponse]);
+      setIsTyping(false);
+    }, 1000);
   };
-
-  // Quick Reply adapté pour l'IA
-  const handleQuickReply = async (reply: string) => {
+  
+  const handleQuickReply = (reply: string) => {
     const userMessage: Message = {
       id: messages.length + 1,
       text: reply,
       sender: 'user',
       timestamp: new Date()
     };
-
+    
     setMessages([...messages, userMessage]);
     setIsTyping(true);
-
-    const aiText = await fetchAIResponse(messages, reply);
-    const botResponse: Message = {
-      id: messages.length + 2,
-      text: aiText,
-      sender: 'bot',
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, botResponse]);
-    setIsTyping(false);
+    
+    // Simulate bot typing and response
+    setTimeout(() => {
+      const botResponse: Message = {
+        id: messages.length + 2,
+        text: getBotResponse(reply),
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, botResponse]);
+      setIsTyping(false);
+    }, 1000);
   };
 
   return (

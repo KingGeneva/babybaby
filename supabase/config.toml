@@ -6,6 +6,3 @@ verify_jwt = false
 
 [functions.send-custom-email]
 verify_jwt = false
-
-[functions.chatgpt-babybot]
-verify_jwt = false
