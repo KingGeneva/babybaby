@@ -14,12 +14,20 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+  
   try {
     const { messages } = await req.json();
     if (!messages || !Array.isArray(messages)) {
       return new Response(
-        JSON.stringify({ error: "Missing or invalid messages array." }),
+        JSON.stringify({ error: "Messages manquants ou format invalide." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!openAIApiKey) {
+      return new Response(
+        JSON.stringify({ error: "Clé API OpenAI non configurée." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -28,6 +36,8 @@ serve(async (req) => {
       content: `Tu es BabyBot, un assistant parental expert, chaleureux, bienveillant et ultra pédagogique. Tes réponses sont toujours en français, adaptées à des jeunes parents, claires et sourcées s'il le faut. Rappelle-toi d'être synthétique mais précis, de donner des conseils et toujours conclure sur une touche positive ou rassurante. Si la question sort du domaine bébé/parentalité, reformule pour recentrer la discussion.`,
     };
 
+    console.log("Envoi de la requête à OpenAI avec", messages.length, "messages");
+    
     const openAIRes = await fetch('https://api.openai.com/v1/chat/completions', {
       method: "POST",
       headers: {
@@ -44,20 +54,27 @@ serve(async (req) => {
 
     if (!openAIRes.ok) {
       const errBody = await openAIRes.text();
-      return new Response(JSON.stringify({ error: errBody }), { status: 500, headers: corsHeaders });
+      console.error("Erreur OpenAI:", errBody);
+      return new Response(
+        JSON.stringify({ error: `Erreur OpenAI: ${openAIRes.status}` }),
+        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const data = await openAIRes.json();
-    const aiResponse = data.choices?.[0]?.message?.content ?? "Je suis désolé, je n'ai pas compris. Peux-tu reformuler ?";
+    console.log("Réponse reçue d'OpenAI:", data.choices ? "OK" : "Pas de réponse");
+    
+    const aiResponse = data.choices?.[0]?.message?.content ?? "Je suis désolé, je n'ai pas compris. Peux-tu reformuler ?";
 
-    return new Response(JSON.stringify({ content: aiResponse }), {
-      status: 200,
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
+    return new Response(
+      JSON.stringify({ content: aiResponse }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
   } catch (e) {
-    return new Response(JSON.stringify({ error: e.message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
+    console.error("Erreur dans la fonction Edge:", e);
+    return new Response(
+      JSON.stringify({ error: e.message }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
   }
 });

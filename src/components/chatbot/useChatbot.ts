@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { toast } from "@/components/ui/use-toast";
 
 export type Message = {
   id: number;
@@ -11,7 +12,7 @@ export type Message = {
 export const initialMessages: Message[] = [
   {
     id: 1,
-    text: "Bonjour ! Je suis BabyBot, votre assistant virtuel. Comment puis-je vous aider aujourd'hui ?",
+    text: "Bonjour ! Je suis BabyBot, votre assistant parental expert. Comment puis-je vous aider aujourd'hui ?",
     sender: "bot",
     timestamp: new Date(),
   },
@@ -37,22 +38,42 @@ export function useChatbot() {
   const toggleOpen = () => setIsOpen((v) => !v);
   const close = () => setIsOpen(false);
 
-  const fetchAIResponse = async (history: Message[], ajoutUserMsg: string) => {
+  const fetchAIResponse = async (history: Message[], userMsg: string) => {
     try {
       const gptMessages = history.map((msg) => ({
         role: msg.sender === "user" ? "user" : "assistant",
         content: msg.text,
-      })).concat([{ role: "user", content: ajoutUserMsg }]);
+      })).concat([{ role: "user", content: userMsg }]);
+      
       setIsTyping(true);
+      
       const response = await fetch(CHATBOT_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: gptMessages }),
       });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Erreur API ChatGPT:", errorText);
+        throw new Error(`Erreur API: ${response.status}`);
+      }
+      
       const data = await response.json();
-      return data.content ?? "🤖 Une erreur s'est produite. Veuillez réessayer.";
+      
+      if (!data || !data.content) {
+        throw new Error("Réponse invalide du serveur");
+      }
+      
+      return data.content;
     } catch (e) {
-      return "🤖 La connexion à l'IA a échoué. Vérifiez votre connexion et réessayez.";
+      console.error("Erreur chatbot:", e);
+      toast({
+        title: "Erreur de communication",
+        description: "Impossible de contacter l'assistant. Veuillez réessayer.",
+        variant: "destructive",
+      });
+      return "🤖 Une erreur s'est produite. Veuillez réessayer dans un instant.";
     } finally {
       setIsTyping(false);
     }
@@ -61,24 +82,37 @@ export function useChatbot() {
   // Envoi d'un message utilisateur
   const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
+    
+    // Créer et ajouter le message de l'utilisateur
     const userMessage: Message = {
       id: messages.length + 1,
       text: inputValue,
       sender: "user",
       timestamp: new Date(),
     };
-    setMessages((m) => [...m, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
+    
+    // Déclencher l'affichage de l'indicateur de frappe
     setIsTyping(true);
-    const aiText = await fetchAIResponse(messages, inputValue);
-    const botResponse: Message = {
-      id: messages.length + 2,
-      text: aiText,
-      sender: "bot",
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, botResponse]);
-    setIsTyping(false);
+    
+    try {
+      // Obtenir la réponse de l'IA
+      const aiText = await fetchAIResponse(messages, inputValue);
+      
+      // Créer et ajouter le message de réponse du bot
+      const botResponse: Message = {
+        id: messages.length + 2,
+        text: aiText,
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botResponse]);
+    } catch (error) {
+      console.error("Erreur lors de l'envoi du message:", error);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   // Réponse rapide
@@ -89,17 +123,25 @@ export function useChatbot() {
       sender: "user",
       timestamp: new Date(),
     };
-    setMessages((m) => [...m, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
+    
     setIsTyping(true);
-    const aiText = await fetchAIResponse(messages, reply);
-    const botResponse: Message = {
-      id: messages.length + 2,
-      text: aiText,
-      sender: "bot",
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, botResponse]);
-    setIsTyping(false);
+    
+    try {
+      const aiText = await fetchAIResponse(messages, reply);
+      
+      const botResponse: Message = {
+        id: messages.length + 2,
+        text: aiText,
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botResponse]);
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de la réponse rapide:", error);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   // Entrée utilisateur
