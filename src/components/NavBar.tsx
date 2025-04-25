@@ -14,20 +14,17 @@ const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
-  // Toggle dropdown resource menu
   const toggleResources = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsResourcesOpen(!isResourcesOpen);
   };
 
-  // Close menu when route changes
   useEffect(() => {
     setIsMenuOpen(false);
     setIsResourcesOpen(false);
     setIsDropdownOpen(false);
   }, [location]);
 
-  // Add scroll effect to navbar
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -44,19 +41,15 @@ const NavBar = () => {
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/95 shadow-sm backdrop-blur-sm" : "bg-transparent"
-      }`}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled ? "bg-white/95 shadow-sm backdrop-blur-sm" : "bg-transparent"
+    }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
           <Link to="/" className="flex items-center">
             <Logo size="md" />
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
             <Link
               to="/tools"
@@ -69,6 +62,12 @@ const NavBar = () => {
               className="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic transition-all"
             >
               Articles
+            </Link>
+            <Link
+              to="/quiz"
+              className="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic transition-all"
+            >
+              Quiz & Tests
             </Link>
             <div className="relative">
               <a
@@ -86,7 +85,6 @@ const NavBar = () => {
                 </motion.div>
               </a>
 
-              {/* Dropdown Menu */}
               <AnimatePresence>
                 {isResourcesOpen && (
                   <motion.div
@@ -126,7 +124,6 @@ const NavBar = () => {
             </div>
           </nav>
 
-          {/* Login / Dashboard Button */}
           <div className="flex items-center gap-2">
             {user ? (
               <Link to="/dashboard">
@@ -149,7 +146,6 @@ const NavBar = () => {
               </Link>
             )}
 
-            {/* Mobile menu button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 rounded-md text-gray-600 hover:text-babybaby-cosmic md:hidden"
@@ -164,7 +160,6 @@ const NavBar = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -188,7 +183,6 @@ const NavBar = () => {
                 Articles
               </Link>
 
-              {/* Mobile Resources Dropdown */}
               <div>
                 <a
                   href="#"
