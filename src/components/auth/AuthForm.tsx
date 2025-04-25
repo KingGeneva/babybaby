@@ -17,6 +17,7 @@ const emailSchema = z.string().email("Email invalide").min(1, "Email requis");
 const passwordSchema = z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères");
 
 const AuthForm: React.FC = () => {
+  // Define mode type explicitly to match all three possible values
   const [mode, setMode] = useState<'login' | 'register' | 'reset'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -240,7 +241,7 @@ const AuthForm: React.FC = () => {
         </CardContent>
         
         <CardFooter className="flex flex-col space-y-2">
-          {mode !== 'reset' && !resetSent && (
+          {(mode !== 'reset' || resetSent) && (
             <Button
               variant="link"
               className="w-full"
@@ -271,3 +272,4 @@ const AuthForm: React.FC = () => {
 };
 
 export default AuthForm;
+
