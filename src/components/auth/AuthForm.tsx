@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import LoginForm from './forms/LoginForm';
 import RegisterForm from './forms/RegisterForm';
 import ResetPasswordForm from './forms/ResetPasswordForm';
+import { supabase } from '@/integrations/supabase/client';
 
 type AuthMode = 'login' | 'register' | 'reset';
 
