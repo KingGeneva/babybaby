@@ -54,16 +54,7 @@ const NavBar = () => {
           />
 
           <div className="flex items-center gap-2">
-            {user ? (
-              <Link to="/dashboard">
-                <Button
-                  size="sm"
-                  className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
-                >
-                  Tableau de bord
-                </Button>
-              </Link>
-            ) : (
+            {!user && (
               <Link to="/auth">
                 <Button
                   size="sm"
