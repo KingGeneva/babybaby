@@ -23,6 +23,20 @@ const AuthPage = () => {
   const accessToken = searchParams.get('access_token');
   const refreshToken = searchParams.get('refresh_token');
   const type = searchParams.get('type');
+  const error = searchParams.get('error');
+  const errorDescription = searchParams.get('error_description');
+
+  // Traiter les erreurs explicites dans l'URL
+  useEffect(() => {
+    if (error) {
+      setTokenError(`${error}: ${errorDescription || 'Une erreur s\'est produite'}`);
+      toast({
+        title: "Erreur d'authentification",
+        description: errorDescription || "Une erreur s'est produite lors de l'authentification",
+        variant: "destructive",
+      });
+    }
+  }, [error, errorDescription]);
 
   // Traiter les tokens de l'URL
   useEffect(() => {
@@ -123,6 +137,14 @@ const AuthPage = () => {
               <Alert variant="destructive">
                 <AlertDescription>{tokenError}</AlertDescription>
               </Alert>
+              <div className="mt-4 flex justify-center">
+                <button 
+                  onClick={() => navigate('/auth')}
+                  className="px-4 py-2 bg-babybaby-cosmic text-white rounded-md hover:bg-babybaby-cosmic/90"
+                >
+                  Retourner à la page de connexion
+                </button>
+              </div>
             </CardContent>
           </Card>
         </div>

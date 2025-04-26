@@ -52,6 +52,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             title: "Profil mis à jour",
             description: "Vos informations ont été mises à jour",
           });
+        } else if (event === 'TOKEN_REFRESHED') {
+          console.log("Token rafraîchi avec succès");
         }
       }
     );

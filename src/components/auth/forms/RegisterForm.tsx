@@ -31,11 +31,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onModeChange, sendCustomEma
       setLoading(true);
       setError('');
 
+      // Utilisation des redirections correctes pour Supabase Auth
       const { data, error } = await supabase.auth.signUp({ 
         email, 
         password,
         options: {
-          emailRedirectTo: window.location.origin + '/auth'
+          emailRedirectTo: `${window.location.origin}/auth`,
+          data: {
+            // Données supplémentaires à associer à l'utilisateur si nécessaire
+          }
         }
       });
       
