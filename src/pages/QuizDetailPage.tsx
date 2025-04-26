@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -7,35 +7,11 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import QuizQuestion from '@/components/quiz/QuizQuestion';
 import QuizProgress from '@/components/quiz/QuizProgress';
+import QuizNavigation from '@/components/quiz/QuizNavigation';
 import { Loader2 } from 'lucide-react';
 import SEOHead from '@/components/common/SEOHead';
-import { Database } from '@/integrations/supabase/types';
-
-type QuizType = Database['public']['Enums']['quiz_type'];
-type QuizIdParam = 'parenting-style' | 'child-development' | 'parental-burnout';
-
-// Cette fonction convertit l'ID de l'URL vers le type d'enum Supabase
-const convertToQuizType = (quizId: string | undefined): QuizType | undefined => {
-  if (!quizId) return undefined;
-  
-  const mapping: Record<QuizIdParam, QuizType> = {
-    'parenting-style': 'parenting_style',
-    'child-development': 'child_development',
-    'parental-burnout': 'parental_burnout'
-  };
-  
-  // Vérifier si quizId est une clé valide de notre mapping
-  return mapping[quizId as QuizIdParam];
-};
-
-interface Question {
-  id: string;
-  question: string;
-  options: Array<{
-    id: string;
-    text: string;
-  }>;
-}
+import { convertToQuizType, calculateScore } from '@/components/quiz/utils';
+import { Question, quizTitles, QuizType } from '@/components/quiz/types';
 
 const QuizDetailPage = () => {
   const { quizId } = useParams<{ quizId: string }>();
@@ -46,11 +22,6 @@ const QuizDetailPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const quizType = convertToQuizType(quizId);
-  const quizTitles: Record<QuizType, string> = {
-    'parenting_style': 'Style Parental',
-    'child_development': 'Développement de l\'Enfant',
-    'parental_burnout': 'Épuisement Parental'
-  };
 
   const { data: questions, isLoading, error } = useQuery({
     queryKey: ['quiz-questions', quizType],
@@ -67,8 +38,6 @@ const QuizDetailPage = () => {
       if (!data || data.length === 0) {
         throw new Error('Aucune question trouvée pour ce quiz');
       }
-      
-      console.log("Questions récupérées:", data);
       
       return data.map(q => ({
         ...q,
@@ -94,14 +63,11 @@ const QuizDetailPage = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      // Si l'utilisateur est connecté, sauvegardez les réponses
+      setIsSubmitting(true);
       try {
-        setIsSubmitting(true);
-        
         const { data: sessionData } = await supabase.auth.getSession();
         
         if (sessionData.session?.user) {
-          // Si l'utilisateur est connecté, enregistrez les réponses
           await supabase.from('quiz_responses').insert({
             user_id: sessionData.session.user.id,
             quiz_type: quizType,
@@ -114,7 +80,6 @@ const QuizDetailPage = () => {
             description: "Vos réponses ont été enregistrées avec succès."
           });
         } else {
-          // Sinon, affichez simplement un message de succès
           toast({
             title: "Quiz terminé !",
             description: "Merci d'avoir participé à ce quiz."
@@ -133,11 +98,6 @@ const QuizDetailPage = () => {
         setIsSubmitting(false);
       }
     }
-  };
-
-  const calculateScore = (answers: Record<string, string>): number => {
-    // Logique simple de calcul du score selon le nombre de questions répondues
-    return Object.keys(answers).length;
   };
 
   const handlePrevious = () => {
@@ -176,7 +136,6 @@ const QuizDetailPage = () => {
   }
 
   const currentQuestion = questions[currentQuestionIndex];
-  const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -196,30 +155,14 @@ const QuizDetailPage = () => {
         onAnswerSelect={handleAnswerSelect}
       />
 
-      <div className="flex justify-between mt-8 max-w-2xl mx-auto">
-        <Button
-          variant="outline"
-          onClick={handlePrevious}
-          disabled={currentQuestionIndex === 0}
-        >
-          Question précédente
-        </Button>
-
-        <Button
-          onClick={handleNext}
-          disabled={!answers[currentQuestion.id] || isSubmitting}
-          className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
-        >
-          {isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Traitement...
-            </>
-          ) : (
-            isLastQuestion ? 'Terminer le quiz' : 'Question suivante'
-          )}
-        </Button>
-      </div>
+      <QuizNavigation
+        currentQuestionIndex={currentQuestionIndex}
+        totalQuestions={questions.length}
+        hasCurrentAnswer={Boolean(answers[currentQuestion.id])}
+        isSubmitting={isSubmitting}
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+      />
     </div>
   );
 };
