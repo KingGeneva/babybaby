@@ -199,6 +199,57 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_questions: {
+        Row: {
+          created_at: string
+          id: string
+          options: Json
+          question: string
+          quiz_type: Database["public"]["Enums"]["quiz_type"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          options: Json
+          question: string
+          quiz_type: Database["public"]["Enums"]["quiz_type"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          options?: Json
+          question?: string
+          quiz_type?: Database["public"]["Enums"]["quiz_type"]
+        }
+        Relationships: []
+      }
+      quiz_responses: {
+        Row: {
+          answers: Json
+          completed_at: string
+          id: string
+          quiz_type: Database["public"]["Enums"]["quiz_type"]
+          score: number | null
+          user_id: string
+        }
+        Insert: {
+          answers: Json
+          completed_at?: string
+          id?: string
+          quiz_type: Database["public"]["Enums"]["quiz_type"]
+          score?: number | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          completed_at?: string
+          id?: string
+          quiz_type?: Database["public"]["Enums"]["quiz_type"]
+          score?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -207,7 +258,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      quiz_type: "parenting_style" | "child_development" | "parental_burnout"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -322,6 +373,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      quiz_type: ["parenting_style", "child_development", "parental_burnout"],
+    },
   },
 } as const
