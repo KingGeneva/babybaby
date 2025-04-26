@@ -4,22 +4,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
 import QuizQuestion from '@/components/quiz/QuizQuestion';
 import QuizProgress from '@/components/quiz/QuizProgress';
 import QuizNavigation from '@/components/quiz/QuizNavigation';
 import { Loader2 } from 'lucide-react';
 import SEOHead from '@/components/common/SEOHead';
 import { convertToQuizType, calculateScore } from '@/components/quiz/utils';
-import { Question, quizTitles, QuizType } from '@/components/quiz/types';
+import { quizTitles } from '@/components/quiz/types';
+import { useQuizSubmission } from '@/hooks/useQuizSubmission';
 
 const QuizDetailPage = () => {
   const { quizId } = useParams<{ quizId: string }>();
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const quizType = convertToQuizType(quizId);
 
@@ -48,6 +46,12 @@ const QuizDetailPage = () => {
     refetchOnWindowFocus: false
   });
 
+  const { isSubmitting, handleQuizSubmission } = useQuizSubmission({
+    quizType,
+    answers,
+    calculateScore
+  });
+
   const handleAnswerSelect = (answerId: string) => {
     if (!questions) return;
     
@@ -63,40 +67,7 @@ const QuizDetailPage = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      setIsSubmitting(true);
-      try {
-        const { data: sessionData } = await supabase.auth.getSession();
-        
-        if (sessionData.session?.user) {
-          await supabase.from('quiz_responses').insert({
-            user_id: sessionData.session.user.id,
-            quiz_type: quizType,
-            answers,
-            score: calculateScore(answers)
-          });
-          
-          toast({
-            title: "Quiz terminé !",
-            description: "Vos réponses ont été enregistrées avec succès."
-          });
-        } else {
-          toast({
-            title: "Quiz terminé !",
-            description: "Merci d'avoir participé à ce quiz."
-          });
-        }
-        
-        navigate('/quiz');
-      } catch (error) {
-        console.error("Erreur lors de la soumission du quiz:", error);
-        toast({
-          title: "Erreur",
-          description: "Une erreur est survenue lors de l'enregistrement de vos réponses.",
-          variant: "destructive"
-        });
-      } finally {
-        setIsSubmitting(false);
-      }
+      await handleQuizSubmission();
     }
   };
 
