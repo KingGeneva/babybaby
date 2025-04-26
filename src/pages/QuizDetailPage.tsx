@@ -25,6 +25,7 @@ const convertToQuizType = (quizId: string | undefined): QuizType | undefined => 
     'parental-burnout': 'parental_burnout'
   };
   
+  // Vérifier si quizId est une clé valide de notre mapping
   return mapping[quizId as QuizIdParam];
 };
 
