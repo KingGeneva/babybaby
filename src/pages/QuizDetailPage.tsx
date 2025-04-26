@@ -1,13 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import QuizQuestion from '@/components/quiz/QuizQuestion';
 import QuizProgress from '@/components/quiz/QuizProgress';
-import { useAuth } from '@/contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
 import SEOHead from '@/components/common/SEOHead';
 import { Database } from '@/integrations/supabase/types';
@@ -42,9 +41,9 @@ const QuizDetailPage = () => {
   const { quizId } = useParams<{ quizId: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user } = useAuth();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const quizType = convertToQuizType(quizId);
   const quizTitles: Record<QuizType, string> = {
@@ -64,50 +63,21 @@ const QuizDetailPage = () => {
         .eq('quiz_type', quizType);
       
       if (error) throw error;
+      
+      if (!data || data.length === 0) {
+        throw new Error('Aucune question trouvée pour ce quiz');
+      }
+      
+      console.log("Questions récupérées:", data);
+      
       return data.map(q => ({
         ...q,
         options: Array.isArray(q.options) ? q.options : JSON.parse(q.options as string)
       }));
     },
-    enabled: !!quizType
+    retry: 1,
+    refetchOnWindowFocus: false
   });
-
-  const submitQuizMutation = useMutation({
-    mutationFn: async (answers: Record<string, string>) => {
-      if (!user) throw new Error('Vous devez être connecté');
-      if (!quizType) throw new Error('Type de quiz invalide');
-      
-      const { error } = await supabase
-        .from('quiz_responses')
-        .insert({
-          user_id: user.id,
-          quiz_type: quizType,
-          answers,
-          score: calculateScore(answers)
-        });
-
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      toast({
-        title: "Quiz terminé !",
-        description: "Vos réponses ont été enregistrées avec succès."
-      });
-      navigate('/dashboard');
-    },
-    onError: (error) => {
-      toast({
-        title: "Erreur",
-        description: error instanceof Error ? error.message : "Une erreur est survenue lors de l'enregistrement de vos réponses.",
-        variant: "destructive"
-      });
-    }
-  });
-
-  const calculateScore = (answers: Record<string, string>): number => {
-    // Logique de calcul du score selon le type de quiz
-    return Object.keys(answers).length;
-  };
 
   const handleAnswerSelect = (answerId: string) => {
     if (!questions) return;
@@ -118,14 +88,56 @@ const QuizDetailPage = () => {
     }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!questions) return;
     
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      submitQuizMutation.mutate(answers);
+      // Si l'utilisateur est connecté, sauvegardez les réponses
+      try {
+        setIsSubmitting(true);
+        
+        const { data: sessionData } = await supabase.auth.getSession();
+        
+        if (sessionData.session?.user) {
+          // Si l'utilisateur est connecté, enregistrez les réponses
+          await supabase.from('quiz_responses').insert({
+            user_id: sessionData.session.user.id,
+            quiz_type: quizType,
+            answers,
+            score: calculateScore(answers)
+          });
+          
+          toast({
+            title: "Quiz terminé !",
+            description: "Vos réponses ont été enregistrées avec succès."
+          });
+        } else {
+          // Sinon, affichez simplement un message de succès
+          toast({
+            title: "Quiz terminé !",
+            description: "Merci d'avoir participé à ce quiz."
+          });
+        }
+        
+        navigate('/quiz');
+      } catch (error) {
+        console.error("Erreur lors de la soumission du quiz:", error);
+        toast({
+          title: "Erreur",
+          description: "Une erreur est survenue lors de l'enregistrement de vos réponses.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
     }
+  };
+
+  const calculateScore = (answers: Record<string, string>): number => {
+    // Logique simple de calcul du score selon le nombre de questions répondues
+    return Object.keys(answers).length;
   };
 
   const handlePrevious = () => {
@@ -195,10 +207,17 @@ const QuizDetailPage = () => {
 
         <Button
           onClick={handleNext}
-          disabled={!answers[currentQuestion.id]}
+          disabled={!answers[currentQuestion.id] || isSubmitting}
           className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
         >
-          {isLastQuestion ? 'Terminer le quiz' : 'Question suivante'}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Traitement...
+            </>
+          ) : (
+            isLastQuestion ? 'Terminer le quiz' : 'Question suivante'
+          )}
         </Button>
       </div>
     </div>
