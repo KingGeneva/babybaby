@@ -1,3 +1,4 @@
+
 import { Database } from '@/integrations/supabase/types';
 
 export type QuizType = Database['public']['Enums']['quiz_type'];
@@ -36,3 +37,4 @@ export const quizTitles: Record<QuizType, string> = {
   'child_development': 'Développement de l\'Enfant',
   'parental_burnout': 'Épuisement Parental'
 };
+

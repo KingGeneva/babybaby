@@ -8,7 +8,7 @@ import QuizProgress from '@/components/quiz/QuizProgress';
 import QuizNavigation from '@/components/quiz/QuizNavigation';
 import { Loader2 } from 'lucide-react';
 import SEOHead from '@/components/common/SEOHead';
-import { convertToQuizType } from '@/components/quiz/utils';
+import { convertToQuizType } from '@/components/quiz/urlUtils';
 import { quizTitles } from '@/components/quiz/types';
 import { useQuizSubmission } from '@/hooks/useQuizSubmission';
 
