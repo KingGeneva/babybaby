@@ -4,17 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { QuizType } from '@/components/quiz/types';
+import { calculateDetailedResults } from '@/components/quiz/utils';
 
 interface UseQuizSubmissionProps {
   quizType: QuizType | undefined;
   answers: Record<string, string>;
-  calculateScore: (answers: Record<string, string>) => number;
+  questions: any[];
 }
 
 export const useQuizSubmission = ({ 
   quizType, 
-  answers, 
-  calculateScore 
+  answers,
+  questions
 }: UseQuizSubmissionProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -25,6 +26,7 @@ export const useQuizSubmission = ({
     
     setIsSubmitting(true);
     try {
+      const results = calculateDetailedResults(answers, questions);
       const { data: sessionData } = await supabase.auth.getSession();
       
       if (sessionData.session?.user) {
@@ -32,21 +34,23 @@ export const useQuizSubmission = ({
           user_id: sessionData.session.user.id,
           quiz_type: quizType,
           answers,
-          score: calculateScore(answers)
+          score: results.score,
+          detailed_results: results.detailedResults,
+          recommendations: results.recommendations
         });
         
         toast({
           title: "Quiz terminé !",
-          description: "Vos réponses ont été enregistrées avec succès."
-        });
-      } else {
-        toast({
-          title: "Quiz terminé !",
-          description: "Merci d'avoir participé à ce quiz."
+          description: "Vos réponses ont été enregistrées avec succès.",
         });
       }
       
-      navigate('/quiz');
+      navigate(`/quiz/${quizType}/results`, { 
+        state: { 
+          results,
+          quizType 
+        }
+      });
     } catch (error) {
       console.error("Erreur lors de la soumission du quiz:", error);
       toast({

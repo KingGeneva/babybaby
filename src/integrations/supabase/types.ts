@@ -227,24 +227,30 @@ export type Database = {
         Row: {
           answers: Json
           completed_at: string
+          detailed_results: Json | null
           id: string
           quiz_type: Database["public"]["Enums"]["quiz_type"]
+          recommendations: string[] | null
           score: number | null
           user_id: string
         }
         Insert: {
           answers: Json
           completed_at?: string
+          detailed_results?: Json | null
           id?: string
           quiz_type: Database["public"]["Enums"]["quiz_type"]
+          recommendations?: string[] | null
           score?: number | null
           user_id: string
         }
         Update: {
           answers?: Json
           completed_at?: string
+          detailed_results?: Json | null
           id?: string
           quiz_type?: Database["public"]["Enums"]["quiz_type"]
+          recommendations?: string[] | null
           score?: number | null
           user_id?: string
         }
