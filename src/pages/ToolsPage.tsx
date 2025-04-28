@@ -4,7 +4,6 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
-import { Music, Volume2, Calculator, Gift, Baby, Check, TabletSmartphone } from 'lucide-react';
 
 // Import des outils
 import NameGenerator from '@/components/tools/NameGenerator';
@@ -41,8 +40,8 @@ const ToolsPage = () => {
             value={activeTab}
             onValueChange={setActiveTab}
           >
-            <div className="flex justify-center mb-8">
-              <TabsList>
+            <div className="flex justify-center mb-8 overflow-x-auto">
+              <TabsList className="flex-nowrap">
                 <TabsTrigger value="all">Tous les outils</TabsTrigger>
                 <TabsTrigger value="names">Prénoms</TabsTrigger>
                 <TabsTrigger value="finance">Finance</TabsTrigger>

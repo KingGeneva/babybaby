@@ -21,6 +21,7 @@ const GrowthMeasurementForm: React.FC<{
   onSuccess?: () => void;
 }> = ({ childId, onSuccess }) => {
   const [loading, setLoading] = useState(false);
+  const isDemoMode = childId === 'demo';
   
   const form = useForm<MeasurementFormValues>({
     defaultValues: {
@@ -33,32 +34,50 @@ const GrowthMeasurementForm: React.FC<{
   const onSubmit = async (data: MeasurementFormValues) => {
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from('growth_measurements')
-        .insert({
-          child_id: childId,
-          measurement_date: data.measurementDate,
-          height_cm: data.heightCm,
-          weight_kg: data.weightKg,
-          head_cm: data.headCm,
-          notes: data.notes,
-        });
+      if (isDemoMode) {
+        // En mode démo, simuler un succès sans faire d'appel à la base de données
+        setTimeout(() => {
+          toast({
+            title: "Mesure enregistrée (Mode Démo)",
+            description: `Les données de croissance ont été simulées en mode démo.`,
+          });
+          
+          form.reset({
+            measurementDate: new Date().toISOString().split('T')[0],
+            heightCm: 0,
+            weightKg: 0,
+          });
+          
+          if (onSuccess) onSuccess();
+        }, 500);
+      } else {
+        // Mode normal, enregistrement dans Supabase
+        const { error } = await supabase
+          .from('growth_measurements')
+          .insert({
+            child_id: childId,
+            measurement_date: data.measurementDate,
+            height_cm: data.heightCm,
+            weight_kg: data.weightKg,
+            head_cm: data.headCm,
+            notes: data.notes,
+          });
 
-      if (error) throw error;
-      
-      toast({
-        title: "Mesure enregistrée",
-        description: `Les données de croissance ont été enregistrées.`,
-      });
-      
-      form.reset({
-        measurementDate: new Date().toISOString().split('T')[0],
-        heightCm: 0,
-        weightKg: 0,
-      });
-      
-      if (onSuccess) onSuccess();
-      
+        if (error) throw error;
+        
+        toast({
+          title: "Mesure enregistrée",
+          description: `Les données de croissance ont été enregistrées.`,
+        });
+        
+        form.reset({
+          measurementDate: new Date().toISOString().split('T')[0],
+          heightCm: 0,
+          weightKg: 0,
+        });
+        
+        if (onSuccess) onSuccess();
+      }
     } catch (error: any) {
       toast({
         title: "Erreur",

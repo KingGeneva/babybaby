@@ -20,6 +20,9 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoData }) => {
+  // Si childId est 'demo', on force le mode démo à true
+  const isDemo = demoMode || childId === 'demo';
+  
   const [childData, setChildData] = useState<{ name: string; birth_date: string } | null>(null);
   const [latestHeight, setLatestHeight] = useState<number | null>(null);
   const [latestWeight, setLatestWeight] = useState<number | null>(null);
@@ -29,7 +32,7 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
   const [weightTrend, setWeightTrend] = useState<'up' | 'down' | 'stable'>('stable');
 
   useEffect(() => {
-    if (!childId || demoMode) return;
+    if (!childId || isDemo) return;
 
     const fetchChildData = async () => {
       try {
@@ -124,23 +127,34 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
     fetchChildData();
     fetchLatestMeasurements();
     fetchGrowthData();
-  }, [childId, demoMode]);
+  }, [childId, isDemo]);
 
   // Use demo data if in demo mode
   useEffect(() => {
-    if (demoMode && demoData) {
+    if (isDemo) {
       // Set demo stats
       setChildData({ name: "Bébé Démo", birth_date: "2024-01-01" });
       setLatestHeight(64);
       setLatestWeight(7.2);
       
       // Format demo data for charts
-      const heightData = demoData.map(item => ({
+      const defaultDemoData = [
+        { name: "Jan", taille: 50, poids: 3.5 },
+        { name: "Fév", taille: 53, poids: 4.2 },
+        { name: "Mar", taille: 57, poids: 5.1 },
+        { name: "Avr", taille: 60, poids: 6.0 },
+        { name: "Mai", taille: 62, poids: 6.5 },
+        { name: "Juin", taille: 64, poids: 7.2 }
+      ];
+      
+      const dataToUse = demoData || defaultDemoData;
+      
+      const heightData = dataToUse.map(item => ({
         date: item.name,
         value: item.taille
       }));
       
-      const weightData = demoData.map(item => ({
+      const weightData = dataToUse.map(item => ({
         date: item.name,
         value: item.poids
       }));
@@ -148,7 +162,7 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
       setHeightData(heightData);
       setWeightData(weightData);
     }
-  }, [demoMode, demoData]);
+  }, [isDemo, demoData]);
 
   return (
     <div className="container mx-auto px-4">
