@@ -9,7 +9,7 @@ export const ebooksData: Ebook[] = [
     coverImage: '/lovable-uploads/e15314a2-a50b-4867-921c-6376551b5030.png',
     fileUrl: 'https://babybaby.org/ebooks/sommeil-bebe.pdf',
     fileType: 'PDF',
-    fileSize: '2.3 MB'
+    fileSize: 2.3
   },
   {
     id: 'alimentation-bebe',
@@ -18,7 +18,7 @@ export const ebooksData: Ebook[] = [
     coverImage: '/lovable-uploads/alimentation-bebe.png',
     fileUrl: 'https://babybaby.org/ebooks/alimentation-bebe.pdf',
     fileType: 'PDF',
-    fileSize: '2.5 MB'
+    fileSize: 2.5
   },
   {
     id: 'developpement-enfant',
@@ -27,6 +27,6 @@ export const ebooksData: Ebook[] = [
     coverImage: '/lovable-uploads/developpement-enfant.png',
     fileUrl: 'https://babybaby.org/ebooks/developpement-enfant.pdf',
     fileType: 'PDF',
-    fileSize: '2.1 MB'
+    fileSize: 2.1
   },
 ];
