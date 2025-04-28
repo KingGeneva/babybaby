@@ -28,5 +28,5 @@ export const ebooksData: Ebook[] = [
     fileUrl: 'https://babybaby.org/ebooks/developpement-enfant.pdf',
     fileType: 'PDF',
     fileSize: 2.1
-  },
+  }
 ];

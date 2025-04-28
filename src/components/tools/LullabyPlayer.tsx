@@ -1,13 +1,15 @@
-
 import React, { useState, useEffect, useRef } from 'react';
-import { Music } from 'lucide-react';
+import { Music, Upload } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { lullabies, createAudio } from './lullaby/utils';
+import { lullabies, getLullabies, createAudio } from './lullaby/utils';
 import PlayerControls from './lullaby/PlayerControls';
 import VolumeControl from './lullaby/VolumeControl';
 import PlaylistView from './lullaby/PlaylistView';
 import ProgressBar from './lullaby/ProgressBar';
+import UploadLullaby from './lullaby/UploadLullaby';
+import { Lullaby } from './lullaby/types';
+import { useQuery } from '@tanstack/react-query';
 
 interface LullabyPlayerProps {
   className?: string;
@@ -27,6 +29,12 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
   const { toast } = useToast();
   
   const currentLullaby = lullabies[currentLullabyIndex];
+
+  const { data: storedLullabies, refetch } = useQuery({
+    queryKey: ['lullabies'],
+    queryFn: getLullabies,
+    initialData: lullabies
+  });
 
   useEffect(() => {
     if (!audioRef.current) {
@@ -222,11 +230,13 @@ const LullabyPlayer: React.FC<LullabyPlayerProps> = ({ className }) => {
         />
         
         <PlaylistView
-          lullabies={lullabies}
+          lullabies={storedLullabies}
           currentIndex={currentLullabyIndex}
           isPlaying={isPlaying}
           onSongSelect={handleSongSelect}
         />
+
+        <UploadLullaby onUploadComplete={refetch} />
       </CardContent>
     </Card>
   );

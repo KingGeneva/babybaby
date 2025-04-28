@@ -1,10 +1,13 @@
 
+import { Lullaby } from './types';
+
 export interface Lullaby {
   id: string;
   title: string;
   artist: string;
   duration: number;
   audioSrc: string;
+  fileType: 'wav' | 'mp3';
 }
 
 export interface AudioPlayerState {
@@ -13,4 +16,10 @@ export interface AudioPlayerState {
   volume: number;
   isMuted: boolean;
   isLooping: boolean;
+}
+
+export interface LullabyFile {
+  name: string;
+  artist: string;
+  file: File;
 }

@@ -1,10 +1,10 @@
 
 export interface Ebook {
-  id: number;
+  id: string;
   title: string;
   description: string;
   coverImage: string;
-  downloadUrl: string;
+  fileUrl: string;
   fileType: string;
-  fileSize: string;
+  fileSize: number;
 }

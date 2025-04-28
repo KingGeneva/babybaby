@@ -1,4 +1,3 @@
-
 import React from 'react';
 import DashboardHeader from './DashboardHeader';
 import GrowthSection from './GrowthSection';
@@ -9,9 +8,15 @@ import useDemoDashboard from './useDemoDashboard';
 interface DashboardProps {
   childId: string;
   demoMode?: boolean;
+  demoData?: Array<{
+    name: string;
+    taille: number;
+    poids: number;
+    eveil?: number;
+  }>;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false }) => {
+const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoData }) => {
   const isDemo = demoMode || childId === 'demo';
   const dashboardData = isDemo ? useDemoDashboard() : useDashboardData(childId, isDemo);
   
