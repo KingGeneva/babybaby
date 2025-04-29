@@ -10,7 +10,7 @@ interface EbookGridProps {
 }
 
 const EbookGrid: React.FC<EbookGridProps> = ({ ebooks }) => {
-  const [downloadingId, setDownloadingId] = useState<number | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const handleDownload = async (ebook: Ebook) => {
     setDownloadingId(ebook.id);

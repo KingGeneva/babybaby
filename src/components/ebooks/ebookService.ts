@@ -5,10 +5,10 @@ import { Ebook } from "./types";
 
 export async function downloadEbook(ebook: Ebook): Promise<void> {
   try {
-    console.log(`Tentative de téléchargement de: ${ebook.title} (fichier: ${ebook.downloadUrl})`);
+    console.log(`Tentative de téléchargement de: ${ebook.title} (fichier: ${ebook.fileUrl})`);
     
     // On remplace les espaces par des underscores pour être cohérent avec le stockage Supabase
-    const fileName = ebook.downloadUrl;
+    const fileName = ebook.fileUrl;
     
     // Récupération de l'URL signée avec un délai étendu
     const { data, error } = await supabase
@@ -21,7 +21,7 @@ export async function downloadEbook(ebook: Ebook): Promise<void> {
       console.error('Détails du fichier demandé:', {
         bucket: 'ebooks',
         fileName: fileName,
-        originalFileName: ebook.downloadUrl
+        originalFileName: ebook.fileUrl
       });
       
       toast.error("Erreur de téléchargement", {

@@ -7,4 +7,5 @@ export interface Ebook {
   fileUrl: string;
   fileType: string;
   fileSize: number;
+  downloadUrl?: string; // Adding this for backward compatibility
 }
