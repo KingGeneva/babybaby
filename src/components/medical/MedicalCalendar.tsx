@@ -1,201 +1,146 @@
 
 import React, { useState } from 'react';
-import { Calendar } from '@/components/ui/calendar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Calendar as CalendarIcon, Plus } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { CalendarClock } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { MedicalAppointment } from '@/types/medical';
-import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
-interface MedicalCalendarProps {
-  appointments: MedicalAppointment[];
-  onDateSelect?: (date: Date) => void;
-  childId: string;
+interface AppointmentType {
+  id: string;
+  date: Date | string;
+  title: string;
+  doctor: string;
+  type: 'vaccine' | 'checkup' | 'specialist';
+  notes?: string;
 }
 
-export default function MedicalCalendar({ appointments, onDateSelect, childId }: MedicalCalendarProps) {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const navigate = useNavigate();
-  
-  // Group appointments by date
-  const appointmentsByDate = appointments.reduce((acc, appointment) => {
-    const appointmentDate = appointment.date;
-    if (!acc[appointmentDate]) {
-      acc[appointmentDate] = [];
-    }
-    acc[appointmentDate].push(appointment);
-    return acc;
-  }, {} as Record<string, MedicalAppointment[]>);
+// Données de démo
+const demoAppointments: AppointmentType[] = [
+  {
+    id: '1',
+    date: new Date(2025, 4, 15),
+    title: 'Visite pédiatre',
+    doctor: 'Dr. Martin',
+    type: 'checkup'
+  },
+  {
+    id: '2',
+    date: new Date(2025, 4, 22),
+    title: 'Vaccination 12 mois',
+    doctor: 'Dr. Petit',
+    type: 'vaccine'
+  },
+  {
+    id: '3',
+    date: new Date(2025, 5, 5),
+    title: 'Ophtalmologue',
+    doctor: 'Dr. Leblanc',
+    type: 'specialist',
+    notes: 'Apporter le dossier médical'
+  }
+];
 
+interface MedicalCalendarProps {
+  appointments?: AppointmentType[];
+  isDemo?: boolean;
+  onAddAppointment?: () => void;
+}
+
+const MedicalCalendar: React.FC<MedicalCalendarProps> = ({
+  appointments = [],
+  isDemo = false,
+  onAddAppointment
+}) => {
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const { toast } = useToast();
+
+  // Utiliser les données de démo si en mode démo
+  const displayAppointments = isDemo ? demoAppointments : appointments;
+
+  // Fonction pour formatter la date des rendez-vous
+  const formatAppointmentDate = (date: Date | string): string => {
+    if (typeof date === 'string') {
+      return format(new Date(date), 'PPP', { locale: fr });
+    }
+    return format(date, 'PPP', { locale: fr });
+  };
+
+  // Génère des badges différents selon le type de rendez-vous
+  const getAppointmentBadge = (type: string) => {
+    switch (type) {
+      case 'vaccine':
+        return <Badge variant="default" className="bg-green-500">Vaccin</Badge>;
+      case 'specialist':
+        return <Badge variant="default" className="bg-purple-500">Spécialiste</Badge>;
+      default:
+        return <Badge variant="outline">Contrôle</Badge>;
+    }
+  };
+
+  // Fonction pour afficher les détails d'un rendez-vous lorsqu'on clique sur une date
   const handleDateSelect = (selectedDate: Date | undefined) => {
-    setDate(selectedDate);
-    if (selectedDate && onDateSelect) {
-      onDateSelect(selectedDate);
-    }
-  };
-  
-  // Custom day renderer to show appointments
-  const renderDay = (day: Date) => {
-    const dateStr = format(day, 'yyyy-MM-dd');
-    const hasAppointments = appointmentsByDate[dateStr]?.length > 0;
+    if (!selectedDate) return;
     
-    return (
-      <div className="relative w-full h-full">
-        <div>{day.getDate()}</div>
-        {hasAppointments && (
-          <div className="absolute bottom-0 left-0 right-0 flex justify-center">
-            <div className="w-1.5 h-1.5 rounded-full bg-babybaby-cosmic"></div>
-          </div>
-        )}
-      </div>
-    );
-  };
-  
-  const selectedDateStr = date ? format(date, 'yyyy-MM-dd') : '';
-  const selectedDateAppointments = appointmentsByDate[selectedDateStr] || [];
-  
-  const handleAddAppointment = () => {
-    if (childId === 'demo') {
+    setDate(selectedDate);
+    
+    const appointmentsOnDate = displayAppointments.filter(apt => {
+      const aptDate = typeof apt.date === 'string' ? new Date(apt.date) : apt.date;
+      return aptDate.toDateString() === selectedDate.toDateString();
+    });
+    
+    if (appointmentsOnDate.length > 0) {
       toast({
-        title: "Mode démonstration",
-        description: "Cette fonctionnalité est désactivée en mode démo"
+        title: `Rendez-vous du ${format(selectedDate, 'dd MMMM yyyy', { locale: fr })}`,
+        description: appointmentsOnDate.map(apt => apt.title).join(', '),
       });
-      return;
     }
-    navigate(`/medical/appointment/new?childId=${childId}${date ? `&date=${selectedDateStr}` : ''}`);
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle>Calendrier Médical</CardTitle>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="flex items-center gap-1" 
-            onClick={handleAddAppointment}
-          >
-            <Plus className="h-4 w-4" />
-            <span>Ajouter</span>
-          </Button>
-        </div>
-        <CardDescription>
-          Consultations et vaccinations prévues
-        </CardDescription>
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-lg font-medium">
+          <CalendarClock className="h-5 w-5" />
+          Calendrier médical
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="md:w-1/2">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal mb-4"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, 'PPP', { locale: fr }) : <span>Sélectionner une date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={handleDateSelect}
-                  initialFocus
-                  components={{
-                    Day: ({ date: day, ...props }) => (
-                      <button {...props}>
-                        {renderDay(day)}
-                      </button>
-                    ),
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-            
-            <div className="space-y-2 mt-4">
-              <h3 className="text-sm font-medium">
-                {date ? format(date, 'EEEE d MMMM yyyy', { locale: fr }) : 'Aucune date sélectionnée'}
-              </h3>
-              
-              {selectedDateAppointments.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  Aucune consultation prévue à cette date.
-                </p>
-              ) : (
-                <ul className="space-y-2">
-                  {selectedDateAppointments.map((appointment) => (
-                    <li key={appointment.id} className="border rounded-md p-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">{appointment.title}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {appointment.time || 'Heure non spécifiée'} • {appointment.doctor}
-                          </p>
-                        </div>
-                        <Badge variant={appointment.completed ? "secondary" : "default"}>
-                          {appointment.completed ? "Terminé" : "À venir"}
-                        </Badge>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
+        <div className="grid gap-6">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={handleDateSelect}
+            className="rounded-md border"
+          />
           
-          <div className="md:w-1/2 md:border-l md:pl-6">
-            <h3 className="text-lg font-medium mb-4">Consultations à venir</h3>
-            <div className="space-y-3">
-              {appointments.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  Aucune consultation prévue.
-                </p>
-              ) : (
-                appointments
-                  .filter(app => {
-                    const appDate = new Date(app.date);
-                    return appDate >= new Date() && !app.completed;
-                  })
-                  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                  .slice(0, 5)
-                  .map(appointment => (
-                    <div key={appointment.id} className="flex items-center border-b pb-2">
-                      <div className="w-12 h-12 bg-babybaby-lightblue rounded-full flex items-center justify-center mr-3">
-                        <span className="text-xs font-medium">
-                          {format(new Date(appointment.date), 'dd MMM', { locale: fr })}
-                        </span>
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium">{appointment.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {appointment.doctor} • {appointment.type === 'vaccination' ? 'Vaccination' : 'Consultation'}
-                        </p>
-                      </div>
-                      <Badge 
-                        className={cn(
-                          appointment.type === 'vaccination' ? 'bg-babybaby-cosmic text-white' : '',
-                          appointment.type === 'check-up' ? 'bg-green-100 text-green-800' : '',
-                          appointment.type === 'specialist' ? 'bg-purple-100 text-purple-800' : ''
-                        )}
-                      >
-                        {appointment.type === 'vaccination' ? 'Vaccin' : 
-                         appointment.type === 'check-up' ? 'Routine' : 
-                         appointment.type === 'specialist' ? 'Spécialiste' : 'Autre'}
-                      </Badge>
-                    </div>
-                  ))
-              )}
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-medium">Prochains rendez-vous</h3>
             </div>
+            
+            {displayAppointments.length > 0 ? (
+              <div className="space-y-3">
+                {displayAppointments.map((apt) => (
+                  <div key={apt.id} className="flex items-start gap-2 border-l-2 border-babybaby-cosmic pl-3">
+                    <div>
+                      <p className="text-sm font-medium">{apt.title}</p>
+                      <p className="text-xs text-muted-foreground">{formatAppointmentDate(apt.date)} • {apt.doctor}</p>
+                      <div className="mt-1">{getAppointmentBadge(apt.type)}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">Aucun rendez-vous à venir</p>
+            )}
           </div>
         </div>
       </CardContent>
     </Card>
   );
-}
+};
+
+export default MedicalCalendar;

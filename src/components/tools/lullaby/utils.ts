@@ -1,5 +1,5 @@
 
-import { Lullaby } from './types';
+import { Lullaby, LullabyFile } from './types';
 
 // Liste des berceuses par défaut
 export const lullabies: Lullaby[] = [
@@ -63,4 +63,58 @@ export const formatTime = (seconds: number): string => {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+};
+
+// Fonction pour téléverser une berceuse
+export const uploadLullaby = async (file: File, metadata: { title: string, artist: string }): Promise<void> => {
+  try {
+    // Create a URL for the audio file
+    const audioUrl = URL.createObjectURL(file);
+    
+    // Get file type
+    const fileType = file.name.toLowerCase().endsWith('.wav') ? 'wav' : 'mp3';
+    
+    // Create a new lullaby object
+    const newLullaby: Lullaby = {
+      id: `custom-${Date.now()}`,
+      title: metadata.title || file.name.split('.')[0],
+      artist: metadata.artist || 'Personnalisé',
+      duration: 180, // Default duration until we can determine it
+      audioSrc: audioUrl,
+      fileType: fileType
+    };
+
+    // Create an Audio element to get the duration
+    const audio = new Audio(audioUrl);
+    
+    await new Promise<void>((resolve) => {
+      audio.addEventListener('loadedmetadata', () => {
+        if (audio.duration !== Infinity) {
+          newLullaby.duration = audio.duration;
+        }
+        resolve();
+      });
+      
+      // Handle errors or if metadata can't be loaded
+      audio.addEventListener('error', () => {
+        console.error('Failed to load audio metadata');
+        resolve();
+      });
+    });
+    
+    // Save to local storage
+    const storedLullabies = localStorage.getItem('custom-lullabies');
+    let customLullabies: Lullaby[] = [];
+    
+    if (storedLullabies) {
+      customLullabies = JSON.parse(storedLullabies);
+    }
+    
+    customLullabies.push(newLullaby);
+    localStorage.setItem('custom-lullabies', JSON.stringify(customLullabies));
+    
+  } catch (error) {
+    console.error('Error uploading lullaby:', error);
+    throw new Error('Failed to upload lullaby');
+  }
 };
