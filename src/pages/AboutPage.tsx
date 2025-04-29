@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import NavBar from '@/components/NavBar';
@@ -10,9 +11,16 @@ const AboutPage = () => {
   return (
     <div className="min-h-screen">
       <SEOHead 
-        title="À propos de BabyBaby" 
-        description="Découvrez l'histoire de BabyBaby, née pour accompagner les parents dans leur parcours."
+        title="À propos de BabyBaby - Notre histoire et notre mission" 
+        description="Découvrez l'histoire de BabyBaby, une plateforme créée pour les parents afin de rendre leur parcours parental plus serein et épanouissant."
         canonicalUrl="https://babybaby.app/about"
+        ogType="website"
+        articleData={{
+          publishedTime: "2023-09-15T08:00:00+00:00",
+          modifiedTime: "2025-04-29T10:00:00+00:00",
+          author: "BabyBaby",
+          tags: ["application parentale", "suivi bébé", "histoire BabyBaby", "mission BabyBaby"]
+        }}
       />
       
       <NavBar />
@@ -41,9 +49,11 @@ const AboutPage = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <img 
-                src="/lovable-uploads/d50b4331-6d8b-45e6-9e58-e8fc2d198a37.png" 
-                alt="L'équipe BabyBaby" 
+                src="/lovable-uploads/021f4ab1-8b86-4ff2-80c1-c2c69ea963fb.png" 
+                alt="Parents utilisant l'application BabyBaby avec leur bébé" 
                 className="rounded-2xl shadow-lg w-full"
+                width="600"
+                height="600"
               />
             </motion.div>
             
@@ -61,8 +71,7 @@ const AboutPage = () => {
                 rendre le parcours parental plus serein et épanouissant.
               </p>
               <p className="text-gray-600">
-                Le fondateur, Kevin Gagné, de Québec, fonde et développe 
-                babybaby.org en 2023, animé par une vision claire : 
+                Babybaby.org a été fondé en 2023, animé par une vision claire : 
                 utiliser la technologie pour soutenir les familles.
               </p>
               <p className="text-gray-600">
@@ -136,7 +145,6 @@ const AboutPage = () => {
             
             <div className="text-center text-gray-500 text-sm">
               <p>BabyBaby</p>
-              <p>Québec, QC, Canada</p>
               <p>contact@babybaby.org</p>
             </div>
           </motion.div>

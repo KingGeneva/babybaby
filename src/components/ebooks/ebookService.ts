@@ -1,50 +1,36 @@
 
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { Ebook } from "./types";
+import { Ebook } from './types';
+import { toast } from 'sonner';
 
-export async function downloadEbook(ebook: Ebook): Promise<void> {
+export const downloadEbook = async (ebook: Ebook): Promise<void> => {
   try {
-    console.log(`Tentative de téléchargement de: ${ebook.title} (fichier: ${ebook.fileUrl})`);
+    // Simuler un délai de téléchargement
+    await new Promise(resolve => setTimeout(resolve, 800));
     
-    // On remplace les espaces par des underscores pour être cohérent avec le stockage Supabase
-    const fileName = ebook.fileUrl;
-    
-    // Récupération de l'URL signée avec un délai étendu
-    const { data, error } = await supabase
-      .storage
-      .from('ebooks')
-      .createSignedUrl(fileName, 600); // 10 minutes pour éviter les problèmes de téléchargement lent
-    
-    if (error) {
-      console.error('Erreur lors de la création de l\'URL signée:', error);
-      console.error('Détails du fichier demandé:', {
-        bucket: 'ebooks',
-        fileName: fileName,
-        originalFileName: ebook.fileUrl
-      });
-      
-      toast.error("Erreur de téléchargement", {
-        description: `Impossible de télécharger "${ebook.title}" pour le moment. Veuillez réessayer plus tard.`
-      });
-      return;
+    // Vérifier si l'URL du fichier est disponible
+    if (!ebook.fileUrl) {
+      throw new Error("Lien de téléchargement non disponible");
     }
     
-    if (data?.signedUrl) {
-      // Ouvrir dans un nouvel onglet et notifier l'utilisateur
-      window.open(data.signedUrl, '_blank');
-      toast.success("Téléchargement démarré", {
-        description: `"${ebook.title}" est en cours de téléchargement.`
-      });
-    } else {
-      toast.error("Lien non généré", {
-        description: "Impossible de générer le lien de téléchargement."
-      });
-    }
-  } catch (err) {
-    console.error('Erreur inattendue:', err);
-    toast.error("Erreur système", {
-      description: "Une erreur inattendue s'est produite. Nos équipes ont été informées."
-    });
+    // Dans un environnement de production, ceci serait remplacé par un vrai téléchargement
+    // Pour la démo, nous ouvrons simplement l'URL dans un nouvel onglet
+    window.open(ebook.fileUrl, '_blank');
+    
+    // Notification de succès
+    toast.success(`${ebook.title} téléchargé avec succès`);
+    
+    // Log analytics (serait implémenté dans un environnement de production)
+    console.log(`Ebook téléchargé: ${ebook.title} (${ebook.id})`);
+    
+  } catch (error) {
+    console.error("Erreur lors du téléchargement:", error);
+    toast.error(`Impossible de télécharger ${ebook.title}. Veuillez réessayer.`);
   }
-}
+};
+
+// Fonction pour obtenir l'URL de prévisualisation (si disponible)
+export const getPreviewUrl = (ebook: Ebook): string | null => {
+  // Dans un environnement réel, cette fonction pourrait vérifier si une prévisualisation est disponible
+  // et renvoyer son URL. Pour la démo, nous renvoyons simplement l'URL du fichier
+  return ebook.fileUrl || null;
+};

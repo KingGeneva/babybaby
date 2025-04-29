@@ -6,6 +6,9 @@ export interface Ebook {
   coverImage: string;
   fileUrl: string;
   fileType: string;
-  fileSize: number;
-  downloadUrl?: string; // Adding this for backward compatibility
+  fileSize: string;
+  category: string;
+  tags: string[];
+  author: string;
+  publishDate: string;
 }

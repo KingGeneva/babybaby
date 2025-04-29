@@ -15,6 +15,7 @@ interface SEOProps {
     author?: string;
     tags?: string[];
   };
+  keywords?: string[];
 }
 
 const SEOHead = ({ 
@@ -25,7 +26,8 @@ const SEOHead = ({
   ogType = "website",
   lang = "fr",
   alternateLanguages = [],
-  articleData
+  articleData,
+  keywords = ["suivi bébé", "croissance infantile", "santé bébé", "conseil parental", "développement enfant"]
 }: SEOProps) => {
   const siteTitle = "BabyBaby - Application de suivi de bébé";
   const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
@@ -34,6 +36,9 @@ const SEOHead = ({
     <Helmet htmlAttributes={{ lang }}>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
+      <meta name="keywords" content={keywords.join(', ')} />
+      
+      {/* Canonical URL */}
       {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
       
       {/* Alternate language URLs */}
@@ -47,6 +52,8 @@ const SEOHead = ({
       <meta property="og:description" content={description} />
       <meta property="og:image" content={ogImage} />
       {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+      <meta property="og:site_name" content="BabyBaby" />
+      <meta property="og:locale" content={lang === "fr" ? "fr_FR" : "en_US"} />
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -69,6 +76,12 @@ const SEOHead = ({
           ))}
         </>
       )}
+      
+      {/* Mobile specific */}
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+      <meta name="theme-color" content="#ffffff" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       
       {/* Prevent indexation in non-production environments */}
       {!canonicalUrl?.includes('babybaby.app') && (

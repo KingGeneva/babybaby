@@ -4,6 +4,7 @@ import { Ebook } from './types';
 import EbookCard from './EbookCard';
 import { downloadEbook } from './ebookService';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 interface EbookGridProps {
   ebooks: Ebook[];
@@ -17,6 +18,9 @@ const EbookGrid: React.FC<EbookGridProps> = ({ ebooks }) => {
     
     try {
       await downloadEbook(ebook);
+    } catch (error) {
+      console.error("Erreur lors du téléchargement:", error);
+      toast.error(`Impossible de télécharger ${ebook.title}`);
     } finally {
       // S'assurer que l'état de chargement est toujours réinitialisé
       setDownloadingId(null);

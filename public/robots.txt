@@ -1,14 +1,38 @@
-User-agent: Googlebot
+
+# BabyBaby robots.txt
+# https://babybaby.app
+
+# Allow all crawlers
+User-agent: *
 Allow: /
 
-User-agent: Bingbot
-Allow: /
+# Sitemap location
+Sitemap: https://babybaby.app/sitemap.xml
 
+# Social Media Bots - Allow specific paths
 User-agent: Twitterbot
 Allow: /
+Allow: /articles/
+Allow: /images/
+Allow: /lovable-uploads/
 
 User-agent: facebookexternalhit
 Allow: /
+Allow: /articles/
+Allow: /images/
+Allow: /lovable-uploads/
 
-User-agent: *
-Allow: /
+# Rate limiting for aggressive crawlers
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: Baiduspider
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Disallow specific paths
+Disallow: /api/
+Disallow: /temp/
+Disallow: /admin/
