@@ -12,6 +12,7 @@ import MedicalCalendar from '@/components/medical/MedicalCalendar';
 import VaccinationTracker from '@/components/medical/VaccinationTracker';
 import { toast } from '@/components/ui/use-toast';
 import P5Canvas from '@/components/P5Canvas';
+import { convertAppointments } from '@/utils/medicalUtils';
 
 export default function MedicalDashboardPage() {
   const { childId } = useParams<{ childId: string }>();
@@ -95,7 +96,7 @@ export default function MedicalDashboardPage() {
         doctor: 'Dr. Martin',
         location: 'Cabinet médical',
         completed: false,
-        type: 'check-up',
+        type: 'checkup',
         childId: childId
       },
       {
@@ -114,7 +115,7 @@ export default function MedicalDashboardPage() {
         id: `${schedule.ageGroup}-${index}`,
         name: vaccine.name,
         recommendedAge: schedule.ageGroup,
-        description: vaccine.description,
+        description: vaccine.description || '',
         mandatory: vaccine.mandatory,
         administeredDate: Math.random() > 0.7 ? '2025-03-01' : undefined
       }))
@@ -181,7 +182,7 @@ export default function MedicalDashboardPage() {
           
           <TabsContent value="calendar">
             <MedicalCalendar 
-              appointments={appointments}
+              appointments={convertAppointments(appointments)}
               childId={childId!}
             />
           </TabsContent>
