@@ -17,10 +17,10 @@ export const ebooksData: Ebook[] = [
   },
   {
     id: "eb-002",
-    title: "Les secrets d'un sommeil paisible",
+    title: "Le sommeil du bébé",
     description: "Des techniques prouvées pour aider votre bébé à bien dormir la nuit.",
     coverImage: "/lovable-uploads/ccda2a74-7a35-4a2d-8bc3-7b8c2feb3139.png",
-    fileUrl: "sommeil-bebe-astuces.pdf",
+    fileUrl: "sommeil-bebe-trucs.pdf",
     fileType: "PDF",
     fileSize: "2.8 MB",
     category: "Sommeil",
