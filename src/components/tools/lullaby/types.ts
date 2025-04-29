@@ -1,5 +1,4 @@
 
-// Removing the incorrect self-import
 export interface Lullaby {
   id: string;
   title: string;

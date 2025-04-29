@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -13,6 +12,29 @@ export const useDashboardData = (childId: string, isDemo = false) => {
 
   useEffect(() => {
     if (!childId || isDemo) return;
+
+    // Vérifier si l'enfant est en mode démo
+    if (childId === 'demo') {
+      // Définir des données factices pour le mode démo
+      setChildData({ name: 'Bébé démo', birth_date: '2025-01-01' });
+      setLatestHeight(65);
+      setLatestWeight(7.5);
+      setHeightData([
+        { date: '1 Jan', value: 50 },
+        { date: '1 Fév', value: 55 },
+        { date: '1 Mar', value: 60 },
+        { date: '1 Avr', value: 65 }
+      ]);
+      setWeightData([
+        { date: '1 Jan', value: 3.5 },
+        { date: '1 Fév', value: 5.0 },
+        { date: '1 Mar', value: 6.2 },
+        { date: '1 Avr', value: 7.5 }
+      ]);
+      setHeightTrend('up');
+      setWeightTrend('up');
+      return;
+    }
 
     const fetchChildData = async () => {
       try {

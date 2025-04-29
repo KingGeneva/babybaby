@@ -60,6 +60,13 @@ export default function MedicalCalendar({ appointments, onDateSelect, childId }:
   const selectedDateAppointments = appointmentsByDate[selectedDateStr] || [];
   
   const handleAddAppointment = () => {
+    if (childId === 'demo') {
+      toast({
+        title: "Mode démonstration",
+        description: "Cette fonctionnalité est désactivée en mode démo"
+      });
+      return;
+    }
     navigate(`/medical/appointment/new?childId=${childId}${date ? `&date=${selectedDateStr}` : ''}`);
   };
 

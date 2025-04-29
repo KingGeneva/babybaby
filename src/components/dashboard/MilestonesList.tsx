@@ -1,112 +1,212 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { Plus, CheckCircle, Circle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-export interface Milestone {
+interface Milestone {
   id: string;
-  name: string;
-  age: string;
-  achieved: boolean;
+  title: string;
+  age_range: string;
+  category: string;
+  completed: boolean;
 }
 
-export interface MilestonesListProps {
-  milestones?: Milestone[];
-  childId?: string;
+interface MilestonesListProps {
+  childId: string;
 }
 
-const MilestonesList: React.FC<MilestonesListProps> = ({ milestones: propMilestones, childId }) => {
+// Données demo des jalons pour quand l'id est 'demo'
+const demoMilestones: Milestone[] = [
+  {
+    id: 'demo-milestone-1',
+    title: 'Tient sa tête',
+    age_range: '0-3 mois',
+    category: 'Motricité',
+    completed: true
+  },
+  {
+    id: 'demo-milestone-2',
+    title: 'Sourire en réponse',
+    age_range: '0-3 mois',
+    category: 'Social',
+    completed: true
+  },
+  {
+    id: 'demo-milestone-3',
+    title: 'S\'assoit sans support',
+    age_range: '4-7 mois',
+    category: 'Motricité',
+    completed: false
+  },
+  {
+    id: 'demo-milestone-4',
+    title: 'Dit son premier mot',
+    age_range: '8-12 mois',
+    category: 'Langage',
+    completed: false
+  }
+];
+
+const MilestonesList: React.FC<MilestonesListProps> = ({ childId }) => {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
-  const [loading, setLoading] = useState(false);
-  
+  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const { toast } = useToast();
+
   useEffect(() => {
-    if (propMilestones && propMilestones.length > 0) {
-      setMilestones(propMilestones);
+    if (childId === 'demo') {
+      setMilestones(demoMilestones);
+      setLoading(false);
       return;
     }
     
-    if (childId) {
-      const fetchMilestones = async () => {
-        setLoading(true);
-        try {
-          const { data, error } = await supabase
-            .from('milestones')
-            .select('*')
-            .eq('child_id', childId);
-            
-          if (error) throw error;
-          
-          const transformedMilestones = data.map(item => ({
-            id: item.id,
-            name: item.name,
-            age: item.expected_age_months ? `${item.expected_age_months} mois` : 'N/A',
-            achieved: !!item.achieved_date
-          }));
-          
-          setMilestones(transformedMilestones);
-        } catch (error) {
-          console.error('Error fetching milestones:', error);
-          setMilestones([]);
-        } finally {
-          setLoading(false);
-        }
-      };
-      
-      fetchMilestones();
-    } else {
-      setMilestones([]);
+    const fetchMilestones = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('milestones')
+          .select('*')
+          .eq('child_id', childId);
+
+        if (error) throw error;
+        setMilestones(data || []);
+      } catch (error) {
+        console.error("Error fetching milestones:", error);
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger les jalons de développement",
+          variant: "destructive",
+        });
+        setMilestones(demoMilestones); // Fallback to demo data on error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMilestones();
+  }, [childId, toast]);
+
+  const toggleCategory = (category: string) => {
+    setActiveCategory(prevCategory => (prevCategory === category ? null : category));
+  };
+
+  const toggleMilestone = async (id: string, completed: boolean) => {
+    if (childId === 'demo') {
+      // In demo mode, just update the local state
+      setMilestones(prevMilestones =>
+        prevMilestones.map(milestone =>
+          milestone.id === id ? { ...milestone, completed: !milestone.completed } : milestone
+        )
+      );
+      toast({
+        title: "Mode démonstration",
+        description: "Les jalons sont mis à jour localement en mode démo."
+      });
+      return;
     }
-  }, [propMilestones, childId]);
-  
-  if (loading) {
-    return (
-      <div className="space-y-4 animate-pulse">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="flex items-start gap-4 ml-7">
-            <div className="h-2.5 w-2.5 rounded-full bg-gray-200"></div>
-            <div className="w-full">
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-3 bg-gray-200 rounded w-1/4"></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-  
-  if (!milestones || milestones.length === 0) {
-    return (
-      <div className="text-center py-4">
-        <p className="text-gray-500">Aucune étape clé enregistrée.</p>
-      </div>
-    );
-  }
-  
+
+    try {
+      const { error } = await supabase
+        .from('milestones')
+        .update({ completed: !completed })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setMilestones(prevMilestones =>
+        prevMilestones.map(milestone =>
+          milestone.id === id ? { ...milestone, completed: !milestone.completed } : milestone
+        )
+      );
+
+      toast({
+        title: "Jalon mis à jour",
+        description: "Le jalon a été mis à jour avec succès.",
+      });
+    } catch (error) {
+      console.error("Error updating milestone:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de mettre à jour le jalon.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const filteredMilestones = activeCategory
+    ? milestones.filter(milestone => milestone.category === activeCategory)
+    : milestones;
+
+  const categories = [...new Set(milestones.map(milestone => milestone.category))];
+
   return (
-    <div className="relative">
-      <div className="absolute h-full w-1 bg-babybaby-blue/30 left-3 top-0 rounded-full"></div>
-      <div className="space-y-4">
-        {milestones.map((milestone, index) => (
-          <motion.div 
-            key={milestone.id || index}
-            className="flex items-start gap-4 ml-7"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-          >
-            <div className={`absolute left-2 w-2.5 h-2.5 rounded-full ${milestone.achieved ? 'bg-green-400' : 'bg-gray-300'}`}></div>
-            <div>
-              <p className="font-medium">{milestone.name}</p>
-              <p className="text-sm text-gray-600">{milestone.age}</p>
+    <Card className="w-full">
+      <CardHeader>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-lg font-medium">Jalons du développement</CardTitle>
+          <Button variant="outline" size="sm" className="flex items-center gap-1">
+            <Plus className="h-4 w-4" />
+            <span>Ajouter</span>
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-babybaby-cosmic"></div>
+          </div>
+        ) : (
+          <div>
+            <div className="flex space-x-2 mb-4 overflow-x-auto">
+              {categories.map(category => (
+                <Button
+                  key={category}
+                  variant={activeCategory === category ? "default" : "outline"}
+                  onClick={() => toggleCategory(category)}
+                >
+                  {category}
+                </Button>
+              ))}
+              <Button
+                variant={activeCategory === null ? "default" : "outline"}
+                onClick={() => toggleCategory(null)}
+              >
+                Tous
+              </Button>
             </div>
-            {milestone.achieved && (
-              <div className="flex-1 text-right">
-                <span className="text-green-500 text-xs">✓ Acquis</span>
-              </div>
-            )}
-          </motion.div>
-        ))}
-      </div>
-    </div>
+            <ul className="divide-y divide-gray-200">
+              {filteredMilestones.map(milestone => (
+                <motion.li
+                  key={milestone.id}
+                  className="py-4 flex items-center justify-between"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div>
+                    <h3 className="text-sm font-semibold">{milestone.title}</h3>
+                    <p className="text-gray-500 text-xs">{milestone.age_range}</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => toggleMilestone(milestone.id, milestone.completed)}
+                  >
+                    {milestone.completed ? (
+                      <CheckCircle className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <Circle className="h-5 w-5 text-gray-400" />
+                    )}
+                  </Button>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
