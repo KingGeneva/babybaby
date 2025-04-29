@@ -24,6 +24,9 @@ const MedicalDashboardTabs: React.FC<MedicalDashboardTabsProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('calendar');
   
+  // Make sure we're converting appointments correctly
+  const convertedAppointments = convertAppointments(appointments);
+  
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
       <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
@@ -39,7 +42,7 @@ const MedicalDashboardTabs: React.FC<MedicalDashboardTabsProps> = ({
       
       <TabsContent value="calendar">
         <MedicalCalendar 
-          appointments={convertAppointments(appointments)}
+          appointments={convertedAppointments}
           childId={childId}
         />
       </TabsContent>

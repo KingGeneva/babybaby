@@ -1,212 +1,307 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { Plus, CheckCircle, Circle } from 'lucide-react';
-import { motion } from 'framer-motion';
 
-interface Milestone {
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { PlusCircle, Check, Clock } from 'lucide-react';
+import { format, parseISO } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { DatePicker } from '@/components/ui/calendar';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+
+// Define the Milestone type that matches the backend schema
+export interface Milestone {
   id: string;
-  title: string;
-  age_range: string;
-  category: string;
-  completed: boolean;
+  child_id: string;
+  name: string;
+  expected_age_months: number | null;
+  achieved_date: string | null;
+  notes: string | null;
+  created_at: string;
+  // For UI purposes
+  title?: string;
+  age_range?: string;
+  category?: string;
+  completed?: boolean;
 }
 
 interface MilestonesListProps {
   childId: string;
+  birthDate: string;
 }
 
-// Données demo des jalons pour quand l'id est 'demo'
-const demoMilestones: Milestone[] = [
-  {
-    id: 'demo-milestone-1',
-    title: 'Tient sa tête',
-    age_range: '0-3 mois',
-    category: 'Motricité',
-    completed: true
-  },
-  {
-    id: 'demo-milestone-2',
-    title: 'Sourire en réponse',
-    age_range: '0-3 mois',
-    category: 'Social',
-    completed: true
-  },
-  {
-    id: 'demo-milestone-3',
-    title: 'S\'assoit sans support',
-    age_range: '4-7 mois',
-    category: 'Motricité',
-    completed: false
-  },
-  {
-    id: 'demo-milestone-4',
-    title: 'Dit son premier mot',
-    age_range: '8-12 mois',
-    category: 'Langage',
-    completed: false
-  }
-];
-
-const MilestonesList: React.FC<MilestonesListProps> = ({ childId }) => {
+const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) => {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [newMilestone, setNewMilestone] = useState({
+    name: '',
+    expected_age_months: '',
+    achieved_date: '',
+    notes: '',
+  });
 
+  // Fetch milestones for the child
   useEffect(() => {
-    if (childId === 'demo') {
-      setMilestones(demoMilestones);
-      setLoading(false);
-      return;
-    }
-    
     const fetchMilestones = async () => {
+      setIsLoading(true);
       try {
         const { data, error } = await supabase
           .from('milestones')
           .select('*')
-          .eq('child_id', childId);
+          .eq('child_id', childId)
+          .order('expected_age_months', { ascending: true });
 
         if (error) throw error;
-        setMilestones(data || []);
+
+        if (data) {
+          // Transform data to match Milestone type with UI properties
+          const transformedData = data.map(milestone => ({
+            ...milestone,
+            title: milestone.name,
+            category: 'Development',  // Default category
+            age_range: milestone.expected_age_months ? `${milestone.expected_age_months} mois` : 'Non défini',
+            completed: !!milestone.achieved_date
+          }));
+          
+          setMilestones(transformedData);
+        }
       } catch (error) {
-        console.error("Error fetching milestones:", error);
-        toast({
-          title: "Erreur",
-          description: "Impossible de charger les jalons de développement",
-          variant: "destructive",
-        });
-        setMilestones(demoMilestones); // Fallback to demo data on error
+        console.error('Error fetching milestones:', error);
+        toast.error('Impossible de charger les étapes de développement');
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
-    fetchMilestones();
-  }, [childId, toast]);
-
-  const toggleCategory = (category: string) => {
-    setActiveCategory(prevCategory => (prevCategory === category ? null : category));
-  };
-
-  const toggleMilestone = async (id: string, completed: boolean) => {
-    if (childId === 'demo') {
-      // In demo mode, just update the local state
-      setMilestones(prevMilestones =>
-        prevMilestones.map(milestone =>
-          milestone.id === id ? { ...milestone, completed: !milestone.completed } : milestone
-        )
-      );
-      toast({
-        title: "Mode démonstration",
-        description: "Les jalons sont mis à jour localement en mode démo."
-      });
-      return;
+    if (childId) {
+      fetchMilestones();
     }
+  }, [childId]);
 
+  // Handle adding a new milestone
+  const handleAddMilestone = async () => {
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('milestones')
-        .update({ completed: !completed })
-        .eq('id', id);
+        .insert([
+          {
+            child_id: childId,
+            name: newMilestone.name,
+            expected_age_months: newMilestone.expected_age_months ? parseInt(newMilestone.expected_age_months) : null,
+            achieved_date: newMilestone.achieved_date || null,
+            notes: newMilestone.notes || null,
+          }
+        ])
+        .select();
 
       if (error) throw error;
 
-      setMilestones(prevMilestones =>
-        prevMilestones.map(milestone =>
-          milestone.id === id ? { ...milestone, completed: !milestone.completed } : milestone
-        )
-      );
-
-      toast({
-        title: "Jalon mis à jour",
-        description: "Le jalon a été mis à jour avec succès.",
-      });
+      if (data && data[0]) {
+        const addedMilestone = {
+          ...data[0],
+          title: data[0].name,
+          category: 'Development',
+          age_range: data[0].expected_age_months ? `${data[0].expected_age_months} mois` : 'Non défini',
+          completed: !!data[0].achieved_date
+        };
+        
+        setMilestones([...milestones, addedMilestone]);
+        setIsAddDialogOpen(false);
+        setNewMilestone({
+          name: '',
+          expected_age_months: '',
+          achieved_date: '',
+          notes: '',
+        });
+        toast.success('Nouvelle étape de développement ajoutée');
+      }
     } catch (error) {
-      console.error("Error updating milestone:", error);
-      toast({
-        title: "Erreur",
-        description: "Impossible de mettre à jour le jalon.",
-        variant: "destructive",
+      console.error('Error adding milestone:', error);
+      toast.error('Impossible d\'ajouter l\'étape de développement');
+    }
+  };
+
+  // Handle updating a milestone's completion status
+  const handleToggleCompletion = async (milestone: Milestone) => {
+    const updatedMilestone = { ...milestone };
+    
+    if (!updatedMilestone.achieved_date) {
+      updatedMilestone.achieved_date = new Date().toISOString().split('T')[0];
+    } else {
+      updatedMilestone.achieved_date = null;
+    }
+    
+    try {
+      const { error } = await supabase
+        .from('milestones')
+        .update({ achieved_date: updatedMilestone.achieved_date })
+        .eq('id', milestone.id);
+
+      if (error) throw error;
+
+      const updatedMilestones = milestones.map(m => 
+        m.id === milestone.id ? { 
+          ...m, 
+          achieved_date: updatedMilestone.achieved_date,
+          completed: !!updatedMilestone.achieved_date 
+        } : m
+      );
+      
+      setMilestones(updatedMilestones);
+      
+      if (updatedMilestone.achieved_date) {
+        toast.success(`${milestone.name} marqué comme accompli`);
+      } else {
+        toast.info(`${milestone.name} marqué comme non accompli`);
+      }
+    } catch (error) {
+      console.error('Error updating milestone:', error);
+      toast.error('Impossible de mettre à jour l\'étape de développement');
+    }
+  };
+
+  // Handle input changes for new milestone
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setNewMilestone({
+      ...newMilestone,
+      [name]: value,
+    });
+  };
+
+  // Handle date change for new milestone
+  const handleDateChange = (date: Date | undefined) => {
+    if (date) {
+      setNewMilestone({
+        ...newMilestone,
+        achieved_date: date.toISOString().split('T')[0],
       });
     }
   };
 
-  const filteredMilestones = activeCategory
-    ? milestones.filter(milestone => milestone.category === activeCategory)
-    : milestones;
-
-  const categories = [...new Set(milestones.map(milestone => milestone.category))];
-
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-lg font-medium">Jalons du développement</CardTitle>
-          <Button variant="outline" size="sm" className="flex items-center gap-1">
-            <Plus className="h-4 w-4" />
-            <span>Ajouter</span>
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <div className="flex justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-babybaby-cosmic"></div>
-          </div>
-        ) : (
-          <div>
-            <div className="flex space-x-2 mb-4 overflow-x-auto">
-              {categories.map(category => (
-                <Button
-                  key={category}
-                  variant={activeCategory === category ? "default" : "outline"}
-                  onClick={() => toggleCategory(category)}
-                >
-                  {category}
-                </Button>
-              ))}
-              <Button
-                variant={activeCategory === null ? "default" : "outline"}
-                onClick={() => toggleCategory(null)}
-              >
-                Tous
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Étapes de développement</h2>
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="flex items-center gap-2">
+              <PlusCircle className="h-4 w-4" />
+              Ajouter
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Ajouter une étape de développement</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Nom de l'étape</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  value={newMilestone.name}
+                  onChange={handleInputChange}
+                  placeholder="Premier sourire, Premier mot..."
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="expected_age_months">Âge attendu (mois)</Label>
+                <Input
+                  id="expected_age_months"
+                  name="expected_age_months"
+                  type="number"
+                  min="0"
+                  value={newMilestone.expected_age_months}
+                  onChange={handleInputChange}
+                  placeholder="6"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Date d'accomplissement (optionnel)</Label>
+                <DatePicker
+                  selectedDate={newMilestone.achieved_date ? parseISO(newMilestone.achieved_date) : undefined}
+                  onDateChange={handleDateChange}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="notes">Notes (optionnel)</Label>
+                <Textarea
+                  id="notes"
+                  name="notes"
+                  value={newMilestone.notes}
+                  onChange={handleInputChange}
+                  placeholder="Contexte, observations..."
+                  className="h-20"
+                />
+              </div>
+              <Button className="w-full" onClick={handleAddMilestone}>
+                Ajouter
               </Button>
             </div>
-            <ul className="divide-y divide-gray-200">
-              {filteredMilestones.map(milestone => (
-                <motion.li
-                  key={milestone.id}
-                  className="py-4 flex items-center justify-between"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {isLoading ? (
+        <div className="flex justify-center py-8">
+          <p>Chargement des étapes de développement...</p>
+        </div>
+      ) : milestones.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-gray-500">Aucune étape de développement enregistrée.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {milestones.map((milestone) => (
+            <Card key={milestone.id} className={milestone.achieved_date ? 'border-green-200 bg-green-50' : ''}>
+              <CardContent className="p-4">
+                <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="text-sm font-semibold">{milestone.title}</h3>
-                    <p className="text-gray-500 text-xs">{milestone.age_range}</p>
+                    <h3 className="font-semibold text-lg">{milestone.name}</h3>
+                    {milestone.expected_age_months && (
+                      <p className="text-sm text-gray-500 mb-2">
+                        Attendu autour de {milestone.expected_age_months} mois
+                      </p>
+                    )}
+                    {milestone.notes && <p className="text-sm mt-2">{milestone.notes}</p>}
+                    {milestone.achieved_date && (
+                      <p className="text-sm text-green-600 mt-2">
+                        <Check className="inline-block h-4 w-4 mr-1" />
+                        Accompli le {format(parseISO(milestone.achieved_date), 'dd MMMM yyyy', { locale: fr })}
+                      </p>
+                    )}
                   </div>
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => toggleMilestone(milestone.id, milestone.completed)}
+                    variant={milestone.achieved_date ? "outline" : "default"}
+                    size="sm"
+                    onClick={() => handleToggleCompletion(milestone)}
+                    className={milestone.achieved_date ? "text-green-600" : ""}
                   >
-                    {milestone.completed ? (
-                      <CheckCircle className="h-5 w-5 text-green-500" />
+                    {milestone.achieved_date ? (
+                      <>
+                        <Check className="h-4 w-4 mr-1" /> Accompli
+                      </>
                     ) : (
-                      <Circle className="h-5 w-5 text-gray-400" />
+                      <>
+                        <Clock className="h-4 w-4 mr-1" /> Marquer
+                      </>
                     )}
                   </Button>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 
