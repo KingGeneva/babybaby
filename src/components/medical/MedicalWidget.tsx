@@ -1,11 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, ChevronRight, Pill, Syringe } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { MedicalAppointment } from '@/types/medical';
@@ -34,7 +32,7 @@ export default function MedicalWidget({ childId }: MedicalWidgetProps) {
             location: 'Cabinet médical',
             notes: 'Apporter le carnet de santé',
             completed: false,
-            type: 'check-up',
+            type: 'checkup',
             childId: childId
           },
           {

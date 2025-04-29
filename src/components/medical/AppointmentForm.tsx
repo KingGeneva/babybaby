@@ -38,7 +38,7 @@ const appointmentSchema = z.object({
   }),
   location: z.string().optional(),
   notes: z.string().optional(),
-  type: z.enum(['vaccination', 'check-up', 'specialist', 'other']),
+  type: z.enum(['vaccination', 'checkup', 'specialist', 'other']),
   completed: z.boolean().default(false),
 });
 
@@ -53,7 +53,7 @@ export default function AppointmentForm({ initialData, childId, initialDate, onS
     } : {
       title: '',
       doctor: '',
-      type: 'check-up',
+      type: 'checkup',
       completed: false,
       date: initialDate ? new Date(initialDate) : undefined,
     },
@@ -116,7 +116,7 @@ export default function AppointmentForm({ initialData, childId, initialDate, onS
                       <SelectValue placeholder="Sélectionnez un type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="check-up">Visite de routine</SelectItem>
+                      <SelectItem value="checkup">Visite de routine</SelectItem>
                       <SelectItem value="vaccination">Vaccination</SelectItem>
                       <SelectItem value="specialist">Spécialiste</SelectItem>
                       <SelectItem value="other">Autre</SelectItem>
