@@ -10,16 +10,23 @@ interface DevelopmentSectionProps {
 
 const DevelopmentSection: React.FC<DevelopmentSectionProps> = ({ childId }) => {
   const [birthDate, setBirthDate] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
     // Pour les démos et tests, on définit une date de naissance par défaut
     if (!childId || childId === 'demo') {
+      console.log('Using demo birth date');
       setBirthDate('2023-01-01');
+      setIsLoading(false);
       return;
     }
     
     const fetchChildData = async () => {
       try {
+        setIsLoading(true);
+        setError(null);
+        
         const { supabase } = await import('@/integrations/supabase/client');
         
         const { data, error } = await supabase
@@ -33,13 +40,17 @@ const DevelopmentSection: React.FC<DevelopmentSectionProps> = ({ childId }) => {
           setBirthDate(data.birth_date);
         } else if (error) {
           console.error('Error fetching child data:', error);
+          setError("Impossible de charger les données de l'enfant");
           // Fallback pour éviter les erreurs
           setBirthDate('2023-01-01');
         }
       } catch (error) {
         console.error('Error in fetchChildData:', error);
+        setError("Une erreur s'est produite lors du chargement des données");
         // Fallback pour éviter les erreurs
         setBirthDate('2023-01-01');
+      } finally {
+        setIsLoading(false);
       }
     };
     
@@ -54,7 +65,18 @@ const DevelopmentSection: React.FC<DevelopmentSectionProps> = ({ childId }) => {
             <CardTitle className="text-lg">Étapes de développement</CardTitle>
           </CardHeader>
           <CardContent>
-            <MilestonesList childId={childId} birthDate={birthDate} />
+            {isLoading ? (
+              <div className="flex justify-center items-center py-10">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-babybaby-cosmic"></div>
+              </div>
+            ) : error ? (
+              <div className="text-center py-6 text-red-500">
+                <p>{error}</p>
+                <p className="mt-2">Utilisation des données de démonstration à la place.</p>
+              </div>
+            ) : (
+              <MilestonesList childId={childId} birthDate={birthDate} />
+            )}
           </CardContent>
         </Card>
       </div>

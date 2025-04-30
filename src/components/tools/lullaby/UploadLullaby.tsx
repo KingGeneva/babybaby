@@ -1,41 +1,50 @@
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/components/ui/use-toast';
+import { Upload } from 'lucide-react';
 import { uploadLullaby } from './utils';
-import { LullabyFile } from './types';
 
-interface UploadLullabyProps {
-  onUploadComplete?: () => void;
-}
-
-const UploadLullaby = ({ onUploadComplete }: UploadLullabyProps) => {
+const UploadLullaby: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
+  const [title, setTitle] = useState('');
+  const [artist, setArtist] = useState('');
+  const [audioFile, setAudioFile] = useState<File | null>(null);
   const { toast } = useToast();
-  
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
 
-    try {
-      setIsUploading(true);
-      const title = file.name.split('.')[0].replace(/-/g, ' ');
-      await uploadLullaby(file, { title, artist: 'Traditionnel' });
-      
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!audioFile) {
       toast({
-        title: 'Berceuse téléversée',
-        description: 'Le fichier a été ajouté avec succès',
+        title: "Erreur",
+        description: "Veuillez sélectionner un fichier audio",
+        variant: "destructive",
       });
+      return;
+    }
+    
+    setIsUploading(true);
+    
+    try {
+      await uploadLullaby(audioFile, { title, artist });
       
-      onUploadComplete?.();
-    } catch (error) {
-      console.error('Upload error:', error);
+      setTitle('');
+      setArtist('');
+      setAudioFile(null);
+      
       toast({
-        title: 'Erreur de téléversement',
-        description: error instanceof Error ? error.message : 'Une erreur est survenue',
-        variant: 'destructive',
+        title: "Succès",
+        description: "La berceuse a été téléchargée avec succès",
+      });
+    } catch (error) {
+      console.error('Error uploading lullaby:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur s'est produite lors du téléchargement de la berceuse",
+        variant: "destructive",
       });
     } finally {
       setIsUploading(false);
@@ -44,16 +53,56 @@ const UploadLullaby = ({ onUploadComplete }: UploadLullabyProps) => {
 
   return (
     <div className="space-y-4">
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label htmlFor="lullaby">Ajouter une berceuse</Label>
-        <Input
-          id="lullaby"
-          type="file"
-          accept=".wav,.mp3"
-          onChange={handleFileUpload}
-          disabled={isUploading}
-        />
-      </div>
+      <h3 className="text-lg font-medium">Ajouter une berceuse</h3>
+      
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Label htmlFor="title">Titre</Label>
+          <Input
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Titre de la berceuse"
+            required
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="artist">Artiste</Label>
+          <Input
+            id="artist"
+            value={artist}
+            onChange={(e) => setArtist(e.target.value)}
+            placeholder="Artiste ou créateur"
+            required
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="audioFile">Fichier audio (MP3, WAV)</Label>
+          <Input
+            id="audioFile"
+            type="file"
+            accept=".mp3,.wav"
+            onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
+            required
+          />
+        </div>
+        
+        <Button type="submit" disabled={isUploading} className="w-full">
+          {isUploading ? (
+            <>
+              <span className="animate-spin mr-2">⏳</span>
+              Téléversement...
+            </>
+          ) : (
+            <>
+              <Upload className="h-4 w-4 mr-2" />
+              Ajouter la berceuse
+            </>
+          )}
+        </Button>
+      </form>
     </div>
   );
 };

@@ -50,3 +50,30 @@ export const formatTime = (seconds: number): string => {
   const secs = Math.floor(seconds % 60);
   return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 };
+
+// Stub functions for admin lullaby management
+// These are mock implementations since we're not using Supabase for lullabies anymore
+export const uploadLullaby = async (file: File, metadata: { title: string; artist: string }): Promise<void> => {
+  console.log('Mock upload lullaby:', file.name, metadata);
+  // Cette fonction est un stub et ne fait rien en réalité
+  return new Promise((resolve) => {
+    setTimeout(resolve, 1000); // Simule un délai d'upload
+  });
+};
+
+export const getAdminLullabies = async (): Promise<{ name: string; url: string }[]> => {
+  console.log('Mock get admin lullabies');
+  // Renvoie une liste vide puisque nous utilisons maintenant defaultLullabies
+  return defaultLullabies.map(lullaby => ({
+    name: `lullaby-${lullaby.title}`,
+    url: lullaby.audioSrc
+  }));
+};
+
+export const deleteLullaby = async (name: string): Promise<void> => {
+  console.log('Mock delete lullaby:', name);
+  // Cette fonction est un stub et ne fait rien en réalité
+  return new Promise((resolve) => {
+    setTimeout(resolve, 500); // Simule un délai de suppression
+  });
+};

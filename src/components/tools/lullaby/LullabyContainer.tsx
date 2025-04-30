@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { Music } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { defaultLullabies } from './utils';
@@ -16,7 +15,7 @@ interface LullabyContainerProps {
 }
 
 const LullabyContainer: React.FC<LullabyContainerProps> = ({ className }) => {
-  // Utiliser directement les berceuses par défaut au lieu d'essayer de les charger dynamiquement
+  // Utiliser directement les berceuses par défaut
   const lullabies = defaultLullabies;
 
   const {
