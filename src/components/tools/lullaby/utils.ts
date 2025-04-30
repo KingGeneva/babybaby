@@ -10,7 +10,7 @@ export const defaultLullabies: Lullaby[] = [
     artist: "Traditionnel",
     duration: 180,
     audioSrc: "/audio/douce-nuit.mp3",
-    fileType: "mp3"
+    fileType: "mp3" as "mp3"
   },
   {
     id: "lullaby-2",
@@ -18,7 +18,7 @@ export const defaultLullabies: Lullaby[] = [
     artist: "Traditionnel",
     duration: 150,
     audioSrc: "/audio/au-clair-de-la-lune.mp3",
-    fileType: "mp3"
+    fileType: "mp3" as "mp3"
   },
   {
     id: "lullaby-3",
@@ -26,7 +26,7 @@ export const defaultLullabies: Lullaby[] = [
     artist: "Johannes Brahms",
     duration: 210,
     audioSrc: "/audio/brahms-lullaby.mp3",
-    fileType: "mp3"
+    fileType: "mp3" as "mp3"
   },
   {
     id: "lullaby-4",
@@ -34,7 +34,7 @@ export const defaultLullabies: Lullaby[] = [
     artist: "Nature Sounds",
     duration: 240,
     audioSrc: "/audio/chanson-du-vent.mp3",
-    fileType: "mp3"
+    fileType: "mp3" as "mp3"
   }
 ];
 
@@ -78,6 +78,7 @@ export const getLullabies = async (): Promise<Lullaby[]> => {
         .createSignedUrl(file.name, 3600); // valid for 1 hour
       
       const title = file.name.split('.')[0].replace(/-/g, ' ');
+      const fileExtension = file.name.split('.').pop() as 'mp3' | 'wav';
       
       // Create lullaby object
       return {
@@ -86,7 +87,7 @@ export const getLullabies = async (): Promise<Lullaby[]> => {
         artist: "Personnalisé",
         duration: 180, // Default duration
         audioSrc: urlData?.signedUrl || '',
-        fileType: file.name.split('.').pop() || 'mp3'
+        fileType: fileExtension
       };
     }));
     
