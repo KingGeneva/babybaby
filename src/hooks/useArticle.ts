@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
 import { Article } from '@/types/article';
-import { getArticleById } from '@/data/articles';
+import { articles } from '@/data/articles';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useArticle = (articleId: number) => {
   const navigate = useNavigate();
@@ -44,7 +45,28 @@ export const useArticle = (articleId: number) => {
   // Get article data
   const getArticleData = async (id: number): Promise<Article | undefined> => {
     try {
-      return await getArticleById(id);
+      // First check static articles
+      const staticArticle = articles.find(article => article.id === id);
+      if (staticArticle) return staticArticle;
+      
+      // Then check Supabase
+      try {
+        const { data, error } = await supabase
+          .storage
+          .from('articles')
+          .download(`articles/${id}.json`);
+          
+        if (error || !data) return undefined;
+        
+        // Read the content of the file JSON
+        const text = await data.text();
+        const article: Article = JSON.parse(text);
+        
+        return article;
+      } catch (error) {
+        console.error('Error loading article from Supabase:', error);
+        return undefined;
+      }
     } catch (error) {
       console.error('Error fetching article:', error);
       return undefined;

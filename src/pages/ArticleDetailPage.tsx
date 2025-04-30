@@ -15,11 +15,9 @@ import ArticleContent from '@/components/articles/ArticleContent';
 import ArticleActions from '@/components/articles/ArticleActions';
 import ArticlePromotion from '@/components/articles/ArticlePromotion';
 import ArticleNotFound from '@/components/articles/ArticleNotFound';
-import { useArticle } from '@/hooks/useArticle';
 import { Article } from '@/types/article';
-
-// Import des articles (à terme, cela viendrait d'une API)
-import { articles } from '@/data/articles';
+import { useArticle } from '@/hooks/useArticle';
+import { ArticleDetailSkeleton } from '@/components/articles/ArticleSkeleton';
 
 const ArticleDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,10 +49,30 @@ const ArticleDetailPage = () => {
     };
     
     loadArticle();
-  }, [articleId, navigate]);
+  }, [articleId, navigate, getArticleData]);
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
+    return (
+      <div className="min-h-screen">
+        <NavBar />
+        <div className="pt-24 pb-16">
+          <div className="container mx-auto px-4">
+            <Button 
+              variant="ghost" 
+              className="mb-6 flex items-center gap-2"
+              onClick={() => navigate('/articles')}
+              disabled
+            >
+              <ArrowLeft size={16} />
+              Retour aux articles
+            </Button>
+            
+            <ArticleDetailSkeleton />
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
   if (!article) {

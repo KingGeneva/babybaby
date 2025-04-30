@@ -4,7 +4,6 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import P5Canvas from '@/components/P5Canvas';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
-import { articles } from '@/data/articles';
 import ArticleSearch from '@/components/articles/ArticleSearch';
 import ArticleCategories from '@/components/articles/ArticleCategories';
 import ArticleViewToggle from '@/components/articles/ArticleViewToggle';
@@ -12,6 +11,8 @@ import ArticleGridView from '@/components/articles/ArticleGridView';
 import ArticleListView from '@/components/articles/ArticleListView';
 import ArticleEmpty from '@/components/articles/ArticleEmpty';
 import ArticlePagination from '@/components/articles/ArticlePagination';
+import { useArticles } from '@/hooks/useArticles';
+import { ArticleCardSkeleton, ArticleListItemSkeleton } from '@/components/articles/ArticleSkeleton';
 
 const categories = [
   "Tous",
@@ -28,12 +29,29 @@ const ArticlesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("Tous");
   const [searchTerm, setSearchTerm] = useState("");
   
-  const filteredArticles = articles.filter(article => {
-    const categoryMatch = selectedCategory === "Tous" || article.category === selectedCategory;
-    const searchMatch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    return categoryMatch && searchMatch;
-  });
+  const { articles, loading, error } = useArticles(selectedCategory, searchTerm);
+
+  // Display skeletons while loading
+  const renderSkeletons = (viewType: 'grid' | 'list') => {
+    const skeletons = Array(6).fill(0);
+    if (viewType === 'grid') {
+      return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {skeletons.map((_, index) => (
+            <ArticleCardSkeleton key={index} />
+          ))}
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex flex-col space-y-4">
+          {skeletons.map((_, index) => (
+            <ArticleListItemSkeleton key={index} />
+          ))}
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -75,14 +93,24 @@ const ArticlesPage = () => {
               </div>
 
               <div className="mt-8">
-                {filteredArticles.length > 0 ? (
+                {loading ? (
                   <>
                     <TabsContent value="grid">
-                      <ArticleGridView articles={filteredArticles} />
+                      {renderSkeletons('grid')}
                     </TabsContent>
                     
                     <TabsContent value="list">
-                      <ArticleListView articles={filteredArticles} />
+                      {renderSkeletons('list')}
+                    </TabsContent>
+                  </>
+                ) : articles.length > 0 ? (
+                  <>
+                    <TabsContent value="grid">
+                      <ArticleGridView articles={articles} />
+                    </TabsContent>
+                    
+                    <TabsContent value="list">
+                      <ArticleListView articles={articles} />
                     </TabsContent>
                   </>
                 ) : (
