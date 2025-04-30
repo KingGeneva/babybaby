@@ -40,19 +40,55 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
+              {/* Public routes */}
               <Route path="/" element={<Index />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/dashboard/:childId" element={<DashboardPage />} />
-              <Route path="/tools" element={<ToolsPage />} />
-              <Route path="/community" element={<CommunityPage />} />
+              <Route path="/auth" element={<AuthPage />} />
               <Route path="/articles" element={<ArticlesPage />} />
               <Route path="/articles/:id" element={<ArticleDetailPage />} />
-              <Route path="/ebooks" element={<EbooksPage />} />
-              <Route path="/auth" element={<AuthPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/about" element={<AboutPage />} />
-              <Route path="/courses" element={<CoursesPage />} />
-              <Route path="/courses/:courseId" element={<CourseDetailPage />} />
+              
+              {/* Protected routes - only accessible to logged-in users */}
+              <Route 
+                path="/dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/dashboard/:childId" 
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/tools" 
+                element={
+                  <ProtectedRoute>
+                    <ToolsPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/community" 
+                element={
+                  <ProtectedRoute>
+                    <CommunityPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/ebooks" 
+                element={
+                  <ProtectedRoute>
+                    <EbooksPage />
+                  </ProtectedRoute>
+                } 
+              />
               <Route 
                 path="/parental-dashboard" 
                 element={
@@ -85,9 +121,46 @@ const App = () => (
                   </ProtectedRoute>
                 } 
               />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/quiz/:quizId" element={<QuizDetailPage />} />
-              <Route path="/quiz/:quizId/results" element={<QuizResultsPage />} />
+              <Route 
+                path="/quiz" 
+                element={
+                  <ProtectedRoute>
+                    <QuizPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/quiz/:quizId" 
+                element={
+                  <ProtectedRoute>
+                    <QuizDetailPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/quiz/:quizId/results" 
+                element={
+                  <ProtectedRoute>
+                    <QuizResultsPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/courses" 
+                element={
+                  <ProtectedRoute>
+                    <CoursesPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/courses/:courseId" 
+                element={
+                  <ProtectedRoute>
+                    <CourseDetailPage />
+                  </ProtectedRoute>
+                } 
+              />
               <Route 
                 path="/admin" 
                 element={
