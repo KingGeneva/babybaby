@@ -17,43 +17,58 @@ interface MilestonesListProps {
 const defaultMilestones: Milestone[] = [
   {
     id: '1',
+    name: 'Premiers sourires',
     title: 'Premiers sourires',
     description: 'Commence à sourire en réponse aux stimuli',
     expected_age_months: 2,
     category: 'Développement social',
-    icon: 'smile'
+    icon: 'smile',
+    child_id: 'demo',
+    created_at: new Date().toISOString(),
   },
   {
     id: '2',
+    name: 'Tient sa tête',
     title: 'Tient sa tête',
     description: 'Capable de tenir sa tête droite sans support',
     expected_age_months: 3,
     category: 'Développement moteur',
-    icon: 'head'
+    icon: 'head',
+    child_id: 'demo',
+    created_at: new Date().toISOString(),
   },
   {
     id: '3',
+    name: 'Se retourne',
     title: 'Se retourne',
     description: 'Se retourne du ventre au dos et vice versa',
     expected_age_months: 5,
     category: 'Développement moteur',
-    icon: 'rotate'
+    icon: 'rotate',
+    child_id: 'demo',
+    created_at: new Date().toISOString(),
   },
   {
     id: '4',
+    name: 'S\'assoit seul',
     title: 'S\'assoit seul',
     description: 'Capable de s\'asseoir sans support',
     expected_age_months: 6,
     category: 'Développement moteur',
-    icon: 'sit'
+    icon: 'sit',
+    child_id: 'demo',
+    created_at: new Date().toISOString(),
   },
   {
     id: '5',
+    name: 'Premiers mots',
     title: 'Premiers mots',
     description: 'Commence à dire des mots reconnaissables',
     expected_age_months: 12,
     category: 'Développement linguistique',
-    icon: 'talk'
+    icon: 'talk',
+    child_id: 'demo',
+    created_at: new Date().toISOString(),
   }
 ];
 
@@ -89,32 +104,36 @@ const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) =
         const { data, error } = await supabase
           .from('milestones')
           .select('*')
+          .eq('child_id', childId)
           .order('expected_age_months', { ascending: true });
           
         if (error) {
           console.error("Error fetching milestones:", error);
           // Fallback aux données par défaut
-          setMilestones(defaultMilestones);
+          setMilestones(defaultMilestones.map(milestone => ({
+            ...milestone,
+            child_id: childId
+          })));
+        } else if (data && data.length > 0) {
+          setMilestones(data);
+          // Prendre note des jalons déjà complétés
+          const completed = data.filter(m => m.achieved_date).map(m => m.id);
+          setCompletedMilestones(completed);
         } else {
-          setMilestones(data || defaultMilestones);
-        }
-        
-        // Récupérer les jalons complétés pour cet enfant
-        const { data: completedData, error: completedError } = await supabase
-          .from('completed_milestones')
-          .select('milestone_id')
-          .eq('child_id', childId);
-          
-        if (completedError) {
-          console.error("Error fetching completed milestones:", completedError);
-        } else {
-          const completedIds = completedData ? completedData.map(item => item.milestone_id) : [];
-          setCompletedMilestones(completedIds);
+          // Si aucun jalon n'est trouvé pour cet enfant, utiliser les jalons par défaut
+          const customizedDefaultMilestones = defaultMilestones.map(milestone => ({
+            ...milestone,
+            child_id: childId
+          }));
+          setMilestones(customizedDefaultMilestones);
         }
       } catch (error) {
         console.error("Error in fetchMilestones:", error);
         // Fallback aux données par défaut
-        setMilestones(defaultMilestones);
+        setMilestones(defaultMilestones.map(milestone => ({
+          ...milestone,
+          child_id: childId
+        })));
       } finally {
         setLoading(false);
       }
@@ -142,23 +161,28 @@ const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) =
     
     try {
       const { supabase } = await import('@/integrations/supabase/client');
+      const milestone = milestones.find(m => m.id === milestoneId);
+      
+      if (!milestone) return;
       
       if (isCompleted) {
-        // Supprimer le jalon complété
+        // Mettre à jour le jalon pour indiquer qu'il n'est pas complété
         await supabase
-          .from('completed_milestones')
-          .delete()
-          .eq('child_id', childId)
-          .eq('milestone_id', milestoneId);
+          .from('milestones')
+          .update({ 
+            achieved_date: null 
+          })
+          .eq('id', milestoneId)
+          .eq('child_id', childId);
       } else {
-        // Ajouter le jalon complété
+        // Mettre à jour le jalon pour indiquer qu'il est complété
         await supabase
-          .from('completed_milestones')
-          .insert({
-            child_id: childId,
-            milestone_id: milestoneId,
-            completed_date: new Date().toISOString()
-          });
+          .from('milestones')
+          .update({
+            achieved_date: new Date().toISOString().split('T')[0]
+          })
+          .eq('id', milestoneId)
+          .eq('child_id', childId);
       }
     } catch (error) {
       console.error("Error updating milestone completion:", error);
@@ -182,7 +206,7 @@ const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) =
   }
   
   // Générer les options de catégorie pour les onglets
-  const categories = Array.from(new Set(milestones.map(m => m.category)));
+  const categories = Array.from(new Set(milestones.map(m => m.category).filter(Boolean) as string[]));
   
   return (
     <div>
@@ -239,15 +263,16 @@ const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) =
                   <div className="flex-grow">
                     <div className="flex justify-between items-start mb-1">
                       <h3 className="font-medium text-gray-900">
-                        {milestone.title}
+                        {milestone.title || milestone.name}
                       </h3>
-                      <Badge variant={isCompleted ? "success" : isPast ? "default" : "outline"}>
+                      <Badge variant={isCompleted ? "default" : isPast ? "secondary" : "outline"} 
+                        className={isCompleted ? "bg-green-500 hover:bg-green-600" : ""}>
                         {isCompleted 
                           ? 'Complété' 
                           : `${milestone.expected_age_months} mois`}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-600">{milestone.description}</p>
+                    <p className="text-sm text-gray-600">{milestone.description || milestone.notes}</p>
                   </div>
                 </div>
               );
