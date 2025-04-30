@@ -26,8 +26,11 @@ export const calculateBabyAgeMonths = (birthDate: string): number => {
  */
 export const fetchMilestones = async (childId: string) => {
   try {
+    console.log('Fetching milestones for child:', childId);
+    
     // Si c'est un mode démo, renvoyez des données de démonstration
     if (childId === 'demo') {
+      console.log('Using demo milestones');
       const demoMilestones = getDemoMilestones();
       return {
         milestones: demoMilestones,
@@ -41,7 +44,12 @@ export const fetchMilestones = async (childId: string) => {
       .select('*')
       .order('expected_age_months', { ascending: true });
       
-    if (milestonesError) throw milestonesError;
+    if (milestonesError) {
+      console.error('Error fetching milestones:', milestonesError);
+      throw milestonesError;
+    }
+    
+    console.log('Fetched milestones:', milestones);
     
     // Pour les besoins de cette application, nous allons utiliser
     // le champ achieved_date pour déterminer si un jalon est complété
@@ -51,6 +59,8 @@ export const fetchMilestones = async (childId: string) => {
         .filter(milestone => milestone.achieved_date !== null && milestone.child_id === childId)
         .map(milestone => milestone.id)
       : [];
+    
+    console.log('Completed milestones:', completedMilestones);
     
     return {
       milestones: milestones || [],
@@ -72,6 +82,8 @@ export const fetchMilestones = async (childId: string) => {
  */
 export const updateMilestoneCompletion = async (childId: string, milestoneId: string, isCurrentlyCompleted: boolean) => {
   try {
+    console.log(`Updating milestone ${milestoneId} for child ${childId}, currently completed: ${isCurrentlyCompleted}`);
+    
     // Si mode démo, simuler la mise à jour
     if (childId === 'demo') {
       console.log(`Demo: ${isCurrentlyCompleted ? 'Suppression' : 'Ajout'} du jalon ${milestoneId}`);
@@ -79,13 +91,20 @@ export const updateMilestoneCompletion = async (childId: string, milestoneId: st
     }
     
     // Mettre à jour le jalon en définissant ou en effaçant la date d'achèvement
-    await supabase
+    const { error } = await supabase
       .from('milestones')
       .update({ 
         achieved_date: isCurrentlyCompleted ? null : new Date().toISOString() 
       })
       .eq('id', milestoneId)
       .eq('child_id', childId);
+      
+    if (error) {
+      console.error('Error updating milestone:', error);
+      throw error;
+    }
+    
+    console.log('Milestone update successful');
   } catch (error) {
     console.error('Erreur lors de la mise à jour du jalon:', error);
   }

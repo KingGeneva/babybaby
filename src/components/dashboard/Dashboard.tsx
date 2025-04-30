@@ -1,3 +1,4 @@
+
 import React from 'react';
 import DashboardHeader from './DashboardHeader';
 import GrowthSection from './GrowthSection';
@@ -17,6 +18,8 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoData }) => {
+  console.log('Dashboard rendering with childId:', childId, 'demoMode:', demoMode);
+  
   const isDemo = demoMode || childId === 'demo';
   const dashboardData = isDemo ? useDemoDashboard() : useDashboardData(childId, isDemo);
   

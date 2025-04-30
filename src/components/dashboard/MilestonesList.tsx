@@ -22,6 +22,7 @@ const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) =
   const [babyAgeMonths, setBabyAgeMonths] = useState<number>(0);
   const [completedMilestones, setCompletedMilestones] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<string>('all');
+  const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
     // Calculate baby's age
@@ -32,30 +33,44 @@ const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) =
     
     // Fetch milestones data
     const loadMilestones = async () => {
-      setLoading(true);
-      const result = await fetchMilestones(childId);
-      setMilestones(result.milestones);
-      setCompletedMilestones(result.completedMilestones);
-      setLoading(false);
+      try {
+        setLoading(true);
+        setError(null);
+        const result = await fetchMilestones(childId);
+        setMilestones(result.milestones);
+        setCompletedMilestones(result.completedMilestones);
+      } catch (err) {
+        console.error('Error loading milestones:', err);
+        setError("Erreur lors du chargement des jalons");
+        // Ensure we have at least empty arrays to prevent rendering issues
+        setMilestones([]);
+        setCompletedMilestones([]);
+      } finally {
+        setLoading(false);
+      }
     };
     
     loadMilestones();
   }, [childId, birthDate]);
   
   const toggleMilestoneCompletion = async (milestoneId: string) => {
-    const isCompleted = completedMilestones.includes(milestoneId);
-    let newCompletedMilestones: string[];
-    
-    if (isCompleted) {
-      newCompletedMilestones = completedMilestones.filter(id => id !== milestoneId);
-    } else {
-      newCompletedMilestones = [...completedMilestones, milestoneId];
+    try {
+      const isCompleted = completedMilestones.includes(milestoneId);
+      let newCompletedMilestones: string[];
+      
+      if (isCompleted) {
+        newCompletedMilestones = completedMilestones.filter(id => id !== milestoneId);
+      } else {
+        newCompletedMilestones = [...completedMilestones, milestoneId];
+      }
+      
+      setCompletedMilestones(newCompletedMilestones);
+      
+      // Update milestone completion in database
+      await updateMilestoneCompletion(childId, milestoneId, isCompleted);
+    } catch (err) {
+      console.error('Error toggling milestone:', err);
     }
-    
-    setCompletedMilestones(newCompletedMilestones);
-    
-    // Update milestone completion in database
-    await updateMilestoneCompletion(childId, milestoneId, isCompleted);
   };
   
   // Filter milestones based on active tab
@@ -75,8 +90,19 @@ const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) =
     );
   }
   
+  if (error) {
+    return (
+      <div className="p-4 text-red-500 text-center">
+        <p>{error}</p>
+        <p className="mt-2">Utilisation des données de démonstration.</p>
+      </div>
+    );
+  }
+  
   // Generate unique categories for filters
-  const categories = Array.from(new Set(milestones.map(m => m.category).filter(Boolean) as string[]));
+  const categories = Array.from(
+    new Set(milestones.map(m => m.category).filter(Boolean) as string[])
+  );
   
   return (
     <div>
