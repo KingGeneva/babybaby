@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import ResourcesDropdown from "./ResourcesDropdown";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, BookOpen } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,6 +41,15 @@ const DesktopNav = ({ isResourcesOpen, toggleResources }: DesktopNavProps) => {
       >
         Quiz & Tests
       </Link>
+      {user && (
+        <Link
+          to="/courses"
+          className="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic transition-all flex items-center"
+        >
+          <BookOpen className="h-4 w-4 mr-1" />
+          Cours
+        </Link>
+      )}
       <ResourcesDropdown isOpen={isResourcesOpen} onToggle={toggleResources} />
 
       {user && (

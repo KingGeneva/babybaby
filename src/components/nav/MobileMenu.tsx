@@ -1,7 +1,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, BookOpen } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -10,6 +11,8 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps) => {
+  const { user } = useAuth();
+  
   return (
     <AnimatePresence>
       {isOpen && (
@@ -39,6 +42,16 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
             >
               Quiz & Tests
             </Link>
+            
+            {user && (
+              <Link
+                to="/courses"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+              >
+                <BookOpen className="h-4 w-4 mr-2" />
+                Cours
+              </Link>
+            )}
 
             <div>
               <a
