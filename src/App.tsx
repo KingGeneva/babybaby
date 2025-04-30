@@ -41,30 +41,9 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route 
-                path="/dashboard" 
-                element={
-                  <ProtectedRoute>
-                    <DashboardPage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/dashboard/:childId" 
-                element={
-                  <ProtectedRoute>
-                    <DashboardPage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/tools" 
-                element={
-                  <ProtectedRoute>
-                    <ToolsPage />
-                  </ProtectedRoute>
-                } 
-              />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/dashboard/:childId" element={<DashboardPage />} />
+              <Route path="/tools" element={<ToolsPage />} />
               <Route path="/community" element={<CommunityPage />} />
               <Route path="/articles" element={<ArticlesPage />} />
               <Route path="/articles/:id" element={<ArticleDetailPage />} />
@@ -72,22 +51,8 @@ const App = () => (
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/about" element={<AboutPage />} />
-              <Route 
-                path="/courses" 
-                element={
-                  <ProtectedRoute>
-                    <CoursesPage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/courses/:courseId" 
-                element={
-                  <ProtectedRoute>
-                    <CourseDetailPage />
-                  </ProtectedRoute>
-                } 
-              />
+              <Route path="/courses" element={<CoursesPage />} />
+              <Route path="/courses/:courseId" element={<CourseDetailPage />} />
               <Route 
                 path="/parental-dashboard" 
                 element={

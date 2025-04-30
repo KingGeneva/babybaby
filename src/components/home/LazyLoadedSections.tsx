@@ -42,34 +42,21 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
   isLoading = false,
   isAuthenticated = false,
   childProfileId,
-  showDevelopmentSection = false
+  showDevelopmentSection = true
 }) => {
   const isMobile = useIsMobile();
   
   return (
     <>
-      {/* Dashboard Demo avec visualisation limitée */}
+      {/* Dashboard Section */}
       <Suspense fallback={<SectionLoader />}>
         <div className="pt-24 relative">
           <Dashboard 
-            childId={'demo'} 
-            demoMode={true} 
+            childId={childProfileId || 'demo'} 
+            demoMode={!isAuthenticated} 
             demoData={demoGrowthData} 
-            showDevelopmentSection={false}
+            showDevelopmentSection={showDevelopmentSection}
           />
-          
-          {/* Bouton d'action pour inciter à la connexion */}
-          <div className="container mx-auto px-4 mt-6 flex justify-center">
-            <Link to="/auth">
-              <Button 
-                size="lg"
-                className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 text-white flex items-center gap-2"
-              >
-                Accéder à votre tableau de bord complet
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
         </div>
       </Suspense>
 
@@ -88,11 +75,6 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
         <PartnersCarousel />
       </Suspense>
       
-      {/* Section des outils avec présentation marketing */}
-      <Suspense fallback={<SectionLoader />}>
-        <ToolsSection />
-      </Suspense>
-      
       {/* Sections moins prioritaires avec chargement conditionnel */}
       <Suspense fallback={<SectionLoader />}>
         <ProductsSection />
@@ -101,6 +83,11 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
       {/* Section ebooks */}
       <Suspense fallback={<SectionLoader />}>
         <EbooksSection />
+      </Suspense>
+      
+      {/* Section outils */}
+      <Suspense fallback={isMobile ? null : <SectionLoader />}>
+        <ToolsSection />
       </Suspense>
       
       {/* Sections à faible priorité */}

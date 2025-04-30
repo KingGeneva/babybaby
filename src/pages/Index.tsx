@@ -6,6 +6,7 @@ import NavBar from '@/components/NavBar';
 import HeroSection from '@/components/HeroSection';
 import LazyLoadedSections from '@/components/home/LazyLoadedSections';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import SEOHead from '@/components/common/SEOHead';
 
 const Index = () => {
@@ -15,9 +16,11 @@ const Index = () => {
     threshold: 0.05,
   });
   const { user } = useAuth();
+  const [childProfiles, setChildProfiles] = useState<any[]>([]);
+  const [growthData, setGrowthData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Données de démonstration pour les visiteurs
+  // Données de démonstration pour les utilisateurs non connectés
   const demoGrowthData = [
     { name: '1 mois', taille: 52, poids: 4.1 },
     { name: '2 mois', taille: 56, poids: 5.2 },
@@ -27,14 +30,50 @@ const Index = () => {
     { name: '6 mois', taille: 67, poids: 7.8 },
   ];
 
+  // Charger les données utilisateur si connecté
   useEffect(() => {
-    // Simuler un chargement pour donner l'impression de données dynamiques
-    const timer = setTimeout(() => {
+    if (user) {
+      async function loadUserData() {
+        setLoading(true);
+        try {
+          // Récupérer les profils d'enfants de l'utilisateur
+          const { data: profiles } = await supabase
+            .from('child_profiles')
+            .select('*')
+            .limit(1);
+
+          if (profiles && profiles.length > 0) {
+            setChildProfiles(profiles);
+
+            // Récupérer les données de croissance du premier enfant
+            const { data: measurements } = await supabase
+              .from('growth_measurements')
+              .select('*')
+              .eq('child_id', profiles[0].id)
+              .order('measurement_date', { ascending: true });
+              
+            if (measurements && measurements.length > 0) {
+              const formattedData = measurements.map(item => ({
+                name: new Date(item.measurement_date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
+                taille: Number(item.height_cm),
+                poids: Number(item.weight_kg),
+                eveil: item.head_cm ? Number(item.head_cm) : undefined,
+              }));
+              setGrowthData(formattedData);
+            }
+          }
+        } catch (error) {
+          console.error("Erreur lors du chargement des données:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+      
+      loadUserData();
+    } else {
       setLoading(false);
-    }, 700);
-    
-    return () => clearTimeout(timer);
-  }, []);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (inView) {
@@ -75,11 +114,6 @@ const Index = () => {
         title="BabyBaby - Application de suivi de bébé | Santé, Croissance, Conseil" 
         description="BabyBaby : L'application indispensable pour les parents. Suivez la croissance, la santé et le développement de votre bébé. Outils, conseils et communauté de parents."
         canonicalUrl="https://babybaby.app"
-        keywords={[
-          "suivi bébé", "croissance infantile", "santé bébé", "conseil parental", 
-          "développement enfant", "outil parent", "application parentalité",
-          "suivi croissance bébé", "carnet santé numérique", "application suivi enfant"
-        ]}
       />
       
       {/* Structured Data */}
@@ -109,10 +143,11 @@ const Index = () => {
         }}
       >
         <LazyLoadedSections 
-          demoGrowthData={demoGrowthData}
+          demoGrowthData={user && growthData.length > 0 ? growthData : demoGrowthData}
           isLoading={loading}
           isAuthenticated={!!user}
-          showDevelopmentSection={false}
+          childProfileId={childProfiles[0]?.id}
+          showDevelopmentSection={false} // Ne pas afficher la section sur la page d'accueil
         />
       </motion.div>
     </div>

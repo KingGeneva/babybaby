@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Navigate, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -18,10 +18,6 @@ const AuthPage = () => {
   const [processingToken, setProcessingToken] = useState(false);
   const [tokenError, setTokenError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const location = useLocation();
-  
-  // Récupérer le chemin précédent si disponible
-  const from = location.state?.from?.pathname || '/dashboard';
 
   // Vérifier si la page comporte des paramètres liés à la réinitialisation de mot de passe
   const accessToken = searchParams.get('access_token');
@@ -69,7 +65,7 @@ const AuthPage = () => {
               throw error;
             } else {
               console.log("Session établie avec succès:", data);
-              navigate(from);
+              navigate('/parental-dashboard');
               toast({
                 title: "Authentification réussie",
                 description: "Vous êtes maintenant connecté",
@@ -91,12 +87,12 @@ const AuthPage = () => {
       
       processTokens();
     }
-  }, [accessToken, refreshToken, type, navigate, from]);
+  }, [accessToken, refreshToken, type, navigate]);
 
   // Rediriger si déjà authentifié
   if (!loading && user && !processingToken) {
     console.log("Utilisateur déjà authentifié, redirection vers le tableau de bord");
-    return <Navigate to={from} replace />;
+    return <Navigate to="/parental-dashboard" replace />;
   }
 
   // Afficher un écran de chargement pendant le traitement des tokens
@@ -165,7 +161,7 @@ const AuthPage = () => {
       
       <div className="container mx-auto px-4 py-20">
         <h1 className="text-3xl font-bold mb-8 text-center text-babybaby-cosmic">
-          {from !== '/dashboard' ? 'Connectez-vous pour continuer' : 'Accès au Tableau de Bord'}
+          Accès au Tableau de Bord
         </h1>
         
         <AuthForm />

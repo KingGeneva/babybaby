@@ -1,13 +1,9 @@
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
-import { useAuth } from '@/contexts/AuthContext';
-import SEOHead from '@/components/common/SEOHead';
-import P5Canvas from '@/components/P5Canvas';
 
 // Import des outils
 import NameGenerator from '@/components/tools/NameGenerator';
@@ -21,44 +17,10 @@ import SleepTracker from '@/components/tools/SleepTracker';
 
 const ToolsPage = () => {
   const [activeTab, setActiveTab] = useState('all');
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Rediriger vers la page d'authentification si l'utilisateur n'est pas connecté
-    if (!loading && !user) {
-      navigate('/auth', { replace: true });
-    }
-  }, [user, loading, navigate]);
-
-  // Afficher un état de chargement pendant la vérification
-  if (loading) {
-    return (
-      <div className="min-h-screen">
-        <NavBar />
-        <div className="pt-24 flex justify-center items-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-babybaby-cosmic"></div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  // Si l'utilisateur n'est pas connecté, ne rien rendre (la redirection se fera via l'effet)
-  if (!user) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen">
-      <SEOHead 
-        title="Outils Parents | BabyBaby" 
-        description="Des outils pratiques pour vous accompagner dans votre parentalité au quotidien."
-        canonicalUrl="https://babybaby.app/tools"
-      />
       <NavBar />
-      <P5Canvas className="fixed inset-0 -z-10" />
-      
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           <motion.div
