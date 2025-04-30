@@ -7,7 +7,7 @@ export interface AppointmentType {
   doctor: string;
   location?: string;
   notes?: string;
-  type: "vaccine" | "checkup" | "specialist" | "other";
+  type: "vaccine" | "checkup" | "specialist";
   completed?: boolean;
 }
 
@@ -26,17 +26,17 @@ export interface MedicalAppointment {
 
 // Function to convert MedicalAppointment to AppointmentType
 export function convertMedicalAppointmentToAppointmentType(appointment: MedicalAppointment): AppointmentType {
-  const typeMap: Record<string, "vaccine" | "checkup" | "specialist" | "other"> = {
+  const typeMap: Record<string, "vaccine" | "checkup" | "specialist"> = {
     "vaccination": "vaccine",
     "checkup": "checkup",
     "specialist": "specialist",
-    "other": "other"
+    "other": "checkup" // Default to checkup for 'other' type
   };
   
   return {
     ...appointment,
     doctor: appointment.doctor || "",
-    type: typeMap[appointment.type] || "other"
+    type: typeMap[appointment.type] || "checkup"
   };
 }
 

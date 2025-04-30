@@ -24,8 +24,19 @@ const MedicalDashboardTabs: React.FC<MedicalDashboardTabsProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('calendar');
   
-  // Make sure we're converting appointments correctly
-  const convertedAppointments = convertAppointments(appointments);
+  // Converti les rendez-vous en fonction de leur type
+  const convertedAppointments = appointments.map(appointment => {
+    const appointmentType: "vaccine" | "checkup" | "specialist" = 
+      appointment.type === "vaccination" ? "vaccine" :
+      appointment.type === "checkup" ? "checkup" :
+      appointment.type === "specialist" ? "specialist" : "checkup";
+    
+    return {
+      ...appointment,
+      doctor: appointment.doctor || "",
+      type: appointmentType
+    };
+  });
   
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>

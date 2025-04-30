@@ -9,9 +9,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { DatePicker } from '@/components/ui/calendar';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { CalendarIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 // Define the Milestone type that matches the backend schema
 export interface Milestone {
@@ -31,7 +34,7 @@ export interface Milestone {
 
 interface MilestonesListProps {
   childId: string;
-  birthDate: string;
+  birthDate?: string;
 }
 
 const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) => {
@@ -225,11 +228,33 @@ const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) =
               </div>
               <div className="space-y-2">
                 <Label>Date d'accomplissement (optionnel)</Label>
-                <DatePicker
-                  selectedDate={newMilestone.achieved_date ? parseISO(newMilestone.achieved_date) : undefined}
-                  onDateChange={handleDateChange}
-                  className="w-full"
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !newMilestone.achieved_date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {newMilestone.achieved_date ? (
+                        format(parseISO(newMilestone.achieved_date), 'dd MMMM yyyy', { locale: fr })
+                      ) : (
+                        <span>Choisir une date</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={newMilestone.achieved_date ? parseISO(newMilestone.achieved_date) : undefined}
+                      onSelect={handleDateChange}
+                      initialFocus
+                      className="p-3 pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="notes">Notes (optionnel)</Label>
