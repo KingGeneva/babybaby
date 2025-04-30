@@ -43,16 +43,14 @@ export const fetchMilestones = async (childId: string) => {
       
     if (milestonesError) throw milestonesError;
     
-    // Récupérer les jalons complétés pour cet enfant
-    const { data: completions, error: completionsError } = await supabase
-      .from('milestone_completions')
-      .select('milestone_id')
-      .eq('child_id', childId);
-      
-    if (completionsError) throw completionsError;
-    
-    // Extraire les IDs des jalons complétés
-    const completedMilestones = completions ? completions.map(c => c.milestone_id) : [];
+    // Pour les besoins de cette application, nous allons utiliser
+    // le champ achieved_date pour déterminer si un jalon est complété
+    // Si achieved_date est défini, le jalon est complété
+    const completedMilestones = milestones
+      ? milestones
+        .filter(milestone => milestone.achieved_date !== null && milestone.child_id === childId)
+        .map(milestone => milestone.id)
+      : [];
     
     return {
       milestones: milestones || [],
@@ -80,23 +78,14 @@ export const updateMilestoneCompletion = async (childId: string, milestoneId: st
       return;
     }
     
-    if (isCurrentlyCompleted) {
-      // Supprimer l'enregistrement si le jalon est déjà complété
-      await supabase
-        .from('milestone_completions')
-        .delete()
-        .eq('child_id', childId)
-        .eq('milestone_id', milestoneId);
-    } else {
-      // Ajouter un nouvel enregistrement si le jalon n'est pas complété
-      await supabase
-        .from('milestone_completions')
-        .insert({
-          child_id: childId,
-          milestone_id: milestoneId,
-          completed_at: new Date().toISOString()
-        });
-    }
+    // Mettre à jour le jalon en définissant ou en effaçant la date d'achèvement
+    await supabase
+      .from('milestones')
+      .update({ 
+        achieved_date: isCurrentlyCompleted ? null : new Date().toISOString() 
+      })
+      .eq('id', milestoneId)
+      .eq('child_id', childId);
   } catch (error) {
     console.error('Erreur lors de la mise à jour du jalon:', error);
   }

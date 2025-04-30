@@ -7,4 +7,6 @@ export interface Milestone {
   notes?: string;
   expected_age_months: number;
   category?: string;
+  achieved_date?: string | null;
+  child_id?: string;
 }
