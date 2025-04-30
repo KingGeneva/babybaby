@@ -11,9 +11,12 @@ import {
   Music,
   Gift,
   Binary,
-  Moon
+  Moon,
+  LogIn
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 
 const tools = [
   {
@@ -75,6 +78,8 @@ const tools = [
 ];
 
 const ToolsSection = () => {
+  const { user } = useAuth();
+  
   return (
     <section className="py-16 bg-gradient-to-b from-white to-sky-50">
       <div className="container mx-auto px-4">
@@ -89,9 +94,20 @@ const ToolsSection = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-3 text-babybaby-cosmic">
             Nos Outils Parents
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-600 max-w-2xl mx-auto mb-6">
             Des outils essentiels pour vous accompagner dans votre parcours parental
           </p>
+          
+          {!user && (
+            <Link to="/auth" className="inline-block">
+              <Button 
+                className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 text-white flex items-center gap-2 mt-2"
+              >
+                <LogIn className="h-4 w-4" />
+                Connectez-vous pour accéder à tous nos outils
+              </Button>
+            </Link>
+          )}
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -106,10 +122,20 @@ const ToolsSection = () => {
                 viewport={{ once: true }}
                 className="group"
               >
-                <Link 
-                  to={`/tools#${tool.title.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="block p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group-hover:scale-105 transform-gpu border border-gray-100 group-hover:border-babybaby-cosmic/20"
+                <div 
+                  className={`block p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group-hover:scale-105 transform-gpu border border-gray-100 group-hover:border-babybaby-cosmic/20 ${!user ? 'opacity-90 pointer-events-none' : ''}`}
                 >
+                  {!user && (
+                    <div className="absolute inset-0 bg-white/60 backdrop-blur-sm rounded-2xl flex items-center justify-center z-10">
+                      <Link to="/auth">
+                        <Button size="sm" variant="secondary" className="flex items-center gap-1">
+                          <LogIn className="h-3 w-3" />
+                          Connexion requise
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
+                  
                   <div className="mb-4 relative">
                     <div className="w-16 h-16 mx-auto bg-gradient-to-br from-sky-100 to-sky-50 rounded-2xl flex items-center justify-center group-hover:from-sky-200 group-hover:to-sky-100 transition-colors">
                       <Icon className="w-8 h-8 text-babybaby-cosmic" strokeWidth={1.5} />
@@ -129,11 +155,30 @@ const ToolsSection = () => {
                       </span>
                     ))}
                   </div>
-                </Link>
+                </div>
               </motion.div>
             );
           })}
         </div>
+        
+        {!user && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="mt-10 text-center"
+          >
+            <Link to="/auth">
+              <Button 
+                size="lg"
+                className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 text-white"
+              >
+                Créer un compte pour accéder à tous les outils
+              </Button>
+            </Link>
+          </motion.div>
+        )}
       </div>
     </section>
   );

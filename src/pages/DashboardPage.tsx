@@ -1,59 +1,27 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import NavBar from '@/components/NavBar';
 import Dashboard from '@/components/dashboard/Dashboard';
 import Footer from '@/components/Footer';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import SEOHead from '@/components/common/SEOHead';
+import P5Canvas from '@/components/P5Canvas';
 
 const DashboardPage = () => {
   const { childId } = useParams();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const [hasProfiles, setHasProfiles] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Vérifier si l'utilisateur est connecté
+    // Rediriger vers la page d'authentification si l'utilisateur n'est pas connecté
     if (!loading && !user) {
-      navigate('/auth');
-      return;
+      navigate('/auth', { replace: true });
     }
-
-    // Si l'utilisateur est connecté mais aucun enfant n'est sélectionné
-    if (user && !childId) {
-      // Vérifier si l'utilisateur a des profils d'enfants
-      const checkProfiles = async () => {
-        try {
-          const { data, error } = await supabase
-            .from('child_profiles')
-            .select('id')
-            .limit(1);
-
-          if (error) throw error;
-
-          // Si l'utilisateur a au moins un profil, rediriger vers le tableau de bord parental
-          // pour sélectionner un enfant
-          if (data && data.length > 0) {
-            setHasProfiles(true);
-            navigate('/parental-dashboard');
-          } else {
-            setHasProfiles(false);
-          }
-        } catch (error) {
-          console.error("Erreur lors de la vérification des profils:", error);
-          setHasProfiles(false);
-        }
-      };
-
-      checkProfiles();
-    } else {
-      setHasProfiles(true);
-    }
-  }, [user, loading, childId, navigate]);
+  }, [user, loading, navigate]);
 
   // Afficher un état de chargement pendant la vérification
-  if (loading || hasProfiles === null) {
+  if (loading) {
     return (
       <div className="min-h-screen">
         <NavBar />
@@ -65,11 +33,22 @@ const DashboardPage = () => {
     );
   }
 
+  // Si l'utilisateur n'est pas connecté, ne rien rendre (la redirection se fera via l'effet)
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen">
+      <SEOHead 
+        title="Tableau de bord | BabyBaby" 
+        description="Suivez la croissance et le développement de votre enfant."
+        canonicalUrl="https://babybaby.app/dashboard"
+      />
       <NavBar />
+      <P5Canvas className="fixed inset-0 -z-10" />
       <div className="pt-24">
-        <Dashboard childId={childId} showDevelopmentSection={true} />
+        <Dashboard childId={childId || 'demo'} showDevelopmentSection={true} />
       </div>
       <Footer />
     </div>
