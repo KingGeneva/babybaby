@@ -13,6 +13,7 @@ import WhiteNoiseGenerator from '@/components/tools/WhiteNoiseGenerator';
 import LullabyPlayer from '@/components/tools/LullabyPlayer';
 import BabyChecklist from '@/components/tools/BabyChecklist';
 import OvulationCalculator from '@/components/tools/OvulationCalculator';
+import SleepTracker from '@/components/tools/SleepTracker';
 
 const ToolsPage = () => {
   const [activeTab, setActiveTab] = useState('all');
@@ -54,6 +55,7 @@ const ToolsPage = () => {
             
             <TabsContent value="all" className="space-y-12">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <SleepTracker />
                 <NameGenerator />
                 <CostCalculator />
                 <WhiteNoiseGenerator />
@@ -78,6 +80,7 @@ const ToolsPage = () => {
             
             <TabsContent value="sleep" className="space-y-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <SleepTracker />
                 <WhiteNoiseGenerator />
                 <LullabyPlayer />
               </div>

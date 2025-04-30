@@ -10,11 +10,19 @@ import {
   ClipboardCheck,
   Music,
   Gift,
-  Binary
+  Binary,
+  Moon
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const tools = [
+  {
+    component: "SleepTracker",
+    title: "Suivi du sommeil",
+    icon: Moon,
+    description: "Suivez et analysez les cycles de sommeil de bébé",
+    tags: ["Sommeil", "Analyse"]
+  },
   {
     component: "OvulationCalculator",
     title: "Calculateur d'ovulation",
