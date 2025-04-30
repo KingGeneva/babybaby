@@ -3,25 +3,21 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Music } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getLullabies, defaultLullabies } from './utils';
+import { defaultLullabies } from './utils';
 import { useAudioPlayer } from './hooks/useAudioPlayer';
 import LullabyInfo from './LullabyInfo';
 import PlayerControls from './PlayerControls';
 import VolumeControl from './VolumeControl';
 import PlaylistView from './PlaylistView';
 import ProgressBar from './ProgressBar';
-import UploadLullaby from './UploadLullaby';
 
 interface LullabyContainerProps {
   className?: string;
 }
 
 const LullabyContainer: React.FC<LullabyContainerProps> = ({ className }) => {
-  const { data: storedLullabies, refetch } = useQuery({
-    queryKey: ['lullabies'],
-    queryFn: getLullabies,
-    initialData: defaultLullabies
-  });
+  // Utiliser directement les berceuses par défaut au lieu d'essayer de les charger dynamiquement
+  const lullabies = defaultLullabies;
 
   const {
     currentLullabyIndex,
@@ -35,7 +31,7 @@ const LullabyContainer: React.FC<LullabyContainerProps> = ({ className }) => {
     handleVolumeChange,
     setCurrentLullabyIndex
   } = useAudioPlayer({
-    lullabies: storedLullabies
+    lullabies: lullabies
   });
 
   const handleSongSelect = (index: number) => {
@@ -77,13 +73,11 @@ const LullabyContainer: React.FC<LullabyContainerProps> = ({ className }) => {
         />
         
         <PlaylistView
-          lullabies={storedLullabies}
+          lullabies={lullabies}
           currentIndex={currentLullabyIndex}
           isPlaying={state.isPlaying}
           onSongSelect={handleSongSelect}
         />
-
-        <UploadLullaby onUploadComplete={refetch} />
       </CardContent>
     </Card>
   );

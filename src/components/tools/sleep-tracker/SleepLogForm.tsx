@@ -1,7 +1,6 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -57,8 +56,12 @@ const SleepLogForm = () => {
     
     // Save the log with duration calculated
     const sleepLog = {
-      ...values,
       id: Date.now().toString(),
+      date: values.date,
+      startTime: values.startTime,
+      endTime: values.endTime,
+      quality: values.quality,
+      notes: values.notes || '', // Ensure notes is a string, even if empty
       createdAt: new Date().toISOString(),
       durationMinutes,
       durationDisplay,
