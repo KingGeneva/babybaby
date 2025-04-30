@@ -24,6 +24,7 @@ import MedicalAppointmentPage from "./pages/MedicalAppointmentPage";
 import QuizPage from "./pages/QuizPage";
 import QuizDetailPage from "./pages/QuizDetailPage";
 import QuizResultsPage from "./pages/QuizResultsPage";
+import AdminPage from './pages/admin/AdminPage';
 
 const queryClient = new QueryClient();
 
@@ -82,6 +83,14 @@ const App = () => (
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/quiz/:quizId" element={<QuizDetailPage />} />
               <Route path="/quiz/:quizId/results" element={<QuizResultsPage />} />
+              <Route 
+                path="/admin" 
+                element={
+                  <ProtectedRoute>
+                    <AdminPage />
+                  </ProtectedRoute>
+                } 
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
             
