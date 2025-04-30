@@ -5,6 +5,7 @@ import { Calendar, Syringe } from 'lucide-react';
 import MedicalCalendar from '@/components/medical/MedicalCalendar';
 import VaccinationTracker from '@/components/medical/VaccinationTracker';
 import { MedicalAppointment, Vaccination } from '@/types/medical';
+import { AppointmentType } from '@/types/medical';
 import { convertAppointments } from '@/utils/medicalUtils';
 
 interface MedicalDashboardTabsProps {
@@ -24,19 +25,8 @@ const MedicalDashboardTabs: React.FC<MedicalDashboardTabsProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('calendar');
   
-  // Converti les rendez-vous en fonction de leur type
-  const convertedAppointments = appointments.map(appointment => {
-    const appointmentType: "vaccine" | "checkup" | "specialist" = 
-      appointment.type === "vaccination" ? "vaccine" :
-      appointment.type === "checkup" ? "checkup" :
-      appointment.type === "specialist" ? "specialist" : "checkup";
-    
-    return {
-      ...appointment,
-      doctor: appointment.doctor || "",
-      type: appointmentType
-    };
-  });
+  // Convert appointments to the expected format for MedicalCalendar
+  const convertedAppointments = convertAppointments(appointments);
   
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -54,7 +44,6 @@ const MedicalDashboardTabs: React.FC<MedicalDashboardTabsProps> = ({
       <TabsContent value="calendar">
         <MedicalCalendar 
           appointments={convertedAppointments}
-          childId={childId}
         />
       </TabsContent>
       

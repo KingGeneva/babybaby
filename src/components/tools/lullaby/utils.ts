@@ -1,7 +1,7 @@
 
 import { Lullaby, LullabyFile } from './types';
 
-// Liste des berceuses par défaut
+// Default lullabies list
 export const lullabies: Lullaby[] = [
   {
     id: "lullaby-1",
@@ -37,39 +37,50 @@ export const lullabies: Lullaby[] = [
   }
 ];
 
-// Fonction pour récupérer les berceuses depuis le stockage local ou utiliser les défauts
+// Get lullabies from local storage or use defaults
 export const getLullabies = async (): Promise<Lullaby[]> => {
   try {
+    // Log that we're trying to get lullabies
+    console.log('Trying to get custom lullabies from localStorage');
+    
     const storedLullabies = localStorage.getItem('custom-lullabies');
     if (storedLullabies) {
+      console.log('Found custom lullabies:', storedLullabies);
       const parsed = JSON.parse(storedLullabies) as Lullaby[];
+      // Combine default lullabies with custom ones
       return [...lullabies, ...parsed];
+    } else {
+      console.log('No custom lullabies found, using defaults');
     }
   } catch (error) {
-    console.error('Erreur lors de la récupération des berceuses personnalisées:', error);
+    console.error('Error retrieving custom lullabies:', error);
   }
   
   return lullabies;
 };
 
-// Fonction pour créer un élément audio
+// Create an audio element
 export const createAudio = (): HTMLAudioElement => {
+  console.log('Creating new audio element');
   const audio = new Audio();
   return audio;
 };
 
-// Fonction pour formater le temps en minutes:secondes
+// Format time in minutes:seconds
 export const formatTime = (seconds: number): string => {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 };
 
-// Fonction pour téléverser une berceuse
+// Upload a lullaby
 export const uploadLullaby = async (file: File, metadata: { title: string, artist: string }): Promise<void> => {
   try {
+    console.log('Uploading lullaby:', file.name);
+    
     // Create a URL for the audio file
     const audioUrl = URL.createObjectURL(file);
+    console.log('Created URL:', audioUrl);
     
     // Get file type
     const fileType = file.name.toLowerCase().endsWith('.wav') ? 'wav' : 'mp3';
@@ -84,11 +95,14 @@ export const uploadLullaby = async (file: File, metadata: { title: string, artis
       fileType: fileType
     };
 
+    console.log('Created lullaby object:', newLullaby);
+
     // Create an Audio element to get the duration
     const audio = new Audio(audioUrl);
     
     await new Promise<void>((resolve) => {
       audio.addEventListener('loadedmetadata', () => {
+        console.log('Audio metadata loaded, duration:', audio.duration);
         if (audio.duration !== Infinity) {
           newLullaby.duration = audio.duration;
         }
@@ -96,10 +110,16 @@ export const uploadLullaby = async (file: File, metadata: { title: string, artis
       });
       
       // Handle errors or if metadata can't be loaded
-      audio.addEventListener('error', () => {
-        console.error('Failed to load audio metadata');
+      audio.addEventListener('error', (e) => {
+        console.error('Failed to load audio metadata:', e);
         resolve();
       });
+      
+      // Set a timeout in case the metadata never loads
+      setTimeout(() => {
+        console.log('Metadata loading timed out');
+        resolve();
+      }, 3000);
     });
     
     // Save to local storage
@@ -112,6 +132,7 @@ export const uploadLullaby = async (file: File, metadata: { title: string, artis
     
     customLullabies.push(newLullaby);
     localStorage.setItem('custom-lullabies', JSON.stringify(customLullabies));
+    console.log('Saved lullaby to localStorage, total custom:', customLullabies.length);
     
   } catch (error) {
     console.error('Error uploading lullaby:', error);

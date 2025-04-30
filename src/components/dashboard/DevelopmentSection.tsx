@@ -15,6 +15,7 @@ const DevelopmentSection: React.FC<DevelopmentSectionProps> = ({ childId }) => {
   useEffect(() => {
     const fetchChildData = async () => {
       if (childId) {
+        console.log('Fetching child data for ID:', childId);
         const { data, error } = await supabase
           .from('child_profiles')
           .select('birth_date')
@@ -22,7 +23,10 @@ const DevelopmentSection: React.FC<DevelopmentSectionProps> = ({ childId }) => {
           .single();
           
         if (!error && data) {
+          console.log('Child data fetched:', data);
           setBirthDate(data.birth_date);
+        } else if (error) {
+          console.error('Error fetching child data:', error);
         }
       }
     };
