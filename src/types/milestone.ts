@@ -4,13 +4,7 @@ export interface Milestone {
   name: string;
   title?: string;
   description?: string;
-  child_id: string;
-  expected_age_months: number;
-  achieved_date?: string;
-  created_at: string;
   notes?: string;
-  completed?: boolean;
-  age_range?: string;
+  expected_age_months: number;
   category?: string;
-  icon?: string;
 }

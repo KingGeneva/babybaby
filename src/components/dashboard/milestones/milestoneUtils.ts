@@ -1,166 +1,191 @@
 
+import { supabase } from '@/integrations/supabase/client';
 import { Milestone } from '@/types/milestone';
-import { differenceInMonths, parseISO } from 'date-fns';
 
-// Default milestones data
-export const defaultMilestones: Milestone[] = [
-  {
-    id: '1',
-    name: 'Premiers sourires',
-    title: 'Premiers sourires',
-    description: 'Commence à sourire en réponse aux stimuli',
-    expected_age_months: 2,
-    category: 'Développement social',
-    icon: 'smile',
-    child_id: 'demo',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: '2',
-    name: 'Tient sa tête',
-    title: 'Tient sa tête',
-    description: 'Capable de tenir sa tête droite sans support',
-    expected_age_months: 3,
-    category: 'Développement moteur',
-    icon: 'head',
-    child_id: 'demo',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: '3',
-    name: 'Se retourne',
-    title: 'Se retourne',
-    description: 'Se retourne du ventre au dos et vice versa',
-    expected_age_months: 5,
-    category: 'Développement moteur',
-    icon: 'rotate',
-    child_id: 'demo',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: '4',
-    name: 'S\'assoit seul',
-    title: 'S\'assoit seul',
-    description: 'Capable de s\'asseoir sans support',
-    expected_age_months: 6,
-    category: 'Développement moteur',
-    icon: 'sit',
-    child_id: 'demo',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: '5',
-    name: 'Premiers mots',
-    title: 'Premiers mots',
-    description: 'Commence à dire des mots reconnaissables',
-    expected_age_months: 12,
-    category: 'Développement linguistique',
-    icon: 'talk',
-    child_id: 'demo',
-    created_at: new Date().toISOString(),
-  }
-];
-
-// Calculate baby age in months
-export const calculateBabyAgeMonths = (birthDate?: string): number => {
-  if (!birthDate) return 0;
-  return differenceInMonths(new Date(), parseISO(birthDate));
-};
-
-// Fetch milestones from database or use defaults
-export const fetchMilestones = async (childId: string): Promise<{
-  milestones: Milestone[];
-  completedMilestones: string[];
-}> => {
-  // For demo purposes
-  if (!childId || childId === 'demo') {
-    return {
-      milestones: defaultMilestones,
-      completedMilestones: ['1', '2'],
-    };
+/**
+ * Calcule l'âge du bébé en mois à partir de sa date de naissance
+ */
+export const calculateBabyAgeMonths = (birthDate: string): number => {
+  const birth = new Date(birthDate);
+  const now = new Date();
+  
+  let months = (now.getFullYear() - birth.getFullYear()) * 12;
+  months -= birth.getMonth();
+  months += now.getMonth();
+  
+  // Ajustement si le jour du mois actuel est avant le jour de naissance
+  if (now.getDate() < birth.getDate()) {
+    months--;
   }
   
+  return Math.max(0, months);
+};
+
+/**
+ * Récupère tous les jalons et les jalons complétés pour un enfant
+ */
+export const fetchMilestones = async (childId: string) => {
   try {
-    const { supabase } = await import('@/integrations/supabase/client');
-    
-    const { data, error } = await supabase
-      .from('milestones')
-      .select('*')
-      .eq('child_id', childId)
-      .order('expected_age_months', { ascending: true });
-      
-    if (error) {
-      console.error("Error fetching milestones:", error);
-      // Fallback to defaults
+    // Si c'est un mode démo, renvoyez des données de démonstration
+    if (childId === 'demo') {
+      const demoMilestones = getDemoMilestones();
       return {
-        milestones: defaultMilestones.map(milestone => ({
-          ...milestone,
-          child_id: childId
-        })),
-        completedMilestones: []
-      };
-    } 
-    
-    if (data && data.length > 0) {
-      // Extract completed milestones
-      const completed = data.filter(m => m.achieved_date).map(m => m.id);
-      return {
-        milestones: data,
-        completedMilestones: completed
-      };
-    } else {
-      // No milestones found for child, use defaults
-      return {
-        milestones: defaultMilestones.map(milestone => ({
-          ...milestone,
-          child_id: childId
-        })),
-        completedMilestones: []
+        milestones: demoMilestones,
+        completedMilestones: ['milestone-1', 'milestone-3']
       };
     }
-  } catch (error) {
-    console.error("Error in fetchMilestones:", error);
-    // Fallback to defaults
+    
+    // Récupérer tous les jalons disponibles
+    const { data: milestones, error: milestonesError } = await supabase
+      .from('milestones')
+      .select('*')
+      .order('expected_age_months', { ascending: true });
+      
+    if (milestonesError) throw milestonesError;
+    
+    // Récupérer les jalons complétés pour cet enfant
+    const { data: completions, error: completionsError } = await supabase
+      .from('milestone_completions')
+      .select('milestone_id')
+      .eq('child_id', childId);
+      
+    if (completionsError) throw completionsError;
+    
+    // Extraire les IDs des jalons complétés
+    const completedMilestones = completions ? completions.map(c => c.milestone_id) : [];
+    
     return {
-      milestones: defaultMilestones.map(milestone => ({
-        ...milestone,
-        child_id: childId
-      })),
+      milestones: milestones || [],
+      completedMilestones
+    };
+  } catch (error) {
+    console.error('Erreur lors du chargement des jalons:', error);
+    // En cas d'erreur, renvoyer des données de démonstration
+    const demoMilestones = getDemoMilestones();
+    return {
+      milestones: demoMilestones,
       completedMilestones: []
     };
   }
 };
 
-// Toggle milestone completion status
-export const updateMilestoneCompletion = async (
-  childId: string,
-  milestoneId: string,
-  isCompleted: boolean
-): Promise<void> => {
-  // For demo mode, don't try to save to database
-  if (!childId || childId === 'demo') {
-    return;
-  }
-  
+/**
+ * Met à jour l'état de complétion d'un jalon
+ */
+export const updateMilestoneCompletion = async (childId: string, milestoneId: string, isCurrentlyCompleted: boolean) => {
   try {
-    const { supabase } = await import('@/integrations/supabase/client');
+    // Si mode démo, simuler la mise à jour
+    if (childId === 'demo') {
+      console.log(`Demo: ${isCurrentlyCompleted ? 'Suppression' : 'Ajout'} du jalon ${milestoneId}`);
+      return;
+    }
     
-    if (isCompleted) {
-      // Update milestone to indicate it's not completed
+    if (isCurrentlyCompleted) {
+      // Supprimer l'enregistrement si le jalon est déjà complété
       await supabase
-        .from('milestones')
-        .update({ achieved_date: null })
-        .eq('id', milestoneId)
-        .eq('child_id', childId);
+        .from('milestone_completions')
+        .delete()
+        .eq('child_id', childId)
+        .eq('milestone_id', milestoneId);
     } else {
-      // Update milestone to indicate it's completed
+      // Ajouter un nouvel enregistrement si le jalon n'est pas complété
       await supabase
-        .from('milestones')
-        .update({ achieved_date: new Date().toISOString().split('T')[0] })
-        .eq('id', milestoneId)
-        .eq('child_id', childId);
+        .from('milestone_completions')
+        .insert({
+          child_id: childId,
+          milestone_id: milestoneId,
+          completed_at: new Date().toISOString()
+        });
     }
   } catch (error) {
-    console.error("Error updating milestone completion:", error);
+    console.error('Erreur lors de la mise à jour du jalon:', error);
   }
+};
+
+/**
+ * Génère des jalons de démonstration pour le mode démo
+ */
+const getDemoMilestones = (): Milestone[] => {
+  return [
+    {
+      id: 'milestone-1',
+      name: 'Sourire',
+      title: 'Sourire',
+      description: 'Le bébé commence à sourire en réponse à votre voix ou à votre visage',
+      expected_age_months: 1,
+      category: 'Social'
+    },
+    {
+      id: 'milestone-2',
+      name: 'Tenir sa tête',
+      title: 'Tenir sa tête',
+      description: 'Le bébé peut tenir sa tête droite sans aide pendant quelques instants',
+      expected_age_months: 2,
+      category: 'Moteur'
+    },
+    {
+      id: 'milestone-3',
+      name: 'Rire aux éclats',
+      title: 'Rire aux éclats',
+      description: 'Le bébé commence à rire en réponse à des stimuli',
+      expected_age_months: 3,
+      category: 'Social'
+    },
+    {
+      id: 'milestone-4',
+      name: 'Rouler',
+      title: 'Rouler du ventre au dos',
+      description: 'Le bébé peut rouler du ventre au dos',
+      expected_age_months: 4,
+      category: 'Moteur'
+    },
+    {
+      id: 'milestone-5',
+      name: 'Babiller',
+      title: 'Babiller',
+      description: 'Le bébé commence à produire des sons variés comme "ba", "da", "ma"',
+      expected_age_months: 5,
+      category: 'Langage'
+    },
+    {
+      id: 'milestone-6',
+      name: 'S\'asseoir',
+      title: 'S\'asseoir sans soutien',
+      description: 'Le bébé peut s\'asseoir sans soutien pendant un moment',
+      expected_age_months: 6,
+      category: 'Moteur'
+    },
+    {
+      id: 'milestone-7',
+      name: 'Ramper',
+      title: 'Commencer à ramper',
+      description: 'Le bébé commence à se déplacer en rampant',
+      expected_age_months: 8,
+      category: 'Moteur'
+    },
+    {
+      id: 'milestone-8',
+      name: 'Premiers mots',
+      title: 'Premiers mots',
+      description: 'Le bébé dit ses premiers mots reconnaissables comme "mama" ou "dada"',
+      expected_age_months: 10,
+      category: 'Langage'
+    },
+    {
+      id: 'milestone-9',
+      name: 'Marcher',
+      title: 'Premiers pas',
+      description: 'Le bébé fait ses premiers pas seul',
+      expected_age_months: 12,
+      category: 'Moteur'
+    },
+    {
+      id: 'milestone-10',
+      name: 'Phrases simples',
+      title: 'Phrases simples',
+      description: 'L\'enfant peut combiner deux mots pour former des phrases simples',
+      expected_age_months: 18,
+      category: 'Langage'
+    }
+  ];
 };

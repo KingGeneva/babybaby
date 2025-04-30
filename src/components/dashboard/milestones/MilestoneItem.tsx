@@ -19,7 +19,6 @@ const MilestoneItem: React.FC<MilestoneItemProps> = ({
 }) => {
   return (
     <div
-      key={milestone.id}
       className={`flex items-start gap-3 p-3 rounded-lg border ${
         isCompleted 
           ? 'bg-green-50 border-green-200' 
