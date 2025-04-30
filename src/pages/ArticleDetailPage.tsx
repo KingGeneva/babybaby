@@ -1,91 +1,65 @@
-import React, { useEffect } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Heart, MessageCircle } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Badge } from '@/components/ui/badge';
-import Markdown from 'react-markdown';
+import { toast } from '@/components/ui/use-toast';
 import SEOHead from '@/components/common/SEOHead';
 import ArticleStructuredData from '@/components/articles/ArticleStructuredData';
+import ArticleHeader from '@/components/articles/ArticleHeader';
+import ArticleImage from '@/components/articles/ArticleImage';
+import ArticleContent from '@/components/articles/ArticleContent';
+import ArticleActions from '@/components/articles/ArticleActions';
+import ArticlePromotion from '@/components/articles/ArticlePromotion';
+import ArticleNotFound from '@/components/articles/ArticleNotFound';
+import { useArticle } from '@/hooks/useArticle';
+import { Article } from '@/types/article';
 
 // Import des articles (à terme, cela viendrait d'une API)
 import { articles } from '@/data/articles';
-import { toast } from '@/components/ui/use-toast';
 
 const ArticleDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [article, setArticle] = useState<Article | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(true);
   
   const articleId = parseInt(id || '0');
-  const article = articles.find(a => a.id === articleId);
+  const { formatDateForStructuredData, getArticleData } = useArticle(articleId);
   
   useEffect(() => {
-    if (!article) {
-      toast({
-        title: "Article introuvable",
-        description: "L'article que vous recherchez n'existe pas ou a été supprimé.",
-        variant: "destructive"
-      });
-      navigate('/articles');
-    }
-  }, [article, navigate]);
+    const loadArticle = async () => {
+      setLoading(true);
+      
+      const articleData = await getArticleData(articleId);
+      
+      if (!articleData) {
+        toast({
+          title: "Article introuvable",
+          description: "L'article que vous recherchez n'existe pas ou a été supprimé.",
+          variant: "destructive"
+        });
+        navigate('/articles');
+      } else {
+        setArticle(articleData);
+      }
+      
+      setLoading(false);
+    };
+    
+    loadArticle();
+  }, [articleId, navigate]);
 
-  if (!article) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <SEOHead
-          title="Article introuvable"
-          description="L'article que vous recherchez n'existe pas ou a été supprimé."
-        />
-        <NavBar />
-        <div className="flex-grow flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4">Article introuvable</h1>
-            <p className="mb-6">L'article que vous recherchez n'existe pas ou a été supprimé.</p>
-            <Button onClick={() => navigate('/articles')}>
-              Retourner aux articles
-            </Button>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
   }
 
-  // Format date for structured data with more robust parsing
-  const formatDateForStructuredData = (dateString: string) => {
-    try {
-      // French month names to number mapping
-      const monthMap: Record<string, string> = {
-        'janvier': '01', 'février': '02', 'mars': '03', 'avril': '04',
-        'mai': '05', 'juin': '06', 'juillet': '07', 'août': '08',
-        'septembre': '09', 'octobre': '10', 'novembre': '11', 'décembre': '12'
-      };
-      
-      // Parse date in format like "15 avril 2025"
-      const parts = dateString.split(' ');
-      if (parts.length !== 3) {
-        throw new Error('Invalid date format');
-      }
-      
-      const day = parts[0].padStart(2, '0');
-      const month = monthMap[parts[1].toLowerCase()];
-      const year = parts[2];
-      
-      if (!day || !month || !year) {
-        throw new Error('Invalid date components');
-      }
-      
-      // Create a valid ISO date string (YYYY-MM-DD)
-      return `${year}-${month}-${day}T12:00:00.000Z`;
-    } catch (error) {
-      console.error('Error parsing date:', error);
-      // Return a fallback valid ISO date
-      return new Date().toISOString();
-    }
-  };
+  if (!article) {
+    return <ArticleNotFound />;
+  }
 
   return (
     <div className="min-h-screen">
@@ -129,71 +103,19 @@ const ArticleDetailPage = () => {
             </Button>
             
             <div className="max-w-3xl mx-auto">
-              <div className="flex items-center gap-3 mb-4">
-                <Badge variant="outline">{article.category}</Badge>
-                <div className="flex items-center text-sm text-gray-500">
-                  <Calendar className="h-4 w-4 mr-1" />
-                  {article.date}
-                </div>
-              </div>
+              <ArticleHeader 
+                category={article.category} 
+                date={article.date} 
+                title={article.title} 
+              />
               
-              <h1 className="text-3xl md:text-4xl font-bold mb-6 text-babybaby-cosmic">
-                {article.title}
-              </h1>
+              <ArticleImage image={article.image} title={article.title} />
               
-              {article.image && article.image !== "/placeholder.svg" && (
-                <div className="mb-8">
-                  <img 
-                    src={article.image} 
-                    alt={article.title}
-                    className="w-full h-auto rounded-lg shadow-md"
-                  />
-                </div>
-              )}
+              <ArticleContent content={article.content} excerpt={article.excerpt} />
               
-              <div className="prose prose-lg max-w-none">
-                {/* Contenu de l'article - utilisation de Markdown */}
-                {article.content ? (
-                  <Markdown>
-                    {article.content}
-                  </Markdown>
-                ) : (
-                  <p className="text-gray-700 mb-4">
-                    {article.excerpt}
-                  </p>
-                )}
-                
-                <div className="flex justify-between items-center my-8 py-4 border-t border-b border-gray-200">
-                  <div className="flex items-center gap-4">
-                    <button className="flex items-center gap-1 text-gray-500 hover:text-red-500 transition-colors">
-                      <Heart className="h-5 w-5" />
-                      <span>42</span>
-                    </button>
-                    <button className="flex items-center gap-1 text-gray-500 hover:text-babybaby-cosmic transition-colors">
-                      <MessageCircle className="h-5 w-5" />
-                      <span>12 commentaires</span>
-                    </button>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
-                      Partager
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      Sauvegarder
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="bg-babybaby-lightblue/30 p-6 rounded-lg mt-8 mb-8">
-                  <h3 className="text-xl font-semibold mb-3">Pour aller plus loin</h3>
-                  <p className="mb-4">
-                    Découvrez des techniques douces et efficaces pour améliorer le sommeil de votre bébé, téléchargez notre guide complet "Sommeil du bébé" gratuitement.
-                  </p>
-                  <Button className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90">
-                    Télécharger notre guide gratuit
-                  </Button>
-                </div>
-              </div>
+              <ArticleActions article={article} />
+              
+              <ArticlePromotion />
             </div>
           </motion.div>
         </div>
