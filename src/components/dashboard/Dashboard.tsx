@@ -15,10 +15,16 @@ interface DashboardProps {
     poids: number;
     eveil?: number;
   }>;
+  showDevelopmentSection?: boolean;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoData }) => {
-  console.log('Dashboard rendering with childId:', childId, 'demoMode:', demoMode);
+const Dashboard: React.FC<DashboardProps> = ({ 
+  childId, 
+  demoMode = false, 
+  demoData,
+  showDevelopmentSection = true 
+}) => {
+  console.log('Dashboard rendering with childId:', childId, 'demoMode:', demoMode, 'showDevelopmentSection:', showDevelopmentSection);
   
   const isDemo = demoMode || childId === 'demo';
   const dashboardData = isDemo ? useDemoDashboard() : useDashboardData(childId, isDemo);
@@ -49,7 +55,9 @@ const Dashboard: React.FC<DashboardProps> = ({ childId, demoMode = false, demoDa
         childId={childId}
       />
 
-      <DevelopmentSection childId={childId} />
+      {showDevelopmentSection && (
+        <DevelopmentSection childId={childId} />
+      )}
     </div>
   );
 };

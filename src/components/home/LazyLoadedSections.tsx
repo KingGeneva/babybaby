@@ -34,13 +34,15 @@ interface LazyLoadedSectionsProps {
   isLoading?: boolean;
   isAuthenticated?: boolean;
   childProfileId?: string;
+  showDevelopmentSection?: boolean;
 }
 
 const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({ 
   demoGrowthData, 
   isLoading = false,
   isAuthenticated = false,
-  childProfileId
+  childProfileId,
+  showDevelopmentSection = true
 }) => {
   const isMobile = useIsMobile();
   
@@ -53,6 +55,7 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
             childId={childProfileId || 'demo'} 
             demoMode={!isAuthenticated} 
             demoData={demoGrowthData} 
+            showDevelopmentSection={showDevelopmentSection}
           />
         </div>
       </Suspense>

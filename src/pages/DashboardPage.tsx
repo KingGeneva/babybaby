@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Dashboard from '@/components/dashboard/Dashboard';
@@ -69,7 +68,7 @@ const DashboardPage = () => {
     <div className="min-h-screen">
       <NavBar />
       <div className="pt-24">
-        <Dashboard childId={childId} />
+        <Dashboard childId={childId} showDevelopmentSection={true} />
       </div>
       <Footer />
     </div>

@@ -147,6 +147,7 @@ const Index = () => {
           isLoading={loading}
           isAuthenticated={!!user}
           childProfileId={childProfiles[0]?.id}
+          showDevelopmentSection={false} // Ne pas afficher la section sur la page d'accueil
         />
       </motion.div>
     </div>
