@@ -18,7 +18,6 @@ const DevelopmentSection: React.FC<DevelopmentSectionProps> = ({ childId }) => {
   useEffect(() => {
     // Pour les démos et tests, on définit une date de naissance par défaut
     if (!childId || childId === 'demo') {
-      console.log('Using demo birth date');
       setBirthDate('2023-01-01');
       setIsLoading(false);
       return;
@@ -36,7 +35,6 @@ const DevelopmentSection: React.FC<DevelopmentSectionProps> = ({ childId }) => {
           .single();
           
         if (!error && data) {
-          console.log('Child data fetched:', data);
           setBirthDate(data.birth_date);
         } else if (error) {
           console.error('Error fetching child data:', error);

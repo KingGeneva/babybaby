@@ -24,60 +24,65 @@ export default defineConfig(({ mode }) => ({
     // Generate unique build hashes for each build to avoid caching issues
     rollupOptions: {
       output: {
+        // Optimized chunk naming
         entryFileNames: `assets/[name].[hash].js`,
         chunkFileNames: `assets/[name].[hash].js`,
         assetFileNames: `assets/[name].[hash].[ext]`,
-        // Suppress certain warnings
-        format: 'es',
-        // Improve code splitting
-        manualChunks(id) {
-          // Create separate chunks for large dependencies
-          if (id.includes('node_modules')) {
-            if (id.includes('@supabase')) {
-              return 'vendor_supabase';
-            }
-            if (id.includes('react-dom')) {
-              return 'vendor_react-dom';
-            }
-            if (id.includes('@tanstack/react-query')) {
-              return 'vendor_react-query';
-            }
-            if (id.includes('recharts')) {
-              return 'vendor_recharts';
-            }
-            // All other node modules
-            return 'vendor';
-          }
+        // Optimize code splitting to reduce memory usage
+        manualChunks: {
+          vendor: [
+            'react',
+            'react-dom',
+            'react-router-dom',
+          ],
+          supabase: ['@supabase/supabase-js'],
+          ui: [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-label',
+            '@radix-ui/react-slot',
+            '@radix-ui/react-toast',
+            '@radix-ui/react-tooltip',
+          ],
+          charts: ['recharts'],
+          queries: ['@tanstack/react-query'],
+          forms: ['react-hook-form', '@hookform/resolvers'],
+          animations: ['framer-motion']
         }
       },
-      // Ignore warnings for certain modules
+      // Reduce warnings to minimize build memory usage
       onwarn(warning, warn) {
+        // Ignore common warnings that aren't critical
         if (warning.code === 'SOURCEMAP_ERROR') return;
         if (warning.code === 'EVAL') return;
         if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+        if (warning.code === 'EMPTY_BUNDLE') return;
         warn(warning);
       }
     },
-    // Add timestamp to asset URLs
+    // Reduce build memory usage
+    chunkSizeWarningLimit: 3000,
+    // Optimize sourcemap settings
+    sourcemap: mode === 'production' ? false : 'hidden',
+    // Minor optimizations
     assetsInlineLimit: 4096,
-    // Improve sourcemaps for better debugging (use 'hidden' for production)
-    sourcemap: mode === 'development' ? true : 'hidden',
-    // Generate manifest for better asset tracking
-    manifest: true,
-    // Minification and optimization settings
-    minify: 'terser',
-    terserOptions: {
+    // Optimize minification
+    minify: mode === 'production' ? 'terser' : false,
+    terserOptions: mode === 'production' ? {
       compress: {
-        drop_console: mode === 'production',
-        drop_debugger: mode === 'production',
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug']
       },
       format: {
         comments: false
+      },
+      mangle: {
+        safari10: true
       }
-    },
-    // Memory optimization for large builds
-    chunkSizeWarningLimit: 2000,
-    // Ensure correct content hashing
-    cssCodeSplit: true,
+    } : undefined,
+    // Disable CSS code split in development to reduce complexity
+    cssCodeSplit: mode === 'production',
+    // Disable manifest in development
+    manifest: mode === 'production',
   }
 }));

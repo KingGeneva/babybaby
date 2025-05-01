@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface CacheManagerProps {
   version?: string;
@@ -8,8 +7,7 @@ interface CacheManagerProps {
 
 /**
  * Component to manage cache and application updates
- * Displays a notification when a new version is available
- * Enhanced with better error handling and loading states
+ * Optimized for memory efficiency
  */
 const CacheManager: React.FC<CacheManagerProps> = ({ version = '1.0.0' }) => {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -47,40 +45,38 @@ const CacheManager: React.FC<CacheManagerProps> = ({ version = '1.0.0' }) => {
     // Store the current version
     localStorage.setItem('app-version', currentVersion);
     
-    // Register service worker for better cache management
+    // Register service worker with simplified update check
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
           .then(registration => {
             console.log('ServiceWorker registration successful');
             
-            // Check for updates more frequently (every 2 minutes)
-            setInterval(() => {
+            // Check for updates less frequently to reduce resource usage
+            const checkInterval = setInterval(() => {
               registration.update()
-                .then(() => console.log('ServiceWorker update check completed'))
                 .catch(error => console.error('ServiceWorker update check failed:', error));
-            }, 120000);
+            }, 3600000); // Check every hour instead of every 2 minutes
             
+            return () => clearInterval(checkInterval);
           }).catch(error => {
             console.error('ServiceWorker registration failed:', error);
           });
       });
     }
 
-    // Clean up stale caches on load
-    const clearStaleData = async () => {
+    // Simplified cleanup function
+    const clearStaleData = () => {
       try {
-        // Clear stale data from IndexedDB/localStorage older than 7 days
         const lastCleanup = localStorage.getItem('last-cache-cleanup');
         const now = Date.now();
         if (!lastCleanup || (now - Number(lastCleanup)) > 7 * 24 * 60 * 60 * 1000) {
           // Clean up any old localStorage items (keep app settings)
-          for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.startsWith('temp-') || key.startsWith('cache-')) {
+          Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('temp-') || key.startsWith('cache-')) {
               localStorage.removeItem(key);
             }
-          }
+          });
           localStorage.setItem('last-cache-cleanup', now.toString());
         }
       } catch (e) {
@@ -89,7 +85,6 @@ const CacheManager: React.FC<CacheManagerProps> = ({ version = '1.0.0' }) => {
     };
     
     clearStaleData();
-    
   }, [version]);
 
   if (isUpdating) {
@@ -104,7 +99,7 @@ const CacheManager: React.FC<CacheManagerProps> = ({ version = '1.0.0' }) => {
     );
   }
 
-  return null; // This is a non-visual component under normal operation
+  return null;
 };
 
 export default CacheManager;
