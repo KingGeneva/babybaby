@@ -26,7 +26,10 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     // Disable sourcemaps entirely in production to save memory
-    sourcemap: mode === 'production' ? false : 'hidden',
+    sourcemap: false,
+    
+    // Use esbuild minifier instead of terser
+    minify: 'esbuild',
     
     // Aggressively split code for better caching and parallel loading
     rollupOptions: {
@@ -134,18 +137,11 @@ export default defineConfig(({ mode }) => ({
     // Reduce asset inline limit
     assetsInlineLimit: 2048, // 2kb instead of 4kb
     
-    // Switch from Terser to esbuild minifier for both development and production builds
-    // since we're having issues with Terser
-    minify: 'esbuild',
-    
-    // Disable CSS code split in development
+    // CSS code split in production only
     cssCodeSplit: mode === 'production',
     
-    // Disable manifest in development
+    // Manifest in production only
     manifest: mode === 'production',
-    
-    // Memory limits for node process
-    target: 'es2020',
     
     // Reduces build memory usage
     emptyOutDir: true,

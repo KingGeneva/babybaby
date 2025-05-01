@@ -1,22 +1,19 @@
+// Simple Service Worker for BabyBaby App
+const CACHE_NAME = 'babybaby-cache-v5';
 
-// Service Worker for BabyBaby App
-const CACHE_NAME = 'babybaby-cache-v4';
-
-// Minimal list to reduce memory usage
+// Minimal essential files to cache
 const PRECACHE_URLS = [
   '/',
-  '/index.html',
-  '/favicon.ico'
+  '/index.html'
 ];
 
-// Lightweight install handler
+// Install handler - keep it extremely simple
 self.addEventListener('install', event => {
   console.log('Service Worker installing');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(PRECACHE_URLS))
       .then(() => self.skipWaiting())
-      .catch(error => console.error('Precaching failed:', error))
   );
 });
 
@@ -25,22 +22,23 @@ self.addEventListener('activate', event => {
   console.log('Service Worker activating');
   event.waitUntil(
     caches.keys()
-      .then(cacheNames => cacheNames.filter(cacheName => cacheName !== CACHE_NAME))
-      .then(cachesToDelete => Promise.all(
-        cachesToDelete.map(cacheToDelete => caches.delete(cacheToDelete))
-      ))
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames
+            .filter(cacheName => cacheName !== CACHE_NAME)
+            .map(cacheName => caches.delete(cacheName))
+        );
+      })
       .then(() => self.clients.claim())
   );
 });
 
-// More efficient fetch strategy
+// Simple network-first strategy for HTML, cache-first for assets
 self.addEventListener('fetch', event => {
   // Skip non-GET requests
-  if (event.request.method !== 'GET') {
-    return;
-  }
+  if (event.request.method !== 'GET') return;
   
-  // HTML pages - network-first strategy
+  // Use network-first for HTML navigation requests
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
@@ -49,20 +47,18 @@ self.addEventListener('fetch', event => {
     return;
   }
   
-  // For assets - cache first, network fallback
+  // Use cache-first for other requests
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
+        if (cachedResponse) return cachedResponse;
         
         return fetch(event.request)
           .then(response => {
-            if (!response || response.status !== 200) {
-              return response;
-            }
+            // Don't cache non-successful responses
+            if (!response || response.status !== 200) return response;
             
+            // Clone the response to cache it
             const responseToCache = response.clone();
             caches.open(CACHE_NAME)
               .then(cache => cache.put(event.request, responseToCache));
@@ -73,11 +69,11 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Handle message from main thread
+// Skip waiting when requested
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
 });
 
-console.log('Service Worker loaded - version 4 - optimized for build');
+console.log('Service Worker loaded - version 5 - simplified');

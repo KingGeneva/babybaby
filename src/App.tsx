@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -30,18 +29,16 @@ import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
 import CacheManager from './components/common/CacheManager';
 
-// Build version - update this when deploying new versions
-const APP_VERSION = '1.0.' + new Date().toISOString().slice(0, 10).replace(/-/g, '');
+// Simpler version number
+const APP_VERSION = '1.1.0';
 
-// Create a client with enhanced caching configuration
+// Create a client with simplified configuration
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 2,
+      retry: 1,
       staleTime: 30000,
-      gcTime: 300000, // 5 minutes - updated from cacheTime to gcTime
-      refetchOnWindowFocus: true,
-      refetchOnMount: true,
+      gcTime: 300000,
     },
   },
 });
