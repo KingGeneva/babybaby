@@ -29,11 +29,32 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: `assets/[name].[hash].[ext]`,
         // Suppress certain warnings
         format: 'es',
+        // Improve code splitting
+        manualChunks(id) {
+          // Create separate chunks for large dependencies
+          if (id.includes('node_modules')) {
+            if (id.includes('@supabase')) {
+              return 'vendor_supabase';
+            }
+            if (id.includes('react-dom')) {
+              return 'vendor_react-dom';
+            }
+            if (id.includes('@tanstack/react-query')) {
+              return 'vendor_react-query';
+            }
+            if (id.includes('recharts')) {
+              return 'vendor_recharts';
+            }
+            // All other node modules
+            return 'vendor';
+          }
+        }
       },
       // Ignore warnings for certain modules
       onwarn(warning, warn) {
         if (warning.code === 'SOURCEMAP_ERROR') return;
         if (warning.code === 'EVAL') return;
+        if (warning.code === 'CIRCULAR_DEPENDENCY') return;
         warn(warning);
       }
     },
@@ -54,6 +75,8 @@ export default defineConfig(({ mode }) => ({
         comments: false
       }
     },
+    // Memory optimization for large builds
+    chunkSizeWarningLimit: 2000,
     // Ensure correct content hashing
     cssCodeSplit: true,
   }

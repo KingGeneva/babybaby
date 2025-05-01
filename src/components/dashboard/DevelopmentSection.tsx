@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import MilestonesList from './MilestonesList';
 import MedicalWidget from '@/components/medical/MedicalWidget';
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from '@/integrations/supabase/client';
 
 interface DevelopmentSectionProps {
   childId: string;
@@ -27,8 +28,6 @@ const DevelopmentSection: React.FC<DevelopmentSectionProps> = ({ childId }) => {
       try {
         setIsLoading(true);
         setError(null);
-        
-        const { supabase } = await import('@/integrations/supabase/client');
         
         const { data, error } = await supabase
           .from('child_profiles')
