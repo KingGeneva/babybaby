@@ -134,24 +134,9 @@ export default defineConfig(({ mode }) => ({
     // Reduce asset inline limit
     assetsInlineLimit: 2048, // 2kb instead of 4kb
     
-    // Optimize minification - use esbuild for development builds (faster)
-    // Use terser only for production (smaller but slower)
-    minify: mode === 'production' ? 'terser' : 'esbuild',
-    terserOptions: mode === 'production' ? {
-      compress: {
-        passes: 2,
-        drop_console: true,
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug'],
-        unsafe: true
-      },
-      format: {
-        comments: false
-      },
-      mangle: {
-        safari10: true
-      }
-    } : undefined,
+    // Switch from Terser to esbuild minifier for both development and production builds
+    // since we're having issues with Terser
+    minify: 'esbuild',
     
     // Disable CSS code split in development
     cssCodeSplit: mode === 'production',
@@ -160,7 +145,6 @@ export default defineConfig(({ mode }) => ({
     manifest: mode === 'production',
     
     // Memory limits for node process
-    // Can help avoid memory issues when running node with limited memory
     target: 'es2020',
     
     // Reduces build memory usage

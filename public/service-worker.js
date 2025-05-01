@@ -1,8 +1,8 @@
-// Service Worker for BabyBaby App
-const CACHE_NAME = 'babybaby-cache-v3';
-const TIMESTAMP = new Date().getTime();
 
-// Resources to cache immediately - minimal list to reduce memory usage
+// Service Worker for BabyBaby App
+const CACHE_NAME = 'babybaby-cache-v4';
+
+// Minimal list to reduce memory usage
 const PRECACHE_URLS = [
   '/',
   '/index.html',
@@ -33,10 +33,10 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Ultra-lightweight fetch strategy
+// More efficient fetch strategy
 self.addEventListener('fetch', event => {
-  // Skip non-GET requests and cross-origin requests
-  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') {
     return;
   }
   
@@ -49,29 +49,14 @@ self.addEventListener('fetch', event => {
     return;
   }
   
-  // For JS/CSS/Images - stale-while-revalidate
-  if (event.request.destination === 'script' || 
-      event.request.destination === 'style' ||
-      event.request.destination === 'image') {
-    
-    event.respondWith(
-      caches.match(event.request).then(cachedResponse => {
-        // Return cached response immediately if available
+  // For assets - cache first, network fallback
+  event.respondWith(
+    caches.match(event.request)
+      .then(cachedResponse => {
         if (cachedResponse) {
-          // Asynchronously update the cache
-          fetch(event.request)
-            .then(response => {
-              if (response && response.status === 200) {
-                caches.open(CACHE_NAME)
-                  .then(cache => cache.put(event.request, response));
-              }
-            })
-            .catch(() => {});
-          
           return cachedResponse;
         }
         
-        // Otherwise fetch from network
         return fetch(event.request)
           .then(response => {
             if (!response || response.status !== 200) {
@@ -85,14 +70,6 @@ self.addEventListener('fetch', event => {
             return response;
           });
       })
-    );
-    return;
-  }
-  
-  // For other assets - cache first, network fallback
-  event.respondWith(
-    caches.match(event.request)
-      .then(cachedResponse => cachedResponse || fetch(event.request))
   );
 });
 
@@ -103,4 +80,4 @@ self.addEventListener('message', event => {
   }
 });
 
-console.log('Service Worker loaded - version 3 - memory optimized');
+console.log('Service Worker loaded - version 4 - optimized for build');

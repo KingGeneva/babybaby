@@ -8,7 +8,7 @@ interface CacheManagerProps {
 
 /**
  * Component to manage cache and application updates
- * Memory-optimized version
+ * Optimized for build performance
  */
 const CacheManager: React.FC<CacheManagerProps> = ({ version = '1.0.0' }) => {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -55,16 +55,27 @@ const CacheManager: React.FC<CacheManagerProps> = ({ version = '1.0.0' }) => {
       });
     }
 
-    // Only clean stale data once per day maximum
+    // More efficient cleanup strategy - only run once per week
     const lastCleanup = localStorage.getItem('last-cache-cleanup');
     const now = Date.now();
-    if (!lastCleanup || (now - Number(lastCleanup)) > 24 * 60 * 60 * 1000) {
-      // Simple cleanup - only target temp data
+    if (!lastCleanup || (now - Number(lastCleanup)) > 7 * 24 * 60 * 60 * 1000) {
+      // Target only specific keys to avoid excessive operations
+      const keysToCheck = ['temp-', 'cache-'];
+      
+      // Process in batches for better performance
+      let count = 0;
       Object.keys(localStorage).forEach(key => {
-        if (key.startsWith('temp-') || key.startsWith('cache-')) {
+        if (keysToCheck.some(prefix => key.startsWith(prefix))) {
           localStorage.removeItem(key);
+          count++;
         }
       });
+      
+      // Only log if items were actually removed
+      if (count > 0) {
+        console.log(`Cache cleanup: removed ${count} items`);
+      }
+      
       localStorage.setItem('last-cache-cleanup', now.toString());
     }
   }, [version]);
