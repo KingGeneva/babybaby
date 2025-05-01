@@ -4,47 +4,60 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 // Lazy loading avec priorité
 const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
-// Sections secondaires chargées de manière paresseuse avec plus de délai
+// Sections secondaires chargées de manière paresseuse
 const TestimonialsCarousel = lazy(() => import('@/components/testimonials/TestimonialsCarousel'));
 const ArticleSection = lazy(() => import('@/components/articles/ArticleSection'));
 const Footer = lazy(() => import('@/components/Footer'));
 
-// Sections tertiaires avec chargement encore plus différé
+// Sections tertiaires avec chargement différé
+// Correction du typage pour résoudre les erreurs TS2345
 const EbooksSection = lazy(() => {
-  // Différer le chargement pour économiser la mémoire
-  return new Promise(resolve => {
-    setTimeout(() => resolve(import('@/components/ebooks/EbooksSection')), 1000);
+  return import('@/components/ebooks/EbooksSection').then(module => {
+    // Différer le chargement pour économiser la mémoire
+    return new Promise(resolve => {
+      setTimeout(() => resolve(module), 1000);
+    });
   });
 });
 
 const PartnersCarousel = lazy(() => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(import('@/components/partners/PartnersCarousel')), 1500);
+  return import('@/components/partners/PartnersCarousel').then(module => {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(module), 1500);
+    });
   });
 });
 
 const ProductsSection = lazy(() => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(import('@/components/products/ProductsSection')), 2000);
+  return import('@/components/products/ProductsSection').then(module => {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(module), 2000);
+    });
   });
 });
 
 const ToolsSection = lazy(() => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(import('@/components/tools/ToolsSection')), 2500);
+  return import('@/components/tools/ToolsSection').then(module => {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(module), 2500);
+    });
   });
 });
 
 // Sections les moins critiques chargées en dernier
 const ContactSection = lazy(() => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(import('@/components/ContactSection')), 3000);
+  return import('@/components/ContactSection').then(module => {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(module), 3000);
+    });
   });
 });
 
 const NewsletterForm = lazy(() => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(import('@/components/NewsletterForm')), 3500);
+  return import('@/components/NewsletterForm').then(module => {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(module), 3500);
+    });
   });
 });
 
