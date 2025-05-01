@@ -26,13 +26,21 @@ export default defineConfig(({ mode }) => ({
       output: {
         entryFileNames: `assets/[name].[hash].js`,
         chunkFileNames: `assets/[name].[hash].js`,
-        assetFileNames: `assets/[name].[hash].[ext]`
+        assetFileNames: `assets/[name].[hash].[ext]`,
+        // Suppress certain warnings
+        format: 'es',
+      },
+      // Ignore warnings for certain modules
+      onwarn(warning, warn) {
+        if (warning.code === 'SOURCEMAP_ERROR') return;
+        if (warning.code === 'EVAL') return;
+        warn(warning);
       }
     },
     // Add timestamp to asset URLs
     assetsInlineLimit: 4096,
-    // Improve sourcemaps for better debugging
-    sourcemap: true,
+    // Improve sourcemaps for better debugging (use 'hidden' for production)
+    sourcemap: mode === 'development' ? true : 'hidden',
     // Generate manifest for better asset tracking
     manifest: true,
     // Minification and optimization settings
@@ -41,6 +49,9 @@ export default defineConfig(({ mode }) => ({
       compress: {
         drop_console: mode === 'production',
         drop_debugger: mode === 'production',
+      },
+      format: {
+        comments: false
       }
     },
     // Ensure correct content hashing
