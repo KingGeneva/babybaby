@@ -1,6 +1,5 @@
-
 // Service Worker for BabyBaby App
-const CACHE_NAME = 'babybaby-cache-v2'; // Increased version
+const CACHE_NAME = 'babybaby-cache-v3';
 const TIMESTAMP = new Date().getTime();
 
 // Resources to cache immediately - minimal list to reduce memory usage
@@ -10,7 +9,7 @@ const PRECACHE_URLS = [
   '/favicon.ico'
 ];
 
-// Install event - minimal precaching to reduce initial load
+// Lightweight install handler
 self.addEventListener('install', event => {
   console.log('Service Worker installing');
   event.waitUntil(
@@ -21,50 +20,61 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activate event - clean up old caches
+// Clean up old caches
 self.addEventListener('activate', event => {
   console.log('Service Worker activating');
-  const currentCaches = [CACHE_NAME];
   event.waitUntil(
     caches.keys()
-      .then(cacheNames => cacheNames.filter(cacheName => !currentCaches.includes(cacheName)))
+      .then(cacheNames => cacheNames.filter(cacheName => cacheName !== CACHE_NAME))
       .then(cachesToDelete => Promise.all(
-        cachesToDelete.map(cacheToDelete => {
-          console.log('Deleting outdated cache:', cacheToDelete);
-          return caches.delete(cacheToDelete);
-        })
+        cachesToDelete.map(cacheToDelete => caches.delete(cacheToDelete))
       ))
       .then(() => self.clients.claim())
-      .catch(error => console.error('Cache cleanup failed:', error))
   );
 });
 
-// Optimized fetch strategy to avoid memory issues
+// Ultra-lightweight fetch strategy
 self.addEventListener('fetch', event => {
-  // Skip cross-origin requests to reduce complexity
-  if (!event.request.url.startsWith(self.location.origin)) {
+  // Skip non-GET requests and cross-origin requests
+  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
     return;
   }
   
-  // Special handling for HTML requests - always go to network
+  // HTML pages - network-first strategy
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('/index.html'))
+      fetch(event.request)
+        .catch(() => caches.match('/index.html'))
     );
     return;
   }
   
-  // For assets like JS and CSS, use stale-while-revalidate strategy
+  // For JS/CSS/Images - stale-while-revalidate
   if (event.request.destination === 'script' || 
       event.request.destination === 'style' ||
       event.request.destination === 'image') {
     
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
-        const fetchPromise = fetch(event.request)
+        // Return cached response immediately if available
+        if (cachedResponse) {
+          // Asynchronously update the cache
+          fetch(event.request)
+            .then(response => {
+              if (response && response.status === 200) {
+                caches.open(CACHE_NAME)
+                  .then(cache => cache.put(event.request, response));
+              }
+            })
+            .catch(() => {});
+          
+          return cachedResponse;
+        }
+        
+        // Otherwise fetch from network
+        return fetch(event.request)
           .then(response => {
-            // Don't cache responses with status !== 200
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+            if (!response || response.status !== 200) {
               return response;
             }
             
@@ -73,43 +83,24 @@ self.addEventListener('fetch', event => {
               .then(cache => cache.put(event.request, responseToCache));
             
             return response;
-          })
-          .catch(error => {
-            console.error('Fetch failed:', error);
-            // Return nothing - fallback to cache
           });
-        
-        return cachedResponse || fetchPromise;
       })
     );
     return;
   }
   
-  // For other requests, just try network with cache fallback
+  // For other assets - cache first, network fallback
   event.respondWith(
-    fetch(event.request)
-      .catch(() => caches.match(event.request))
+    caches.match(event.request)
+      .then(cachedResponse => cachedResponse || fetch(event.request))
   );
 });
 
-// Handle updates from main thread
+// Handle message from main thread
 self.addEventListener('message', event => {
-  if (event.data) {
-    console.log('Service Worker received message:', event.data);
-    if (event.data.type === 'SKIP_WAITING') {
-      self.skipWaiting();
-    }
-    
-    if (event.data.type === 'CLEAR_CACHE') {
-      event.waitUntil(
-        caches.keys().then(cacheNames => {
-          return Promise.all(
-            cacheNames.map(cacheName => caches.delete(cacheName))
-          );
-        })
-      );
-    }
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });
 
-console.log('Service Worker loaded - version 2');
+console.log('Service Worker loaded - version 3 - memory optimized');
