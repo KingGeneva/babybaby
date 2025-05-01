@@ -31,5 +31,19 @@ export default defineConfig(({ mode }) => ({
     },
     // Add timestamp to asset URLs
     assetsInlineLimit: 4096,
+    // Improve sourcemaps for better debugging
+    sourcemap: true,
+    // Generate manifest for better asset tracking
+    manifest: true,
+    // Minification and optimization settings
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: mode === 'production',
+        drop_debugger: mode === 'production',
+      }
+    },
+    // Ensure correct content hashing
+    cssCodeSplit: true,
   }
 }));
