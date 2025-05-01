@@ -27,7 +27,7 @@ const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
   authorName = "BabyBaby",
   authorUrl = "https://babybaby.app/about",
   publisherName = "BabyBaby",
-  publisherLogo = "https://lovable.dev/opengraph-image-p98pqg.png",
+  publisherLogo = "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
   url,
   category = "Parentalité",
   tags = [],

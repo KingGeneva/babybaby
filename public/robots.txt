@@ -5,11 +5,6 @@
 # Allow all crawlers
 User-agent: *
 Allow: /
-
-# Optimize crawl rate
-Crawl-delay: 2
-
-# Site Content
 Allow: /articles/
 Allow: /ebooks/
 Allow: /tools/
@@ -25,7 +20,7 @@ Disallow: /temp/
 Allow: /images/
 Allow: /lovable-uploads/
 
-# Social Media Bots - Allow specific paths with priority
+# Social Media Bots - Allow specific paths
 User-agent: Twitterbot
 Allow: /
 Allow: /articles/
@@ -38,18 +33,15 @@ Allow: /articles/
 Allow: /images/
 Allow: /lovable-uploads/
 
-# Rate limiting for aggressive crawlers
+# Rate limiting for crawlers
 User-agent: AhrefsBot
-Crawl-delay: 5
-
-User-agent: Baiduspider
-Crawl-delay: 5
+Crawl-delay: 3
 
 User-agent: SemrushBot
-Crawl-delay: 5
+Crawl-delay: 3
 
 # Sitemap location
 Sitemap: https://babybaby.app/sitemap.xml
 
-# Host directive helps with canonical issues
+# Host directive
 Host: babybaby.app
