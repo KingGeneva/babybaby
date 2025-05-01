@@ -28,13 +28,20 @@ import QuizResultsPage from "./pages/QuizResultsPage";
 import AdminPage from './pages/admin/AdminPage';
 import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
+import CacheManager from './components/common/CacheManager';
 
-// Create a client
+// Build version - update this when deploying new versions
+const APP_VERSION = '1.0.' + new Date().toISOString().slice(0, 10).replace(/-/g, '');
+
+// Create a client with enhanced caching configuration
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 1,
+      retry: 2,
       staleTime: 30000,
+      cacheTime: 300000, // 5 minutes
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
     },
   },
 });
@@ -46,6 +53,7 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
+          <CacheManager version={APP_VERSION} />
           <BrowserRouter>
             <Routes>
               {/* Public routes */}

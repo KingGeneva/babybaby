@@ -35,13 +35,16 @@ Allow: /lovable-uploads/
 
 # Rate limiting for crawlers
 User-agent: AhrefsBot
-Crawl-delay: 3
+Crawl-delay: 2
 
 User-agent: SemrushBot
-Crawl-delay: 3
+Crawl-delay: 2
 
 # Sitemap location
 Sitemap: https://babybaby.app/sitemap.xml
 
 # Host directive
 Host: babybaby.app
+
+# Cache control hints
+# X-Robots-Tag: max-snippet:-1, max-image-preview:large, max-video-preview:-1
