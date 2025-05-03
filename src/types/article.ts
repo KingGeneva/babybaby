@@ -12,4 +12,15 @@ export interface Article {
   tags: string[];
   author: string;
   featured?: boolean; // Optionnel
+  series?: {
+    id: string;
+    name: string;
+    position: number;
+  };
+}
+
+export interface ArticleSeries {
+  id: string;
+  name: string;
+  articles: Article[];
 }

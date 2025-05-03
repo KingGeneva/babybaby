@@ -1,144 +1,94 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useArticle } from '@/hooks/useArticle';
+import { useSeriesArticles } from '@/hooks/useSeriesArticles';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { toast } from '@/components/ui/use-toast';
 import SEOHead from '@/components/common/SEOHead';
-import ArticleStructuredData from '@/components/articles/ArticleStructuredData';
 import ArticleHeader from '@/components/articles/ArticleHeader';
 import ArticleImage from '@/components/articles/ArticleImage';
 import ArticleContent from '@/components/articles/ArticleContent';
 import ArticleActions from '@/components/articles/ArticleActions';
 import ArticlePromotion from '@/components/articles/ArticlePromotion';
 import ArticleNotFound from '@/components/articles/ArticleNotFound';
-import { Article } from '@/types/article';
-import { useArticle } from '@/hooks/useArticle';
-import { ArticleDetailSkeleton } from '@/components/articles/ArticleSkeleton';
+import ArticleStructuredData from '@/components/articles/ArticleStructuredData';
 
 const ArticleDetailPage = () => {
-  const { id } = useParams<{ id: string }>();
+  const { articleId } = useParams<{ articleId: string }>();
   const navigate = useNavigate();
-  const [article, setArticle] = useState<Article | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(true);
-  
-  const articleId = parseInt(id || '0');
-  const { formatDateForStructuredData, getArticleData } = useArticle(articleId);
+  const { article, loading, error } = useArticle(Number(articleId));
+  const { articles: seriesArticles } = useSeriesArticles(article?.series?.id);
   
   useEffect(() => {
-    const loadArticle = async () => {
-      setLoading(true);
-      
-      const articleData = await getArticleData(articleId);
-      
-      if (!articleData) {
-        toast({
-          title: "Article introuvable",
-          description: "L'article que vous recherchez n'existe pas ou a été supprimé.",
-          variant: "destructive"
-        });
-        navigate('/articles');
-      } else {
-        setArticle(articleData);
-      }
-      
-      setLoading(false);
-    };
-    
-    loadArticle();
-  }, [articleId, navigate, getArticleData]);
+    window.scrollTo(0, 0);
+  }, [articleId]);
 
   if (loading) {
     return (
-      <div className="min-h-screen">
-        <NavBar />
-        <div className="pt-24 pb-16">
-          <div className="container mx-auto px-4">
-            <Button 
-              variant="ghost" 
-              className="mb-6 flex items-center gap-2"
-              onClick={() => navigate('/articles')}
-              disabled
-            >
-              <ArrowLeft size={16} />
-              Retour aux articles
-            </Button>
-            
-            <ArticleDetailSkeleton />
-          </div>
+      <div className="min-h-screen pt-20 flex justify-center items-center">
+        <div className="animate-pulse">
+          <div className="h-8 w-64 bg-gray-200 mb-8 rounded-full"></div>
+          <div className="h-64 w-full max-w-3xl bg-gray-200 rounded-lg"></div>
         </div>
-        <Footer />
       </div>
     );
   }
 
-  if (!article) {
-    return <ArticleNotFound />;
+  if (error || !article) {
+    return <ArticleNotFound onBack={() => navigate('/articles')} />;
   }
 
   return (
     <div className="min-h-screen">
       <SEOHead
-        title={article.title}
-        description={article.excerpt}
-        ogImage={article.image || "/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"}
-        ogType="article"
-        canonicalUrl={`https://babybaby.app/articles/${article.id}`}
-        articleData={{
-          publishedTime: formatDateForStructuredData(article.date),
-          tags: [article.category]
-        }}
+        title={`${article.title} | BabyBaby`}
+        description={article.summary || article.excerpt}
+        image={article.image}
       />
       
       <ArticleStructuredData
         title={article.title}
-        description={article.excerpt}
+        description={article.summary || article.excerpt}
         image={article.image}
-        datePublished={formatDateForStructuredData(article.date)}
-        authorName="BabyBaby"
+        datePublished={article.date}
         url={`https://babybaby.app/articles/${article.id}`}
+        category={article.category}
       />
-      
+
       <NavBar />
-      
-      <div className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Button 
-              variant="ghost" 
-              className="mb-6 flex items-center gap-2"
-              onClick={() => navigate('/articles')}
-            >
-              <ArrowLeft size={16} />
-              Retour aux articles
-            </Button>
-            
-            <div className="max-w-3xl mx-auto">
-              <ArticleHeader 
-                category={article.category} 
-                date={article.date} 
-                title={article.title} 
-              />
-              
-              <ArticleImage image={article.image} title={article.title} />
-              
-              <ArticleContent content={article.content} excerpt={article.excerpt} />
-              
-              <ArticleActions article={article} />
-              
-              <ArticlePromotion />
-            </div>
-          </motion.div>
+
+      <main className="container mx-auto px-4 pt-24 pb-16">
+        <article className="max-w-3xl mx-auto">
+          <ArticleHeader
+            title={article.title}
+            category={article.category}
+            date={article.date}
+            readingTime={article.readingTime}
+            author={article.author}
+          />
+
+          <ArticleImage src={article.image} alt={article.title} />
+
+          <div className="mt-8">
+            <ArticleContent 
+              content={article.content} 
+              excerpt={article.excerpt}
+              series={article.series}
+              relatedArticles={seriesArticles}
+            />
+          </div>
+
+          <div className="my-8">
+            <ArticleActions article={article} />
+          </div>
+        </article>
+
+        <div className="mt-12">
+          <ArticlePromotion />
         </div>
-      </div>
-      
+      </main>
+
       <Footer />
     </div>
   );

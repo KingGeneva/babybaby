@@ -1,4 +1,3 @@
-
 import { Course } from "@/types/course";
 
 export const courses: Course[] = [
@@ -12,6 +11,12 @@ export const courses: Course[] = [
     instructor: "Dr. Sophie Martin",
     category: "Soins",
     updatedAt: "15/04/2025",
+    thematic: {
+      id: "soins-par-age",
+      name: "Soins de bébé par âge",
+      position: 1,
+      ageRange: "0-3 mois"
+    },
     modules: [
       {
         id: "module-1",
@@ -126,6 +131,12 @@ export const courses: Course[] = [
     instructor: "Émilie Durand",
     category: "Développement",
     updatedAt: "10/04/2025",
+    thematic: {
+      id: "developpement-par-age",
+      name: "Développement de bébé par âge",
+      position: 1,
+      ageRange: "0-12 mois"
+    },
     modules: [
       {
         id: "module-1",
@@ -167,6 +178,12 @@ export const courses: Course[] = [
     instructor: "Nutritionniste Marie Leblanc",
     category: "Nutrition",
     updatedAt: "20/04/2025",
+    thematic: {
+      id: "alimentation-par-age",
+      name: "Alimentation de bébé par âge",
+      position: 2,
+      ageRange: "6-12 mois"
+    },
     modules: [
       {
         id: "module-1",
@@ -194,6 +211,162 @@ export const courses: Course[] = [
         title: "Gérer les allergies et intolérances",
         duration: "50min",
         content: `<p>Contenu détaillé sur les allergies alimentaires...</p>`,
+        resources: []
+      }
+    ]
+  },
+  {
+    id: "sommeil-bebe-0-6",
+    title: "Sommeil du bébé de 0 à 6 mois",
+    description: "Techniques douces et efficaces pour aider votre nouveau-né à développer de saines habitudes de sommeil dès les premiers mois.",
+    image: "/lovable-uploads/ccda2a74-7a35-4a2d-8bc3-7b8c2feb3139.png",
+    duration: "2h30min",
+    level: "Débutant",
+    instructor: "Dr. Anne Lecorps",
+    category: "Sommeil",
+    updatedAt: "02/05/2025",
+    thematic: {
+      id: "sommeil-par-age",
+      name: "Sommeil de bébé par âge",
+      position: 1,
+      ageRange: "0-6 mois"
+    },
+    modules: [
+      {
+        id: "module-1",
+        title: "Comprendre les cycles de sommeil du nouveau-né",
+        duration: "35min",
+        content: `
+          <h2>Comprendre les cycles de sommeil du nouveau-né</h2>
+          
+          <p>Le sommeil d'un nouveau-né est structuré de façon très différente de celui d'un adulte. Cette compréhension est fondamentale pour aider votre bébé à bien dormir.</p>
+          
+          <h3>Les états de veille et de sommeil</h3>
+          
+          <p>Les nouveau-nés alternent entre six états de conscience différents :</p>
+          
+          <ul>
+            <li><strong>Sommeil profond</strong> : Respiration régulière, pas de mouvements oculaires, peu de mouvements corporels</li>
+            <li><strong>Sommeil léger (paradoxal)</strong> : Mouvements oculaires rapides, respiration irrégulière, petits soubresauts</li>
+            <li><strong>Somnolence</strong> : État intermédiaire entre sommeil et éveil</li>
+            <li><strong>Éveil calme</strong> : Bébé est alerte mais calme</li>
+            <li><strong>Éveil actif</strong> : Bébé est éveillé et actif</li>
+            <li><strong>Pleurs</strong> : État d'éveil avec agitation maximale</li>
+          </ul>
+          
+          <p>Ces états se succèdent selon des cycles plus courts que chez l'adulte (50-60 minutes contre 90 minutes). De plus, les nouveau-nés passent environ 50% de leur temps de sommeil en sommeil paradoxal, contre 20% chez l'adulte.</p>
+          
+          <h3>Les besoins de sommeil par âge</h3>
+          
+          <p>Entre 0 et 6 mois, les besoins de sommeil évoluent rapidement :</p>
+          
+          <ul>
+            <li><strong>0-1 mois</strong> : 16-18 heures par jour en cycles de 2-3 heures</li>
+            <li><strong>1-3 mois</strong> : 15-17 heures avec des périodes de sommeil nocturne qui s'allongent progressivement</li>
+            <li><strong>3-6 mois</strong> : 14-16 heures avec 2-3 siestes et une période nocturne plus longue</li>
+          </ul>
+          
+          <h3>Rythme circadien en développement</h3>
+          
+          <p>À la naissance, le bébé n'a pas encore développé son rythme circadien (horloge biologique). Cette horloge se met en place progressivement pendant les 3-4 premiers mois. Avant cela, le sommeil est distribué de façon assez aléatoire entre le jour et la nuit.</p>
+          
+          <p>Pour favoriser le développement du rythme circadien :</p>
+          
+          <ul>
+            <li>Exposez bébé à la lumière naturelle pendant la journée</li>
+            <li>Maintenez un environnement calme et sombre la nuit</li>
+            <li>Évitez de stimuler bébé pendant les tétées nocturnes</li>
+          </ul>
+          
+          <h3>Reconnaître les signes de fatigue</h3>
+          
+          <p>Apprendre à identifier les premiers signes de fatigue est essentiel pour mettre bébé au lit au bon moment :</p>
+          
+          <ul>
+            <li>Frottement des yeux</li>
+            <li>Bâillements</li>
+            <li>Regard dans le vide</li>
+            <li>Agitation ou hyperactivité</li>
+            <li>Pleurs plus facilement</li>
+          </ul>
+          
+          <p>Si vous attendez l'apparition des pleurs intenses, il est souvent trop tard : bébé est déjà en surstimulation et aura plus de mal à s'endormir.</p>
+        `,
+        resources: [
+          {
+            id: "resource-1",
+            title: "Tableau des besoins de sommeil par âge",
+            type: "pdf",
+            url: "/resources/besoins-sommeil-par-age.pdf"
+          }
+        ]
+      },
+      {
+        id: "module-2",
+        title: "Créer un environnement propice au sommeil",
+        duration: "30min",
+        content: `<p>Contenu détaillé sur l'environnement de sommeil idéal...</p>`,
+        resources: []
+      },
+      {
+        id: "module-3",
+        title: "Techniques d'apaisement et routines",
+        duration: "45min",
+        content: `<p>Contenu détaillé sur les routines d'endormissement...</p>`,
+        resources: []
+      },
+      {
+        id: "module-4",
+        title: "Gérer les réveils nocturnes",
+        duration: "40min",
+        content: `<p>Contenu détaillé sur la gestion des réveils...</p>`,
+        resources: []
+      }
+    ]
+  },
+  {
+    id: "sommeil-bebe-6-12",
+    title: "Sommeil du bébé de 6 à 12 mois",
+    description: "Comment gérer la régression du sommeil et établir des routines efficaces pour les bébés plus âgés.",
+    image: "/lovable-uploads/ccda2a74-7a35-4a2d-8bc3-7b8c2feb3139.png",
+    duration: "2h15min",
+    level: "Intermédiaire",
+    instructor: "Dr. Anne Lecorps",
+    category: "Sommeil",
+    updatedAt: "03/05/2025",
+    thematic: {
+      id: "sommeil-par-age",
+      name: "Sommeil de bébé par âge",
+      position: 2,
+      ageRange: "6-12 mois"
+    },
+    modules: [
+      {
+        id: "module-1",
+        title: "La régression du sommeil : comprendre et gérer",
+        duration: "40min",
+        content: `<p>Contenu détaillé sur la régression du sommeil...</p>`,
+        resources: []
+      },
+      {
+        id: "module-2",
+        title: "Routines adaptées pour les 6-12 mois",
+        duration: "35min",
+        content: `<p>Contenu détaillé sur les routines...</p>`,
+        resources: []
+      },
+      {
+        id: "module-3",
+        title: "Gestion des siestes et transitions",
+        duration: "30min",
+        content: `<p>Contenu détaillé sur les siestes...</p>`,
+        resources: []
+      },
+      {
+        id: "module-4",
+        title: "L'apprentissage du sommeil autonome",
+        duration: "30min",
+        content: `<p>Contenu détaillé sur l'autonomie...</p>`,
         resources: []
       }
     ]
