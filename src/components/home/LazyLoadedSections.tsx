@@ -15,7 +15,7 @@ const EbooksSection = lazy(() => {
   return new Promise(resolve => {
     // Charger le module puis attendre avant de résoudre
     import('@/components/ebooks/EbooksSection').then(module => {
-      setTimeout(() => resolve(module), 1000);
+      setTimeout(() => resolve({ default: module.default }), 1000);
     });
   });
 });
@@ -23,7 +23,7 @@ const EbooksSection = lazy(() => {
 const PartnersCarousel = lazy(() => {
   return new Promise(resolve => {
     import('@/components/partners/PartnersCarousel').then(module => {
-      setTimeout(() => resolve(module), 1500);
+      setTimeout(() => resolve({ default: module.default }), 1500);
     });
   });
 });
@@ -31,7 +31,7 @@ const PartnersCarousel = lazy(() => {
 const ProductsSection = lazy(() => {
   return new Promise(resolve => {
     import('@/components/products/ProductsSection').then(module => {
-      setTimeout(() => resolve(module), 2000);
+      setTimeout(() => resolve({ default: module.default }), 2000);
     });
   });
 });
@@ -39,7 +39,16 @@ const ProductsSection = lazy(() => {
 const ToolsSection = lazy(() => {
   return new Promise(resolve => {
     import('@/components/tools/ToolsSection').then(module => {
-      setTimeout(() => resolve(module), 2500);
+      setTimeout(() => resolve({ default: module.default }), 2500);
+    });
+  });
+});
+
+// Réintégration du module de cours
+const CoursesSection = lazy(() => {
+  return new Promise(resolve => {
+    import('@/components/courses/CoursesSection').then(module => {
+      setTimeout(() => resolve({ default: module.default }), 1800);
     });
   });
 });
@@ -48,7 +57,7 @@ const ToolsSection = lazy(() => {
 const ContactSection = lazy(() => {
   return new Promise(resolve => {
     import('@/components/ContactSection').then(module => {
-      setTimeout(() => resolve(module), 3000);
+      setTimeout(() => resolve({ default: module.default }), 3000);
     });
   });
 });
@@ -56,7 +65,7 @@ const ContactSection = lazy(() => {
 const NewsletterForm = lazy(() => {
   return new Promise(resolve => {
     import('@/components/NewsletterForm').then(module => {
-      setTimeout(() => resolve(module), 3500);
+      setTimeout(() => resolve({ default: module.default }), 3500);
     });
   });
 });
@@ -132,6 +141,11 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
       {/* Section ebooks - Priorité 3 */}
       <Suspense fallback={<SectionLoader />}>
         <EbooksSection />
+      </Suspense>
+      
+      {/* Section cours - Priorité 3 (réintégrée) */}
+      <Suspense fallback={<SectionLoader />}>
+        <CoursesSection />
       </Suspense>
       
       {/* Contenu basse priorité - uniquement sur desktop ou si défilement */}
