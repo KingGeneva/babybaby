@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Logo from './Logo';
-import { Instagram, Facebook, Twitter, Youtube, ArrowUp } from 'lucide-react';
+import { Instagram, Facebook, Twitter, ArrowUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
@@ -14,9 +14,9 @@ const Footer: React.FC = () => {
   };
   
   const socialIcons = [
-    { icon: <Instagram size={20} />, href: '#' },
-    { icon: <Facebook size={20} />, href: '#' },
-    { icon: <Twitter size={20} />, href: '#' },
+    { icon: <Instagram size={20} />, href: 'https://www.instagram.com/babybabyorg/' },
+    { icon: <Facebook size={20} />, href: 'https://www.facebook.com/share/15EvBcNAmu/' },
+    { icon: <Twitter size={20} />, href: 'https://x.com/babybaby_org?t=HQ6BT0JV7_aomxxW2riyow&s=09' },
     { icon: <Youtube size={20} />, href: '#' },
   ];
   
