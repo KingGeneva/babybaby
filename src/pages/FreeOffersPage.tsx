@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ExternalLink, Gift, Coupon, Baby, ShoppingBag } from 'lucide-react';
+import { ExternalLink, Gift, Tag, Baby, ShoppingBag } from 'lucide-react';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,7 +45,7 @@ const FreeOffersPage = () => {
       description: 'Inscrivez-vous au programme P&G « Redonne » pour accéder à des offres exclusives sur les produits Pampers, accumuler des points échangeables contre des récompenses et soutenir des causes sociales par vos interactions.',
       registerLink: 'https://www.pggoodeveryday.ca/fr/inscrivez-vous/pampers/',
       registerText: 'Inscription au programme Pampers',
-      icon: Coupon
+      icon: Tag
     },
     {
       id: 'bondepart',
