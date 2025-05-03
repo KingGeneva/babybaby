@@ -45,7 +45,7 @@ const ChatbotButton = () => {
     }
     
     if (lowerCaseMessage.includes('comment') && lowerCaseMessage.includes('fonctionne')) {
-      return "BabyBaby est une application complète pour suivre le développement de votre enfant. Elle propose un tableau de bord personnalisé, un suivi de croissance, un calendrier médical, un carnet de vaccination, des articles informatifs, des outils pratiques comme le générateur de prénoms et le bruit blanc, et bien plus encore !";
+      return "BabyBaby est une application complète pour suivre le développement de votre enfant. Elle propose un tableau de bord personnalisé, un suivi de croissance, un calendrier médical, un carnet de vaccination, des articles informatifs, des outils pratiques comme le générateur de prénoms et le bruit blanc, des cours pour parents, et bien plus encore !";
     }
     
     // Profils de bébé
@@ -77,9 +77,23 @@ const ChatbotButton = () => {
       return "BabyBaby propose une bibliothèque d'articles rédigés par des experts sur la parentalité, le développement, la santé et le bien-être des bébés. Vous pouvez filtrer les articles par catégorie, rechercher des sujets spécifiques et sauvegarder vos articles préférés pour les consulter plus tard.";
     }
     
+    // Cours pour parents (nouvelle fonctionnalité)
+    if (lowerCaseMessage.includes('cours') || lowerCaseMessage.includes('formation') || lowerCaseMessage.includes('apprendre')) {
+      return "BabyBaby propose désormais des cours en ligne pour les parents ! Ces formations sont conçues par des experts et couvrent divers sujets comme les soins aux nouveau-nés, le sommeil, l'alimentation, et le développement. Chaque cours est composé de modules vidéo, de ressources téléchargeables et d'exercices pratiques. Vous pouvez y accéder depuis la section 'Cours' du menu principal. Les cours sont disponibles pour tous les utilisateurs inscrits.";
+    }
+    
+    if (lowerCaseMessage.includes('module') || lowerCaseMessage.includes('leçon')) {
+      return "Les cours BabyBaby sont divisés en modules accessibles et pratiques. Chaque module comprend une vidéo explicative, du contenu écrit, et souvent des ressources supplémentaires comme des PDF ou des liens utiles. Vous pouvez suivre les cours à votre rythme et reprendre là où vous vous êtes arrêté. Les modules sont conçus pour s'adapter à votre emploi du temps chargé de parent.";
+    }
+    
+    // E-books
+    if (lowerCaseMessage.includes('ebook') || lowerCaseMessage.includes('livre') || lowerCaseMessage.includes('lecture')) {
+      return "BabyBaby propose une sélection d'e-books gratuits et premium sur divers sujets liés à la parentalité. Ces guides pratiques sont téléchargeables au format PDF et peuvent être consultés hors ligne. Vous trouverez des e-books sur l'alimentation, le sommeil, les activités d'éveil, et bien d'autres sujets. Accédez à la bibliothèque d'e-books depuis la section 'Ressources' du menu.";
+    }
+    
     // Outils
     if (lowerCaseMessage.includes('outil') || lowerCaseMessage.includes('fonction')) {
-      return "BabyBaby propose plusieurs outils pratiques : calculateur d'ovulation, générateur de prénoms, bruit blanc pour aider bébé à dormir, berceuses, checklist pour préparer l'arrivée de bébé, registre de cadeaux, et calculateur de coûts. Vous pouvez accéder à tous ces outils depuis la section 'Outils' dans le menu principal.";
+      return "BabyBaby propose plusieurs outils pratiques : calculateur d'ovulation, générateur de prénoms, bruit blanc pour aider bébé à dormir, berceuses, checklist pour préparer l'arrivée de bébé, registre de cadeaux, calculateur de coûts, et notre nouveau quiz interactif pour connaître votre style parental. Vous pouvez accéder à tous ces outils depuis la section 'Outils' dans le menu principal.";
     }
     
     if (lowerCaseMessage.includes('bruit blanc') || lowerCaseMessage.includes('berceuse') || lowerCaseMessage.includes('dormir')) {
@@ -94,14 +108,19 @@ const ChatbotButton = () => {
       return "Notre checklist pour l'arrivée de bébé vous guide dans les préparatifs avant la naissance. Les items sont organisés par catégorie (vêtements, matériel de puériculture, hygiène...) et vous pouvez suivre votre progression, ajouter vos propres items et recevoir des rappels pour les achats importants.";
     }
     
+    // Quiz et tests interactifs (nouvelle fonctionnalité)
+    if (lowerCaseMessage.includes('quiz') || lowerCaseMessage.includes('test') || lowerCaseMessage.includes('interactif')) {
+      return "BabyBaby propose maintenant des quiz interactifs pour vous aider à mieux comprendre votre style parental, vos connaissances sur le développement de l'enfant, et plus encore. Ces quiz sont ludiques, éducatifs et vous fournissent des résultats personnalisés avec des conseils adaptés. Vous pouvez accéder aux quiz depuis la section 'Outils' ou directement depuis la page d'accueil.";
+    }
+    
     // Compte et inscription
     if (lowerCaseMessage.includes('compte') || lowerCaseMessage.includes('inscription') || lowerCaseMessage.includes('connexion')) {
-      return "Pour créer un compte, cliquez sur 'Se connecter' en haut à droite, puis 'Créer un compte'. L'inscription est gratuite et sécurisée. Vous pourrez ajouter plusieurs profils d'enfants et accéder à toutes les fonctionnalités de base de l'application. Vos données sont protégées et ne sont jamais partagées sans votre consentement.";
+      return "Pour créer un compte, cliquez sur 'Se connecter' en haut à droite, puis 'Créer un compte'. L'inscription est gratuite et sécurisée. Vous pourrez ajouter plusieurs profils d'enfants et accéder à toutes les fonctionnalités de base de l'application, y compris nos nouveaux cours pour parents. Vos données sont protégées et ne sont jamais partagées sans votre consentement.";
     }
     
     // Paiement et abonnement
     if (lowerCaseMessage.includes('paiement') || lowerCaseMessage.includes('abonnement') || lowerCaseMessage.includes('premium')) {
-      return "BabyBaby propose une version gratuite avec toutes les fonctionnalités essentielles, et une version premium avec des options avancées (plus d'espace de stockage, export de données, absence de publicités, etc.). Vous pouvez consulter les différentes offres dans la section 'Abonnement' après vous être connecté.";
+      return "BabyBaby propose une version gratuite avec toutes les fonctionnalités essentielles, et une version premium avec des options avancées (accès à tous les cours pour parents, plus d'espace de stockage, export de données, absence de publicités, etc.). Vous pouvez consulter les différentes offres dans la section 'Abonnement' après vous être connecté.";
     }
     
     // Confidentialité et sécurité
@@ -114,8 +133,13 @@ const ChatbotButton = () => {
       return "Si vous rencontrez un problème technique, vous pouvez contacter notre support à support@babybaby.app ou via le formulaire de contact accessible depuis les paramètres. Notre équipe est disponible du lundi au vendredi, de 9h à 18h et vous répondra sous 24h.";
     }
     
+    // Communauté (mise à jour)
+    if (lowerCaseMessage.includes('communauté') || lowerCaseMessage.includes('forum') || lowerCaseMessage.includes('autres parents')) {
+      return "BabyBaby dispose d'une section communauté où vous pouvez échanger avec d'autres parents, poser des questions, et partager vos expériences. Notre forum est organisé par thématiques (sommeil, alimentation, développement, etc.) et modéré par notre équipe pour garantir un environnement bienveillant et respectueux. Vous pouvez également participer à des discussions liées aux cours et partager vos conseils avec la communauté.";
+    }
+    
     // Réponse par défaut
-    return "Je ne suis pas sûr de comprendre votre question. Pourriez-vous la reformuler ou choisir l'un des sujets suggérés ci-dessous ? Vous pouvez me demander des informations sur le suivi de croissance, le calendrier médical, les vaccinations, les articles, ou les différents outils disponibles dans l'application.";
+    return "Je ne suis pas sûr de comprendre votre question. Pourriez-vous la reformuler ou choisir l'un des sujets suggérés ci-dessous ? Vous pouvez me demander des informations sur le suivi de croissance, le calendrier médical, les vaccinations, les articles, les cours pour parents, ou les différents outils disponibles dans l'application.";
   };
   
   const handleSendMessage = () => {
