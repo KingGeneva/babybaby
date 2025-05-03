@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Logo from './Logo';
-import { Instagram, Facebook, Twitter, ArrowUp } from 'lucide-react';
+import { Instagram, Facebook, Twitter, Youtube, ArrowUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
