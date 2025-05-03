@@ -10,14 +10,6 @@ export interface Course {
   modules: CourseModule[];
   updatedAt: string;
   category: string;
-  thematic?: CourseThematic; // Nouvelle propriété optionnelle
-}
-
-export interface CourseThematic {
-  id: string;
-  name: string;
-  position: number;
-  ageRange: string;
 }
 
 export interface CourseModule {

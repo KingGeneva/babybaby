@@ -1,5 +1,5 @@
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { BookOpen, Clock, User, Search, BookText } from "lucide-react";
@@ -16,12 +16,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { courses } from "@/data/courses";
 import { Separator } from "@/components/ui/separator";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import CourseThematicSection from "@/components/courses/CourseThematicSection";
 
 const CoursesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedView, setSelectedView] = useState("categories"); // "categories" ou "thematics"
   const { user } = useAuth();
   
   // Dans une version future, on pourrait charger les cours depuis Supabase
@@ -32,23 +30,6 @@ const CoursesPage = () => {
   
   // Extraire toutes les catégories uniques
   const categories = ["all", ...Array.from(new Set(allCourses.map(course => course.category)))];
-  
-  // Extraire toutes les thématiques uniques
-  const thematics = useMemo(() => {
-    const thematicMap = new Map();
-    
-    allCourses.forEach(course => {
-      if (course.thematic) {
-        const { id, name } = course.thematic;
-        if (!thematicMap.has(id)) {
-          thematicMap.set(id, { id, name, courses: [] });
-        }
-        thematicMap.get(id).courses.push(course);
-      }
-    });
-    
-    return Array.from(thematicMap.values());
-  }, [allCourses]);
   
   // Filtrer les cours en fonction de la recherche et de la catégorie
   const filteredCourses = allCourses.filter(course => {
@@ -91,72 +72,32 @@ const CoursesPage = () => {
                 />
               </div>
               
-              <div className="flex gap-2 w-full md:w-auto justify-end">
-                <Button
-                  variant={selectedView === "categories" ? "default" : "outline"}
-                  onClick={() => setSelectedView("categories")}
-                >
-                  Par catégorie
-                </Button>
-                <Button
-                  variant={selectedView === "thematics" ? "default" : "outline"}
-                  onClick={() => setSelectedView("thematics")}
-                >
-                  Par âge
-                </Button>
-              </div>
+              <Tabs 
+                value={selectedCategory} 
+                onValueChange={setSelectedCategory}
+                className="w-full md:w-auto"
+              >
+                <TabsList className="w-full overflow-x-auto">
+                  {categories.map(category => (
+                    <TabsTrigger key={category} value={category} className="capitalize">
+                      {category === "all" ? "Tous" : category}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
             </div>
             
-            {selectedView === "categories" && (
-              <>
-                <Tabs 
-                  value={selectedCategory} 
-                  onValueChange={setSelectedCategory}
-                  className="w-full mb-8"
-                >
-                  <TabsList className="w-full overflow-x-auto">
-                    {categories.map(category => (
-                      <TabsTrigger key={category} value={category} className="capitalize">
-                        {category === "all" ? "Tous" : category}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </Tabs>
-                
-                {filteredCourses.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredCourses.map(course => (
-                      <CourseCard key={course.id} course={course} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-16">
-                    <BookText className="mx-auto h-16 w-16 text-gray-300 mb-4" />
-                    <h3 className="text-xl font-medium mb-2">Aucun cours trouvé</h3>
-                    <p className="text-gray-500">Essayez de modifier vos critères de recherche.</p>
-                  </div>
-                )}
-              </>
-            )}
-            
-            {selectedView === "thematics" && (
-              <div className="space-y-12">
-                {thematics.length > 0 ? (
-                  thematics.map(thematic => (
-                    <CourseThematicSection 
-                      key={thematic.id}
-                      thematicId={thematic.id}
-                      thematicName={thematic.name}
-                      courses={thematic.courses}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center py-16">
-                    <BookText className="mx-auto h-16 w-16 text-gray-300 mb-4" />
-                    <h3 className="text-xl font-medium mb-2">Aucune série thématique trouvée</h3>
-                    <p className="text-gray-500">Notre catalogue de séries chronologiques est en cours de développement.</p>
-                  </div>
-                )}
+            {filteredCourses.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredCourses.map(course => (
+                  <CourseCard key={course.id} course={course} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <BookText className="mx-auto h-16 w-16 text-gray-300 mb-4" />
+                <h3 className="text-xl font-medium mb-2">Aucun cours trouvé</h3>
+                <p className="text-gray-500">Essayez de modifier vos critères de recherche.</p>
               </div>
             )}
           </div>
@@ -186,13 +127,6 @@ const CourseCard = ({ course }: CourseCardProps) => {
             {course.level}
           </Badge>
         </div>
-        {course.thematic && (
-          <div className="absolute bottom-2 left-2">
-            <Badge variant="secondary" className="bg-babybaby-cosmic text-white text-xs">
-              {course.thematic.ageRange}
-            </Badge>
-          </div>
-        )}
       </div>
       
       <CardHeader className="pb-2">
