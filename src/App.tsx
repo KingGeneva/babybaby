@@ -23,6 +23,7 @@ const ArticlesPage = lazy(() => import("./pages/ArticlesPage"));
 const ArticleDetailPage = lazy(() => import("./pages/ArticleDetailPage"));
 const FAQPage = lazy(() => import("./pages/FAQPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
+const FreeOffersPage = lazy(() => import("./pages/FreeOffersPage"));
 
 // Pages nécessitant authentification
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
@@ -78,6 +79,7 @@ const App = () => (
                 <Route path="/articles/:id" element={<ArticleDetailPage />} />
                 <Route path="/faq" element={<FAQPage />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route path="/free-offers" element={<FreeOffersPage />} />
                 
                 {/* Routes protégées */}
                 <Route 

@@ -1,7 +1,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronRight, BookOpen } from "lucide-react";
+import { ChevronRight, BookOpen, Gift } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface MobileMenuProps {
@@ -84,6 +84,13 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
                       className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
                     >
                       E-books & Guides
+                    </Link>
+                    <Link
+                      to="/free-offers"
+                      className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                    >
+                      <Gift className="h-4 w-4 mr-2" />
+                      Offres Gratuites
                     </Link>
                     <Link
                       to="/community"

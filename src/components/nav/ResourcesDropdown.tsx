@@ -1,7 +1,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Gift } from "lucide-react";
 
 interface ResourcesDropdownProps {
   isOpen: boolean;
@@ -40,6 +40,13 @@ const ResourcesDropdown = ({ isOpen, onToggle }: ResourcesDropdownProps) => {
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
             >
               E-books & Guides
+            </Link>
+            <Link
+              to="/free-offers"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+            >
+              <Gift className="h-4 w-4 mr-2" />
+              Offres Gratuites
             </Link>
             <Link
               to="/community"
