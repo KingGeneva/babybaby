@@ -16,7 +16,8 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title }) => {
       <img 
         src={image} 
         alt={title}
-        className="w-full h-auto rounded-lg shadow-md"
+        className="w-full h-auto rounded-lg shadow-md object-cover max-h-[500px]"
+        loading="eager"
       />
     </div>
   );
