@@ -11,7 +11,7 @@ const ArticleContent: React.FC<ArticleContentProps> = ({ content, excerpt }) => 
   return (
     <div className="prose prose-lg max-w-none">
       {content ? (
-        <Markdown className="prose-headings:text-babybaby-cosmic prose-strong:font-bold">
+        <Markdown>
           {content}
         </Markdown>
       ) : (
