@@ -1,4 +1,3 @@
-
 import { Helmet } from 'react-helmet-async';
 
 interface SEOProps {
@@ -34,9 +33,6 @@ const SEOHead = ({
   
   return (
     <Helmet htmlAttributes={{ lang }}>
-      {/* Google AdSense Script */}
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5223592381026830" crossOrigin="anonymous"></script>
-      
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords.join(', ')} />
