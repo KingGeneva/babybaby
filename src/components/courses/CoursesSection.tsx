@@ -1,23 +1,67 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, GraduationCap } from 'lucide-react';
+import { BookOpen, GraduationCap, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { courses } from '@/data/courses';
+import ArticleStructuredData from '@/components/articles/ArticleStructuredData';
+import { useToast } from '@/components/ui/use-toast';
 
 const CoursesSection = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   
   // Afficher seulement les 3 premiers cours
   const featuredCourses = courses.slice(0, 3);
   
+  // Rich structured data for SEO
+  const courseStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": featuredCourses.map((course, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Course",
+        "name": course.title,
+        "description": course.description,
+        "provider": {
+          "@type": "Organization",
+          "name": "BabyBaby",
+          "sameAs": "https://babybaby.app"
+        },
+        "url": `https://babybaby.app/courses/${course.id}`,
+        "image": course.image
+      }
+    }))
+  };
+
+  const handleCourseAccess = () => {
+    if (!user) {
+      toast({
+        title: "Connexion requise",
+        description: "Connectez-vous pour accéder à tous nos cours.",
+        variant: "default",
+      });
+    }
+  };
+  
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
+        <ArticleStructuredData
+          title="Cours pour parents - BabyBaby"
+          description="Développez vos connaissances parentales avec nos cours spécialement conçus"
+          image="https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
+          datePublished="2025-05-01"
+          url="https://babybaby.app/courses"
+          category="Formation"
+        />
+
         <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 20 }}
@@ -50,6 +94,7 @@ const CoursesSection = () => {
                     src={course.image} 
                     alt={course.title} 
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
                   />
                   <div className="absolute top-2 right-2">
                     <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-xs">
@@ -81,7 +126,7 @@ const CoursesSection = () => {
                       </Button>
                     </Link>
                   ) : (
-                    <Link to="/auth" className="block w-full">
+                    <Link to="/auth" className="block w-full" onClick={handleCourseAccess}>
                       <Button variant="outline" className="w-full">
                         Connectez-vous pour accéder
                       </Button>
@@ -101,6 +146,9 @@ const CoursesSection = () => {
             </Button>
           </Link>
         </div>
+
+        {/* Structured Data for SEO */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(courseStructuredData) }} />
       </div>
     </section>
   );

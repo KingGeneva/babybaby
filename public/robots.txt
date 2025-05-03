@@ -10,6 +10,7 @@ Allow: /ebooks/
 Allow: /tools/
 Allow: /faq/
 Allow: /about/
+Allow: /courses/
 
 # Disallow access to admin areas
 Disallow: /admin/
@@ -24,12 +25,14 @@ Allow: /lovable-uploads/
 User-agent: Twitterbot
 Allow: /
 Allow: /articles/
+Allow: /courses/
 Allow: /images/
 Allow: /lovable-uploads/
 
 User-agent: facebookexternalhit
 Allow: /
 Allow: /articles/
+Allow: /courses/
 Allow: /images/
 Allow: /lovable-uploads/
 

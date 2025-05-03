@@ -2,7 +2,7 @@
 import React, { Suspense, lazy, ComponentType } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-// Standard lazy loading
+// Standard lazy loading with priority
 const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
 const TestimonialsCarousel = lazy(() => import('@/components/testimonials/TestimonialsCarousel'));
 const ArticleSection = lazy(() => import('@/components/articles/ArticleSection'));
@@ -11,8 +11,7 @@ const Footer = lazy(() => import('@/components/Footer'));
 // Type for delayed lazy loading
 type LazyComponentType = Promise<{ default: ComponentType<any> }>;
 
-// Lazy loading with delay for lower priority sections
-// Using the correct pattern for lazy loading with delays
+// Lazy loading with delay for lower priority sections - Tier 2
 const EbooksSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -35,6 +34,7 @@ const PartnersCarousel = lazy((): LazyComponentType => {
   });
 });
 
+// Tier 3 priority - load after main content
 const ProductsSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -57,7 +57,7 @@ const ToolsSection = lazy((): LazyComponentType => {
   });
 });
 
-// Réintégration du module de cours
+// Courses prioritized slightly higher for SEO value
 const CoursesSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -69,7 +69,7 @@ const CoursesSection = lazy((): LazyComponentType => {
   });
 });
 
-// Sections les moins critiques chargées en dernier
+// Lowest priority sections loaded last
 const ContactSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -92,7 +92,7 @@ const NewsletterForm = lazy((): LazyComponentType => {
   });
 });
 
-// Fallback loaders optimisés
+// Optimized fallback loaders for better UX
 const SectionLoader = () => (
   <div className="py-6 flex justify-center items-center">
     <div className="animate-pulse w-full max-w-2xl h-16 bg-gray-100 rounded-lg"></div>
