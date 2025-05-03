@@ -4,7 +4,7 @@ import { Article } from '@/types/article';
 export const sommeilArticles: Article[] = [
   {
     id: 4,
-    title: "Comprendre et améliorer le sommeil de votre bébé",
+    title: "Astuces pour aider bébé à mieux dormir",
     excerpt: "Solutions pratiques pour favoriser un meilleur sommeil chez les nourrissons.",
     summary: "Des conseils fondés sur la science pour aider votre bébé à mieux dormir.",
     content: "Le sommeil est essentiel au développement de votre bébé, mais peut représenter un défi pour de nombreux parents. Établir une routine régulière avec des rituels apaisants comme un bain tiède, une histoire ou une berceuse peut aider à signaler à votre bébé que c'est l'heure de dormir.",
