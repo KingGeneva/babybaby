@@ -2,71 +2,76 @@
 import React, { Suspense, lazy } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-// Lazy loading avec priorité
+// Standard lazy loading
 const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
-// Sections secondaires chargées de manière paresseuse
 const TestimonialsCarousel = lazy(() => import('@/components/testimonials/TestimonialsCarousel'));
 const ArticleSection = lazy(() => import('@/components/articles/ArticleSection'));
 const Footer = lazy(() => import('@/components/Footer'));
 
-// Sections tertiaires avec chargement différé
-// Correction des erreurs de typage TS2345
+// Lazy loading with delay for lower priority sections
+// Using the correct pattern for lazy loading with delays
 const EbooksSection = lazy(() => {
   return new Promise(resolve => {
-    // Charger le module puis attendre avant de résoudre
-    import('@/components/ebooks/EbooksSection').then(module => {
-      setTimeout(() => resolve({ default: module.default }), 1000);
-    });
+    setTimeout(() => {
+      import('@/components/ebooks/EbooksSection')
+        .then(module => resolve({ default: module.default }));
+    }, 1000);
   });
 });
 
 const PartnersCarousel = lazy(() => {
   return new Promise(resolve => {
-    import('@/components/partners/PartnersCarousel').then(module => {
-      setTimeout(() => resolve({ default: module.default }), 1500);
-    });
+    setTimeout(() => {
+      import('@/components/partners/PartnersCarousel')
+        .then(module => resolve({ default: module.default }));
+    }, 1500);
   });
 });
 
 const ProductsSection = lazy(() => {
   return new Promise(resolve => {
-    import('@/components/products/ProductsSection').then(module => {
-      setTimeout(() => resolve({ default: module.default }), 2000);
-    });
+    setTimeout(() => {
+      import('@/components/products/ProductsSection')
+        .then(module => resolve({ default: module.default }));
+    }, 2000);
   });
 });
 
 const ToolsSection = lazy(() => {
   return new Promise(resolve => {
-    import('@/components/tools/ToolsSection').then(module => {
-      setTimeout(() => resolve({ default: module.default }), 2500);
-    });
+    setTimeout(() => {
+      import('@/components/tools/ToolsSection')
+        .then(module => resolve({ default: module.default }));
+    }, 2500);
   });
 });
 
 // Réintégration du module de cours
 const CoursesSection = lazy(() => {
   return new Promise(resolve => {
-    import('@/components/courses/CoursesSection').then(module => {
-      setTimeout(() => resolve({ default: module.default }), 1800);
-    });
+    setTimeout(() => {
+      import('@/components/courses/CoursesSection')
+        .then(module => resolve({ default: module.default }));
+    }, 1800);
   });
 });
 
 // Sections les moins critiques chargées en dernier
 const ContactSection = lazy(() => {
   return new Promise(resolve => {
-    import('@/components/ContactSection').then(module => {
-      setTimeout(() => resolve({ default: module.default }), 3000);
-    });
+    setTimeout(() => {
+      import('@/components/ContactSection')
+        .then(module => resolve({ default: module.default }));
+    }, 3000);
   });
 });
 
 const NewsletterForm = lazy(() => {
   return new Promise(resolve => {
-    import('@/components/NewsletterForm').then(module => {
-      setTimeout(() => resolve({ default: module.default }), 3500);
-    });
+    setTimeout(() => {
+      import('@/components/NewsletterForm')
+        .then(module => resolve({ default: module.default }));
+    }, 3500);
   });
 });
 
