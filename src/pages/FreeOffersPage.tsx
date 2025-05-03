@@ -72,7 +72,14 @@ const FreeOffersPage = () => {
       <SEOHead
         title="Offres Gratuites Pour Parents | BabyBaby"
         description="Découvrez une sélection d'offres gratuites, coupons et trousses pour bébé disponibles au Canada et au Québec. Profitez d'échantillons de couches, préparations pour nourrissons et plus encore."
-        keywords="offres gratuites bébé, coupons bébé, échantillons gratuits bébé, trousse bébé gratuite, cadeaux bébé canada, offres parents québec"
+        keywords={[
+          "offres gratuites bébé", 
+          "coupons bébé", 
+          "échantillons gratuits bébé", 
+          "trousse bébé gratuite", 
+          "cadeaux bébé canada", 
+          "offres parents québec"
+        ]}
       />
       <NavBar />
       <div className="flex-grow pt-24 pb-16">
