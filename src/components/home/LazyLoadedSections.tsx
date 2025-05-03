@@ -1,5 +1,5 @@
 
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, ComponentType } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 // Standard lazy loading
@@ -8,9 +8,12 @@ const TestimonialsCarousel = lazy(() => import('@/components/testimonials/Testim
 const ArticleSection = lazy(() => import('@/components/articles/ArticleSection'));
 const Footer = lazy(() => import('@/components/Footer'));
 
+// Type for delayed lazy loading
+type LazyComponentType = Promise<{ default: ComponentType<any> }>;
+
 // Lazy loading with delay for lower priority sections
 // Using the correct pattern for lazy loading with delays
-const EbooksSection = lazy(() => {
+const EbooksSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/ebooks/EbooksSection')
@@ -21,7 +24,7 @@ const EbooksSection = lazy(() => {
   });
 });
 
-const PartnersCarousel = lazy(() => {
+const PartnersCarousel = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/partners/PartnersCarousel')
@@ -32,7 +35,7 @@ const PartnersCarousel = lazy(() => {
   });
 });
 
-const ProductsSection = lazy(() => {
+const ProductsSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/products/ProductsSection')
@@ -43,7 +46,7 @@ const ProductsSection = lazy(() => {
   });
 });
 
-const ToolsSection = lazy(() => {
+const ToolsSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/tools/ToolsSection')
@@ -55,7 +58,7 @@ const ToolsSection = lazy(() => {
 });
 
 // Réintégration du module de cours
-const CoursesSection = lazy(() => {
+const CoursesSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/courses/CoursesSection')
@@ -67,7 +70,7 @@ const CoursesSection = lazy(() => {
 });
 
 // Sections les moins critiques chargées en dernier
-const ContactSection = lazy(() => {
+const ContactSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/ContactSection')
@@ -78,7 +81,7 @@ const ContactSection = lazy(() => {
   });
 });
 
-const NewsletterForm = lazy(() => {
+const NewsletterForm = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/NewsletterForm')
