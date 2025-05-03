@@ -14,7 +14,9 @@ const EbooksSection = lazy(() => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/ebooks/EbooksSection')
-        .then(module => resolve({ default: module.default }));
+        .then(module => {
+          resolve({ default: module.default });
+        });
     }, 1000);
   });
 });
@@ -23,7 +25,9 @@ const PartnersCarousel = lazy(() => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/partners/PartnersCarousel')
-        .then(module => resolve({ default: module.default }));
+        .then(module => {
+          resolve({ default: module.default });
+        });
     }, 1500);
   });
 });
@@ -32,7 +36,9 @@ const ProductsSection = lazy(() => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/products/ProductsSection')
-        .then(module => resolve({ default: module.default }));
+        .then(module => {
+          resolve({ default: module.default });
+        });
     }, 2000);
   });
 });
@@ -41,7 +47,9 @@ const ToolsSection = lazy(() => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/tools/ToolsSection')
-        .then(module => resolve({ default: module.default }));
+        .then(module => {
+          resolve({ default: module.default });
+        });
     }, 2500);
   });
 });
@@ -51,7 +59,9 @@ const CoursesSection = lazy(() => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/courses/CoursesSection')
-        .then(module => resolve({ default: module.default }));
+        .then(module => {
+          resolve({ default: module.default });
+        });
     }, 1800);
   });
 });
@@ -61,7 +71,9 @@ const ContactSection = lazy(() => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/ContactSection')
-        .then(module => resolve({ default: module.default }));
+        .then(module => {
+          resolve({ default: module.default });
+        });
     }, 3000);
   });
 });
@@ -70,7 +82,9 @@ const NewsletterForm = lazy(() => {
   return new Promise(resolve => {
     setTimeout(() => {
       import('@/components/NewsletterForm')
-        .then(module => resolve({ default: module.default }));
+        .then(module => {
+          resolve({ default: module.default });
+        });
     }, 3500);
   });
 });
