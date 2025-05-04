@@ -75,6 +75,12 @@ const partners: Partner[] = [
     name: "PaternityLab",
     logo: "/lovable-uploads/b8cc3c2a-bb9a-4560-baf1-44055b2ca3a1.png",
     url: "https://www.kqzyfj.com/click-101432391-15736233"
+  },
+  {
+    id: 12,
+    name: "MFIMedical",
+    logo: "/lovable-uploads/3bc51bf4-12ed-45e7-959f-82b12db0f56e.png",
+    url: "https://www.tkqlhce.com/click-101432391-15891524"
   }
 ];
 
