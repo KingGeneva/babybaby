@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,6 @@ import { Check, Gift, Send } from 'lucide-react';
 import { toast } from '@/components/ui/sonner';
 import { supabase } from '@/integrations/supabase/client';
 import SubscriptionBenefits from './subscription/SubscriptionBenefits';
-import LimitedTimeOffer from './subscription/LimitedTimeOffer';
 import SocialProof from './subscription/SocialProof';
 
 const NewsletterForm: React.FC = () => {
@@ -78,7 +76,6 @@ const NewsletterForm: React.FC = () => {
       transition={{ duration: 0.5 }}
       lang="fr"
     >
-      <LimitedTimeOffer className="mb-6" />
       
       <h3 className="text-2xl font-bold mb-4 text-center">Rejoignez notre communauté de parents</h3>
       <p className="text-gray-700 mb-6 text-center">
