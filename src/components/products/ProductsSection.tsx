@@ -1,4 +1,3 @@
-
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -89,7 +88,7 @@ const ProductsSection: React.FC = () => {
           transition={{ duration: 0.4 }}
           viewport={{ once: true, margin: "-10%" }}
         >
-          <h2 className="text-2xl md:text-3xl font-bold mb-2 text-babybaby-cosmic">Produits Recommandés</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-2 text-babybaby-cosmic">Produits Partenaires</h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
             Des produits sélectionnés avec soin par notre équipe pour faciliter votre quotidien.
           </p>
