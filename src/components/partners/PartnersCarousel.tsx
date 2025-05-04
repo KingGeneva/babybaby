@@ -10,54 +10,6 @@ interface Partner {
 
 const partners: Partner[] = [
   {
-    id: 1,
-    name: "Pampers",
-    logo: "/placeholder.svg",
-    url: "https://example.com/pampers"
-  },
-  {
-    id: 2,
-    name: "Blédina",
-    logo: "/placeholder.svg",
-    url: "https://example.com/bledina"
-  },
-  {
-    id: 3,
-    name: "Philips Avent",
-    logo: "/placeholder.svg",
-    url: "https://example.com/philips"
-  },
-  {
-    id: 4,
-    name: "Nuk",
-    logo: "/placeholder.svg",
-    url: "https://example.com/nuk"
-  },
-  {
-    id: 5,
-    name: "Mustela",
-    logo: "/placeholder.svg",
-    url: "https://example.com/mustela"
-  },
-  {
-    id: 6,
-    name: "Chicco",
-    logo: "/placeholder.svg",
-    url: "https://example.com/chicco"
-  },
-  {
-    id: 7,
-    name: "MAM Baby",
-    logo: "/placeholder.svg",
-    url: "https://example.com/mam"
-  },
-  {
-    id: 8,
-    name: "Natalys",
-    logo: "/placeholder.svg", 
-    url: "https://example.com/natalys"
-  },
-  {
     id: 9,
     name: "O030",
     logo: "/lovable-uploads/7d0b9eea-9e79-427d-8afa-f18467a2a11d.png",
