@@ -69,6 +69,12 @@ const partners: Partner[] = [
     name: "BabyBasket",
     logo: "/lovable-uploads/d9c8fef0-bfcf-4ae5-bf0e-047d471cc207.png",
     url: "https://babybasket.com"
+  },
+  {
+    id: 11,
+    name: "PaternityLab",
+    logo: "/lovable-uploads/b8cc3c2a-bb9a-4560-baf1-44055b2ca3a1.png",
+    url: "https://www.kqzyfj.com/click-101432391-15736233"
   }
 ];
 
