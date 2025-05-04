@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -207,7 +208,7 @@ const App = () => (
             </Suspense>
             
             <ChatbotButton />
-            <FloatingIncentive />
+            <FloatingIncentive scrollThreshold={400} />
           </BrowserRouter>
         </TooltipProvider>
       </HelmetProvider>
