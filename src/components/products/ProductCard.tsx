@@ -148,7 +148,7 @@ const ProductCard: React.FC<ProductCardProps> = memo(({ product, index }) => {
         </CardContent>
 
         <CardFooter className="flex justify-between items-center pt-0 pb-3 px-4">
-          <div className="text-lg font-bold text-babybaby-cosmic">{product.price.toFixed(2)} $CA</div>
+          <div className="text-lg font-bold text-babybaby-cosmic">${product.id === 4 ? "338.99" : product.price.toFixed(2)}</div>
           <Button 
             size="sm" 
             className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80"
