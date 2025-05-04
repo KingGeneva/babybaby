@@ -1,4 +1,3 @@
-
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -9,6 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { HelmetProvider } from "react-helmet-async";
 import CacheManager from './components/common/CacheManager';
 import ChatbotButton from "./components/chatbot/ChatbotButton";
+import FloatingIncentive from "./components/subscription/FloatingIncentive";
 
 // Version simplifiée
 const APP_VERSION = '1.1';
@@ -207,6 +207,7 @@ const App = () => (
             </Suspense>
             
             <ChatbotButton />
+            <FloatingIncentive />
           </BrowserRouter>
         </TooltipProvider>
       </HelmetProvider>

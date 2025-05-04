@@ -2,8 +2,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Logo from './Logo';
-import { Instagram, Facebook, Twitter, Youtube, ArrowUp } from 'lucide-react';
+import { Instagram, Facebook, Twitter, Youtube, ArrowUp, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const Footer: React.FC = () => {
   const scrollToTop = () => {
@@ -66,6 +67,8 @@ const Footer: React.FC = () => {
                     className="w-8 h-8 rounded-full bg-babybaby-cosmic flex items-center justify-center text-white"
                     whileHover={{ y: -3 }}
                     transition={{ duration: 0.2 }}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {social.icon}
                   </motion.a>
@@ -90,6 +93,26 @@ const Footer: React.FC = () => {
                 </ul>
               </div>
             ))}
+          </div>
+          
+          {/* Subscription incentive banner */}
+          <div className="bg-gradient-to-r from-babybaby-cosmic/10 to-transparent p-4 rounded-lg mt-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-babybaby-cosmic text-white p-2 rounded-full">
+                  <Bell size={16} />
+                </div>
+                <div>
+                  <h4 className="font-medium text-sm">Devenez membre premium</h4>
+                  <p className="text-xs text-gray-600">Accédez à tous nos outils et contenus exclusifs</p>
+                </div>
+              </div>
+              <Link to="/free-offers">
+                <Button size="sm" className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 w-full md:w-auto">
+                  Découvrir les offres
+                </Button>
+              </Link>
+            </div>
           </div>
           
           <motion.button
