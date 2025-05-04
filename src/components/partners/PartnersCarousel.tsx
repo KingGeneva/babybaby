@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -30,7 +31,7 @@ const partners: Partner[] = [
   {
     id: 12,
     name: "MFIMedical",
-    logo: "/lovable-uploads/3bc51bf4-12ed-45e7-959f-82b12db0f56e.png",
+    logo: "/lovable-uploads/c872500f-5877-4395-bb3c-089e296bf56b.png",
     url: "https://www.tkqlhce.com/click-101432391-15891524"
   },
   {
