@@ -57,7 +57,7 @@ const SocialProof: React.FC<SocialProofProps> = ({
           ))}
         </div>
         <p className="text-xs text-gray-600">
-          Plus de 15 000 parents abonnés
+          Plus de 2000 parents abonnés
         </p>
       </div>
     );
