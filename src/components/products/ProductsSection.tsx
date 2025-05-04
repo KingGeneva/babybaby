@@ -1,3 +1,4 @@
+
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -42,6 +43,15 @@ const products = [
     image: "/lovable-uploads/af44cf46-3e2e-404e-9c33-6bc75e1a24a1.png",
     animationType: "bottle" as const,
     link: "https://a.co/d/d8LeJeN"
+  },
+  {
+    id: 4,
+    title: "Panier-cadeau pour garçon, par Baby Basket",
+    description: "Offrez toute la joie que vous ressentez avec ce fabuleux panier familial, rempli de tout ce qu'il faut pour le nouveau-né et ses fiers parents !",
+    price: 189.99,
+    image: "/lovable-uploads/705d0c2d-1501-4890-be56-dc7905704c1f.png",
+    animationType: "toy" as const,
+    link: "https://www.anrdoezrs.net/click-101432391-13366800?url=https%3A%2F%2Fwww.babybasket.com%2FFabulous-Family-Boy-Gift-Basket&cjsku=335"
   }
 ];
 
