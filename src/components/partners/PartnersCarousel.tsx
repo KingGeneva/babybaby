@@ -63,6 +63,12 @@ const partners: Partner[] = [
     name: "O030",
     logo: "/lovable-uploads/7d0b9eea-9e79-427d-8afa-f18467a2a11d.png",
     url: "https://o030.com"
+  },
+  {
+    id: 10,
+    name: "BabyBasket",
+    logo: "/lovable-uploads/d9c8fef0-bfcf-4ae5-bf0e-047d471cc207.png",
+    url: "https://babybasket.com"
   }
 ];
 
