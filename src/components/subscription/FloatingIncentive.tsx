@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { X, Gift, ArrowRight } from 'lucide-react';
+import { X, Mail, ArrowRight } from 'lucide-react';
 import SocialProof from './SocialProof';
 
 interface FloatingIncentiveProps {
@@ -64,15 +64,15 @@ const FloatingIncentive: React.FC<FloatingIncentiveProps> = ({
           
           <div className="flex items-center gap-2 mb-3">
             <div className="bg-babybaby-cosmic/10 p-1.5 rounded-full">
-              <Gift className="h-4 w-4 text-babybaby-cosmic" />
+              <Mail className="h-4 w-4 text-babybaby-cosmic" />
             </div>
             <h4 className="font-bold text-sm text-babybaby-cosmic">
-              Offre spéciale nouveaux membres
+              Rejoignez notre newsletter
             </h4>
           </div>
           
           <p className="text-xs text-gray-600 mb-3">
-            Recevez gratuitement notre guide complet <span className="font-semibold">"Les 30 premiers jours avec bébé"</span> et débloquez des outils exclusifs.
+            Recevez des conseils personnalisés et suivez toutes les étapes du développement de votre enfant.
           </p>
           
           <SocialProof compact className="mb-3" />
