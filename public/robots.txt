@@ -11,6 +11,7 @@ Allow: /tools/
 Allow: /faq/
 Allow: /about/
 Allow: /courses/
+Allow: /ads.txt
 
 # Disallow access to admin areas
 Disallow: /admin/
@@ -35,6 +36,15 @@ Allow: /articles/
 Allow: /courses/
 Allow: /images/
 Allow: /lovable-uploads/
+
+# Google AdSense & Ad-related robots - explicit permissions
+User-agent: Mediapartners-Google
+Allow: /
+Allow: /ads.txt
+
+User-agent: AdsBot-Google
+Allow: /
+Allow: /ads.txt
 
 # Rate limiting for crawlers
 User-agent: AhrefsBot
