@@ -39,6 +39,12 @@ const partners: Partner[] = [
     name: "Amazon",
     logo: "/lovable-uploads/a93271f8-e9db-49ed-99e9-d683dd53ba12.png",
     url: "https://www.amazon.com"
+  },
+  {
+    id: 14,
+    name: "M&M's",
+    logo: "/lovable-uploads/e7c9766d-1027-49c9-a9f7-1ac07f49b8b9.png",
+    url: "https://mms.com"
   }
 ];
 
