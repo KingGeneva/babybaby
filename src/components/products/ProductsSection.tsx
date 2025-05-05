@@ -1,3 +1,4 @@
+
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -18,12 +19,12 @@ const ProductCardPlaceholder = () => (
 const products = [
   {
     id: 1,
-    title: "Siège auto pivotant 360° Evenflo Revolve360",
-    description: "Le siège auto Evenflo Revolve360 offre une rotation complète à 360° pour une installation et un positionnement faciles de votre bébé, avec une sécurité optimale.",
-    price: 399.99,
-    image: "/lovable-uploads/24c181aa-ed3a-4de1-b24b-776e707993d9.png",
-    animationType: "crib" as const,
-    link: "https://a.co/d/0xN2yKz"
+    title: "Ensemble grenouillère et chaussettes pour bébé M&M'S®",
+    description: "Adorable ensemble comprenant une grenouillère jaune et des chaussettes assorties, parfait pour les plus petits fans de M&M'S®.",
+    price: 31.99,
+    image: "/lovable-uploads/af7cb1bb-a9c3-4487-9f11-9c050013463d.png",
+    animationType: "toy" as const,
+    link: "https://www.tkqlhce.com/click-101432391-15872736?url=https%3A%2F%2Fwww.mms.com%2Fen-us%2Fmms-apparel%2Fheritage-mms-onesie%2Fct2291-p.html%3Fcolor%3Dyellow%26size%3D12MO&cjsku=3000881311002"
   },
   {
     id: 2,
