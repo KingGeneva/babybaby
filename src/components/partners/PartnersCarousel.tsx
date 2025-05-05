@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -44,6 +45,12 @@ const partners: Partner[] = [
     name: "M&M's",
     logo: "/lovable-uploads/37a80789-9d1e-40dc-a8d0-d1e9e4ba2230.png",
     url: "https://mms.com"
+  },
+  {
+    id: 15,
+    name: "Deux par deux",
+    logo: "/lovable-uploads/55b1f730-647d-463b-8db9-2e33309e02c1.png",
+    url: "https://www.anrdoezrs.net/click-101432391-15735100"
   }
 ];
 
