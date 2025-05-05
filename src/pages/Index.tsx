@@ -8,6 +8,7 @@ import ArticleSection from '@/components/articles/ArticleSection';
 import TestimonialsCarousel from '@/components/testimonials/TestimonialsCarousel';
 import PartnersCarousel from '@/components/partners/PartnersCarousel';
 import ProductsSection from '@/components/products/ProductsSection';
+import PremiumProductsSection from '@/components/premium/PremiumProductsSection';
 import EbooksSection from '@/components/ebooks/EbooksSection';
 import ToolsSection from '@/components/tools/ToolsSection';
 import ContactSection from '@/components/ContactSection';
@@ -203,6 +204,9 @@ const Index = () => {
 
         {/* Témoignages Section */}
         <TestimonialsCarousel />
+        
+        {/* Nouvelle section Premium Products */}
+        <PremiumProductsSection />
         
         {/* Call-to-Action Section */}
         <section className="py-16 bg-gradient-to-r from-babybaby-cosmic/10 to-babybaby-cosmic/5">
