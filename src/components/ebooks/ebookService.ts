@@ -64,6 +64,7 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
 // Fonction pour enregistrer le téléchargement (optionnelle)
 const recordDownload = async (ebook: Ebook) => {
   try {
+    console.log("Tentative d'enregistrement du téléchargement pour:", ebook.title);
     const { error } = await supabase
       .from('ebook_downloads')
       .insert({

@@ -44,7 +44,7 @@ const ArticlePromotion: React.FC = () => {
         const { data, error } = await supabase
           .storage
           .from('ebooks')
-          .download('coliques-du-bebe.pdf'); // Correction du nom du fichier
+          .download('coliques-du-bebe.pdf');
           
         if (error) {
           throw error;
@@ -115,8 +115,14 @@ const ArticlePromotion: React.FC = () => {
           <p className="mb-4">
             Découvrez des techniques douces et efficaces pour améliorer le sommeil de votre bébé et soulager ses coliques en téléchargeant gratuitement nos guides complets.
           </p>
-          <Button className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90">
-            Télécharger notre guide gratuit
+          <Button 
+            className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
+            onClick={() => toast({
+              title: "Nos guides",
+              description: "Consultez notre section E-books pour découvrir tous nos guides gratuits.",
+            })}
+          >
+            Découvrir nos guides gratuits
           </Button>
         </>
       )}

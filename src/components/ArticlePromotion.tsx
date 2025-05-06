@@ -44,7 +44,7 @@ const ArticlePromotion: React.FC = () => {
         const { data, error } = await supabase
           .storage
           .from('ebooks')
-          .download('coliques-du-bebe.pdf'); // Correction du nom du fichier
+          .download('coliques-du-bebe.pdf');
           
         if (error) {
           throw error;
