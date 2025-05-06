@@ -30,9 +30,12 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
   // Vérifier si c'est l'article sur les coliques
   const isColicsArticle = article.id === 1;
+  
+  // Déterminer si l'article est récent (ID 1)
+  const isNewArticle = article.id === 1;
 
   return (
-    <Card className="overflow-hidden h-full flex flex-col hover:shadow-xl transition-all duration-300 border-t-4 border-t-babybaby-cosmic/80">
+    <Card className={`overflow-hidden h-full flex flex-col hover:shadow-xl transition-all duration-300 border-t-4 ${isNewArticle ? 'border-t-amber-400' : 'border-t-babybaby-cosmic/80'}`}>
       <div className="relative h-52 overflow-hidden">
         <motion.img 
           src={article.image} 
@@ -48,6 +51,11 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         {article.featured && (
           <div className="absolute top-0 right-0 bg-amber-500 text-white px-3 py-1 m-3 rounded-full text-xs font-semibold shadow-md">
             À la une
+          </div>
+        )}
+        {isNewArticle && (
+          <div className="absolute top-0 right-0 bg-amber-400 text-white px-3 py-1 m-3 rounded-full text-xs font-semibold shadow-md flex items-center">
+            Nouveau
           </div>
         )}
         {isColicsArticle && (

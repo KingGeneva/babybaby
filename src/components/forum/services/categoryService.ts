@@ -1,7 +1,6 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { ForumCategory } from '../types';
-import { GenericSupabaseResponse } from '../utils/supabaseTypes';
 
 /**
  * Récupère toutes les catégories du forum
@@ -9,16 +8,16 @@ import { GenericSupabaseResponse } from '../utils/supabaseTypes';
 export const getAllCategories = async (): Promise<ForumCategory[]> => {
   try {
     // Récupérer les catégories depuis Supabase
-    const response: GenericSupabaseResponse<ForumCategory[]> = await supabase
+    const { data, error } = await supabase
       .from('forum_categories')
       .select('*')
       .order('order', { ascending: true });
 
-    if (response.error) {
-      throw new Error(`Erreur lors de la récupération des catégories: ${response.error.message}`);
+    if (error) {
+      throw new Error(`Erreur lors de la récupération des catégories: ${error.message}`);
     }
 
-    return response.data || [];
+    return data || [];
   } catch (error) {
     console.error('Erreur dans getAllCategories:', error);
     return [];
@@ -31,17 +30,17 @@ export const getAllCategories = async (): Promise<ForumCategory[]> => {
 export const getCategoryBySlug = async (slug: string): Promise<ForumCategory | null> => {
   try {
     // Récupérer la catégorie depuis Supabase
-    const response: GenericSupabaseResponse<ForumCategory[]> = await supabase
+    const { data, error } = await supabase
       .from('forum_categories')
       .select('*')
       .eq('slug', slug)
       .single();
 
-    if (response.error) {
-      throw new Error(`Erreur lors de la récupération de la catégorie: ${response.error.message}`);
+    if (error) {
+      throw new Error(`Erreur lors de la récupération de la catégorie: ${error.message}`);
     }
 
-    return response.data || null;
+    return data || null;
   } catch (error) {
     console.error('Erreur dans getCategoryBySlug:', error);
     return null;
@@ -53,19 +52,22 @@ export const getCategoryBySlug = async (slug: string): Promise<ForumCategory | n
  */
 export const getCategoryById = async (id: number): Promise<ForumCategory | null> => {
   try {
-    const response: GenericSupabaseResponse<ForumCategory[]> = await supabase
+    const { data, error } = await supabase
       .from('forum_categories')
       .select('*')
       .eq('id', id)
       .single();
 
-    if (response.error) {
-      throw new Error(`Erreur lors de la récupération de la catégorie: ${response.error.message}`);
+    if (error) {
+      throw new Error(`Erreur lors de la récupération de la catégorie: ${error.message}`);
     }
 
-    return response.data || null;
+    return data || null;
   } catch (error) {
     console.error('Erreur dans getCategoryById:', error);
     return null;
   }
 };
+
+// Création d'un alias pour getAllCategories pour compatibilité avec l'existant
+export const getCategories = getAllCategories;

@@ -101,5 +101,8 @@ export const getArticlesByCategory = async (category: string): Promise<Article[]
     console.error('Error loading articles from storage:', error);
   }
   
+  // Trier par ID décroissant pour avoir les plus récents en premier
+  result = result.sort((a, b) => b.id - a.id);
+  
   return result;
 };

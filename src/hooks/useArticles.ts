@@ -74,6 +74,9 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
             article.excerpt.toLowerCase().includes(lowerSearchTerm)
           );
         }
+
+        // Trier les articles par ID décroissant (plus récents en premier)
+        result = result.sort((a, b) => b.id - a.id);
         
         setArticles(result);
       } catch (error) {

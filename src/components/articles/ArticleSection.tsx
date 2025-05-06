@@ -35,7 +35,7 @@ const itemVariants = {
 const ArticleSection: React.FC = () => {
   const isMobile = useIsMobile();
   
-  // Only show the first 3 articles on the homepage
+  // Trier les articles par ID décroissant pour mettre le plus récent en premier
   const featuredArticles = articles
     .sort((a, b) => b.id - a.id) // Sort by newest first (assuming higher ID = newer)
     .slice(0, 3);

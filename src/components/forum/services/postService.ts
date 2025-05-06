@@ -1,7 +1,6 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { ForumPost } from '../types';
-import { GenericSupabaseResponse } from '../utils/supabaseTypes';
 
 /**
  * Récupère les posts d'un sujet
@@ -10,7 +9,7 @@ export const getPostsByTopicId = async (topicId: number, page = 1, limit = 10): 
   try {
     const offset = (page - 1) * limit;
     
-    const response: GenericSupabaseResponse<ForumPost[]> = await supabase
+    const { data, error } = await supabase
       .from('forum_posts')
       .select(`
         *,
@@ -20,11 +19,11 @@ export const getPostsByTopicId = async (topicId: number, page = 1, limit = 10): 
       .order('created_at', { ascending: true })
       .range(offset, offset + limit - 1);
 
-    if (response.error) {
-      throw new Error(`Erreur lors de la récupération des posts: ${response.error.message}`);
+    if (error) {
+      throw new Error(`Erreur lors de la récupération des posts: ${error.message}`);
     }
 
-    return response.data || [];
+    return data || [];
   } catch (error) {
     console.error('Erreur dans getPostsByTopicId:', error);
     return [];
@@ -36,7 +35,7 @@ export const getPostsByTopicId = async (topicId: number, page = 1, limit = 10): 
  */
 export const getPostById = async (postId: number): Promise<ForumPost | null> => {
   try {
-    const response: GenericSupabaseResponse<ForumPost[]> = await supabase
+    const { data, error } = await supabase
       .from('forum_posts')
       .select(`
         *,
@@ -45,11 +44,11 @@ export const getPostById = async (postId: number): Promise<ForumPost | null> => 
       .eq('id', postId)
       .single();
 
-    if (response.error) {
-      throw new Error(`Erreur lors de la récupération du post: ${response.error.message}`);
+    if (error) {
+      throw new Error(`Erreur lors de la récupération du post: ${error.message}`);
     }
 
-    return response.data || null;
+    return data || null;
   } catch (error) {
     console.error('Erreur dans getPostById:', error);
     return null;
@@ -61,7 +60,7 @@ export const getPostById = async (postId: number): Promise<ForumPost | null> => 
  */
 export const createPost = async (post: Partial<ForumPost>): Promise<ForumPost | null> => {
   try {
-    const response: GenericSupabaseResponse<ForumPost[]> = await supabase
+    const { data, error } = await supabase
       .from('forum_posts')
       .insert([post])
       .select(`
@@ -70,11 +69,11 @@ export const createPost = async (post: Partial<ForumPost>): Promise<ForumPost | 
       `)
       .single();
 
-    if (response.error) {
-      throw new Error(`Erreur lors de la création du post: ${response.error.message}`);
+    if (error) {
+      throw new Error(`Erreur lors de la création du post: ${error.message}`);
     }
 
-    return response.data || null;
+    return data || null;
   } catch (error) {
     console.error('Erreur dans createPost:', error);
     return null;
@@ -86,7 +85,7 @@ export const createPost = async (post: Partial<ForumPost>): Promise<ForumPost | 
  */
 export const updatePost = async (postId: number, updates: Partial<ForumPost>): Promise<ForumPost | null> => {
   try {
-    const response: GenericSupabaseResponse<ForumPost[]> = await supabase
+    const { data, error } = await supabase
       .from('forum_posts')
       .update(updates)
       .eq('id', postId)
@@ -96,11 +95,11 @@ export const updatePost = async (postId: number, updates: Partial<ForumPost>): P
       `)
       .single();
 
-    if (response.error) {
-      throw new Error(`Erreur lors de la mise à jour du post: ${response.error.message}`);
+    if (error) {
+      throw new Error(`Erreur lors de la mise à jour du post: ${error.message}`);
     }
 
-    return response.data || null;
+    return data || null;
   } catch (error) {
     console.error('Erreur dans updatePost:', error);
     return null;
@@ -112,13 +111,13 @@ export const updatePost = async (postId: number, updates: Partial<ForumPost>): P
  */
 export const deletePost = async (postId: number): Promise<boolean> => {
   try {
-    const response = await supabase
+    const { error } = await supabase
       .from('forum_posts')
       .delete()
       .eq('id', postId);
 
-    if (response.error) {
-      throw new Error(`Erreur lors de la suppression du post: ${response.error.message}`);
+    if (error) {
+      throw new Error(`Erreur lors de la suppression du post: ${error.message}`);
     }
 
     return true;
