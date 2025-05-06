@@ -3,27 +3,41 @@ import { supabase } from '@/integrations/supabase/client';
 import { ForumPost } from '../types';
 
 /**
- * Récupère les posts d'un sujet
+ * Récupère les messages d'un sujet
  */
-export const getPostsByTopicId = async (topicId: number, page = 1, limit = 10): Promise<ForumPost[]> => {
+export const getPostsByTopicId = async (topicId: string): Promise<ForumPost[]> => {
   try {
-    const offset = (page - 1) * limit;
-    
-    const { data, error } = await supabase
-      .from('forum_posts')
-      .select(`
-        *,
-        user:user_id (id, username, email, avatar_url, created_at)
-      `)
-      .eq('topic_id', topicId)
-      .order('created_at', { ascending: true })
-      .range(offset, offset + limit - 1);
-
-    if (error) {
-      throw new Error(`Erreur lors de la récupération des posts: ${error.message}`);
-    }
-
-    return data || [];
+    // Simuler des messages pour un sujet
+    return [
+      {
+        id: "p1",
+        topic_id: topicId,
+        content: "C'est un sujet très intéressant, merci de l'avoir partagé !",
+        user_id: "user3",
+        created_at: new Date(Date.now() - 86400000).toISOString(),
+        updated_at: new Date(Date.now() - 86400000).toISOString(),
+        likes_count: 5,
+        user: {
+          id: "user3",
+          username: "ConseillerParental",
+          avatar_url: "/placeholder.svg"
+        }
+      },
+      {
+        id: "p2",
+        topic_id: topicId,
+        content: "Je suis d'accord avec le post précédent. J'ai personnellement trouvé que...",
+        user_id: "user4",
+        created_at: new Date(Date.now() - 43200000).toISOString(),
+        updated_at: new Date(Date.now() - 43200000).toISOString(),
+        likes_count: 2,
+        user: {
+          id: "user4",
+          username: "MamanDeTrois",
+          avatar_url: "/placeholder.svg"
+        }
+      }
+    ];
   } catch (error) {
     console.error('Erreur dans getPostsByTopicId:', error);
     return [];
@@ -31,49 +45,31 @@ export const getPostsByTopicId = async (topicId: number, page = 1, limit = 10): 
 };
 
 /**
- * Récupère un post par son ID
+ * Crée un nouveau message
  */
-export const getPostById = async (postId: number): Promise<ForumPost | null> => {
+export const createPost = async (
+  topicId: string,
+  content: string,
+  userId: string
+): Promise<ForumPost | null> => {
   try {
-    const { data, error } = await supabase
-      .from('forum_posts')
-      .select(`
-        *,
-        user:user_id (id, username, email, avatar_url, created_at)
-      `)
-      .eq('id', postId)
-      .single();
-
-    if (error) {
-      throw new Error(`Erreur lors de la récupération du post: ${error.message}`);
-    }
-
-    return data || null;
-  } catch (error) {
-    console.error('Erreur dans getPostById:', error);
-    return null;
-  }
-};
-
-/**
- * Crée un nouveau post
- */
-export const createPost = async (post: Partial<ForumPost>): Promise<ForumPost | null> => {
-  try {
-    const { data, error } = await supabase
-      .from('forum_posts')
-      .insert([post])
-      .select(`
-        *,
-        user:user_id (id, username, email, avatar_url, created_at)
-      `)
-      .single();
-
-    if (error) {
-      throw new Error(`Erreur lors de la création du post: ${error.message}`);
-    }
-
-    return data || null;
+    // Simuler la création d'un message
+    const newPost: ForumPost = {
+      id: Math.random().toString(36).substring(2, 15),
+      topic_id: topicId,
+      content,
+      user_id: userId,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      likes_count: 0,
+      user: {
+        id: userId,
+        username: "Utilisateur",
+        avatar_url: "/placeholder.svg"
+      }
+    };
+    
+    return newPost;
   } catch (error) {
     console.error('Erreur dans createPost:', error);
     return null;
@@ -81,69 +77,29 @@ export const createPost = async (post: Partial<ForumPost>): Promise<ForumPost | 
 };
 
 /**
- * Met à jour un post
+ * Ajoute un like à un message
  */
-export const updatePost = async (postId: number, updates: Partial<ForumPost>): Promise<ForumPost | null> => {
+export const likePost = async (postId: string, userId: string): Promise<boolean> => {
   try {
-    const { data, error } = await supabase
-      .from('forum_posts')
-      .update(updates)
-      .eq('id', postId)
-      .select(`
-        *,
-        user:user_id (id, username, email, avatar_url, created_at)
-      `)
-      .single();
-
-    if (error) {
-      throw new Error(`Erreur lors de la mise à jour du post: ${error.message}`);
-    }
-
-    return data || null;
-  } catch (error) {
-    console.error('Erreur dans updatePost:', error);
-    return null;
-  }
-};
-
-/**
- * Supprime un post
- */
-export const deletePost = async (postId: number): Promise<boolean> => {
-  try {
-    const { error } = await supabase
-      .from('forum_posts')
-      .delete()
-      .eq('id', postId);
-
-    if (error) {
-      throw new Error(`Erreur lors de la suppression du post: ${error.message}`);
-    }
-
+    // Simuler l'ajout d'un like
+    console.log(`Like added to post ${postId} by user ${userId}`);
     return true;
   } catch (error) {
-    console.error('Erreur dans deletePost:', error);
+    console.error('Erreur dans likePost:', error);
     return false;
   }
 };
 
 /**
- * Récupère le nombre de posts d'un sujet
+ * Retire un like d'un message
  */
-export const getPostCountForTopic = async (topicId: number): Promise<number> => {
+export const unlikePost = async (postId: string, userId: string): Promise<boolean> => {
   try {
-    const { count, error } = await supabase
-      .from('forum_posts')
-      .select('*', { count: 'exact', head: true })
-      .eq('topic_id', topicId);
-
-    if (error) {
-      throw new Error(`Erreur lors du comptage des posts: ${error.message}`);
-    }
-
-    return count || 0;
+    // Simuler le retrait d'un like
+    console.log(`Like removed from post ${postId} by user ${userId}`);
+    return true;
   } catch (error) {
-    console.error('Erreur dans getPostCountForTopic:', error);
-    return 0;
+    console.error('Erreur dans unlikePost:', error);
+    return false;
   }
 };

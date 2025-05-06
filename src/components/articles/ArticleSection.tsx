@@ -6,9 +6,8 @@ import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from 'react-router-dom';
-
-// Import articles from the shared data source
-import { articles } from '@/data/articles';
+import { useArticles } from '@/hooks/useArticles';
+import { ArticleCardSkeleton } from './ArticleSkeleton';
 
 // Variantes d'animation pour la section
 const sectionVariants = {
@@ -34,11 +33,10 @@ const itemVariants = {
 
 const ArticleSection: React.FC = () => {
   const isMobile = useIsMobile();
+  const { articles, loading, error } = useArticles("Tous", "");
   
-  // Trier les articles par ID décroissant pour mettre le plus récent en premier
-  const featuredArticles = articles
-    .sort((a, b) => b.id - a.id) // Sort by newest first (assuming higher ID = newer)
-    .slice(0, 3);
+  // Limiter à 3 articles pour la page d'accueil
+  const featuredArticles = articles.slice(0, 3);
   
   return (
     <section className="py-12 bg-gradient-to-b from-white to-sky-50">
@@ -69,12 +67,23 @@ const ArticleSection: React.FC = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {/* Sur mobile, limiter à 2 articles pour une performance optimale */}
-          {featuredArticles.slice(0, isMobile ? 2 : featuredArticles.length).map((article) => (
-            <motion.div key={article.id} variants={itemVariants}>
-              <ArticleCard article={article} />
-            </motion.div>
-          ))}
+          {loading ? (
+            // Afficher des skeletons pendant le chargement
+            <>
+              {Array(isMobile ? 2 : 3).fill(0).map((_, index) => (
+                <motion.div key={`skeleton-${index}`} variants={itemVariants}>
+                  <ArticleCardSkeleton />
+                </motion.div>
+              ))}
+            </>
+          ) : (
+            // Afficher les articles chargés
+            featuredArticles.slice(0, isMobile ? 2 : featuredArticles.length).map((article) => (
+              <motion.div key={article.id} variants={itemVariants}>
+                <ArticleCard article={article} />
+              </motion.div>
+            ))
+          )}
         </motion.div>
 
         <motion.div 

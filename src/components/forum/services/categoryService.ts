@@ -7,17 +7,29 @@ import { ForumCategory } from '../types';
  */
 export const getAllCategories = async (): Promise<ForumCategory[]> => {
   try {
-    // Récupérer les catégories depuis Supabase
-    const { data, error } = await supabase
-      .from('forum_categories')
-      .select('*')
-      .order('order', { ascending: true });
-
-    if (error) {
-      throw new Error(`Erreur lors de la récupération des catégories: ${error.message}`);
-    }
-
-    return data || [];
+    // Simulation de catégories du forum tant que la table n'existe pas
+    return [
+      {
+        id: 1,
+        name: "Développement du bébé",
+        description: "Discussions sur les étapes de croissance et développement",
+        slug: "developpement",
+        icon: "Baby",
+        order: 1,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 2,
+        name: "Santé et bien-être",
+        description: "Questions médicales et bien-être du bébé",
+        slug: "sante",
+        icon: "Heart",
+        order: 2,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ];
   } catch (error) {
     console.error('Erreur dans getAllCategories:', error);
     return [];
@@ -29,18 +41,10 @@ export const getAllCategories = async (): Promise<ForumCategory[]> => {
  */
 export const getCategoryBySlug = async (slug: string): Promise<ForumCategory | null> => {
   try {
-    // Récupérer la catégorie depuis Supabase
-    const { data, error } = await supabase
-      .from('forum_categories')
-      .select('*')
-      .eq('slug', slug)
-      .single();
-
-    if (error) {
-      throw new Error(`Erreur lors de la récupération de la catégorie: ${error.message}`);
-    }
-
-    return data || null;
+    // Récupérer des catégories simulées
+    const categories = await getAllCategories();
+    const category = categories.find(c => c.slug === slug);
+    return category || null;
   } catch (error) {
     console.error('Erreur dans getCategoryBySlug:', error);
     return null;
@@ -52,17 +56,9 @@ export const getCategoryBySlug = async (slug: string): Promise<ForumCategory | n
  */
 export const getCategoryById = async (id: number): Promise<ForumCategory | null> => {
   try {
-    const { data, error } = await supabase
-      .from('forum_categories')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) {
-      throw new Error(`Erreur lors de la récupération de la catégorie: ${error.message}`);
-    }
-
-    return data || null;
+    const categories = await getAllCategories();
+    const category = categories.find(c => c.id === id);
+    return category || null;
   } catch (error) {
     console.error('Erreur dans getCategoryById:', error);
     return null;
