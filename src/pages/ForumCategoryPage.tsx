@@ -2,7 +2,6 @@
 import React from 'react';
 import CategoryPage from '@/components/forum/components/category/CategoryPage';
 import SEOHead from '@/components/common/SEOHead';
-import Logo from '@/components/Logo';
 
 const ForumCategoryPage = () => {
   return (

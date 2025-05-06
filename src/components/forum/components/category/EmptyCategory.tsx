@@ -2,7 +2,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
-import Logo from '@/components/Logo';
 
 interface EmptyCategoryProps {
   handleCreateTopic: () => void;
@@ -11,9 +10,6 @@ interface EmptyCategoryProps {
 const EmptyCategory: React.FC<EmptyCategoryProps> = ({ handleCreateTopic }) => {
   return (
     <div className="text-center py-12">
-      <div className="flex justify-center mb-4">
-        <Logo size="md" showText={false} />
-      </div>
       <h3 className="text-xl font-medium mb-4">Aucune discussion dans cette catégorie</h3>
       <p className="text-gray-600 mb-6">Soyez le premier à lancer une discussion !</p>
       <Button 
