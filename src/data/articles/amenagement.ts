@@ -3,7 +3,7 @@ import { Article } from '@/types/article';
 
 export const amenagementArticles: Article[] = [
   {
-    id: 2,
+    id: 7, // Changed ID to avoid conflicts
     title: "Créer une chambre de bébé sécurisée et stimulante",
     excerpt: "Conseils d'experts pour aménager un espace idéal pour votre nouveau-né.",
     summary: "Des conseils pratiques pour aménager la chambre de bébé en alliant sécurité et développement.",

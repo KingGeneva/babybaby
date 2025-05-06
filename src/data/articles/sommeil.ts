@@ -3,7 +3,7 @@ import { Article } from '@/types/article';
 
 export const sommeilArticles: Article[] = [
   {
-    id: 4,
+    id: 9, // Changed ID to avoid conflicts
     title: "5 astuces efficaces pour aider bébé à mieux dormir",
     excerpt: "Solutions pratiques pour favoriser un meilleur sommeil chez les nourrissons.",
     summary: "Des conseils fondés sur la science pour aider votre bébé à mieux dormir.",

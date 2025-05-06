@@ -3,7 +3,7 @@ import { Article } from '@/types/article';
 
 export const developpementArticles: Article[] = [
   {
-    id: 3,
+    id: 8, // Changed ID to avoid conflicts
     title: "Les étapes clés du développement moteur de 0 à 12 mois",
     excerpt: "Découvrez les jalons importants du développement physique de votre bébé.",
     summary: "Un aperçu des principales étapes de développement moteur durant la première année.",

@@ -1,11 +1,13 @@
+
 import { Article } from '@/types/article';
 
 // Liste des articles sur la nutrition
 export const nutritionArticles: Article[] = [
   {
-    id: 1,
+    id: 10, // Changed ID to 10 so it appears first
     title: "Coliques du Bébé : Comprendre, Identifier et Soulager",
     excerpt: "Les coliques du nourrisson représentent l'un des défis les plus éprouvants pour de jeunes parents. Découvrez comment identifier et soulager ce trouble courant.",
+    summary: "Guide complet pour comprendre, identifier et soulager les coliques de bébé.",
     content: `
 # Coliques du Bébé : Comprendre, Identifier et Soulager
 
@@ -38,7 +40,8 @@ Un guide complet pour mieux comprendre et soulager votre bébé… et retrouver 
     `,
     image: "/lovable-uploads/b38422af-2f1b-4427-aad4-cee8e9d3d887.png",
     category: "Nutrition",
-    date: "2025-04-26",
+    date: "26 avril 2025",
+    readingTime: 12,
     author: "Dr. Sophie Martin",
     views: 843,
     featured: true,
@@ -48,6 +51,7 @@ Un guide complet pour mieux comprendre et soulager votre bébé… et retrouver 
     id: 2,
     title: "Les bienfaits de l'allaitement maternel",
     excerpt: "Découvrez pourquoi l'allaitement maternel est souvent recommandé par les pédiatres et comment il peut bénéficier autant à la mère qu'à son bébé.",
+    summary: "Les avantages de l'allaitement pour la mère et le bébé, expliqués par des experts.",
     content: `# Les bienfaits de l'allaitement maternel
 
 L'allaitement maternel est bien plus qu'un simple moyen de nourrir votre bébé. Il s'agit d'un processus complexe qui offre de nombreux avantages tant pour la mère que pour l'enfant. Voici un aperçu des bienfaits de cette pratique naturelle.
@@ -93,7 +97,8 @@ Si vous rencontrez des difficultés, n'hésitez pas à consulter un professionne
 L'allaitement maternel est un choix personnel qui dépend de nombreux facteurs. Quelle que soit votre décision, l'important est que vous et votre bébé soyez en bonne santé et heureux. Si vous choisissez d'allaiter, sachez que cette pratique offre de nombreux avantages pour vous et votre enfant, et qu'il existe des ressources pour vous aider en cas de besoin.`,
     image: "/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png",
     category: "Nutrition",
-    date: "2025-04-10",
+    date: "10 avril 2025",
+    readingTime: 10,
     author: "Dr. Marie Dupont",
     views: 1562,
     tags: ["allaitement", "nutrition", "nouveau-né", "santé"]
@@ -102,6 +107,7 @@ L'allaitement maternel est un choix personnel qui dépend de nombreux facteurs. 
     id: 3,
     title: "La diversification alimentaire : quand et comment l'introduire",
     excerpt: "Apprenez à quels moments introduire de nouveaux aliments dans l'alimentation de votre bébé et découvrez les meilleures pratiques pour une diversification réussie.",
+    summary: "Guide complet pour bien démarrer la diversification alimentaire de votre bébé.",
     content: `# La diversification alimentaire : quand et comment l'introduire
 
 La diversification alimentaire est une étape importante dans le développement de votre bébé. Elle consiste à introduire progressivement des aliments solides dans son alimentation, en complément du lait maternel ou infantile. Voici un guide pour vous aider à aborder cette période avec sérénité.
@@ -154,7 +160,8 @@ La diversification alimentaire est une période d'exploration et de découverte 
 N'hésitez pas à consulter votre pédiatre ou un professionnel de santé si vous avez des questions ou des inquiétudes concernant l'alimentation de votre bébé.`,
     image: "/lovable-uploads/f5a21dc5-5eb0-4077-b04f-d7d3f4d44ccd.png",
     category: "Nutrition",
-    date: "2025-02-15",
+    date: "15 février 2025",
+    readingTime: 9,
     author: "Emilie Rousseau",
     views: 2104,
     tags: ["diversification", "alimentation", "nutrition", "bébé"]
