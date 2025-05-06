@@ -79,5 +79,18 @@ export const ebooksData: Ebook[] = [
     tags: ["éveil", "jeux", "activités", "développement"],
     author: "Émilie Lefebvre",
     publishDate: "2024-03-15"
+  },
+  {
+    id: "eb-007",
+    title: "Les coliques du bébé",
+    description: "Guide pratique pour comprendre et soulager les coliques de votre bébé avec des méthodes efficaces.",
+    coverImage: "/lovable-uploads/ccda2a74-7a35-4a2d-8bc3-7b8c2feb3139.png", // Réutilisation d'une image existante
+    fileUrl: "sommeil-bebe-astuces.pdf", // Utilisation du lien fourni
+    fileType: "PDF",
+    fileSize: "3.5 MB",
+    category: "Santé",
+    tags: ["coliques", "santé", "nouveau-né", "soulagement"],
+    author: "Dr. Thomas Renaud",
+    publishDate: "2024-04-10"
   }
 ];
