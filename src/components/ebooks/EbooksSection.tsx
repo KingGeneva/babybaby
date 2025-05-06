@@ -44,6 +44,7 @@ const EbooksSection: React.FC = () => {
   
   const handleDownload = async (ebook: Ebook) => {
     setIsLoading(true);
+    console.log(`Tentative de téléchargement depuis la section EbooksSection: ${ebook.title} (${ebook.fileUrl})`);
     await downloadEbook(ebook);
     setIsLoading(false);
   };

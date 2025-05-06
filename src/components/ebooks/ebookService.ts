@@ -12,7 +12,7 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
     const bucketName = 'ebooks';
     const filePath = ebook.fileUrl;
     
-    console.log(`Téléchargement de l'ebook depuis le bucket: ${bucketName}, fichier: ${filePath}`);
+    console.log(`Téléchargement de l'ebook: ${ebook.title}, depuis le bucket: ${bucketName}, fichier: ${filePath}`);
     
     // Download the file from Supabase Storage
     const { data, error } = await supabase
@@ -36,7 +36,7 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
     // Open the file in a new tab or download it directly
     const link = document.createElement('a');
     link.href = url;
-    link.download = ebook.title.replace(/\s+/g, '-').toLowerCase() + '.' + filePath.split('.').pop();
+    link.download = filePath; // Utiliser directement le nom du fichier pour éviter les erreurs
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

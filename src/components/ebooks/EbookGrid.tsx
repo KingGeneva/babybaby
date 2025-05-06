@@ -17,6 +17,7 @@ const EbookGrid: React.FC<EbookGridProps> = ({ ebooks }) => {
     setDownloadingId(ebook.id);
     
     try {
+      console.log(`Démarrage du téléchargement de l'ebook: ${ebook.title} (${ebook.fileUrl})`);
       await downloadEbook(ebook);
     } catch (error) {
       console.error("Erreur lors du téléchargement:", error);

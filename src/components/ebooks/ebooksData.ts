@@ -18,7 +18,7 @@ export const ebooksData: Ebook[] = [
   {
     id: "eb-002",
     title: "Les secrets d'un sommeil paisible",
-    description: "Des techniques prouvées pour aider votre bébé à bien dormir la nuit.",
+    description: "Des techniques douces et prouvées pour aider votre bébé à bien dormir la nuit.",
     coverImage: "/lovable-uploads/ccda2a74-7a35-4a2d-8bc3-7b8c2feb3139.png",
     fileUrl: "sommeil-bebe-astuces.pdf",
     fileType: "PDF",
@@ -82,7 +82,7 @@ export const ebooksData: Ebook[] = [
   },
   {
     id: "eb-007",
-    title: "Coliques du bébé",
+    title: "Comprendre et soulager les coliques du bébé",
     description: "Guide pratique pour comprendre et soulager les coliques de votre bébé avec des méthodes efficaces.",
     coverImage: "/lovable-uploads/728d443c-203b-42a8-bdd9-c19a50c6eed4.png",
     fileUrl: "coliques-du-bebe.pdf",
