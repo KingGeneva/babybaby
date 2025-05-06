@@ -34,7 +34,11 @@ export const getTopics = async (
     // Get topics with pagination
     const { data, error, count } = await query
       .limit(limit)
-      .range(offset, offset + limit - 1);
+      .range(offset, offset + limit - 1) as unknown as { 
+        data: ForumTopic[] | null, 
+        error: any, 
+        count: number | null 
+      };
 
     if (error) {
       console.error("Error loading topics:", error);
@@ -72,7 +76,7 @@ export const getTopicById = async (id: string): Promise<ForumTopic | null> => {
         likes_count:forum_likes(count)
       `)
       .eq("id", id)
-      .maybeSingle();
+      .maybeSingle() as unknown as { data: ForumTopic | null, error: any };
 
     if (error) {
       console.error("Error loading topic:", error);
@@ -124,9 +128,9 @@ export const createTopic = async (
         user_id: userData.user.id,
         slug: slug, // Add slug for SEO
         meta_description: content.substring(0, 160) // First 160 chars as meta description
-      })
+      } as unknown as any)
       .select()
-      .maybeSingle();
+      .maybeSingle() as unknown as { data: ForumTopic | null, error: any };
 
     if (error) {
       console.error("Error creating topic:", error);
@@ -154,7 +158,7 @@ export const createTopic = async (
 export const incrementTopicViews = async (topicId: string): Promise<void> => {
   try {
     const { error } = await supabase
-      .rpc('increment_topic_views', { topic_id: topicId });
+      .rpc('increment_topic_views', { topic_id: topicId }) as unknown as { error: any };
 
     if (error) {
       console.error("Error incrementing views:", error);

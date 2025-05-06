@@ -9,7 +9,7 @@ export const getCategories = async (): Promise<ForumCategory[]> => {
     const { data, error } = await supabase
       .from("forum_categories")
       .select("*")
-      .order("name", { ascending: true }) as { data: ForumCategory[] | null, error: any };
+      .order("name", { ascending: true }) as unknown as { data: ForumCategory[] | null, error: any };
 
     if (error) {
       console.error("Error loading categories:", error);
@@ -29,7 +29,7 @@ export const getCategoryBySlug = async (slug: string): Promise<ForumCategory | n
       .from("forum_categories")
       .select("*")
       .eq("slug", slug)
-      .maybeSingle() as { data: ForumCategory | null, error: any };
+      .maybeSingle() as unknown as { data: ForumCategory | null, error: any };
 
     if (error) {
       console.error("Error loading category:", error);
