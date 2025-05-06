@@ -15,6 +15,9 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
       setError(null);
       
       try {
+        console.log('Fetching articles for category:', category);
+        console.log('Static articles before filter:', staticArticles.map(a => ({ id: a.id, title: a.title })));
+        
         // First get static articles
         let result = [...staticArticles];
         

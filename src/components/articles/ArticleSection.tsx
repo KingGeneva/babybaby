@@ -32,10 +32,14 @@ const itemVariants = {
 
 const ArticleSection: React.FC = () => {
   const isMobile = useIsMobile();
-  const { articles, loading, error } = useArticles("Tous", "");
+  const { articles, loading, error } = useArticles();
   
   // Limit to 3 articles for the homepage
   const featuredArticles = articles.slice(0, 3);
+  
+  // Add debug logs
+  console.log('Articles in ArticleSection:', articles.map(a => ({ id: a.id, title: a.title })));
+  console.log('Featured articles in ArticleSection:', featuredArticles.map(a => ({ id: a.id, title: a.title })));
   
   return (
     <section className="py-12 bg-gradient-to-b from-white to-sky-50">
