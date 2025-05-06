@@ -102,7 +102,7 @@ const ArticlePromotion: React.FC = () => {
       ) : isColicsArticle ? (
         <>
           <p className="mb-4">
-            Pour aller plus loin et découvrir des solutions pour soulager les coliques de votre bébé, téléchargez notre guide complet "Coliques du bébé" gratuitement.
+            Pour découvrir en détail les causes, symptômes, mythes et solutions aux coliques du nourrisson, téléchargez notre guide complet « Coliques du bébé » gratuitement.
           </p>
           <Button 
             className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 flex items-center gap-2"

@@ -1,182 +1,186 @@
 
-import { supabase } from "@/integrations/supabase/client";
-import { ForumTopic, PaginationParams, PaginatedResponse } from "../types";
-import { toast } from "@/components/ui/use-toast";
-import { GenericSupabaseResponse, AnyTable } from "../utils/supabaseTypes";
+import { supabase } from '@/integrations/supabase/client';
+import { ForumTopic } from '../types';
+import { GenericSupabaseResponse } from '../utils/supabaseTypes';
 
-// Limit for pagination
-const DEFAULT_LIMIT = 10;
-
-// Forum topics
-export const getTopics = async (
-  categoryId?: string, 
-  pagination: PaginationParams = { page: 1, limit: DEFAULT_LIMIT }
-): Promise<PaginatedResponse<ForumTopic>> => {
-  const { page, limit } = pagination;
-  const offset = (page - 1) * limit;
-
+/**
+ * Récupère tous les sujets d'une catégorie
+ */
+export const getTopicsByCategoryId = async (
+  categoryId: number, 
+  page = 1, 
+  limit = 10
+): Promise<ForumTopic[]> => {
   try {
-    // Cast supabase to allow any table name
-    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
-
-    // Base query
-    let query = supabaseAny
-      .from("forum_topics")
-      .select(`
-        *,
-        posts_count:forum_posts(count),
-        likes_count:forum_likes(count)
-      `, { count: 'exact' })
-      .order("is_pinned", { ascending: false })
-      .order("created_at", { ascending: false });
-
-    // Add category filter if needed
-    if (categoryId) {
-      query = query.eq("category_id", categoryId);
-    }
-
-    // Get topics with pagination and manually handle the response
-    const response = await query
-      .limit(limit)
-      .range(offset, offset + limit - 1);
+    const offset = (page - 1) * limit;
     
-    // Manually handle the response
-    const { data, error, count } = response as unknown as {
-      data: ForumTopic[] | null;
-      error: any;
-      count: number | null;
-    };
-
-    if (error) {
-      console.error("Error loading topics:", error);
-      throw error;
-    }
-
-    const totalPages = count ? Math.ceil(count / limit) : 0;
-
-    return {
-      data: data || [],
-      total: count || 0,
-      page,
-      limit,
-      totalPages
-    };
-  } catch (error) {
-    console.error("Error in getTopics:", error);
-    return {
-      data: [],
-      total: 0,
-      page,
-      limit,
-      totalPages: 0
-    };
-  }
-};
-
-export const getTopicById = async (id: string): Promise<ForumTopic | null> => {
-  try {
-    // Cast supabase to allow any table name
-    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
-
-    const { data, error } = await supabaseAny
-      .from("forum_topics")
+    const response: GenericSupabaseResponse<ForumTopic[]> = await supabase
+      .from('forum_topics')
       .select(`
         *,
-        posts_count:forum_posts(count),
-        likes_count:forum_likes(count)
+        user:user_id (id, username, avatar_url),
+        category:category_id (id, name, slug),
+        posts:forum_posts (count)
       `)
-      .eq("id", id)
-      .maybeSingle() as GenericSupabaseResponse<ForumTopic | null>;
+      .eq('category_id', categoryId)
+      .order('is_pinned', { ascending: false })
+      .order('updated_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
-    if (error) {
-      console.error("Error loading topic:", error);
-      return null;
+    if (response.error) {
+      throw new Error(`Erreur lors de la récupération des sujets: ${response.error.message}`);
     }
 
-    if (data) {
-      // Increment views
-      await incrementTopicViews(id);
-    }
-
-    return data;
+    return response.data || [];
   } catch (error) {
-    console.error("Error in getTopicById:", error);
+    console.error('Erreur dans getTopicsByCategoryId:', error);
+    return [];
+  }
+};
+
+/**
+ * Récupère un sujet par son ID
+ */
+export const getTopicById = async (topicId: number): Promise<ForumTopic | null> => {
+  try {
+    const response: GenericSupabaseResponse<ForumTopic[]> = await supabase
+      .from('forum_topics')
+      .select(`
+        *,
+        user:user_id (id, username, avatar_url),
+        category:category_id (id, name, slug)
+      `)
+      .eq('id', topicId)
+      .single();
+
+    if (response.error) {
+      throw new Error(`Erreur lors de la récupération du sujet: ${response.error.message}`);
+    }
+
+    return response.data || null;
+  } catch (error) {
+    console.error('Erreur dans getTopicById:', error);
     return null;
   }
 };
 
-export const createTopic = async (
-  title: string,
-  content: string,
-  categoryId: string
-): Promise<ForumTopic | null> => {
+/**
+ * Crée un nouveau sujet
+ */
+export const createTopic = async (topic: Partial<ForumTopic>): Promise<ForumTopic | null> => {
   try {
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    
-    if (userError || !userData.user) {
-      toast({
-        title: "Erreur d'authentification",
-        description: "Vous devez être connecté pour créer un sujet",
-        variant: "destructive",
-      });
-      return null;
+    const response: GenericSupabaseResponse<ForumTopic[]> = await supabase
+      .from('forum_topics')
+      .insert([topic])
+      .select(`
+        *,
+        user:user_id (id, username, avatar_url),
+        category:category_id (id, name, slug)
+      `)
+      .single();
+
+    if (response.error) {
+      throw new Error(`Erreur lors de la création du sujet: ${response.error.message}`);
     }
 
-    // Generate slug for SEO
-    const slug = title
-      .toLowerCase()
-      .replace(/[^\w\s]/gi, '')
-      .replace(/\s+/gi, '-')
-      .substring(0, 60);
-
-    // Cast supabase to allow any table name
-    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
-
-    const { data, error } = await supabaseAny
-      .from("forum_topics")
-      .insert({
-        title,
-        content,
-        category_id: categoryId,
-        user_id: userData.user.id,
-        slug: slug, // Add slug for SEO
-        meta_description: content.substring(0, 160) // First 160 chars as meta description
-      })
-      .select()
-      .maybeSingle() as GenericSupabaseResponse<ForumTopic | null>;
-
-    if (error) {
-      console.error("Error creating topic:", error);
-      toast({
-        title: "Erreur",
-        description: "Impossible de créer le sujet. Veuillez réessayer.",
-        variant: "destructive",
-      });
-      throw error;
-    }
-
-    toast({
-      title: "Succès",
-      description: "Votre sujet a été créé.",
-    });
-
-    return data;
+    return response.data || null;
   } catch (error) {
-    console.error("Error in createTopic:", error);
+    console.error('Erreur dans createTopic:', error);
     return null;
   }
 };
 
-// Function to increment topic views
-export const incrementTopicViews = async (topicId: string): Promise<void> => {
+/**
+ * Met à jour un sujet
+ */
+export const updateTopic = async (topicId: number, updates: Partial<ForumTopic>): Promise<ForumTopic | null> => {
   try {
-    const { error } = await supabase
-      .rpc('increment_topic_views', { topic_id: topicId }) as GenericSupabaseResponse<void>;
+    const response: GenericSupabaseResponse<ForumTopic[]> = await supabase
+      .from('forum_topics')
+      .update(updates)
+      .eq('id', topicId)
+      .select(`
+        *,
+        user:user_id (id, username, avatar_url),
+        category:category_id (id, name, slug)
+      `)
+      .single();
+
+    if (response.error) {
+      throw new Error(`Erreur lors de la mise à jour du sujet: ${response.error.message}`);
+    }
+
+    return response.data || null;
+  } catch (error) {
+    console.error('Erreur dans updateTopic:', error);
+    return null;
+  }
+};
+
+/**
+ * Supprime un sujet
+ */
+export const deleteTopic = async (topicId: number): Promise<boolean> => {
+  try {
+    const response = await supabase
+      .from('forum_topics')
+      .delete()
+      .eq('id', topicId);
+
+    if (response.error) {
+      throw new Error(`Erreur lors de la suppression du sujet: ${response.error.message}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Erreur dans deleteTopic:', error);
+    return false;
+  }
+};
+
+/**
+ * Récupère le nombre total de sujets dans une catégorie
+ */
+export const getTopicCountForCategory = async (categoryId: number): Promise<number> => {
+  try {
+    const { count, error } = await supabase
+      .from('forum_topics')
+      .select('*', { count: 'exact', head: true })
+      .eq('category_id', categoryId);
 
     if (error) {
-      console.error("Error incrementing views:", error);
+      throw new Error(`Erreur lors du comptage des sujets: ${error.message}`);
     }
+
+    return count || 0;
   } catch (error) {
-    console.error("Error in incrementTopicViews:", error);
+    console.error('Erreur dans getTopicCountForCategory:', error);
+    return 0;
+  }
+};
+
+/**
+ * Récupère les sujets récents
+ */
+export const getRecentTopics = async (limit = 5): Promise<ForumTopic[]> => {
+  try {
+    const response: GenericSupabaseResponse<ForumTopic[]> = await supabase
+      .from('forum_topics')
+      .select(`
+        *,
+        user:user_id (id, username, avatar_url),
+        category:category_id (id, name, slug)
+      `)
+      .order('updated_at', { ascending: false })
+      .limit(limit);
+
+    if (response.error) {
+      throw new Error(`Erreur lors de la récupération des sujets récents: ${response.error.message}`);
+    }
+
+    return response.data || [];
+  } catch (error) {
+    console.error('Erreur dans getRecentTopics:', error);
+    return [];
   }
 };

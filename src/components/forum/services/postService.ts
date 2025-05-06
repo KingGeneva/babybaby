@@ -1,116 +1,150 @@
 
-import { supabase } from "@/integrations/supabase/client";
-import { ForumPost, PaginationParams, PaginatedResponse } from "../types";
-import { toast } from "@/components/ui/use-toast";
-import { GenericSupabaseResponse, AnyTable, CountResponse } from "../utils/supabaseTypes";
+import { supabase } from '@/integrations/supabase/client';
+import { ForumPost } from '../types';
+import { GenericSupabaseResponse } from '../utils/supabaseTypes';
 
-// Limit for pagination
-const DEFAULT_LIMIT = 10;
-
-// Forum posts (replies)
-export const getPosts = async (
-  topicId: string,
-  pagination: PaginationParams = { page: 1, limit: DEFAULT_LIMIT }
-): Promise<PaginatedResponse<ForumPost>> => {
-  const { page, limit } = pagination;
-  const offset = (page - 1) * limit;
-
+/**
+ * Récupère les posts d'un sujet
+ */
+export const getPostsByTopicId = async (topicId: number, page = 1, limit = 10): Promise<ForumPost[]> => {
   try {
-    // Cast supabase to allow any table name
-    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
-
-    // Use the generic response type
-    const response = await supabaseAny
-      .from("forum_posts")
+    const offset = (page - 1) * limit;
+    
+    const response: GenericSupabaseResponse<ForumPost[]> = await supabase
+      .from('forum_posts')
       .select(`
         *,
-        likes_count:forum_likes(count)
-      `, { count: "exact" })
-      .eq("topic_id", topicId)
-      .order("created_at", { ascending: true })
-      .limit(limit)
+        user:user_id (id, username, email, avatar_url, created_at)
+      `)
+      .eq('topic_id', topicId)
+      .order('created_at', { ascending: true })
       .range(offset, offset + limit - 1);
-    
-    // Manually handle the response
-    const { data, error, count } = response as unknown as {
-      data: ForumPost[] | null;
-      error: any;
-      count: number | null;
-    };
 
-    if (error) {
-      console.error("Error loading posts:", error);
-      throw error;
+    if (response.error) {
+      throw new Error(`Erreur lors de la récupération des posts: ${response.error.message}`);
     }
 
-    const totalPages = count ? Math.ceil(count / limit) : 0;
-
-    return {
-      data: data || [],
-      total: count || 0,
-      page,
-      limit,
-      totalPages
-    };
+    return response.data || [];
   } catch (error) {
-    console.error("Error in getPosts:", error);
-    return {
-      data: [],
-      total: 0,
-      page,
-      limit,
-      totalPages: 0
-    };
+    console.error('Erreur dans getPostsByTopicId:', error);
+    return [];
   }
 };
 
-export const createPost = async (
-  content: string,
-  topicId: string
-): Promise<ForumPost | null> => {
+/**
+ * Récupère un post par son ID
+ */
+export const getPostById = async (postId: number): Promise<ForumPost | null> => {
   try {
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    
-    if (userError || !userData.user) {
-      toast({
-        title: "Erreur d'authentification",
-        description: "Vous devez être connecté pour répondre",
-        variant: "destructive",
-      });
-      return null;
+    const response: GenericSupabaseResponse<ForumPost[]> = await supabase
+      .from('forum_posts')
+      .select(`
+        *,
+        user:user_id (id, username, email, avatar_url, created_at)
+      `)
+      .eq('id', postId)
+      .single();
+
+    if (response.error) {
+      throw new Error(`Erreur lors de la récupération du post: ${response.error.message}`);
     }
 
-    // Cast supabase to allow any table name
-    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+    return response.data || null;
+  } catch (error) {
+    console.error('Erreur dans getPostById:', error);
+    return null;
+  }
+};
 
-    const { data, error } = await supabaseAny
-      .from("forum_posts")
-      .insert({
-        content,
-        topic_id: topicId,
-        user_id: userData.user.id,
-      })
-      .select()
-      .maybeSingle() as GenericSupabaseResponse<ForumPost | null>;
+/**
+ * Crée un nouveau post
+ */
+export const createPost = async (post: Partial<ForumPost>): Promise<ForumPost | null> => {
+  try {
+    const response: GenericSupabaseResponse<ForumPost[]> = await supabase
+      .from('forum_posts')
+      .insert([post])
+      .select(`
+        *,
+        user:user_id (id, username, email, avatar_url, created_at)
+      `)
+      .single();
+
+    if (response.error) {
+      throw new Error(`Erreur lors de la création du post: ${response.error.message}`);
+    }
+
+    return response.data || null;
+  } catch (error) {
+    console.error('Erreur dans createPost:', error);
+    return null;
+  }
+};
+
+/**
+ * Met à jour un post
+ */
+export const updatePost = async (postId: number, updates: Partial<ForumPost>): Promise<ForumPost | null> => {
+  try {
+    const response: GenericSupabaseResponse<ForumPost[]> = await supabase
+      .from('forum_posts')
+      .update(updates)
+      .eq('id', postId)
+      .select(`
+        *,
+        user:user_id (id, username, email, avatar_url, created_at)
+      `)
+      .single();
+
+    if (response.error) {
+      throw new Error(`Erreur lors de la mise à jour du post: ${response.error.message}`);
+    }
+
+    return response.data || null;
+  } catch (error) {
+    console.error('Erreur dans updatePost:', error);
+    return null;
+  }
+};
+
+/**
+ * Supprime un post
+ */
+export const deletePost = async (postId: number): Promise<boolean> => {
+  try {
+    const response = await supabase
+      .from('forum_posts')
+      .delete()
+      .eq('id', postId);
+
+    if (response.error) {
+      throw new Error(`Erreur lors de la suppression du post: ${response.error.message}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Erreur dans deletePost:', error);
+    return false;
+  }
+};
+
+/**
+ * Récupère le nombre de posts d'un sujet
+ */
+export const getPostCountForTopic = async (topicId: number): Promise<number> => {
+  try {
+    const { count, error } = await supabase
+      .from('forum_posts')
+      .select('*', { count: 'exact', head: true })
+      .eq('topic_id', topicId);
 
     if (error) {
-      console.error("Error creating post:", error);
-      toast({
-        title: "Erreur",
-        description: "Impossible de publier votre réponse. Veuillez réessayer.",
-        variant: "destructive",
-      });
-      throw error;
+      throw new Error(`Erreur lors du comptage des posts: ${error.message}`);
     }
 
-    toast({
-      title: "Succès",
-      description: "Votre réponse a été publiée.",
-    });
-
-    return data;
+    return count || 0;
   } catch (error) {
-    console.error("Error in createPost:", error);
-    return null;
+    console.error('Erreur dans getPostCountForTopic:', error);
+    return 0;
   }
 };

@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Calendar, ChevronRight, Eye } from 'lucide-react';
+import { Calendar, ChevronRight, Eye, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ShareArticle from './ShareArticle';
 
@@ -28,6 +28,9 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
     setImageError(true);
   };
 
+  // Vérifier si c'est l'article sur les coliques
+  const isColicsArticle = article.id === 1;
+
   return (
     <Card className="overflow-hidden h-full flex flex-col hover:shadow-xl transition-all duration-300 border-t-4 border-t-babybaby-cosmic/80">
       <div className="relative h-52 overflow-hidden">
@@ -45,6 +48,12 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         {article.featured && (
           <div className="absolute top-0 right-0 bg-amber-500 text-white px-3 py-1 m-3 rounded-full text-xs font-semibold shadow-md">
             À la une
+          </div>
+        )}
+        {isColicsArticle && (
+          <div className="absolute bottom-0 right-0 bg-green-500 text-white px-3 py-1 m-3 rounded-full text-xs font-semibold shadow-md flex items-center">
+            <BookOpen className="mr-1 h-3 w-3" />
+            E-book gratuit
           </div>
         )}
       </div>
