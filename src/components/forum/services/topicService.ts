@@ -2,7 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { ForumTopic, PaginationParams, PaginatedResponse } from "../types";
 import { toast } from "@/components/ui/use-toast";
-import { GenericSupabaseResponse, AnyTable } from "../utils/supabaseTypes";
+import { GenericSupabaseResponse, AnyTable, CountResponse } from "../utils/supabaseTypes";
 
 // Limit for pagination
 const DEFAULT_LIMIT = 10;
@@ -38,7 +38,7 @@ export const getTopics = async (
     // Get topics with pagination
     const { data, error, count } = await query
       .limit(limit)
-      .range(offset, offset + limit - 1) as GenericSupabaseResponse<ForumTopic[]> & { count: number | null };
+      .range(offset, offset + limit - 1) as CountResponse<ForumTopic[]>;
 
     if (error) {
       console.error("Error loading topics:", error);
@@ -79,11 +79,11 @@ export const getTopicById = async (id: string): Promise<ForumTopic | null> => {
         likes_count:forum_likes(count)
       `)
       .eq("id", id)
-      .maybeSingle() as GenericSupabaseResponse<ForumTopic>;
+      .single() as GenericSupabaseResponse<ForumTopic>;
 
     if (error) {
       console.error("Error loading topic:", error);
-      throw error;
+      return null;
     }
 
     if (data) {
@@ -91,7 +91,7 @@ export const getTopicById = async (id: string): Promise<ForumTopic | null> => {
       await incrementTopicViews(id);
     }
 
-    return data || null;
+    return data;
   } catch (error) {
     console.error("Error in getTopicById:", error);
     return null;
@@ -153,7 +153,7 @@ export const createTopic = async (
       description: "Votre sujet a été créé.",
     });
 
-    return data || null;
+    return data;
   } catch (error) {
     console.error("Error in createTopic:", error);
     return null;

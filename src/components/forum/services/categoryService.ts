@@ -36,14 +36,16 @@ export const getCategoryBySlug = async (slug: string): Promise<ForumCategory | n
       .from("forum_categories")
       .select("*")
       .eq("slug", slug)
-      .maybeSingle() as GenericSupabaseResponse<ForumCategory>;
+      .single() as GenericSupabaseResponse<ForumCategory>;
 
     if (error) {
-      console.error("Error loading category:", error);
-      throw error;
+      if (error.code !== 'PGRST116') { // PGRST116 is the "no rows returned" error
+        console.error("Error loading category:", error);
+      }
+      return null;
     }
 
-    return data || null;
+    return data;
   } catch (error) {
     console.error("Error in getCategoryBySlug:", error);
     return null;

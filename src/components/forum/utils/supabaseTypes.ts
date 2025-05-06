@@ -2,13 +2,18 @@
 import { SupabaseClient, PostgrestResponse } from '@supabase/supabase-js';
 import { Database } from '@/integrations/supabase/types';
 
-// Type for any Supabase table not defined in the database types
+// Type générique pour les réponses Supabase
 export type GenericSupabaseResponse<T> = PostgrestResponse<T>;
 
-// Type for the Supabase client that can handle any table
+// Type pour le client Supabase qui peut gérer n'importe quelle table
 export type GenericSupabaseClient = SupabaseClient<Database, "public", any>;
 
-// Helper type for casting supabase.from() to work with any table
+// Type d'aide pour convertir supabase.from() pour fonctionner avec n'importe quelle table
 export type AnyTable = {
   [key: string]: any;
 };
+
+// Type d'aide pour les réponses avec décompte
+export interface CountResponse<T> extends PostgrestResponse<T> {
+  count: number | null;
+}
