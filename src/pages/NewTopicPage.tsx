@@ -1,81 +1,58 @@
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
-import { ForumCategory } from '@/components/forum/types';
-import { createTopic } from '@/components/forum/services/topicService';
-import { getCategoryBySlug, getCategories } from '@/components/forum/services/categoryService';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { ChevronLeft } from 'lucide-react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useAuth } from '@/contexts/AuthContext';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from '@/components/ui/use-toast';
 import ForumEditor from '@/components/forum/ForumEditor';
+import { createTopic } from '@/components/forum/forumService';
+import { ForumCategory } from '@/components/forum/types';
+import { getAllCategories } from '@/components/forum/services/categoryService';
+import { useAuth } from '@/contexts/AuthContext';
+import AuthNotice from '@/components/forum/components/AuthNotice';
 
 const NewTopicPage = () => {
-  const { categoryId } = useParams<{ categoryId: string }>();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId || '');
+  const [categoryId, setCategoryId] = useState<string>('');
   const [categories, setCategories] = useState<ForumCategory[]>([]);
-  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        
-        // Charger toutes les catégories
-        const categoriesData = await getCategories();
+        const categoriesData = await getAllCategories();
         setCategories(categoriesData);
-        
-        // Si un ID de catégorie est fourni, vérifier qu'il existe
-        if (categoryId) {
-          const category = categoriesData.find(c => c.id === categoryId);
-          if (!category) {
-            // Si la catégorie n'existe pas par ID, utiliser la première catégorie
-            setSelectedCategoryId(categoriesData.length > 0 ? categoriesData[0].id : '');
-          }
-        } else {
-          // Si aucun ID n'est fourni, utiliser la première catégorie
-          setSelectedCategoryId(categoriesData.length > 0 ? categoriesData[0].id : '');
-        }
-        
         setLoading(false);
       } catch (error) {
         console.error("Erreur lors du chargement des catégories:", error);
         setLoading(false);
-        toast({
-          title: "Erreur",
-          description: "Impossible de charger les catégories. Veuillez réessayer.",
-          variant: "destructive",
-        });
       }
     };
-
+    
     fetchCategories();
-  }, [categoryId]);
+  }, []);
 
+  const handleCategoryChange = (value: string) => {
+    setCategoryId(value);
+  };
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!title.trim() || !content.trim() || !selectedCategoryId || !user) {
+    if (!title.trim() || !content.trim() || !categoryId || !user) {
       toast({
-        title: "Formulaire incomplet",
-        description: "Veuillez remplir tous les champs obligatoires.",
+        title: "Erreur",
+        description: "Veuillez remplir tous les champs",
         variant: "destructive",
       });
       return;
@@ -83,20 +60,31 @@ const NewTopicPage = () => {
     
     try {
       setSubmitting(true);
-      const newTopic = await createTopic(title, content, selectedCategoryId);
+      
+      // Convert categoryId to number for the API
+      const categoryIdNumber = parseInt(categoryId, 10);
+      
+      const newTopic = await createTopic(
+        title, 
+        content, 
+        categoryIdNumber, 
+        user.id
+      );
       
       if (newTopic) {
         toast({
           title: "Sujet créé",
           description: "Votre sujet a été créé avec succès",
         });
+        
+        // Naviguer vers le nouveau sujet
         navigate(`/forum/topics/${newTopic.id}`);
       }
     } catch (error) {
       console.error("Erreur lors de la création du sujet:", error);
       toast({
         title: "Erreur",
-        description: "Impossible de créer le sujet. Veuillez réessayer.",
+        description: "Impossible de créer votre sujet. Veuillez réessayer.",
         variant: "destructive",
       });
     } finally {
@@ -109,13 +97,7 @@ const NewTopicPage = () => {
       <div className="min-h-screen">
         <NavBar />
         <div className="pt-24 pb-20 px-4">
-          <div className="container mx-auto text-center">
-            <h1 className="text-3xl font-bold mb-6 text-babybaby-cosmic">Forum des Parents</h1>
-            <p className="text-lg mb-8">Connectez-vous pour accéder au forum et partager avec d'autres parents.</p>
-            <Button onClick={() => navigate('/auth')} size="lg">
-              Se connecter
-            </Button>
-          </div>
+          <AuthNotice />
         </div>
         <Footer />
       </div>
@@ -126,95 +108,71 @@ const NewTopicPage = () => {
     <div className="min-h-screen">
       <NavBar />
       <div className="pt-24 pb-20 px-4">
-        <div className="container mx-auto max-w-3xl">
-          <div className="mb-6 flex items-center">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="font-normal p-0"
-              onClick={() => navigate(-1)}
-            >
-              <ChevronLeft size={16} className="mr-1" />
-              Retour
-            </Button>
-          </div>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-babybaby-cosmic">
-                Nouvelle discussion
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <div className="flex justify-center items-center h-64">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-babybaby-cosmic"></div>
-                </div>
-              ) : (
+        <div className="container mx-auto">
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold mb-6 text-center text-babybaby-cosmic">
+              Créer un nouveau sujet
+            </h1>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Nouveau sujet</CardTitle>
+              </CardHeader>
+              <CardContent>
                 <form onSubmit={handleSubmit}>
-                  <div className="space-y-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="category">Catégorie</Label>
-                      <Select 
-                        value={selectedCategoryId} 
-                        onValueChange={setSelectedCategoryId}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Sélectionner une catégorie" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {categories.map(category => (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="title">Titre de la discussion</Label>
-                      <Input
-                        id="title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Entrez un titre pour votre discussion"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="content">Contenu</Label>
-                      <ForumEditor 
+                  <div className="mb-4">
+                    <Label htmlFor="title">Titre</Label>
+                    <Input
+                      id="title"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      className="mt-1"
+                      placeholder="Titre de votre sujet"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="mb-4">
+                    <Label htmlFor="category">Catégorie</Label>
+                    <Select onValueChange={handleCategoryChange} value={categoryId}>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Sélectionner une catégorie" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id.toString()}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <Label htmlFor="content">Contenu</Label>
+                    <div className="mt-1">
+                      <ForumEditor
                         value={content}
                         onChange={setContent}
-                        placeholder="Ecrivez votre message..."
+                        placeholder="Détaillez votre question ou sujet..."
                         minHeight="300px"
                       />
                     </div>
-                    
-                    <div className="flex justify-end">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        className="mr-2"
-                        onClick={() => navigate(-1)}
-                      >
-                        Annuler
-                      </Button>
-                      <Button 
-                        type="submit" 
-                        className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
-                        disabled={!title.trim() || !content.trim() || !selectedCategoryId || submitting}
-                      >
-                        {submitting ? 'Publication...' : 'Publier'}
-                      </Button>
-                    </div>
+                  </div>
+                  
+                  <div className="mt-6 flex justify-end">
+                    <Button
+                      type="submit"
+                      className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
+                      disabled={submitting || !title || !content || !categoryId}
+                    >
+                      {submitting ? 'Création...' : 'Créer le sujet'}
+                    </Button>
                   </div>
                 </form>
-              )}
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
       <Footer />

@@ -1,8 +1,9 @@
 
-import { ForumTopic, ForumPost, ForumCategory } from './types';
+import { ForumTopic, ForumPost, ForumCategory, PaginationParams, PaginatedResponse } from './types';
 import { getAllCategories, getCategoryBySlug, getCategoryById } from './services/categoryService';
-import { getTopicsByCategory, getTopicById, createTopic } from './services/topicService';
-import { getPostsByTopicId, createPost, likePost, unlikePost } from './services/postService';
+import { getTopicsByCategory, getTopicById, createTopic, incrementTopicView } from './services/topicService';
+import { getPostsByTopicId, createPost } from './services/postService';
+import { likeTopic, unlikeTopic, likePost, unlikePost } from './services/likeService';
 
 // Export all individual service functions
 export {
@@ -13,11 +14,13 @@ export {
   getTopicById,
   createTopic,
   getPostsByTopicId,
-  createPost
+  createPost,
+  likeTopic,
+  unlikeTopic,
+  likePost,
+  unlikePost,
+  incrementTopicView
 };
-
-// Re-export like functions but only from likeService to avoid ambiguity
-export { likePost, unlikePost } from './services/likeService';
 
 // Main service function for forum data
 export const getForumData = async () => {
@@ -72,7 +75,7 @@ export const getRecentDiscussions = async (limit: number = 5): Promise<ForumTopi
   ].slice(0, limit);
 };
 
-// Add a new function to get paginated topics
+// Add a function to get paginated topics
 export const getTopics = async (categoryId: number, options: { page: number; limit: number }) => {
   const topics = await getTopicsByCategory(categoryId);
   const totalTopics = topics.length;
@@ -92,7 +95,7 @@ export const getTopics = async (categoryId: number, options: { page: number; lim
 };
 
 // Add a function to get paginated posts
-export const getPosts = async (topicId: string, options: { page: number; limit: number }) => {
+export const getPosts = async (topicId: string, options: { page: number; limit: number }): Promise<PaginatedResponse<ForumPost>> => {
   const posts = await getPostsByTopicId(topicId);
   const totalPosts = posts.length;
   const totalPages = Math.ceil(totalPosts / options.limit);
@@ -112,7 +115,5 @@ export const getPosts = async (topicId: string, options: { page: number; limit: 
 
 // Add function to increment topic views
 export const incrementTopicViews = async (topicId: string) => {
-  console.log(`Incrementing views for topic ${topicId}`);
-  // This would be a real database call in production
-  return true;
+  return await incrementTopicView(topicId);
 };

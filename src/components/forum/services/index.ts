@@ -2,7 +2,18 @@
 // Exporter tous les services forum
 export * from './categoryService';
 export * from './topicService';
-export * from './postService';
-// Ne pas réexporter likeService directement pour éviter les ambiguïtés
-// car likePost et unlikePost sont déjà exportés par postService
+
+// Export des fonctions individuelles pour éviter les ambiguïtés
+export { 
+  getPostsByTopicId, 
+  createPost 
+} from './postService';
+
+export { 
+  likeTopic, 
+  unlikeTopic,
+  likePost,
+  unlikePost
+} from './likeService';
+
 export * from './userService';
