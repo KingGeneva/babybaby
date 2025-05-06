@@ -11,6 +11,10 @@ Allow: /tools/
 Allow: /faq/
 Allow: /about/
 Allow: /courses/
+Allow: /community/
+Allow: /forum/
+Allow: /forum/categories/
+Allow: /forum/topics/
 Allow: /ads.txt
 
 # Disallow access to admin areas
@@ -27,6 +31,8 @@ User-agent: Twitterbot
 Allow: /
 Allow: /articles/
 Allow: /courses/
+Allow: /community/
+Allow: /forum/
 Allow: /images/
 Allow: /lovable-uploads/
 
@@ -34,6 +40,8 @@ User-agent: facebookexternalhit
 Allow: /
 Allow: /articles/
 Allow: /courses/
+Allow: /community/
+Allow: /forum/
 Allow: /images/
 Allow: /lovable-uploads/
 

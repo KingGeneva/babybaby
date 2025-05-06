@@ -9,12 +9,19 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import ForumSection from '@/components/forum/ForumSection';
+import SEOHead from '@/components/common/SEOHead';
 
 const CommunityPage = () => {
   const { user } = useAuth();
 
   return (
     <div className="min-h-screen">
+      <SEOHead 
+        title="Communauté de Parents | BabyBaby"
+        description="Rejoignez notre communauté bienveillante de parents. Échangez, partagez et trouvez du soutien dans tous les aspects de la parentalité, des premiers jours à la petite enfance."
+        canonicalUrl="https://babybaby.app/community"
+        keywords={["communauté parents", "entraide parentale", "soutien parents", "forum grossesse", "échanges mamans", "conseils jeunes parents"]}
+      />
       <NavBar />
       <div className="pt-24 pb-20 px-4">
         <div className="container mx-auto">

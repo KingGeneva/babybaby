@@ -27,6 +27,10 @@ export interface ForumTopic {
   posts_count?: number;
   likes_count?: number;
   has_liked?: boolean;
+  // Nouveaux champs pour SEO
+  slug?: string;
+  meta_description?: string;
+  tags?: string[];
 }
 
 export interface ForumPost {

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Helmet } from 'react-helmet-async';
 
 // Sample data for forum discussions
 const discussions = [
@@ -45,6 +46,41 @@ const discussions = [
 const ForumSection = () => {
   return (
     <section className="py-16 bg-gradient-to-b from-white to-sky-50">
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "DiscussionForumPosting",
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "https://babybaby.app/community"
+            },
+            "headline": "Forum communautaire BabyBaby",
+            "description": "Échangez avec d'autres parents sur des sujets comme la grossesse, le développement et la santé des enfants.",
+            "publisher": {
+              "@type": "Organization",
+              "name": "BabyBaby",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
+              }
+            },
+            "interactionStatistic": [
+              {
+                "@type": "InteractionCounter",
+                "interactionType": "https://schema.org/CommentAction",
+                "userInteractionCount": "5124"
+              },
+              {
+                "@type": "InteractionCounter",
+                "interactionType": "https://schema.org/LikeAction",
+                "userInteractionCount": "17542"
+              }
+            ]
+          })}
+        </script>
+      </Helmet>
+      
       <div className="container mx-auto px-4">
         <motion.div
           className="text-center mb-12"
@@ -69,7 +105,7 @@ const ForumSection = () => {
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold">Discussions récentes</h3>
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/community" className="flex items-center gap-1">
+                <Link to="/forum" className="flex items-center gap-1">
                   Voir tout <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
@@ -88,7 +124,7 @@ const ForumSection = () => {
                     <CardContent className="p-5">
                       <div className="flex justify-between items-start">
                         <h4 className="text-lg font-medium hover:text-babybaby-cosmic transition-colors">
-                          <Link to={`/community/discussions/${discussion.id}`}>
+                          <Link to={`/forum/topics/${discussion.id}`}>
                             {discussion.title}
                           </Link>
                         </h4>
@@ -150,8 +186,10 @@ const ForumSection = () => {
                 </div>
                 
                 <div className="mt-6">
-                  <Button className="w-full bg-babybaby-cosmic hover:bg-babybaby-cosmic/90">
-                    Rejoindre la discussion
+                  <Button className="w-full bg-babybaby-cosmic hover:bg-babybaby-cosmic/90" asChild>
+                    <Link to="/forum">
+                      Rejoindre la discussion
+                    </Link>
                   </Button>
                 </div>
               </CardContent>

@@ -12,40 +12,47 @@ import { toast } from "@/components/ui/use-toast";
 // Limit for pagination
 const DEFAULT_LIMIT = 10;
 
-// Catégories du forum
+// Forum categories
 export const getCategories = async (): Promise<ForumCategory[]> => {
-  const { data, error } = await supabase
-    .from("forum_categories")
-    .select("*")
-    .order("name", { ascending: true });
+  try {
+    const { data, error } = await supabase
+      .from("forum_categories")
+      .select("*")
+      .order("name", { ascending: true });
 
-  if (error) {
-    console.error("Erreur lors du chargement des catégories:", error);
-    throw error;
+    if (error) {
+      console.error("Error loading categories:", error);
+      throw error;
+    }
+
+    return data as ForumCategory[] || [];
+  } catch (error) {
+    console.error("Error in getCategories:", error);
+    return [];
   }
-
-  return data || [];
 };
 
 export const getCategoryBySlug = async (slug: string): Promise<ForumCategory | null> => {
-  const { data, error } = await supabase
-    .from("forum_categories")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+  try {
+    const { data, error } = await supabase
+      .from("forum_categories")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
 
-  if (error) {
-    if (error.code !== "PGRST116") { // Not found
-      console.error("Erreur lors du chargement de la catégorie:", error);
+    if (error) {
+      console.error("Error loading category:", error);
       throw error;
     }
+
+    return data as ForumCategory;
+  } catch (error) {
+    console.error("Error in getCategoryBySlug:", error);
     return null;
   }
-
-  return data;
 };
 
-// Sujets du forum
+// Forum topics
 export const getTopics = async (
   categoryId?: string, 
   pagination: PaginationParams = { page: 1, limit: DEFAULT_LIMIT }
@@ -53,69 +60,81 @@ export const getTopics = async (
   const { page, limit } = pagination;
   const offset = (page - 1) * limit;
 
-  // Requête de base
-  const baseQuery = supabase
-    .from("forum_topics")
-    .select(`
-      *,
-      category:forum_categories(*),
-      posts_count:forum_posts(count),
-      likes_count:forum_likes(count)
-    `)
-    .order("is_pinned", { ascending: false })
-    .order("created_at", { ascending: false });
+  try {
+    // Base query
+    let query = supabase
+      .from("forum_topics")
+      .select(`
+        *,
+        posts_count:forum_posts(count),
+        likes_count:forum_likes(count)
+      `, { count: 'exact' })
+      .order("is_pinned", { ascending: false })
+      .order("created_at", { ascending: false });
 
-  // Ajouter le filtre par catégorie si nécessaire
-  const query = categoryId 
-    ? baseQuery.eq("category_id", categoryId)
-    : baseQuery;
+    // Add category filter if needed
+    if (categoryId) {
+      query = query.eq("category_id", categoryId);
+    }
 
-  // Récupérer les sujets avec pagination
-  const { data, error, count } = await query
-    .limit(limit)
-    .range(offset, offset + limit - 1)
-    .returns<ForumTopic[]>();
+    // Get topics with pagination
+    const { data, error, count } = await query
+      .limit(limit)
+      .range(offset, offset + limit - 1);
 
-  if (error) {
-    console.error("Erreur lors du chargement des sujets:", error);
-    throw error;
+    if (error) {
+      console.error("Error loading topics:", error);
+      throw error;
+    }
+
+    const totalPages = count ? Math.ceil(count / limit) : 0;
+
+    return {
+      data: data as ForumTopic[] || [],
+      total: count || 0,
+      page,
+      limit,
+      totalPages
+    };
+  } catch (error) {
+    console.error("Error in getTopics:", error);
+    return {
+      data: [],
+      total: 0,
+      page,
+      limit,
+      totalPages: 0
+    };
   }
-
-  const totalPages = count ? Math.ceil(count / limit) : 0;
-
-  return {
-    data: data || [],
-    total: count || 0,
-    page,
-    limit,
-    totalPages
-  };
 };
 
 export const getTopicById = async (id: string): Promise<ForumTopic | null> => {
-  const { data, error } = await supabase
-    .from("forum_topics")
-    .select(`
-      *,
-      category:forum_categories(*),
-      posts_count:forum_posts(count),
-      likes_count:forum_likes(count)
-    `)
-    .eq("id", id)
-    .single();
+  try {
+    const { data, error } = await supabase
+      .from("forum_topics")
+      .select(`
+        *,
+        posts_count:forum_posts(count),
+        likes_count:forum_likes(count)
+      `)
+      .eq("id", id)
+      .maybeSingle();
 
-  if (error) {
-    if (error.code !== "PGRST116") { // Not found
-      console.error("Erreur lors du chargement du sujet:", error);
+    if (error) {
+      console.error("Error loading topic:", error);
       throw error;
     }
+
+    if (data) {
+      // Increment views
+      await incrementTopicViews(id);
+    }
+
+    return data as ForumTopic;
+  } catch (error) {
+    console.error("Error in getTopicById:", error);
     return null;
   }
-
-  // Increment les vues
-  await incrementTopicViews(id);
-
-  return data;
 };
 
 export const createTopic = async (
@@ -123,47 +142,61 @@ export const createTopic = async (
   content: string,
   categoryId: string
 ): Promise<ForumTopic | null> => {
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  
-  if (userError || !userData.user) {
+  try {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !userData.user) {
+      toast({
+        title: "Erreur d'authentification",
+        description: "Vous devez être connecté pour créer un sujet",
+        variant: "destructive",
+      });
+      return null;
+    }
+
+    // Generate slug for SEO
+    const slug = title
+      .toLowerCase()
+      .replace(/[^\w\s]/gi, '')
+      .replace(/\s+/gi, '-')
+      .substring(0, 60);
+
+    const { data, error } = await supabase
+      .from("forum_topics")
+      .insert({
+        title,
+        content,
+        category_id: categoryId,
+        user_id: userData.user.id,
+        slug: slug, // Add slug for SEO
+        meta_description: content.substring(0, 160) // First 160 chars as meta description
+      })
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error creating topic:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de créer le sujet. Veuillez réessayer.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+
     toast({
-      title: "Erreur d'authentification",
-      description: "Vous devez être connecté pour créer un sujet",
-      variant: "destructive",
+      title: "Succès",
+      description: "Votre sujet a été créé.",
     });
+
+    return data as ForumTopic;
+  } catch (error) {
+    console.error("Error in createTopic:", error);
     return null;
   }
-
-  const { data, error } = await supabase
-    .from("forum_topics")
-    .insert({
-      title,
-      content,
-      category_id: categoryId,
-      user_id: userData.user.id,
-    })
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Erreur lors de la création du sujet:", error);
-    toast({
-      title: "Erreur",
-      description: "Impossible de créer le sujet. Veuillez réessayer.",
-      variant: "destructive",
-    });
-    throw error;
-  }
-
-  toast({
-    title: "Succès",
-    description: "Votre sujet a été créé.",
-  });
-
-  return data;
 };
 
-// Posts (réponses) du forum
+// Forum posts (replies)
 export const getPosts = async (
   topicId: string,
   pagination: PaginationParams = { page: 1, limit: DEFAULT_LIMIT }
@@ -171,230 +204,280 @@ export const getPosts = async (
   const { page, limit } = pagination;
   const offset = (page - 1) * limit;
 
-  const { data, error, count } = await supabase
-    .from("forum_posts")
-    .select(`
-      *,
-      likes_count:forum_likes(count)
-    `, { count: "exact" })
-    .eq("topic_id", topicId)
-    .order("created_at", { ascending: true })
-    .limit(limit)
-    .range(offset, offset + limit - 1);
+  try {
+    const { data, error, count } = await supabase
+      .from("forum_posts")
+      .select(`
+        *,
+        likes_count:forum_likes(count)
+      `, { count: "exact" })
+      .eq("topic_id", topicId)
+      .order("created_at", { ascending: true })
+      .limit(limit)
+      .range(offset, offset + limit - 1);
 
-  if (error) {
-    console.error("Erreur lors du chargement des réponses:", error);
-    throw error;
+    if (error) {
+      console.error("Error loading posts:", error);
+      throw error;
+    }
+
+    const totalPages = count ? Math.ceil(count / limit) : 0;
+
+    return {
+      data: data as ForumPost[] || [],
+      total: count || 0,
+      page,
+      limit,
+      totalPages
+    };
+  } catch (error) {
+    console.error("Error in getPosts:", error);
+    return {
+      data: [],
+      total: 0,
+      page,
+      limit,
+      totalPages: 0
+    };
   }
-
-  const totalPages = count ? Math.ceil(count / limit) : 0;
-
-  return {
-    data: data || [],
-    total: count || 0,
-    page,
-    limit,
-    totalPages
-  };
 };
 
 export const createPost = async (
   content: string,
   topicId: string
 ): Promise<ForumPost | null> => {
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  
-  if (userError || !userData.user) {
+  try {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !userData.user) {
+      toast({
+        title: "Erreur d'authentification",
+        description: "Vous devez être connecté pour répondre",
+        variant: "destructive",
+      });
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from("forum_posts")
+      .insert({
+        content,
+        topic_id: topicId,
+        user_id: userData.user.id,
+      })
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error creating post:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de publier votre réponse. Veuillez réessayer.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+
     toast({
-      title: "Erreur d'authentification",
-      description: "Vous devez être connecté pour répondre",
-      variant: "destructive",
+      title: "Succès",
+      description: "Votre réponse a été publiée.",
     });
+
+    return data as ForumPost;
+  } catch (error) {
+    console.error("Error in createPost:", error);
     return null;
   }
-
-  const { data, error } = await supabase
-    .from("forum_posts")
-    .insert({
-      content,
-      topic_id: topicId,
-      user_id: userData.user.id,
-    })
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Erreur lors de la création de la réponse:", error);
-    toast({
-      title: "Erreur",
-      description: "Impossible de publier votre réponse. Veuillez réessayer.",
-      variant: "destructive",
-    });
-    throw error;
-  }
-
-  toast({
-    title: "Succès",
-    description: "Votre réponse a été publiée.",
-  });
-
-  return data;
 };
 
-// Gestion des likes
+// Like management
 export const likeTopic = async (topicId: string): Promise<boolean> => {
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  
-  if (userError || !userData.user) {
-    toast({
-      title: "Erreur d'authentification",
-      description: "Vous devez être connecté pour aimer un sujet",
-      variant: "destructive",
-    });
-    return false;
-  }
-
-  const { data, error } = await supabase
-    .from("forum_likes")
-    .insert({
-      topic_id: topicId,
-      user_id: userData.user.id,
-    })
-    .select();
-
-  if (error) {
-    if (error.code === "23505") { // Duplicate key error
-      // L'utilisateur a déjà aimé ce sujet, suppression du like
-      return await unlikeTopic(topicId);
-    }
+  try {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
     
-    console.error("Erreur lors de l'ajout du like:", error);
+    if (userError || !userData.user) {
+      toast({
+        title: "Erreur d'authentification",
+        description: "Vous devez être connecté pour aimer un sujet",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    const { data, error } = await supabase
+      .from("forum_likes")
+      .insert({
+        topic_id: topicId,
+        user_id: userData.user.id,
+      })
+      .select();
+
+    if (error) {
+      if (error.code === "23505") { // Duplicate key error
+        // User already liked this topic, remove the like
+        return await unlikeTopic(topicId);
+      }
+      
+      console.error("Error adding like:", error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error in likeTopic:", error);
     return false;
   }
-
-  return true;
 };
 
 export const unlikeTopic = async (topicId: string): Promise<boolean> => {
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  
-  if (userError || !userData.user) {
+  try {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !userData.user) {
+      return false;
+    }
+
+    const { error } = await supabase
+      .from("forum_likes")
+      .delete()
+      .eq("topic_id", topicId)
+      .eq("user_id", userData.user.id);
+
+    if (error) {
+      console.error("Error removing like:", error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error in unlikeTopic:", error);
     return false;
   }
-
-  const { error } = await supabase
-    .from("forum_likes")
-    .delete()
-    .eq("topic_id", topicId)
-    .eq("user_id", userData.user.id);
-
-  if (error) {
-    console.error("Erreur lors de la suppression du like:", error);
-    return false;
-  }
-
-  return true;
 };
 
 export const likePost = async (postId: string): Promise<boolean> => {
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  
-  if (userError || !userData.user) {
-    toast({
-      title: "Erreur d'authentification",
-      description: "Vous devez être connecté pour aimer une réponse",
-      variant: "destructive",
-    });
-    return false;
-  }
-
-  const { data, error } = await supabase
-    .from("forum_likes")
-    .insert({
-      post_id: postId,
-      user_id: userData.user.id,
-    })
-    .select();
-
-  if (error) {
-    if (error.code === "23505") { // Duplicate key error
-      // L'utilisateur a déjà aimé cette réponse, suppression du like
-      return await unlikePost(postId);
-    }
+  try {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
     
-    console.error("Erreur lors de l'ajout du like:", error);
+    if (userError || !userData.user) {
+      toast({
+        title: "Erreur d'authentification",
+        description: "Vous devez être connecté pour aimer une réponse",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    const { data, error } = await supabase
+      .from("forum_likes")
+      .insert({
+        post_id: postId,
+        user_id: userData.user.id,
+      })
+      .select();
+
+    if (error) {
+      if (error.code === "23505") { // Duplicate key error
+        // User already liked this post, remove the like
+        return await unlikePost(postId);
+      }
+      
+      console.error("Error adding like:", error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error in likePost:", error);
     return false;
   }
-
-  return true;
 };
 
 export const unlikePost = async (postId: string): Promise<boolean> => {
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  
-  if (userError || !userData.user) {
+  try {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !userData.user) {
+      return false;
+    }
+
+    const { error } = await supabase
+      .from("forum_likes")
+      .delete()
+      .eq("post_id", postId)
+      .eq("user_id", userData.user.id);
+
+    if (error) {
+      console.error("Error removing like:", error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error in unlikePost:", error);
     return false;
   }
-
-  const { error } = await supabase
-    .from("forum_likes")
-    .delete()
-    .eq("post_id", postId)
-    .eq("user_id", userData.user.id);
-
-  if (error) {
-    console.error("Erreur lors de la suppression du like:", error);
-    return false;
-  }
-
-  return true;
 };
 
-// Fonction pour incrémenter les vues d'un sujet
+// Function to increment topic views
 export const incrementTopicViews = async (topicId: string): Promise<void> => {
-  const { error } = await supabase
-    .rpc('increment_topic_views', { topic_id: topicId });
+  try {
+    const { error } = await supabase
+      .rpc('increment_topic_views', { topic_id: topicId });
 
-  if (error) {
-    console.error("Erreur lors de l'incrémentation des vues:", error);
+    if (error) {
+      console.error("Error incrementing views:", error);
+    }
+  } catch (error) {
+    console.error("Error in incrementTopicViews:", error);
   }
 };
 
-// Fonction pour obtenir le profil utilisateur
+// Function to get user profile
 export const getUserProfile = async (userId: string) => {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", userId)
-    .single();
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
+      .maybeSingle();
 
-  if (error && error.code !== "PGRST116") {
-    console.error("Erreur lors du chargement du profil:", error);
-    throw error;
+    if (error) {
+      console.error("Error loading profile:", error);
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in getUserProfile:", error);
+    return null;
   }
-
-  return data;
 };
 
-// Fonction pour vérifier si un utilisateur a aimé un sujet ou une réponse
+// Function to check if a user has liked a topic or post
 export const checkUserLikes = async (userId: string, itemIds: string[], type: 'topic' | 'post') => {
   if (!userId || itemIds.length === 0) return {};
   
-  const field = type === 'topic' ? 'topic_id' : 'post_id';
-  
-  const { data, error } = await supabase
-    .from("forum_likes")
-    .select("*")
-    .eq("user_id", userId)
-    .in(field, itemIds);
+  try {
+    const field = type === 'topic' ? 'topic_id' : 'post_id';
+    
+    const { data, error } = await supabase
+      .from("forum_likes")
+      .select("*")
+      .eq("user_id", userId)
+      .in(field, itemIds);
 
-  if (error) {
-    console.error("Erreur lors de la vérification des likes:", error);
+    if (error) {
+      console.error("Error checking likes:", error);
+      return {};
+    }
+
+    return data.reduce((acc, like) => {
+      acc[like[field]] = true;
+      return acc;
+    }, {});
+  } catch (error) {
+    console.error("Error in checkUserLikes:", error);
     return {};
   }
-
-  return data.reduce((acc, like) => {
-    acc[like[field]] = true;
-    return acc;
-  }, {});
 };

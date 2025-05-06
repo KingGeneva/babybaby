@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { BookOpen, MessageCircle, Users, Clock, ChevronRight, Search } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
+import SEOHead from '@/components/common/SEOHead';
 
 const ForumPage = () => {
   const [categories, setCategories] = useState<ForumCategory[]>([]);
@@ -77,6 +78,12 @@ const ForumPage = () => {
   if (!user) {
     return (
       <div className="min-h-screen">
+        <SEOHead 
+          title="Forum des Parents | BabyBaby"
+          description="Rejoignez notre forum pour échanger avec d'autres parents, poser vos questions et partager vos expériences sur la parentalité, la grossesse et le développement des enfants."
+          canonicalUrl="https://babybaby.app/forum"
+          keywords={["forum parents", "communauté parents", "questions parentalité", "échanges bébé", "conseils jeunes parents", "entraide parentale"]}
+        />
         <NavBar />
         <div className="pt-24 pb-20 px-4">
           <div className="container mx-auto text-center">
@@ -94,6 +101,12 @@ const ForumPage = () => {
 
   return (
     <div className="min-h-screen">
+      <SEOHead 
+        title="Forum des Parents | BabyBaby"
+        description="Échangez avec d'autres parents sur notre forum. Discussions par thématiques : grossesse, nouveaux-nés, alimentation, éducation et santé des enfants."
+        canonicalUrl="https://babybaby.app/forum"
+        keywords={["forum parents", "communauté parents", "questions parentalité", "échanges bébé", "conseils jeunes parents", "entraide parentale"]}
+      />
       <NavBar />
       <div className="pt-24 pb-20 px-4">
         <div className="container mx-auto">
