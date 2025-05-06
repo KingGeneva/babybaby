@@ -136,7 +136,7 @@ export const createTopic = async (
         meta_description: content.substring(0, 160) // First 160 chars as meta description
       })
       .select()
-      .maybeSingle() as GenericSupabaseResponse<ForumTopic>;
+      .single() as GenericSupabaseResponse<ForumTopic>;
 
     if (error) {
       console.error("Error creating topic:", error);

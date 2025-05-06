@@ -83,7 +83,7 @@ export const createPost = async (
         user_id: userData.user.id,
       })
       .select()
-      .maybeSingle() as GenericSupabaseResponse<ForumPost>;
+      .single() as GenericSupabaseResponse<ForumPost>;
 
     if (error) {
       console.error("Error creating post:", error);

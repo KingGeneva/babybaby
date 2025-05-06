@@ -12,4 +12,3 @@ export type GenericSupabaseClient = SupabaseClient<Database, "public", any>;
 export type AnyTable = {
   [key: string]: any;
 };
-
