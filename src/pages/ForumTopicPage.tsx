@@ -4,10 +4,14 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { ForumTopic, ForumPost } from '@/components/forum/types';
-import { getTopicById, getPosts, createPost, likeTopic, likePost } from '@/components/forum/forumService';
+import { 
+  getTopicById, 
+  incrementTopicViews 
+} from '@/components/forum/services/topicService';
+import { getPosts, createPost } from '@/components/forum/services/postService';
+import { likeTopic, likePost } from '@/components/forum/services/likeService';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { 
   MessageCircle, 
   Heart, 

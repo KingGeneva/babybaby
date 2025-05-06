@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { ForumCategory } from '@/components/forum/types';
-import { getCategories } from '@/components/forum/forumService';
+import { getCategories } from '@/components/forum/services/categoryService';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
