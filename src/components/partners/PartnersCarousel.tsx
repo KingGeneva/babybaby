@@ -51,6 +51,12 @@ const partners: Partner[] = [
     name: "Deux par deux",
     logo: "/lovable-uploads/55b1f730-647d-463b-8db9-2e33309e02c1.png",
     url: "https://www.anrdoezrs.net/click-101432391-15735100"
+  },
+  {
+    id: 16,
+    name: "Coco Moon Hawaii",
+    logo: "/lovable-uploads/eca18429-7255-460c-853e-b2b623f14afe.png",
+    url: "https://www.kqzyfj.com/click-101432391-17061544"
   }
 ];
 
