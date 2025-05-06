@@ -85,7 +85,7 @@ export const ebooksData: Ebook[] = [
     title: "Coliques du bébé",
     description: "Guide pratique pour comprendre et soulager les coliques de votre bébé avec des méthodes efficaces.",
     coverImage: "/lovable-uploads/728d443c-203b-42a8-bdd9-c19a50c6eed4.png",
-    fileUrl: "sommeil-bebe-astuces.pdf",
+    fileUrl: "coliques-du-bebe.pdf",
     fileType: "PDF",
     fileSize: "3.5 MB",
     category: "Santé",
@@ -94,4 +94,3 @@ export const ebooksData: Ebook[] = [
     publishDate: "2024-04-10"
   }
 ];
-
