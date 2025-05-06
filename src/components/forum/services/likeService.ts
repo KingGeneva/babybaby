@@ -1,6 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
+import { GenericSupabaseResponse } from "../utils/supabaseTypes";
 
 // Like management
 export const likeTopic = async (topicId: string): Promise<boolean> => {
@@ -21,8 +22,8 @@ export const likeTopic = async (topicId: string): Promise<boolean> => {
       .insert({
         topic_id: topicId,
         user_id: userData.user.id,
-      } as unknown as any)
-      .select() as unknown as { data: any, error: any };
+      })
+      .select() as GenericSupabaseResponse<any[]>;
 
     if (error) {
       if (error.code === "23505") { // Duplicate key error
@@ -53,7 +54,7 @@ export const unlikeTopic = async (topicId: string): Promise<boolean> => {
       .from("forum_likes")
       .delete()
       .eq("topic_id", topicId)
-      .eq("user_id", userData.user.id) as unknown as { error: any };
+      .eq("user_id", userData.user.id) as GenericSupabaseResponse<any>;
 
     if (error) {
       console.error("Error removing like:", error);
@@ -85,8 +86,8 @@ export const likePost = async (postId: string): Promise<boolean> => {
       .insert({
         post_id: postId,
         user_id: userData.user.id,
-      } as unknown as any)
-      .select() as unknown as { data: any, error: any };
+      })
+      .select() as GenericSupabaseResponse<any[]>;
 
     if (error) {
       if (error.code === "23505") { // Duplicate key error
@@ -117,7 +118,7 @@ export const unlikePost = async (postId: string): Promise<boolean> => {
       .from("forum_likes")
       .delete()
       .eq("post_id", postId)
-      .eq("user_id", userData.user.id) as unknown as { error: any };
+      .eq("user_id", userData.user.id) as GenericSupabaseResponse<any>;
 
     if (error) {
       console.error("Error removing like:", error);
@@ -142,7 +143,7 @@ export const checkUserLikes = async (userId: string, itemIds: string[], type: 't
       .from("forum_likes")
       .select("*")
       .eq("user_id", userId)
-      .in(field, itemIds) as unknown as { data: any[] | null, error: any };
+      .in(field, itemIds) as GenericSupabaseResponse<any[]>;
 
     if (error) {
       console.error("Error checking likes:", error);

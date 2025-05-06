@@ -2,6 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { ForumPost, PaginationParams, PaginatedResponse } from "../types";
 import { toast } from "@/components/ui/use-toast";
+import { GenericSupabaseResponse } from "../utils/supabaseTypes";
 
 // Limit for pagination
 const DEFAULT_LIMIT = 10;
@@ -24,11 +25,7 @@ export const getPosts = async (
       .eq("topic_id", topicId)
       .order("created_at", { ascending: true })
       .limit(limit)
-      .range(offset, offset + limit - 1) as unknown as { 
-        data: ForumPost[] | null, 
-        error: any, 
-        count: number | null 
-      };
+      .range(offset, offset + limit - 1) as GenericSupabaseResponse<ForumPost[]> & { count: number | null };
 
     if (error) {
       console.error("Error loading posts:", error);
@@ -78,9 +75,9 @@ export const createPost = async (
         content,
         topic_id: topicId,
         user_id: userData.user.id,
-      } as unknown as any)
+      })
       .select()
-      .maybeSingle() as unknown as { data: ForumPost | null, error: any };
+      .maybeSingle() as GenericSupabaseResponse<ForumPost>;
 
     if (error) {
       console.error("Error creating post:", error);
