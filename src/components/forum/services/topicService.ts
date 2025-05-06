@@ -2,7 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { ForumTopic, PaginationParams, PaginatedResponse } from "../types";
 import { toast } from "@/components/ui/use-toast";
-import { GenericSupabaseResponse } from "../utils/supabaseTypes";
+import { GenericSupabaseResponse, AnyTable } from "../utils/supabaseTypes";
 
 // Limit for pagination
 const DEFAULT_LIMIT = 10;
@@ -16,8 +16,11 @@ export const getTopics = async (
   const offset = (page - 1) * limit;
 
   try {
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+
     // Base query
-    let query = supabase
+    let query = supabaseAny
       .from("forum_topics")
       .select(`
         *,
@@ -45,7 +48,7 @@ export const getTopics = async (
     const totalPages = count ? Math.ceil(count / limit) : 0;
 
     return {
-      data: data as ForumTopic[] || [],
+      data: data || [],
       total: count || 0,
       page,
       limit,
@@ -65,7 +68,10 @@ export const getTopics = async (
 
 export const getTopicById = async (id: string): Promise<ForumTopic | null> => {
   try {
-    const { data, error } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+
+    const { data, error } = await supabaseAny
       .from("forum_topics")
       .select(`
         *,
@@ -85,7 +91,7 @@ export const getTopicById = async (id: string): Promise<ForumTopic | null> => {
       await incrementTopicViews(id);
     }
 
-    return data as ForumTopic;
+    return data || null;
   } catch (error) {
     console.error("Error in getTopicById:", error);
     return null;
@@ -116,7 +122,10 @@ export const createTopic = async (
       .replace(/\s+/gi, '-')
       .substring(0, 60);
 
-    const { data, error } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+
+    const { data, error } = await supabaseAny
       .from("forum_topics")
       .insert({
         title,
@@ -144,7 +153,7 @@ export const createTopic = async (
       description: "Votre sujet a été créé.",
     });
 
-    return data as ForumTopic;
+    return data || null;
   } catch (error) {
     console.error("Error in createTopic:", error);
     return null;

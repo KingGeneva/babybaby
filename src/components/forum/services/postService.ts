@@ -2,7 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { ForumPost, PaginationParams, PaginatedResponse } from "../types";
 import { toast } from "@/components/ui/use-toast";
-import { GenericSupabaseResponse } from "../utils/supabaseTypes";
+import { GenericSupabaseResponse, AnyTable } from "../utils/supabaseTypes";
 
 // Limit for pagination
 const DEFAULT_LIMIT = 10;
@@ -16,7 +16,10 @@ export const getPosts = async (
   const offset = (page - 1) * limit;
 
   try {
-    const { data, error, count } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+
+    const { data, error, count } = await supabaseAny
       .from("forum_posts")
       .select(`
         *,
@@ -35,7 +38,7 @@ export const getPosts = async (
     const totalPages = count ? Math.ceil(count / limit) : 0;
 
     return {
-      data: data as ForumPost[] || [],
+      data: data || [],
       total: count || 0,
       page,
       limit,
@@ -69,7 +72,10 @@ export const createPost = async (
       return null;
     }
 
-    const { data, error } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+
+    const { data, error } = await supabaseAny
       .from("forum_posts")
       .insert({
         content,
@@ -94,7 +100,7 @@ export const createPost = async (
       description: "Votre réponse a été publiée.",
     });
 
-    return data as ForumPost;
+    return data || null;
   } catch (error) {
     console.error("Error in createPost:", error);
     return null;

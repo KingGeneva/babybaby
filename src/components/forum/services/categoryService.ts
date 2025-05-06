@@ -2,13 +2,15 @@
 import { supabase } from "@/integrations/supabase/client";
 import { ForumCategory } from "../types";
 import { toast } from "@/components/ui/use-toast";
-import { GenericSupabaseResponse } from "../utils/supabaseTypes";
+import { GenericSupabaseResponse, AnyTable } from "../utils/supabaseTypes";
 
 // Forum categories
 export const getCategories = async (): Promise<ForumCategory[]> => {
   try {
-    // Use type assertion for the response
-    const { data, error } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+    
+    const { data, error } = await supabaseAny
       .from("forum_categories")
       .select("*")
       .order("name", { ascending: true }) as GenericSupabaseResponse<ForumCategory[]>;
@@ -18,7 +20,7 @@ export const getCategories = async (): Promise<ForumCategory[]> => {
       throw error;
     }
 
-    return data as ForumCategory[] || [];
+    return data || [];
   } catch (error) {
     console.error("Error in getCategories:", error);
     return [];
@@ -27,8 +29,10 @@ export const getCategories = async (): Promise<ForumCategory[]> => {
 
 export const getCategoryBySlug = async (slug: string): Promise<ForumCategory | null> => {
   try {
-    // Use type assertion for the response
-    const { data, error } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+    
+    const { data, error } = await supabaseAny
       .from("forum_categories")
       .select("*")
       .eq("slug", slug)
@@ -39,7 +43,7 @@ export const getCategoryBySlug = async (slug: string): Promise<ForumCategory | n
       throw error;
     }
 
-    return data as ForumCategory;
+    return data || null;
   } catch (error) {
     console.error("Error in getCategoryBySlug:", error);
     return null;

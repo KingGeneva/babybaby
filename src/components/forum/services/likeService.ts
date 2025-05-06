@@ -1,7 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
-import { GenericSupabaseResponse } from "../utils/supabaseTypes";
+import { GenericSupabaseResponse, AnyTable } from "../utils/supabaseTypes";
 
 // Like management
 export const likeTopic = async (topicId: string): Promise<boolean> => {
@@ -17,7 +17,10 @@ export const likeTopic = async (topicId: string): Promise<boolean> => {
       return false;
     }
 
-    const { data, error } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+
+    const { data, error } = await supabaseAny
       .from("forum_likes")
       .insert({
         topic_id: topicId,
@@ -50,7 +53,10 @@ export const unlikeTopic = async (topicId: string): Promise<boolean> => {
       return false;
     }
 
-    const { error } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+
+    const { error } = await supabaseAny
       .from("forum_likes")
       .delete()
       .eq("topic_id", topicId)
@@ -81,7 +87,10 @@ export const likePost = async (postId: string): Promise<boolean> => {
       return false;
     }
 
-    const { data, error } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+
+    const { data, error } = await supabaseAny
       .from("forum_likes")
       .insert({
         post_id: postId,
@@ -114,7 +123,10 @@ export const unlikePost = async (postId: string): Promise<boolean> => {
       return false;
     }
 
-    const { error } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+
+    const { error } = await supabaseAny
       .from("forum_likes")
       .delete()
       .eq("post_id", postId)
@@ -139,7 +151,10 @@ export const checkUserLikes = async (userId: string, itemIds: string[], type: 't
   try {
     const field = type === 'topic' ? 'topic_id' : 'post_id';
     
-    const { data, error } = await supabase
+    // Cast supabase to allow any table name
+    const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
+
+    const { data, error } = await supabaseAny
       .from("forum_likes")
       .select("*")
       .eq("user_id", userId)
