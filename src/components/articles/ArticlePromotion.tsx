@@ -12,14 +12,42 @@ const ArticlePromotion: React.FC = () => {
   const handleDownloadEbook = async () => {
     // Téléchargement de l'ebook depuis le bucket Supabase
     try {
+      toast({
+        title: "Préparation du téléchargement",
+        description: "Veuillez patienter...",
+      });
+      
+      let fileName = "";
+      let downloadName = "";
+      let successMessage = "";
+      
       // Pour l'article sur le sommeil
       if (id === '4') {
+        fileName = "sommeil-bebe-astuces.pdf";
+        downloadName = "Les secrets d'un sommeil paisible.pdf";
+        successMessage = "Votre guide sur le sommeil du bébé a bien été téléchargé.";
+      } 
+      // Pour l'article sur les coliques
+      else if (id === '1') {
+        fileName = "Coliques du bebe.pdf";
+        downloadName = "Coliques du bébé.pdf";
+        successMessage = "Votre guide sur les coliques du bébé a bien été téléchargé.";
+      }
+      else {
+        fileName = "Les 6 premiers mois - Guide.pdf";
+        downloadName = "Les 6 premiers mois - Guide essentiel.pdf";
+        successMessage = "Votre guide pour les 6 premiers mois a bien été téléchargé.";
+      }
+      
+      if (fileName) {
+        console.log(`Téléchargement du fichier: ${fileName}`);
         const { data, error } = await supabase
           .storage
           .from('ebooks')
-          .download('sommeil-bebe-astuce.pdf');
+          .download(fileName);
           
         if (error) {
+          console.error("Erreur de téléchargement:", error);
           throw error;
         }
         
@@ -28,7 +56,7 @@ const ArticlePromotion: React.FC = () => {
           const url = URL.createObjectURL(data);
           const a = document.createElement('a');
           a.href = url;
-          a.download = 'guide-sommeil-du-bebe.pdf';
+          a.download = downloadName;
           document.body.appendChild(a);
           a.click();
           URL.revokeObjectURL(url);
@@ -36,7 +64,7 @@ const ArticlePromotion: React.FC = () => {
           
           toast({
             title: "Téléchargement réussi",
-            description: "Votre guide sur le sommeil du bébé a bien été téléchargé.",
+            description: successMessage,
           });
         }
       }
@@ -52,6 +80,7 @@ const ArticlePromotion: React.FC = () => {
   
   // Personnalisation du contenu en fonction de l'article
   const isSleepArticle = id === '4';
+  const isColicsArticle = id === '1';
   
   return (
     <div className="bg-babybaby-lightblue/30 p-6 rounded-lg mt-8 mb-8">
@@ -59,7 +88,20 @@ const ArticlePromotion: React.FC = () => {
       {isSleepArticle ? (
         <>
           <p className="mb-4">
-            Pour aller plus loin et découvrir des techniques douces et efficaces pour améliorer le sommeil de votre bébé, téléchargez notre guide complet "Sommeil du bébé" gratuitement.
+            Pour aller plus loin et découvrir des techniques douces et efficaces pour améliorer le sommeil de votre bébé, téléchargez notre guide complet "Les secrets d'un sommeil paisible" gratuitement.
+          </p>
+          <Button 
+            className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 flex items-center gap-2"
+            onClick={handleDownloadEbook}
+          >
+            <Download size={16} />
+            Télécharger notre guide gratuit
+          </Button>
+        </>
+      ) : isColicsArticle ? (
+        <>
+          <p className="mb-4">
+            Pour aller plus loin et découvrir des solutions pour soulager les coliques de votre bébé, téléchargez notre guide complet "Coliques du bébé" gratuitement.
           </p>
           <Button 
             className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 flex items-center gap-2"
@@ -72,9 +114,13 @@ const ArticlePromotion: React.FC = () => {
       ) : (
         <>
           <p className="mb-4">
-            Découvrez des techniques douces et efficaces pour améliorer le sommeil de votre bébé, téléchargez notre guide complet "Sommeil du bébé" gratuitement.
+            Découvrez nos guides complets sur le développement de votre bébé, le sommeil et les coliques en téléchargeant gratuitement nos ressources.
           </p>
-          <Button className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90">
+          <Button 
+            className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 flex items-center gap-2"
+            onClick={handleDownloadEbook}
+          >
+            <Download size={16} />
             Télécharger notre guide gratuit
           </Button>
         </>

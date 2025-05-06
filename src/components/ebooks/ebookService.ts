@@ -36,7 +36,9 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
     // Open the file in a new tab or download it directly
     const link = document.createElement('a');
     link.href = url;
-    link.download = ebook.title.replace(/\s+/g, '-').toLowerCase() + '.' + filePath.split('.').pop();
+    
+    // Use the exact filename from storage for download
+    link.download = filePath;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -47,6 +49,7 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
     }, 5000);
     
     // Success notification
+    toast.dismiss();
     toast.success(`${ebook.title} téléchargé avec succès`);
     
     // Log analytics
@@ -57,6 +60,7 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
     
   } catch (error) {
     console.error("Erreur lors du téléchargement:", error);
+    toast.dismiss();
     toast.error(`Impossible de télécharger ${ebook.title}. Veuillez réessayer.`);
   }
 };
