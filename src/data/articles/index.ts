@@ -14,7 +14,7 @@ export const articles: Article[] = [
   ...sommeilArticles,
   ...developpementArticles,
   ...preparationArticles
-];
+].sort((a, b) => b.id - a.id); // Sort by ID in descending order (newest first)
 
 export * from './nutrition';
 export * from './amenagement';
@@ -24,13 +24,13 @@ export * from './preparation';
 
 // This function helps to find an article by ID
 export const getArticleById = async (id: number): Promise<Article | undefined> => {
-  // D'abord, chercher dans les articles statiques
+  // First, check in static articles
   const staticArticle = articles.find(article => article.id === id);
   if (staticArticle) return staticArticle;
   
-  // Ensuite, essayer de charger depuis Supabase Storage
+  // Then, try to load from Supabase Storage
   try {
-    // Essayer de trouver un fichier JSON avec l'ID de l'article
+    // Try to find a JSON file with the article ID
     const { data, error } = await supabase
       .storage
       .from('articles')
@@ -38,7 +38,7 @@ export const getArticleById = async (id: number): Promise<Article | undefined> =
       
     if (error || !data) return undefined;
     
-    // Lire le contenu du fichier JSON
+    // Read JSON file content
     const text = await data.text();
     const article: Article = JSON.parse(text);
     
@@ -53,24 +53,24 @@ export const getArticleById = async (id: number): Promise<Article | undefined> =
 export const getArticlesByCategory = async (category: string): Promise<Article[]> => {
   let result = [...articles];
   
-  // Filtrer par catégorie si ce n'est pas "Tous"
+  // Filter by category if not "Tous"
   if (category !== "Tous") {
     result = result.filter(article => article.category === category);
   }
   
-  // Essayer de charger des articles supplémentaires depuis Supabase Storage
+  // Try to load additional articles from Supabase Storage
   try {
-    // Lister les fichiers JSON dans le dossier articles
+    // List JSON files in articles folder
     const { data: files, error } = await supabase
       .storage
       .from('articles')
       .list('articles');
       
     if (!error && files && files.length > 0) {
-      // Filtrer les fichiers JSON
+      // Filter JSON files
       const jsonFiles = files.filter(file => file.name.endsWith('.json'));
       
-      // Charger et analyser chaque fichier JSON
+      // Load and parse each JSON file
       const storageArticles = await Promise.all(
         jsonFiles.map(async (file) => {
           try {
@@ -90,7 +90,7 @@ export const getArticlesByCategory = async (category: string): Promise<Article[]
         })
       );
       
-      // Ajouter les articles valides qui correspondent à la catégorie
+      // Add valid storage articles that match the category
       const validStorageArticles = storageArticles.filter((a): a is Article => 
         a !== null && (category === "Tous" || a.category === category)
       );
@@ -101,7 +101,7 @@ export const getArticlesByCategory = async (category: string): Promise<Article[]
     console.error('Error loading articles from storage:', error);
   }
   
-  // Trier par ID décroissant pour avoir les plus récents en premier
+  // Sort by ID in descending order to have the most recent first
   result = result.sort((a, b) => b.id - a.id);
   
   return result;

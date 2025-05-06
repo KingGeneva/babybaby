@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { useArticles } from '@/hooks/useArticles';
 import { ArticleCardSkeleton } from './ArticleSkeleton';
 
-// Variantes d'animation pour la section
+// Animation variants
 const sectionVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -21,7 +21,6 @@ const sectionVariants = {
   }
 };
 
-// Variantes d'animation pour les éléments
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
@@ -35,7 +34,7 @@ const ArticleSection: React.FC = () => {
   const isMobile = useIsMobile();
   const { articles, loading, error } = useArticles("Tous", "");
   
-  // Limiter à 3 articles pour la page d'accueil
+  // Limit to 3 articles for the homepage
   const featuredArticles = articles.slice(0, 3);
   
   return (
@@ -68,7 +67,7 @@ const ArticleSection: React.FC = () => {
           viewport={{ once: true, margin: "-100px" }}
         >
           {loading ? (
-            // Afficher des skeletons pendant le chargement
+            // Display skeletons while loading
             <>
               {Array(isMobile ? 2 : 3).fill(0).map((_, index) => (
                 <motion.div key={`skeleton-${index}`} variants={itemVariants}>
@@ -76,8 +75,13 @@ const ArticleSection: React.FC = () => {
                 </motion.div>
               ))}
             </>
+          ) : error ? (
+            // Display error state
+            <div className="col-span-full text-center text-red-500">
+              Impossible de charger les articles. Veuillez réessayer plus tard.
+            </div>
           ) : (
-            // Afficher les articles chargés
+            // Display loaded articles
             featuredArticles.slice(0, isMobile ? 2 : featuredArticles.length).map((article) => (
               <motion.div key={article.id} variants={itemVariants}>
                 <ArticleCard article={article} />

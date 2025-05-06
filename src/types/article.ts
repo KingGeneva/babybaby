@@ -12,4 +12,5 @@ export interface Article {
   tags: string[];
   author: string;
   featured?: boolean; // Optionnel
+  views?: number;     // Optionnel
 }

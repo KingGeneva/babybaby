@@ -75,8 +75,11 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
           );
         }
 
-        // Trier les articles par ID décroissant (plus récents en premier)
+        // Sort articles by ID in descending order (most recent first)
         result = result.sort((a, b) => b.id - a.id);
+        
+        // Debug log to verify article sorting and order
+        console.log('Articles after sorting:', result.map(a => ({ id: a.id, title: a.title })));
         
         setArticles(result);
       } catch (error) {
