@@ -2,7 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { ForumTopic, PaginationParams, PaginatedResponse } from "../types";
 import { toast } from "@/components/ui/use-toast";
-import { GenericSupabaseResponse, AnyTable, CountResponse } from "../utils/supabaseTypes";
+import { GenericSupabaseResponse, AnyTable } from "../utils/supabaseTypes";
 
 // Limit for pagination
 const DEFAULT_LIMIT = 10;
@@ -35,10 +35,17 @@ export const getTopics = async (
       query = query.eq("category_id", categoryId);
     }
 
-    // Get topics with pagination
-    const { data, error, count } = await query
+    // Get topics with pagination and manually handle the response
+    const response = await query
       .limit(limit)
-      .range(offset, offset + limit - 1) as CountResponse<ForumTopic[]>;
+      .range(offset, offset + limit - 1);
+    
+    // Manually handle the response
+    const { data, error, count } = response as unknown as {
+      data: ForumTopic[] | null;
+      error: any;
+      count: number | null;
+    };
 
     if (error) {
       console.error("Error loading topics:", error);
@@ -79,7 +86,7 @@ export const getTopicById = async (id: string): Promise<ForumTopic | null> => {
         likes_count:forum_likes(count)
       `)
       .eq("id", id)
-      .single() as GenericSupabaseResponse<ForumTopic>;
+      .maybeSingle() as GenericSupabaseResponse<ForumTopic | null>;
 
     if (error) {
       console.error("Error loading topic:", error);
@@ -136,7 +143,7 @@ export const createTopic = async (
         meta_description: content.substring(0, 160) // First 160 chars as meta description
       })
       .select()
-      .single() as GenericSupabaseResponse<ForumTopic>;
+      .maybeSingle() as GenericSupabaseResponse<ForumTopic | null>;
 
     if (error) {
       console.error("Error creating topic:", error);

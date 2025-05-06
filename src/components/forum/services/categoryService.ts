@@ -36,7 +36,7 @@ export const getCategoryBySlug = async (slug: string): Promise<ForumCategory | n
       .from("forum_categories")
       .select("*")
       .eq("slug", slug)
-      .single() as GenericSupabaseResponse<ForumCategory>;
+      .maybeSingle() as GenericSupabaseResponse<ForumCategory | null>;
 
     if (error) {
       if (error.code !== 'PGRST116') { // PGRST116 is the "no rows returned" error

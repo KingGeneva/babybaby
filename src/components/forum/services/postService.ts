@@ -19,7 +19,8 @@ export const getPosts = async (
     // Cast supabase to allow any table name
     const supabaseAny = supabase as unknown as { from: (table: string) => AnyTable };
 
-    const { data, error, count } = await supabaseAny
+    // Use the generic response type
+    const response = await supabaseAny
       .from("forum_posts")
       .select(`
         *,
@@ -28,7 +29,14 @@ export const getPosts = async (
       .eq("topic_id", topicId)
       .order("created_at", { ascending: true })
       .limit(limit)
-      .range(offset, offset + limit - 1) as CountResponse<ForumPost[]>;
+      .range(offset, offset + limit - 1);
+    
+    // Manually handle the response
+    const { data, error, count } = response as unknown as {
+      data: ForumPost[] | null;
+      error: any;
+      count: number | null;
+    };
 
     if (error) {
       console.error("Error loading posts:", error);
@@ -83,7 +91,7 @@ export const createPost = async (
         user_id: userData.user.id,
       })
       .select()
-      .single() as GenericSupabaseResponse<ForumPost>;
+      .maybeSingle() as GenericSupabaseResponse<ForumPost | null>;
 
     if (error) {
       console.error("Error creating post:", error);

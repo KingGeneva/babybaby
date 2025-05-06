@@ -14,6 +14,6 @@ export type AnyTable = {
 };
 
 // Type d'aide pour les réponses avec décompte
-export interface CountResponse<T> extends PostgrestResponse<T> {
+export type CountResponse<T> = PostgrestResponse<T> & {
   count: number | null;
-}
+};
