@@ -21,7 +21,7 @@ export const likeTopic = async (topicId: string): Promise<boolean> => {
       .insert({
         topic_id: topicId,
         user_id: userData.user.id,
-      })
+      } as any)
       .select();
 
     if (error) {
@@ -53,7 +53,7 @@ export const unlikeTopic = async (topicId: string): Promise<boolean> => {
       .from("forum_likes")
       .delete()
       .eq("topic_id", topicId)
-      .eq("user_id", userData.user.id);
+      .eq("user_id", userData.user.id) as { error: any };
 
     if (error) {
       console.error("Error removing like:", error);
@@ -85,7 +85,7 @@ export const likePost = async (postId: string): Promise<boolean> => {
       .insert({
         post_id: postId,
         user_id: userData.user.id,
-      })
+      } as any)
       .select();
 
     if (error) {
@@ -117,7 +117,7 @@ export const unlikePost = async (postId: string): Promise<boolean> => {
       .from("forum_likes")
       .delete()
       .eq("post_id", postId)
-      .eq("user_id", userData.user.id);
+      .eq("user_id", userData.user.id) as { error: any };
 
     if (error) {
       console.error("Error removing like:", error);
@@ -142,17 +142,17 @@ export const checkUserLikes = async (userId: string, itemIds: string[], type: 't
       .from("forum_likes")
       .select("*")
       .eq("user_id", userId)
-      .in(field, itemIds);
+      .in(field, itemIds) as { data: any[] | null, error: any };
 
     if (error) {
       console.error("Error checking likes:", error);
       return {};
     }
 
-    return data.reduce((acc, like) => {
+    return data?.reduce((acc, like) => {
       acc[like[field]] = true;
       return acc;
-    }, {});
+    }, {}) || {};
   } catch (error) {
     console.error("Error in checkUserLikes:", error);
     return {};
