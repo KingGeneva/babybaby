@@ -14,10 +14,15 @@ const EbookGrid: React.FC<EbookGridProps> = ({ ebooks }) => {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const handleDownload = async (ebook: Ebook) => {
+    // Prevent multiple downloads at once
+    if (downloadingId) return;
+    
     setDownloadingId(ebook.id);
     
     try {
+      console.log(`Tentative de téléchargement de l'ebook: ${ebook.title} (${ebook.fileUrl})`);
       await downloadEbook(ebook);
+      toast.success(`Téléchargement de "${ebook.title}" réussi`);
     } catch (error) {
       console.error("Erreur lors du téléchargement:", error);
       toast.error(`Impossible de télécharger ${ebook.title}`);
