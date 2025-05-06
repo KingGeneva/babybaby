@@ -4,9 +4,15 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import { MessageCircle, Users, Heart } from 'lucide-react';
+import { MessageCircle, Users, Heart, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import ForumSection from '@/components/forum/ForumSection';
 
 const CommunityPage = () => {
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen">
       <NavBar />
@@ -36,6 +42,22 @@ const CommunityPage = () => {
                 <p className="text-gray-700">
                   Notre communauté bienveillante est là pour vous accompagner dans tous les aspects de la parentalité, des premiers jours à la petite enfance.
                 </p>
+                
+                {user && (
+                  <Button className="mt-6 bg-babybaby-cosmic hover:bg-babybaby-cosmic/90" asChild>
+                    <Link to="/forum">
+                      Accéder au Forum <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                )}
+                
+                {!user && (
+                  <Button className="mt-6 bg-babybaby-cosmic hover:bg-babybaby-cosmic/90" asChild>
+                    <Link to="/auth">
+                      Se connecter pour accéder au Forum <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                )}
               </div>
               
               <div className="w-full md:w-1/2 grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -78,24 +100,8 @@ const CommunityPage = () => {
             </div>
           </motion.div>
           
-          <div className="text-center mb-12">
-            <motion.h2
-              className="text-2xl font-bold mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              Fonctionnalités à venir
-            </motion.h2>
-            <motion.p
-              className="text-gray-700 max-w-2xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              Notre communauté est en cours de développement. Bientôt vous pourrez profiter de forums de discussion, de profils personnalisés, et bien plus encore!
-            </motion.p>
-          </div>
+          {/* Forum Section */}
+          <ForumSection />
         </div>
       </div>
       <Footer />

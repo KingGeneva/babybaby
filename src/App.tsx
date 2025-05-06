@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -23,6 +24,12 @@ const ArticleDetailPage = lazy(() => import("./pages/ArticleDetailPage"));
 const FAQPage = lazy(() => import("./pages/FAQPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const FreeOffersPage = lazy(() => import("./pages/FreeOffersPage"));
+
+// Pages du forum
+const ForumPage = lazy(() => import("./pages/ForumPage"));
+const ForumCategoryPage = lazy(() => import("./pages/ForumCategoryPage"));
+const ForumTopicPage = lazy(() => import("./pages/ForumTopicPage"));
+const NewTopicPage = lazy(() => import("./pages/NewTopicPage"));
 
 // Pages nécessitant authentification
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
@@ -79,6 +86,48 @@ const App = () => (
                 <Route path="/faq" element={<FAQPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/free-offers" element={<FreeOffersPage />} />
+                
+                {/* Routes du forum - protégées par authentification */}
+                <Route 
+                  path="/forum" 
+                  element={
+                    <ProtectedRoute>
+                      <ForumPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/forum/categories/:slug" 
+                  element={
+                    <ProtectedRoute>
+                      <ForumCategoryPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/forum/topics/:topicId" 
+                  element={
+                    <ProtectedRoute>
+                      <ForumTopicPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/forum/new-topic/:categoryId" 
+                  element={
+                    <ProtectedRoute>
+                      <NewTopicPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/forum/new-topic" 
+                  element={
+                    <ProtectedRoute>
+                      <NewTopicPage />
+                    </ProtectedRoute>
+                  } 
+                />
                 
                 {/* Routes protégées */}
                 <Route 

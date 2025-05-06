@@ -279,7 +279,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_topic_views: {
+        Args: { topic_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       quiz_type: "parenting_style" | "child_development" | "parental_burnout"
