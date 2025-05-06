@@ -22,6 +22,7 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
     
     if (error) {
       console.error("Erreur de stockage:", error);
+      console.log("Détails de l'erreur:", JSON.stringify(error));
       throw new Error(`Erreur lors du téléchargement: ${error.message}`);
     }
     

@@ -34,6 +34,7 @@ const ArticlePromotion: React.FC = () => {
         successMessage = "Votre guide sur les coliques du bébé a bien été téléchargé.";
       }
       else {
+        // This should match the exact filename in the Supabase storage bucket
         fileName = "Les 6 premiers mois - Guide.pdf";
         downloadName = "Les 6 premiers mois - Guide complet.pdf";
         successMessage = "Votre guide pour les 6 premiers mois a bien été téléchargé.";
