@@ -10,17 +10,16 @@ const ArticlePromotion: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   
   const handleDownloadEbook = async () => {
+    // Téléchargement de l'ebook depuis le bucket Supabase
     try {
       // Pour l'article sur le sommeil
       if (id === '4') {
-        console.log("Téléchargement du guide sur le sommeil");
         const { data, error } = await supabase
           .storage
           .from('ebooks')
           .download('sommeil-bebe-astuces.pdf');
           
         if (error) {
-          console.error("Erreur lors du téléchargement:", error);
           throw error;
         }
         
@@ -29,7 +28,7 @@ const ArticlePromotion: React.FC = () => {
           const url = URL.createObjectURL(data);
           const a = document.createElement('a');
           a.href = url;
-          a.download = 'sommeil-bebe-astuces.pdf';
+          a.download = 'guide-sommeil-du-bebe.pdf';
           document.body.appendChild(a);
           a.click();
           URL.revokeObjectURL(url);
@@ -42,14 +41,12 @@ const ArticlePromotion: React.FC = () => {
         }
       } else if (id === '1') {
         // Pour l'article sur les coliques
-        console.log("Téléchargement du guide sur les coliques");
         const { data, error } = await supabase
           .storage
           .from('ebooks')
-          .download('coliques-du-bebe.pdf');
+          .download('sommeil-bebe-astuces.pdf'); // Utilisation du même fichier comme demandé
           
         if (error) {
-          console.error("Erreur lors du téléchargement:", error);
           throw error;
         }
         
@@ -58,7 +55,7 @@ const ArticlePromotion: React.FC = () => {
           const url = URL.createObjectURL(data);
           const a = document.createElement('a');
           a.href = url;
-          a.download = 'coliques-du-bebe.pdf';
+          a.download = 'les-coliques-du-bebe.pdf';
           document.body.appendChild(a);
           a.click();
           URL.revokeObjectURL(url);
