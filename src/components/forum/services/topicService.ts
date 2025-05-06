@@ -53,6 +53,8 @@ export const createTopic = async (
       replies_count: 0,
       last_reply_at: new Date().toISOString(),
       slug: title.toLowerCase().replace(/\s+/g, '-'),
+      is_pinned: false,
+      is_locked: false,
       user: {
         id: userId,
         username: "Utilisateur",
@@ -64,5 +66,19 @@ export const createTopic = async (
   } catch (error) {
     console.error('Erreur dans createTopic:', error);
     return null;
+  }
+};
+
+/**
+ * Incrémente le nombre de vues d'un sujet
+ */
+export const incrementTopicView = async (topicId: string): Promise<boolean> => {
+  try {
+    // Simuler l'incrémentation des vues
+    console.log(`Vues incrémentées pour le sujet ${topicId}`);
+    return true;
+  } catch (error) {
+    console.error('Erreur dans incrementTopicView:', error);
+    return false;
   }
 };

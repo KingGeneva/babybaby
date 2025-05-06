@@ -3,39 +3,41 @@ import { supabase } from '@/integrations/supabase/client';
 import { ForumPost } from '../types';
 
 /**
- * Récupère les messages d'un sujet
+ * Récupère les posts d'un sujet
  */
 export const getPostsByTopicId = async (topicId: string): Promise<ForumPost[]> => {
   try {
-    // Simuler des messages pour un sujet
+    // Simuler des posts pour un sujet
     return [
       {
-        id: "p1",
-        topic_id: topicId,
-        content: "C'est un sujet très intéressant, merci de l'avoir partagé !",
+        id: "post1",
+        content: "C'est un excellent sujet, j'ai eu le même problème avec mon bébé.",
         user_id: "user3",
+        topic_id: topicId,
         created_at: new Date(Date.now() - 86400000).toISOString(),
         updated_at: new Date(Date.now() - 86400000).toISOString(),
-        likes_count: 5,
         user: {
           id: "user3",
-          username: "ConseillerParental",
+          username: "MamanExperimentée",
           avatar_url: "/placeholder.svg"
-        }
+        },
+        likes_count: 3,
+        has_liked: false
       },
       {
-        id: "p2",
-        topic_id: topicId,
-        content: "Je suis d'accord avec le post précédent. J'ai personnellement trouvé que...",
+        id: "post2",
+        content: "Voici ce qui a fonctionné pour nous...",
         user_id: "user4",
+        topic_id: topicId,
         created_at: new Date(Date.now() - 43200000).toISOString(),
         updated_at: new Date(Date.now() - 43200000).toISOString(),
-        likes_count: 2,
         user: {
           id: "user4",
-          username: "MamanDeTrois",
+          username: "PapaNovice",
           avatar_url: "/placeholder.svg"
-        }
+        },
+        likes_count: 1,
+        has_liked: false
       }
     ];
   } catch (error) {
@@ -45,61 +47,31 @@ export const getPostsByTopicId = async (topicId: string): Promise<ForumPost[]> =
 };
 
 /**
- * Crée un nouveau message
+ * Crée un nouveau post
  */
-export const createPost = async (
-  topicId: string,
-  content: string,
-  userId: string
-): Promise<ForumPost | null> => {
+export const createPost = async (content: string, topicId: string): Promise<ForumPost | null> => {
   try {
-    // Simuler la création d'un message
+    const userId = "simulated_user"; // Dans une vraie app, ce serait l'ID du user connecté
+    
     const newPost: ForumPost = {
       id: Math.random().toString(36).substring(2, 15),
-      topic_id: topicId,
       content,
       user_id: userId,
+      topic_id: topicId,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      likes_count: 0,
       user: {
         id: userId,
         username: "Utilisateur",
         avatar_url: "/placeholder.svg"
-      }
+      },
+      likes_count: 0,
+      has_liked: false
     };
     
     return newPost;
   } catch (error) {
     console.error('Erreur dans createPost:', error);
     return null;
-  }
-};
-
-/**
- * Ajoute un like à un message
- */
-export const likePost = async (postId: string, userId: string): Promise<boolean> => {
-  try {
-    // Simuler l'ajout d'un like
-    console.log(`Like added to post ${postId} by user ${userId}`);
-    return true;
-  } catch (error) {
-    console.error('Erreur dans likePost:', error);
-    return false;
-  }
-};
-
-/**
- * Retire un like d'un message
- */
-export const unlikePost = async (postId: string, userId: string): Promise<boolean> => {
-  try {
-    // Simuler le retrait d'un like
-    console.log(`Like removed from post ${postId} by user ${userId}`);
-    return true;
-  } catch (error) {
-    console.error('Erreur dans unlikePost:', error);
-    return false;
   }
 };

@@ -1,10 +1,11 @@
 
 export interface ForumCategory {
-  id: string;
+  id: number;
   name: string;
   description: string | null;
   slug: string;
   icon: string | null;
+  order: number;
   created_at: string;
   updated_at: string;
 }
@@ -14,12 +15,14 @@ export interface ForumTopic {
   title: string;
   content: string;
   user_id: string;
-  category_id: string;
+  category_id: number;
   is_pinned: boolean;
   is_locked: boolean;
   views_count: number;
   created_at: string;
   updated_at: string;
+  replies_count: number;
+  last_reply_at: string;
   
   // Relations
   category?: ForumCategory;
