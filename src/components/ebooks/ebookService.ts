@@ -37,8 +37,21 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
     const link = document.createElement('a');
     link.href = url;
     
-    // Use the exact filename from storage for download
-    link.download = filePath;
+    // Use the proper filename for download based on the ebook title
+    let downloadFilename = "";
+    
+    if (ebook.title === "Le sommeil du bébé") {
+      downloadFilename = "Le sommeil du bébé.pdf";
+    } else if (ebook.title === "Coliques du bébé") {
+      downloadFilename = "Coliques du bébé.pdf";
+    } else if (ebook.title === "Les 6 premiers mois - Guide complet") {
+      downloadFilename = "Les 6 premiers mois - Guide complet.pdf";
+    } else {
+      // Fallback to the storage filename if title doesn't match
+      downloadFilename = filePath;
+    }
+    
+    link.download = downloadFilename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

@@ -24,7 +24,7 @@ const ArticlePromotion: React.FC = () => {
       // Pour l'article sur le sommeil
       if (id === '4') {
         fileName = "sommeil-bebe-astuces.pdf";
-        downloadName = "Les secrets d'un sommeil paisible.pdf";
+        downloadName = "Le sommeil du bébé.pdf";
         successMessage = "Votre guide sur le sommeil du bébé a bien été téléchargé.";
       } 
       // Pour l'article sur les coliques
@@ -35,7 +35,7 @@ const ArticlePromotion: React.FC = () => {
       }
       else {
         fileName = "Les 6 premiers mois - Guide.pdf";
-        downloadName = "Les 6 premiers mois - Guide essentiel.pdf";
+        downloadName = "Les 6 premiers mois - Guide complet.pdf";
         successMessage = "Votre guide pour les 6 premiers mois a bien été téléchargé.";
       }
       
@@ -88,7 +88,7 @@ const ArticlePromotion: React.FC = () => {
       {isSleepArticle ? (
         <>
           <p className="mb-4">
-            Pour aller plus loin et découvrir des techniques douces et efficaces pour améliorer le sommeil de votre bébé, téléchargez notre guide complet "Les secrets d'un sommeil paisible" gratuitement.
+            Pour aller plus loin et découvrir des techniques douces et efficaces pour améliorer le sommeil de votre bébé, téléchargez notre guide complet "Le sommeil du bébé" gratuitement.
           </p>
           <Button 
             className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 flex items-center gap-2"

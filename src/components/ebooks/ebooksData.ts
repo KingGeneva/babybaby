@@ -4,9 +4,9 @@ import { Ebook } from './types';
 export const ebooksData: Ebook[] = [
   {
     id: "eb-001",
-    title: "Les 6 premiers mois - Guide essentiel",
+    title: "Les 6 premiers mois - Guide complet",
     description: "Tout ce que vous devez savoir pour accompagner votre bébé durant ses 6 premiers mois de vie.",
-    coverImage: "/lovable-uploads/9ab34a8d-de13-4ad9-98ea-480f0d04a14b.png",
+    coverImage: "/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png",
     fileUrl: "Les 6 premiers mois - Guide.pdf",
     fileType: "PDF",
     fileSize: "4.7 MB",
@@ -17,9 +17,9 @@ export const ebooksData: Ebook[] = [
   },
   {
     id: "eb-002",
-    title: "Les secrets d'un sommeil paisible",
-    description: "Des techniques prouvées pour aider votre bébé à bien dormir la nuit.",
-    coverImage: "/lovable-uploads/ccda2a74-7a35-4a2d-8bc3-7b8c2feb3139.png",
+    title: "Le sommeil du bébé",
+    description: "Des techniques douces et efficaces pour aider votre bébé à bien dormir la nuit.",
+    coverImage: "/lovable-uploads/2b2ef526-b96a-4319-a022-120bb0d2ca28.png",
     fileUrl: "sommeil-bebe-astuces.pdf",
     fileType: "PDF",
     fileSize: "2.8 MB",
