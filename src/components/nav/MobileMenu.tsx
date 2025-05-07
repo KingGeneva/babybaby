@@ -1,7 +1,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronRight, BookOpen, Gift } from "lucide-react";
+import { ChevronRight, BookOpen, Gift, LayoutDashboard, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface MobileMenuProps {
@@ -11,7 +11,7 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps) => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   
   return (
     <AnimatePresence>
@@ -24,6 +24,26 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
           className="md:hidden bg-white shadow-lg overflow-hidden"
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
+            {user && (
+              <div className="border-b border-gray-100 mb-2 pb-2">
+                <h3 className="px-3 py-2 text-sm font-medium text-gray-500">Mon compte</h3>
+                <Link
+                  to="/parental-dashboard"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                >
+                  <LayoutDashboard className="h-4 w-4 mr-2" />
+                  Tableau de bord
+                </Link>
+                <button
+                  onClick={signOut}
+                  className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Se déconnecter
+                </button>
+              </div>
+            )}
+            
             <Link
               to="/tools"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
