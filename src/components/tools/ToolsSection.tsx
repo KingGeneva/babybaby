@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { 
   Calendar,
   Calculator, 
-  BabyIcon,
   HeartPulse,
   Music2,
   ClipboardCheck,
@@ -85,7 +84,11 @@ const ToolsSection = () => {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <BabyIcon className="mx-auto h-12 w-12 text-babybaby-cosmic mb-4" />
+          <img 
+            src="/lovable-uploads/5fe3518c-559e-4def-b5c5-05bd235e6ea5.png" 
+            alt="Hochet pour bébé" 
+            className="mx-auto h-12 w-12 text-babybaby-cosmic mb-4" 
+          />
           <h2 className="text-3xl md:text-4xl font-bold mb-3 text-babybaby-cosmic">
             Nos Outils Parents
           </h2>

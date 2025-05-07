@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BabyIcon, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface ChatHeaderProps {
   onClose: () => void;
@@ -9,7 +9,11 @@ interface ChatHeaderProps {
 const ChatHeader: React.FC<ChatHeaderProps> = ({ onClose }) => {
   return (
     <div className="bg-babybaby-cosmic p-4 text-white flex items-center">
-      <BabyIcon className="h-6 w-6 mr-2" />
+      <img 
+        src="/lovable-uploads/d68c0988-9046-4709-813b-aa748f804176.png" 
+        alt="BabyBot" 
+        className="h-6 w-6 mr-2" 
+      />
       <div>
         <h3 className="font-semibold">BabyBot</h3>
         <p className="text-xs opacity-80">Assistant virtuel</p>
