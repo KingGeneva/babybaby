@@ -12,7 +12,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ onClose }) => {
       <img 
         src="/lovable-uploads/d68c0988-9046-4709-813b-aa748f804176.png" 
         alt="BabyBot" 
-        className="h-6 w-6 mr-2" 
+        className="h-8 w-8 mr-2" 
       />
       <div>
         <h3 className="font-semibold">BabyBot</h3>
