@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import P5Canvas from '@/components/P5Canvas';
 
 const DashboardPage = () => {
   const { childId } = useParams();
@@ -68,8 +69,9 @@ const DashboardPage = () => {
   return (
     <div className="min-h-screen">
       <NavBar />
+      <P5Canvas className="fixed inset-0 -z-10" />
       <div className="pt-24">
-        <Dashboard childId={childId} showDevelopmentSection={true} />
+        <Dashboard childId={childId || ''} showDevelopmentSection={true} />
       </div>
       <Footer />
     </div>
