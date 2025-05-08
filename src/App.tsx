@@ -1,4 +1,3 @@
-
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -36,6 +35,7 @@ const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const ToolsPage = lazy(() => import("./pages/ToolsPage"));
 const CommunityPage = lazy(() => import("./pages/CommunityPage"));
 const EbooksPage = lazy(() => import("./pages/EbooksPage"));
+const EbookViewerPage = lazy(() => import("./pages/EbookViewerPage"));
 const ParentalDashboard = lazy(() => import("./pages/ParentalDashboard"));
 const MedicalDashboardPage = lazy(() => import("./pages/MedicalDashboardPage"));
 const MedicalAppointmentPage = lazy(() => import("./pages/MedicalAppointmentPage"));
@@ -86,6 +86,8 @@ const App = () => (
                 <Route path="/faq" element={<FAQPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/free-offers" element={<FreeOffersPage />} />
+                <Route path="/ebooks" element={<EbooksPage />} />
+                <Route path="/ebooks/:id" element={<EbookViewerPage />} />
                 
                 {/* Routes du forum - protégées par authentification */}
                 <Route 

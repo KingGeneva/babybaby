@@ -1,4 +1,3 @@
-
 import { Ebook } from './types';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -33,6 +32,15 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
     // Create a blob URL from the downloaded file
     const blob = new Blob([data], { type: getContentType(filePath) });
     const url = URL.createObjectURL(blob);
+    
+    // Cache the PDF for offline viewing if service worker is available
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'CACHE_PDF',
+        url: `/ebooks/${ebook.id}/content.pdf`,
+        pdfBlob: blob
+      });
+    }
     
     // Open the file in a new tab or download it directly
     const link = document.createElement('a');
@@ -95,15 +103,50 @@ const recordDownload = async (ebook: Ebook) => {
   }
 };
 
-// Function to get preview URL (if available)
+// Function to get preview URL for FlipBook viewer
 export const getPreviewUrl = async (ebook: Ebook): Promise<string | null> => {
   try {
+    // First check if we've cached this in localStorage for faster access
+    const cachedUrlKey = `ebook-preview-url-${ebook.id}`;
+    const cachedUrl = localStorage.getItem(cachedUrlKey);
+    const cachedTimestamp = localStorage.getItem(`${cachedUrlKey}-timestamp`);
+    
+    // Use cached URL if it's less than 30 minutes old
+    if (cachedUrl && cachedTimestamp) {
+      const timestamp = parseInt(cachedTimestamp);
+      const now = Date.now();
+      const thirtyMinutesInMs = 30 * 60 * 1000;
+      
+      if (now - timestamp < thirtyMinutesInMs) {
+        console.log("Using cached preview URL");
+        return cachedUrl;
+      }
+    }
+    
+    // Otherwise, get a fresh URL from Supabase
     const { data } = await supabase
       .storage
       .from('ebooks')
       .createSignedUrl(ebook.fileUrl, 3600); // URL valide pendant 1 heure
+    
+    if (data?.signedUrl) {
+      // Cache this URL for faster future access
+      localStorage.setItem(cachedUrlKey, data.signedUrl);
+      localStorage.setItem(`${cachedUrlKey}-timestamp`, Date.now().toString());
       
-    return data?.signedUrl || null;
+      // Cache the ebook data to improve performance
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'CACHE_EBOOK',
+          url: `/ebooks/${ebook.id}`,
+          data: ebook
+        });
+      }
+      
+      return data.signedUrl;
+    }
+      
+    return null;
   } catch (error) {
     console.error("Erreur lors de la création de l'URL signée:", error);
     return null;
@@ -191,5 +234,33 @@ export const uploadEbook = async (
   } catch (error) {
     console.error("Erreur lors de l'upload de l'ebook:", error);
     return null;
+  }
+};
+
+// Fonction pour précharger les PDF pour une visualisation ultérieure plus rapide
+export const preloadEbooks = async (ebooks: Ebook[]): Promise<void> => {
+  try {
+    // Limiter le nombre d'ebooks à précharger pour éviter de surcharger
+    const ebooksToPreload = ebooks.slice(0, 3);
+    
+    for (const ebook of ebooksToPreload) {
+      // Créer une URL signée mais ne pas la télécharger réellement
+      const { data } = await supabase
+        .storage
+        .from('ebooks')
+        .createSignedUrl(ebook.fileUrl, 3600);
+        
+      if (data?.signedUrl) {
+        // Stocker en cache pour une utilisation future
+        const cachedUrlKey = `ebook-preview-url-${ebook.id}`;
+        localStorage.setItem(cachedUrlKey, data.signedUrl);
+        localStorage.setItem(`${cachedUrlKey}-timestamp`, Date.now().toString());
+        
+        console.log(`URL préchargée pour ${ebook.title}`);
+      }
+    }
+    
+  } catch (error) {
+    console.error("Erreur lors du préchargement des ebooks:", error);
   }
 };

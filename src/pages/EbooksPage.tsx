@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Search } from 'lucide-react';
 import { ebooksData } from '@/components/ebooks/ebooksData';
@@ -10,10 +10,12 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import SEOHead from '@/components/common/SEOHead';
+import { preloadEbooks } from '@/components/ebooks/ebookService';
 
 const EbooksPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFileType, setSelectedFileType] = useState<string | null>(null);
+  const [isPreloaded, setIsPreloaded] = useState(false);
 
   const filteredEbooks = useMemo(() => {
     return ebooksData.filter(ebook => {
@@ -23,6 +25,26 @@ const EbooksPage = () => {
       return matchesSearch && matchesType;
     });
   }, [searchQuery, selectedFileType]);
+
+  // Précharger les ebooks populaires en arrière-plan
+  useEffect(() => {
+    if (!isPreloaded) {
+      // On utilise requestIdleCallback pour ne pas bloquer le rendu initial
+      if ('requestIdleCallback' in window) {
+        // @ts-ignore
+        window.requestIdleCallback(() => {
+          preloadEbooks(ebooksData.slice(0, 3))
+            .then(() => setIsPreloaded(true));
+        });
+      } else {
+        // Fallback pour les navigateurs qui ne supportent pas requestIdleCallback
+        setTimeout(() => {
+          preloadEbooks(ebooksData.slice(0, 3))
+            .then(() => setIsPreloaded(true));
+        }, 2000);
+      }
+    }
+  }, [isPreloaded]);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">

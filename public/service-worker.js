@@ -1,12 +1,14 @@
 
 // Service Worker optimisé pour BabyBaby App
-const CACHE_NAME = 'babybaby-cache-v3';
+const CACHE_NAME = 'babybaby-cache-v4';
 const RESOURCES_TO_CACHE = [
   '/',
   '/index.html',
   '/favicon.ico',
   '/assets/index-*.js',
-  '/assets/index-*.css'
+  '/assets/index-*.css',
+  '/flowpaper/js/jquery.min.js',
+  '/flowpaper/js/flowpaper.js'
 ];
 
 // Installation avec mise en cache préventive
@@ -75,14 +77,16 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Stratégie de cache spéciale pour les images (cache-first pour les performances)
+// Stratégie de cache spéciale pour les images et PDF (cache-first pour les performances)
 self.addEventListener('fetch', event => {
   const requestUrl = new URL(event.request.url);
   
-  // Cache-first pour les images
+  // Cache-first pour les images et PDF
   if (
     event.request.method === 'GET' &&
-    event.request.destination === 'image'
+    (event.request.destination === 'image' || 
+     requestUrl.pathname.endsWith('.pdf') ||
+     requestUrl.pathname.includes('/flowpaper/'))
   ) {
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
@@ -100,13 +104,13 @@ self.addEventListener('fetch', event => {
           return cachedResponse;
         }
         
-        // Si l'image n'est pas en cache, la récupérer depuis le réseau
+        // Si l'image/PDF n'est pas en cache, la récupérer depuis le réseau
         return fetch(event.request).then(response => {
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
           
-          // Mettre en cache la nouvelle image
+          // Mettre en cache la nouvelle ressource
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then(cache => {
             cache.put(event.request, responseToCache);
@@ -120,9 +124,9 @@ self.addEventListener('fetch', event => {
   }
 });
 
-// Cache spécial pour les articles souvent consultés
+// Cache spécial pour les ebooks fréquemment consultés
 self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'CACHE_ARTICLE') {
+  if (event.data && event.data.type === 'CACHE_EBOOK') {
     const { url, data } = event.data;
     
     caches.open(CACHE_NAME).then(cache => {
@@ -133,8 +137,23 @@ self.addEventListener('message', event => {
         }
       });
       cache.put(url, response);
-      console.log(`Article mis en cache: ${url}`);
+      console.log(`Ebook mis en cache: ${url}`);
     });
+  } else if (event.data && event.data.type === 'CACHE_PDF') {
+    const { url, pdfBlob } = event.data;
+    
+    if (url && pdfBlob) {
+      caches.open(CACHE_NAME).then(cache => {
+        const response = new Response(pdfBlob, {
+          headers: { 
+            'Content-Type': 'application/pdf',
+            'Cache-Control': 'public, max-age=604800' // 7 jours
+          }
+        });
+        cache.put(url, response);
+        console.log(`PDF mis en cache: ${url}`);
+      });
+    }
   } else if (event.data && event.data.type === 'CLEAR_OLD_CACHES') {
     // Nettoyer les anciens caches sur demande
     caches.keys().then(cacheNames => {
@@ -163,4 +182,4 @@ self.addEventListener('message', event => {
 });
 
 // Version optimisée
-console.log('Service Worker chargé - version optimisée v3 avec cache agressif et stratégies intelligentes');
+console.log('Service Worker chargé - version optimisée v4 avec support FlowPaper et cache PDF');
