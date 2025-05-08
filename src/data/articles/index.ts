@@ -4,6 +4,7 @@ import { amenagementArticles } from './amenagement';
 import { sommeilArticles } from './sommeil';
 import { developpementArticles } from './developpement';
 import { preparationArticles } from './preparation';
+import { croissanceArticles } from './croissance';
 import { Article } from '@/types/article';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -13,7 +14,8 @@ export const articles: Article[] = [
   ...amenagementArticles,
   ...sommeilArticles,
   ...developpementArticles,
-  ...preparationArticles
+  ...preparationArticles,
+  ...croissanceArticles
 ].sort((a, b) => b.id - a.id); // Sort by ID in descending order (newest first)
 
 export * from './nutrition';
@@ -21,6 +23,7 @@ export * from './amenagement';
 export * from './sommeil';
 export * from './developpement';
 export * from './preparation';
+export * from './croissance';
 
 // This function helps to find an article by ID
 export const getArticleById = async (id: number): Promise<Article | undefined> => {
