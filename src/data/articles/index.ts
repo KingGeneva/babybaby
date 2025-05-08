@@ -8,10 +8,11 @@ import { croissanceArticles } from './croissance';
 import { Article } from '@/types/article';
 import { supabase } from '@/integrations/supabase/client';
 
-// Cache local pour les articles
-const articleCache = new Map<number, Article>();
-const categoryCache = new Map<string, Article[]>();
-let cacheExpiration = Date.now() + (15 * 60 * 1000); // 15 minutes
+// Cache local pour les articles avec TTL amélioré
+const articleCache = new Map<number, { data: Article, timestamp: number }>();
+const categoryCache = new Map<string, { data: Article[], timestamp: number }>();
+const CACHE_TTL = 15 * 60 * 1000; // 15 minutes
+const CACHE_VERSION = 1; // Incrémenter pour invalider tous les caches
 
 // Combine all articles from different categories
 export const articles: Article[] = [
@@ -25,7 +26,7 @@ export const articles: Article[] = [
 
 // Pré-remplir le cache avec les articles statiques
 articles.forEach(article => {
-  articleCache.set(article.id, article);
+  articleCache.set(article.id, { data: article, timestamp: Date.now() });
 });
 
 export * from './nutrition';
@@ -35,21 +36,51 @@ export * from './developpement';
 export * from './preparation';
 export * from './croissance';
 
+// Vérifier si un élément du cache est encore valide
+const isCacheValid = (timestamp: number): boolean => {
+  return Date.now() - timestamp < CACHE_TTL;
+};
+
 // This function helps to find an article by ID with cache
 export const getArticleById = async (id: number): Promise<Article | undefined> => {
-  // Check cache first
-  if (articleCache.has(id)) {
-    return articleCache.get(id);
+  // Check localStorage first for better performance (for featured articles)
+  const cachedArticlesStr = localStorage.getItem('cached-articles');
+  if (cachedArticlesStr) {
+    try {
+      const cachedArticles = JSON.parse(cachedArticlesStr) as Article[];
+      const localCachedArticle = cachedArticles.find(a => a.id === id);
+      if (localCachedArticle) {
+        // Refresh cache en arrière-plan si nécessaire
+        const cachedTimestamp = parseInt(localStorage.getItem('cached-articles-timestamp') || '0');
+        if (Date.now() - cachedTimestamp > CACHE_TTL) {
+          setTimeout(() => fetchArticleAndUpdateCache(id), 100);
+        }
+        return localCachedArticle;
+      }
+    } catch (err) {
+      // Silent fail, continue with other cache mechanisms
+    }
   }
   
-  // First, check in static articles
+  // Check memory cache
+  const cachedArticle = articleCache.get(id);
+  if (cachedArticle && isCacheValid(cachedArticle.timestamp)) {
+    return cachedArticle.data;
+  }
+  
+  // Then, try to find in static articles (fastest)
   const staticArticle = articles.find(article => article.id === id);
   if (staticArticle) {
-    articleCache.set(id, staticArticle);
+    articleCache.set(id, { data: staticArticle, timestamp: Date.now() });
     return staticArticle;
   }
   
-  // Then, try to load from Supabase Storage
+  // Finally, try to load from Supabase Storage
+  return fetchArticleAndUpdateCache(id);
+};
+
+// Helper function to fetch article and update cache
+const fetchArticleAndUpdateCache = async (id: number): Promise<Article | undefined> => {
   try {
     // Try to find a JSON file with the article ID
     const { data, error } = await supabase
@@ -64,7 +95,16 @@ export const getArticleById = async (id: number): Promise<Article | undefined> =
     const article: Article = JSON.parse(text);
     
     // Cache the article
-    articleCache.set(id, article);
+    articleCache.set(id, { data: article, timestamp: Date.now() });
+    
+    // Service Worker caching if available
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'CACHE_ARTICLE',
+        url: `/articles/${id}`,
+        data: article
+      });
+    }
     
     return article;
   } catch (error) {
@@ -73,29 +113,12 @@ export const getArticleById = async (id: number): Promise<Article | undefined> =
   }
 };
 
-// Refresh the cache every 15 minutes or when explicitly called
-const refreshCache = () => {
-  if (Date.now() > cacheExpiration) {
-    articleCache.clear();
-    categoryCache.clear();
-    
-    // Pre-fill with static articles
-    articles.forEach(article => {
-      articleCache.set(article.id, article);
-    });
-    
-    cacheExpiration = Date.now() + (15 * 60 * 1000);
-  }
-};
-
 // This function helps to get articles by category with cache
 export const getArticlesByCategory = async (category: string): Promise<Article[]> => {
-  // Check if we need to refresh the cache
-  refreshCache();
-  
-  // Check cache first
-  if (categoryCache.has(category)) {
-    return categoryCache.get(category) || [];
+  // Check memory cache first
+  const cachedCategory = categoryCache.get(category);
+  if (cachedCategory && isCacheValid(cachedCategory.timestamp)) {
+    return cachedCategory.data;
   }
   
   let result = [...articles];
@@ -158,7 +181,7 @@ export const getArticlesByCategory = async (category: string): Promise<Article[]
   result = result.sort((a, b) => b.id - a.id);
   
   // Cache the result
-  categoryCache.set(category, result);
+  categoryCache.set(category, { data: result, timestamp: Date.now() });
   
   return result;
 };
@@ -167,5 +190,25 @@ export const getArticlesByCategory = async (category: string): Promise<Article[]
 export const invalidateArticleCache = () => {
   articleCache.clear();
   categoryCache.clear();
-  cacheExpiration = 0;
+  localStorage.removeItem('cached-articles');
+  localStorage.removeItem('cached-articles-timestamp');
+  
+  // Re-populate with static articles
+  articles.forEach(article => {
+    articleCache.set(article.id, { data: article, timestamp: Date.now() });
+  });
+};
+
+// Mise à jour progressive du cache en arrière-plan
+export const preloadPopularCategories = () => {
+  // Préchargement des catégories populaires en arrière-plan
+  if ('requestIdleCallback' in window) {
+    // @ts-ignore
+    window.requestIdleCallback(() => {
+      const popularCategories = ["Tous", "Nutrition", "Sommeil", "Développement"];
+      popularCategories.forEach(category => {
+        getArticlesByCategory(category);
+      });
+    }, { timeout: 3000 });
+  }
 };

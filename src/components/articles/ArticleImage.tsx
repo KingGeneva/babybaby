@@ -25,7 +25,7 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title }) => {
           className="w-full h-auto rounded-lg shadow-md object-cover max-h-[500px]"
           loading="lazy"
           decoding="async"
-          fetchpriority="high"
+          fetchPriority="high"
           width="800"
           height="500"
         />

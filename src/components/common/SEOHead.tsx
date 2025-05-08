@@ -1,3 +1,4 @@
+
 import { Helmet } from 'react-helmet-async';
 
 interface SEOProps {
@@ -30,17 +31,28 @@ const SEOHead = ({
 }: SEOProps) => {
   const siteTitle = "BabyBaby - Application de suivi de bébé";
   const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+  const maxDescLength = 160;
+  
+  // Optimisation de la description pour respecter la longueur recommandée
+  const optimizedDescription = description.length > maxDescLength 
+    ? `${description.substring(0, maxDescLength - 3)}...` 
+    : description;
   
   return (
     <Helmet htmlAttributes={{ lang }}>
       <title>{fullTitle}</title>
-      <meta name="description" content={description} />
+      <meta name="description" content={optimizedDescription} />
       <meta name="keywords" content={keywords.join(', ')} />
       
       {/* Additional SEO meta tags */}
       <meta name="author" content="BabyBaby" />
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       <meta name="googlebot" content="index, follow" />
+      
+      {/* Performance & mobile optimization */}
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://www.googletagmanager.com" />
       
       {/* Canonical URL */}
       {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
@@ -53,7 +65,7 @@ const SEOHead = ({
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={ogType} />
       <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
+      <meta property="og:description" content={optimizedDescription} />
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
@@ -65,7 +77,7 @@ const SEOHead = ({
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@babybaby_app" />
       <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
+      <meta name="twitter:description" content={optimizedDescription} />
       <meta name="twitter:image" content={ogImage} />
       
       {/* Article specific structured data */}
@@ -89,6 +101,7 @@ const SEOHead = ({
       <meta name="theme-color" content="#ffffff" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      <meta name="format-detection" content="telephone=no" />
       
       {/* Prevent indexation in non-production environments */}
       {!canonicalUrl?.includes('babybaby.app') && (

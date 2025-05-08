@@ -33,12 +33,21 @@ const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
   tags = [],
   wordCount,
 }) => {
+  // Calcul du word count si non fourni
+  const estimatedWordCount = wordCount || description.split(" ").length + (title.split(" ").length * 2);
+  
+  // Normalization des URLs pour s'assurer qu'elles sont absolues
+  const absoluteImage = image.startsWith('http') ? image : `https://babybaby.app${image}`;
+  const absoluteUrl = url.startsWith('http') ? url : `https://babybaby.app${url}`;
+  const absolutePublisherLogo = publisherLogo.startsWith('http') ? publisherLogo : `https://babybaby.app${publisherLogo}`;
+  
+  // Structured data améliorée pour les articles
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": title,
     "description": description,
-    "image": image,
+    "image": absoluteImage,
     "datePublished": datePublished,
     "dateModified": dateModified || datePublished,
     "author": {
@@ -51,22 +60,23 @@ const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
       "name": publisherName,
       "logo": {
         "@type": "ImageObject",
-        "url": publisherLogo,
+        "url": absolutePublisherLogo,
         "width": "192",
         "height": "192"
       },
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": url,
+      "@id": absoluteUrl,
     },
     "articleSection": category,
     "keywords": tags.join(", "),
-    "wordCount": wordCount || description.split(" ").length,
+    "wordCount": estimatedWordCount,
+    "inLanguage": "fr-FR",
     "isAccessibleForFree": "True"
   };
 
-  // FAQ schema for articles that might contain Q&A content
+  // FAQ schema pour les articles qui contiennent potentiellement des Q&A
   const faqStructuredData = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -86,11 +96,19 @@ const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
           "@type": "Answer",
           "text": "Il est recommandé d'enregistrer les données à chaque visite médicale ou mensuelle pour les six premiers mois, puis tous les 3 mois jusqu'à l'âge de 2 ans."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "Comment interpréter les courbes de croissance de mon bébé?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Les courbes de croissance montrent la progression de votre bébé par rapport aux standards. L'important est que votre bébé suive sa propre courbe de façon constante, pas nécessairement qu'il soit dans la moyenne."
+        }
       }
     ]
   };
 
-  // BreadcrumbList schema to improve navigation context
+  // BreadcrumbList schema pour améliorer le contexte de navigation
   const breadcrumbStructuredData = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

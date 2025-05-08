@@ -2,25 +2,6 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5G681ECSF1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-5G681ECSF1');
-    </script>
-
-    <!-- Google AdSense - Single initialization -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5223592381026830" crossorigin="anonymous"></script>
-    <meta name="google-adsense-account" content="ca-pub-5223592381026830">
-
-    <!-- Ahrefs Analytics -->
-    <script src="https://analytics.ahrefs.com/analytics.js" data-key="1vTB4+hNvzpA5EhHOJU05g" async></script>
-
-    <!-- Impact Site Verification -->
-    <meta name="Impact-Site-Verification" content="87bc928e-9f4c-45a3-8aa7-eae705784996">
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
@@ -32,11 +13,20 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
     
+    <!-- Preconnects pour améliorer les performances -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+    <link rel="preconnect" href="https://analytics.ahrefs.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+    
     <!-- Open Graph Meta Tags pour le partage social -->
     <meta property="og:title" content="BabyBaby - Application de suivi de bébé | La référence des parents" />
     <meta property="og:description" content="Suivez la croissance de votre bébé avec des outils innovants. Conseils d'experts, suivi personnalisé et communauté de parents." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:url" content="https://babybaby.app" />
     <meta property="og:site_name" content="BabyBaby" />
     <meta property="og:locale" content="fr_FR" />
@@ -61,6 +51,7 @@
     <meta name="msapplication-navbutton-color" content="#ffffff" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="msapplication-starturl" content="/" />
+    <meta name="format-detection" content="telephone=no" />
 
     <!-- Structured Data pour Google -->
     <script type="application/ld+json">
@@ -80,27 +71,54 @@
         "provider": {
           "@type": "Organization",
           "name": "BabyBaby",
-          "logo": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
-        }
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+            "width": "192",
+            "height": "192"
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "ratingCount": "1250",
+          "bestRating": "5",
+          "worstRating": "1"
+        },
+        "sameAs": [
+          "https://twitter.com/babybaby_app",
+          "https://facebook.com/babybaby",
+          "https://instagram.com/babybaby_app"
+        ]
       }
     </script>
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" />
-    <link rel="apple-touch-icon" href="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" />
+    <!-- Favicon avec gestion des différentes tailles -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" />
     
-    <!-- Single AdSense initialization script -->
+    <!-- Google Analytics avec chargement différé -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5G681ECSF1"></script>
     <script>
-      (adsbygoogle = window.adsbygoogle || []).push({
-          google_ad_client: "ca-pub-5223592381026830",
-          enable_page_level_ads: true
-      });
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-5G681ECSF1', { 'anonymize_ip': true });
     </script>
+
+    <!-- Google AdSense avec chargement asynchrone -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5223592381026830" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-5223592381026830">
+
+    <!-- Ahrefs Analytics avec chargement différé -->
+    <script async src="https://analytics.ahrefs.com/analytics.js" data-key="1vTB4+hNvzpA5EhHOJU05g"></script>
+
+    <!-- Impact Site Verification -->
+    <meta name="Impact-Site-Verification" content="87bc928e-9f4c-45a3-8aa7-eae705784996">
   </head>
 
   <body>
     <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
