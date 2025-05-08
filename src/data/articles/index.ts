@@ -8,6 +8,11 @@ import { croissanceArticles } from './croissance';
 import { Article } from '@/types/article';
 import { supabase } from '@/integrations/supabase/client';
 
+// Cache local pour les articles
+const articleCache = new Map<number, Article>();
+const categoryCache = new Map<string, Article[]>();
+let cacheExpiration = Date.now() + (15 * 60 * 1000); // 15 minutes
+
 // Combine all articles from different categories
 export const articles: Article[] = [
   ...nutritionArticles,
@@ -18,6 +23,11 @@ export const articles: Article[] = [
   ...croissanceArticles
 ].sort((a, b) => b.id - a.id); // Sort by ID in descending order (newest first)
 
+// Pré-remplir le cache avec les articles statiques
+articles.forEach(article => {
+  articleCache.set(article.id, article);
+});
+
 export * from './nutrition';
 export * from './amenagement';
 export * from './sommeil';
@@ -25,11 +35,19 @@ export * from './developpement';
 export * from './preparation';
 export * from './croissance';
 
-// This function helps to find an article by ID
+// This function helps to find an article by ID with cache
 export const getArticleById = async (id: number): Promise<Article | undefined> => {
+  // Check cache first
+  if (articleCache.has(id)) {
+    return articleCache.get(id);
+  }
+  
   // First, check in static articles
   const staticArticle = articles.find(article => article.id === id);
-  if (staticArticle) return staticArticle;
+  if (staticArticle) {
+    articleCache.set(id, staticArticle);
+    return staticArticle;
+  }
   
   // Then, try to load from Supabase Storage
   try {
@@ -45,6 +63,9 @@ export const getArticleById = async (id: number): Promise<Article | undefined> =
     const text = await data.text();
     const article: Article = JSON.parse(text);
     
+    // Cache the article
+    articleCache.set(id, article);
+    
     return article;
   } catch (error) {
     console.error('Error loading article from storage:', error);
@@ -52,8 +73,31 @@ export const getArticleById = async (id: number): Promise<Article | undefined> =
   }
 };
 
-// This function helps to get articles by category
+// Refresh the cache every 15 minutes or when explicitly called
+const refreshCache = () => {
+  if (Date.now() > cacheExpiration) {
+    articleCache.clear();
+    categoryCache.clear();
+    
+    // Pre-fill with static articles
+    articles.forEach(article => {
+      articleCache.set(article.id, article);
+    });
+    
+    cacheExpiration = Date.now() + (15 * 60 * 1000);
+  }
+};
+
+// This function helps to get articles by category with cache
 export const getArticlesByCategory = async (category: string): Promise<Article[]> => {
+  // Check if we need to refresh the cache
+  refreshCache();
+  
+  // Check cache first
+  if (categoryCache.has(category)) {
+    return categoryCache.get(category) || [];
+  }
+  
   let result = [...articles];
   
   // Filter by category if not "Tous"
@@ -61,7 +105,7 @@ export const getArticlesByCategory = async (category: string): Promise<Article[]
     result = result.filter(article => article.category === category);
   }
   
-  // Try to load additional articles from Supabase Storage
+  // Try to load additional articles from Supabase Storage with error handling
   try {
     // List JSON files in articles folder
     const { data: files, error } = await supabase
@@ -77,10 +121,16 @@ export const getArticlesByCategory = async (category: string): Promise<Article[]
       const storageArticles = await Promise.all(
         jsonFiles.map(async (file) => {
           try {
-            const { data } = await supabase
+            const { data, error: downloadError } = await supabase
               .storage
               .from('articles')
               .download(`articles/${file.name}`);
+              
+            if (downloadError) {
+              // Gérer l'erreur silencieusement
+              console.log(`Skip loading article ${file.name} due to permission error`);
+              return null;
+            }
               
             if (data) {
               const text = await data.text();
@@ -107,5 +157,15 @@ export const getArticlesByCategory = async (category: string): Promise<Article[]
   // Sort by ID in descending order to have the most recent first
   result = result.sort((a, b) => b.id - a.id);
   
+  // Cache the result
+  categoryCache.set(category, result);
+  
   return result;
+};
+
+// Helper to invalidate cache when needed (e.g. after adding new article)
+export const invalidateArticleCache = () => {
+  articleCache.clear();
+  categoryCache.clear();
+  cacheExpiration = 0;
 };

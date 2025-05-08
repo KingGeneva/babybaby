@@ -2,16 +2,16 @@
 import React, { Suspense, lazy, ComponentType } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-// Standard lazy loading with priority
+// Standard lazy loading avec priorité élevée - chargement immédiat
 const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
 const TestimonialsCarousel = lazy(() => import('@/components/testimonials/TestimonialsCarousel'));
 const ArticleSection = lazy(() => import('@/components/articles/ArticleSection'));
 const Footer = lazy(() => import('@/components/Footer'));
 
-// Type for delayed lazy loading
+// Type pour le lazy loading différé
 type LazyComponentType = Promise<{ default: ComponentType<any> }>;
 
-// Lazy loading with delay for lower priority sections - Tier 2
+// Lazy loading légèrement différé pour les sections moins prioritaires - Tier 2
 const EbooksSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -19,7 +19,7 @@ const EbooksSection = lazy((): LazyComponentType => {
         .then(module => {
           resolve({ default: module.default });
         });
-    }, 1000);
+    }, 300); // Réduit de 1000ms à 300ms
   });
 });
 
@@ -30,11 +30,11 @@ const PartnersCarousel = lazy((): LazyComponentType => {
         .then(module => {
           resolve({ default: module.default });
         });
-    }, 1500);
+    }, 500); // Réduit de 1500ms à 500ms
   });
 });
 
-// Tier 3 priority - load after main content
+// Tier 3 priorité - charge après le contenu principal
 const ProductsSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -42,7 +42,7 @@ const ProductsSection = lazy((): LazyComponentType => {
         .then(module => {
           resolve({ default: module.default });
         });
-    }, 2000);
+    }, 700); // Réduit de 2000ms à 700ms
   });
 });
 
@@ -53,11 +53,11 @@ const ToolsSection = lazy((): LazyComponentType => {
         .then(module => {
           resolve({ default: module.default });
         });
-    }, 2500);
+    }, 900); // Réduit de 2500ms à 900ms
   });
 });
 
-// Courses prioritized slightly higher for SEO value
+// Cours priorisés légèrement pour la valeur SEO
 const CoursesSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -65,11 +65,11 @@ const CoursesSection = lazy((): LazyComponentType => {
         .then(module => {
           resolve({ default: module.default });
         });
-    }, 1800);
+    }, 600); // Réduit de 1800ms à 600ms
   });
 });
 
-// Lowest priority sections loaded last
+// Sections de priorité la plus basse chargées en dernier
 const ContactSection = lazy((): LazyComponentType => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -77,7 +77,7 @@ const ContactSection = lazy((): LazyComponentType => {
         .then(module => {
           resolve({ default: module.default });
         });
-    }, 3000);
+    }, 1000); // Réduit de 3000ms à 1000ms
   });
 });
 
@@ -88,11 +88,11 @@ const NewsletterForm = lazy((): LazyComponentType => {
         .then(module => {
           resolve({ default: module.default });
         });
-    }, 3500);
+    }, 1200); // Réduit de 3500ms à 1200ms
   });
 });
 
-// Optimized fallback loaders for better UX
+// Loaders optimisés pour une meilleure expérience utilisateur
 const SectionLoader = () => (
   <div className="py-6 flex justify-center items-center">
     <div className="animate-pulse w-full max-w-2xl h-16 bg-gray-100 rounded-lg"></div>

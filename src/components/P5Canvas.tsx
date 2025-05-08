@@ -123,7 +123,7 @@ const P5Canvas: React.FC<P5CanvasProps> = ({ className }) => {
     // Créer une nouvelle instance p5
     const sketch = new p5((p: p5) => {
       const bubbles: BubbleType[] = [];
-      const bubbleCount = 40; // Nombre de bulles
+      const bubbleCount = 30; // Réduit de 40 à 30 bulles pour améliorer les performances
       let mouseIsPressed = false;
       
       p.setup = () => {
@@ -160,8 +160,14 @@ const P5Canvas: React.FC<P5CanvasProps> = ({ className }) => {
         }
       };
 
+      // Optimisation de la fonction de redimensionnement
+      let resizeTimeout: number;
       p.windowResized = () => {
-        p.resizeCanvas(p.windowWidth, p.windowHeight);
+        // Limiter les appels de redimensionnement avec un debounce
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          p.resizeCanvas(p.windowWidth, p.windowHeight);
+        }, 250) as unknown as number;
       };
       
       p.mousePressed = () => {
