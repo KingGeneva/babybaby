@@ -3,12 +3,11 @@ export interface Ebook {
   id: string;
   title: string;
   description: string;
-  coverImage: string;
+  category: string;
   fileUrl: string;
+  coverImage: string;
   fileType: string;
   fileSize: string;
-  category: string;
   tags: string[];
-  author: string;
-  publishDate: string;
+  uploadDate?: string;  // Making uploadDate optional
 }
