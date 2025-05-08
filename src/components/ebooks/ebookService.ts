@@ -1,19 +1,21 @@
+
 import { Ebook } from './types';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
+// Téléchargement d'un ebook
 export const downloadEbook = async (ebook: Ebook): Promise<void> => {
   try {
-    // Start loading feedback
+    // Feedback de chargement
     toast.loading(`Préparation de ${ebook.title}...`);
     
-    // Construct the path to access from storage bucket
+    // Construction du chemin d'accès au bucket de stockage
     const bucketName = 'ebooks';
     const filePath = ebook.fileUrl;
     
-    console.log(`Téléchargement de l'ebook depuis le bucket: ${bucketName}, fichier: ${filePath}`);
+    console.log(`Téléchargement de l'ebook depuis: bucket=${bucketName}, fichier=${filePath}`);
     
-    // Download the file from Supabase Storage
+    // Téléchargement du fichier depuis Supabase Storage
     const { data, error } = await supabase
       .storage
       .from(bucketName)
@@ -29,11 +31,11 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
       throw new Error("Aucune donnée reçue");
     }
     
-    // Create a blob URL from the downloaded file
+    // Création d'une URL à partir du fichier téléchargé
     const blob = new Blob([data], { type: getContentType(filePath) });
     const url = URL.createObjectURL(blob);
     
-    // Cache the PDF for offline viewing if service worker is available
+    // Mise en cache du PDF si service worker disponible
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
         type: 'CACHE_PDF',
@@ -42,42 +44,31 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
       });
     }
     
-    // Open the file in a new tab or download it directly
+    // Ouverture ou téléchargement direct du fichier
     const link = document.createElement('a');
     link.href = url;
     
-    // Use the proper filename for download based on the ebook title
-    let downloadFilename = "";
-    
-    if (ebook.title === "Le sommeil du bébé") {
-      downloadFilename = "Le sommeil du bébé.pdf";
-    } else if (ebook.title === "Coliques du bébé") {
-      downloadFilename = "Coliques du bébé.pdf";
-    } else if (ebook.title === "Les 6 premiers mois - Guide complet") {
-      downloadFilename = "Les 6 premiers mois - Guide complet.pdf";
-    } else {
-      // Fallback to the storage filename if title doesn't match
-      downloadFilename = filePath;
-    }
+    // Utilisation du bon nom de fichier basé sur le titre de l'ebook
+    let downloadFilename = `${ebook.title}.pdf`;
     
     link.download = downloadFilename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     
-    // Clean up the blob URL after a delay
+    // Nettoyage de l'URL du blob après un délai
     setTimeout(() => {
       URL.revokeObjectURL(url);
     }, 5000);
     
-    // Success notification
+    // Notification de succès
     toast.dismiss();
     toast.success(`${ebook.title} téléchargé avec succès`);
     
-    // Log analytics
+    // Analytics
     console.log(`Ebook téléchargé: ${ebook.title} (${ebook.id})`);
     
-    // Optionally record download analytics
+    // Enregistrement optionnel des statistiques de téléchargement
     recordDownload(ebook);
     
   } catch (error) {
@@ -94,7 +85,7 @@ const recordDownload = async (ebook: Ebook) => {
       .from('ebook_downloads')
       .insert({
         ebook_title: ebook.title,
-        email: 'anonymous', // À remplacer par l'email de l'utilisateur connecté si disponible
+        email: 'anonymous', // À remplacer par l'email de l'utilisateur si disponible
       });
       
     if (error) console.error("Erreur d'enregistrement du téléchargement:", error);
@@ -103,57 +94,42 @@ const recordDownload = async (ebook: Ebook) => {
   }
 };
 
-// Function to get preview URL for FlipBook viewer
+// Fonction pour obtenir l'URL de prévisualisation pour FlipBook
 export const getPreviewUrl = async (ebook: Ebook): Promise<string | null> => {
   try {
-    // First check if we've cached this in localStorage for faster access
-    const cachedUrlKey = `ebook-preview-url-${ebook.id}`;
-    const cachedUrl = localStorage.getItem(cachedUrlKey);
-    const cachedTimestamp = localStorage.getItem(`${cachedUrlKey}-timestamp`);
+    console.log(`getPreviewUrl: Obtention URL pour ${ebook.title} (${ebook.id})`);
     
-    // Use cached URL if it's less than 30 minutes old
-    if (cachedUrl && cachedTimestamp) {
-      const timestamp = parseInt(cachedTimestamp);
-      const now = Date.now();
-      const thirtyMinutesInMs = 30 * 60 * 1000;
-      
-      if (now - timestamp < thirtyMinutesInMs) {
-        console.log("Using cached preview URL");
-        return cachedUrl;
-      }
+    // Tentative direct avec une URL publique d'abord (si disponible)
+    if (ebook.fileUrl.startsWith('http')) {
+      console.log("getPreviewUrl: URL directe détectée, utilisation sans signature");
+      return ebook.fileUrl;
     }
     
-    // Otherwise, get a fresh URL from Supabase
-    const { data } = await supabase
+    // Génération d'une URL signée avec une durée de validité plus longue
+    const { data, error } = await supabase
       .storage
       .from('ebooks')
-      .createSignedUrl(ebook.fileUrl, 3600); // URL valide pendant 1 heure
+      .createSignedUrl(ebook.fileUrl, 7200); // URL valide pendant 2 heures
     
-    if (data?.signedUrl) {
-      // Cache this URL for faster future access
-      localStorage.setItem(cachedUrlKey, data.signedUrl);
-      localStorage.setItem(`${cachedUrlKey}-timestamp`, Date.now().toString());
-      
-      // Cache the ebook data to improve performance
-      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({
-          type: 'CACHE_EBOOK',
-          url: `/ebooks/${ebook.id}`,
-          data: ebook
-        });
-      }
-      
-      return data.signedUrl;
+    if (error) {
+      console.error("getPreviewUrl: Erreur lors de la création de l'URL signée:", error);
+      throw error;
+    }
+    
+    if (!data || !data.signedUrl) {
+      console.error("getPreviewUrl: Pas d'URL signée générée");
+      throw new Error("Aucune URL signée générée");
     }
       
-    return null;
+    console.log("getPreviewUrl: URL signée obtenue avec succès");
+    return data.signedUrl;
   } catch (error) {
-    console.error("Erreur lors de la création de l'URL signée:", error);
+    console.error("getPreviewUrl: Erreur critique:", error);
     return null;
   }
 };
 
-// Helper function to determine content type based on file extension
+// Fonction utilitaire pour déterminer le type de contenu basé sur l'extension
 const getContentType = (filePath: string): string => {
   const extension = filePath.split('.').pop()?.toLowerCase() || '';
   
@@ -169,98 +145,38 @@ const getContentType = (filePath: string): string => {
   }
 };
 
-// Function pour télécharger un nouvel ebook dans le bucket
-export const uploadEbook = async (
-  file: File,
-  metadata: {
-    title: string;
-    description: string;
-    category: string;
-    coverImage?: File;
-  }
-): Promise<Ebook | null> => {
+// Fonction pour précharger les ebooks populaires
+export const preloadEbooks = async (ebooks: Ebook[]): Promise<void> => {
   try {
-    // 1. Upload file to Supabase Storage
-    const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+    // Limiter le nombre d'ebooks à précharger (max 3)
+    const ebooksToPreload = ebooks.slice(0, 3);
+    console.log(`preloadEbooks: Préchargement de ${ebooksToPreload.length} ebooks`);
     
-    const { error: fileError } = await supabase
-      .storage
-      .from('ebooks')
-      .upload(fileName, file);
-      
-    if (fileError) throw fileError;
-    
-    // 2. Upload cover image if provided
-    let coverImagePath = '/lovable-uploads/placeholder-cover.png'; // Default fallback
-    
-    if (metadata.coverImage) {
-      const coverFileName = `covers/${Date.now()}-${metadata.coverImage.name.replace(/\s+/g, '-')}`;
-      
-      const { error: coverError } = await supabase
-        .storage
-        .from('ebooks')
-        .upload(coverFileName, metadata.coverImage);
-        
-      if (!coverError) {
-        const { data: coverData } = await supabase
-          .storage
-          .from('ebooks')
-          .getPublicUrl(coverFileName);
+    for (const ebook of ebooksToPreload) {
+      try {
+        // Créer une URL signée en avance
+        const url = await getPreviewUrl(ebook);
+        if (url) {
+          console.log(`preloadEbooks: URL préchargée pour ${ebook.title}`);
           
-        coverImagePath = coverData.publicUrl;
-      } else {
-        console.error("Erreur lors de l'upload de la couverture:", coverError);
+          // Précharger l'image de couverture aussi
+          if (ebook.coverImage) {
+            const img = new Image();
+            img.src = ebook.coverImage;
+          }
+        }
+      } catch (err) {
+        // Ignorer les erreurs individuelles pour ne pas bloquer les autres préchargements
+        console.warn(`preloadEbooks: Échec du préchargement pour ${ebook.title}`, err);
       }
     }
     
-    // 3. Créer un nouvel objet ebook
-    const newEbook: Ebook = {
-      id: `eb-${Date.now()}`,
-      title: metadata.title,
-      description: metadata.description,
-      coverImage: coverImagePath,
-      fileUrl: fileName,
-      fileType: file.name.split('.').pop()?.toUpperCase() || 'PDF',
-      fileSize: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
-      category: metadata.category,
-      tags: [metadata.category.toLowerCase()],
-      author: 'BabyBaby',
-      publishDate: new Date().toISOString().split('T')[0]
-    };
-    
-    // Retourner le nouvel ebook
-    return newEbook;
-    
   } catch (error) {
-    console.error("Erreur lors de l'upload de l'ebook:", error);
-    return null;
+    console.error("preloadEbooks: Erreur générale:", error);
   }
 };
 
-// Fonction pour précharger les PDF pour une visualisation ultérieure plus rapide
-export const preloadEbooks = async (ebooks: Ebook[]): Promise<void> => {
-  try {
-    // Limiter le nombre d'ebooks à précharger pour éviter de surcharger
-    const ebooksToPreload = ebooks.slice(0, 3);
-    
-    for (const ebook of ebooksToPreload) {
-      // Créer une URL signée mais ne pas la télécharger réellement
-      const { data } = await supabase
-        .storage
-        .from('ebooks')
-        .createSignedUrl(ebook.fileUrl, 3600);
-        
-      if (data?.signedUrl) {
-        // Stocker en cache pour une utilisation future
-        const cachedUrlKey = `ebook-preview-url-${ebook.id}`;
-        localStorage.setItem(cachedUrlKey, data.signedUrl);
-        localStorage.setItem(`${cachedUrlKey}-timestamp`, Date.now().toString());
-        
-        console.log(`URL préchargée pour ${ebook.title}`);
-      }
-    }
-    
-  } catch (error) {
-    console.error("Erreur lors du préchargement des ebooks:", error);
-  }
+// Garde seulement les fonctions exportées nécessaires
+export {
+  // Les fonctions déjà exportées sont conservées automatiquement
 };

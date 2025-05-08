@@ -1,165 +1,87 @@
 
-import React, { useEffect } from 'react';
-import { toast } from '@/components/ui/use-toast';
-import { articles } from '@/data/articles';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 interface CacheManagerProps {
-  version?: string;
+  version: string;
 }
 
-/**
- * CacheManager amélioré avec mise en cache des articles et détection de mise à jour
- */
-const CacheManager: React.FC<CacheManagerProps> = ({ version = '1.2' }) => {
+const CacheManager: React.FC<CacheManagerProps> = ({ version }) => {
   useEffect(() => {
-    // Vérification de version et mise en cache
-    const storedVersion = localStorage.getItem('app-version');
-    const isNewVersion = storedVersion !== version;
-    
-    // Enregistrer le service worker si supporté
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('Service Worker enregistré avec succès:', registration.scope);
-            
-            // Nettoyer les anciens caches au démarrage
-            if (registration.active && isNewVersion) {
-              registration.active.postMessage({ 
-                type: 'CLEAR_OLD_CACHES' 
-              });
-            }
-            
-            // Mettre en cache les articles fréquemment consultés
-            if (registration.active) {
-              cacheFrequentlyAccessedArticles(registration.active);
-              
-              // Précharger les ressources importantes pendant les périodes d'inactivité
-              setupIdlePreloading(registration.active);
-            }
-          })
-          .catch(error => {
-            console.error('Échec de l\'enregistrement du Service Worker:', error);
-          });
-      });
+    // Vérifier si le service worker est supporté
+    if (!('serviceWorker' in navigator)) {
+      console.log('Service Worker non supporté par ce navigateur');
+      return;
     }
-    
-    // Notifier l'utilisateur si une nouvelle version est disponible
-    if (isNewVersion) {
-      toast({
-        title: "Nouvelle mise à jour disponible",
-        description: "Rechargez la page pour voir les derniers changements et améliorer les performances.",
-        action: (
-          <button 
-            className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80 text-white px-4 py-2 rounded-md"
-            onClick={() => window.location.reload()}
-          >
-            Recharger
-          </button>
-        ),
-        duration: 10000,
-      });
-    }
-    
-    // Précharger des images critiques
-    const preloadCriticalImages = () => {
-      const criticalImages = [
-        "/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png",
-        "/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
-      ];
-      
-      criticalImages.forEach(imgSrc => {
-        const img = new Image();
-        img.src = imgSrc;
-      });
-    };
-    
-    // Mettre en cache les articles populaires localement
-    const cacheArticlesLocally = () => {
-      // Trouver les articles populaires/mis en avant
-      const articlesToCache = articles
-        .filter(article => article.featured || (article.views && article.views > 50))
-        .slice(0, 8); // Limiter aux 8 premiers pour éviter d'alourdir le stockage
-      
-      if (articlesToCache.length > 0) {
-        localStorage.setItem('cached-articles', JSON.stringify(articlesToCache));
-        localStorage.setItem('cached-articles-timestamp', Date.now().toString());
-      }
-    };
-    
-    // Mettre en cache via le Service Worker
-    const cacheFrequentlyAccessedArticles = (serviceWorker: ServiceWorker) => {
-      const featuredArticles = articles
-        .filter(article => article.featured || (article.views && article.views > 30))
-        .slice(0, 5);
-      
-      featuredArticles.forEach(article => {
-        serviceWorker.postMessage({
-          type: 'CACHE_ARTICLE',
-          url: `/articles/${article.id}`,
-          data: article
-        });
-      });
-    };
 
-    // Préchargement de ressources pendant les périodes d'inactivité
-    const setupIdlePreloading = (serviceWorker: ServiceWorker) => {
-      if ('requestIdleCallback' in window) {
-        // @ts-ignore
-        window.requestIdleCallback(() => {
-          const resourcesToPreload = [
-            '/articles',
-            '/about',
-            '/faq',
-            '/community',
-            '/lovable-uploads/021f4ab1-8b86-4ff2-80c1-c2c69ea963fb.png',
-          ];
-          
-          serviceWorker.postMessage({
-            type: 'PRECACHE_RESOURCES',
-            resources: resourcesToPreload
-          });
-        }, { timeout: 5000 });
-      }
-    };
-    
-    // Exécuter le cache local
-    preloadCriticalImages();
-    cacheArticlesLocally();
-    
-    // Stocker la version actuelle
-    localStorage.setItem('app-version', version);
-    
-    // Nettoyage du cache local pour les très vieilles entrées
-    const cleanupOldCache = () => {
-      const cacheTimestamp = localStorage.getItem('cache-timestamp');
-      const now = Date.now();
-      
-      // Si le cache a plus d'une semaine, on nettoie les entrées non essentielles
-      if (cacheTimestamp && (now - parseInt(cacheTimestamp)) > 7 * 24 * 60 * 60 * 1000) {
-        // Garder uniquement les données importantes
-        const keysToKeep = ['app-version', 'cached-articles', 'user-preferences', 'cached-articles-timestamp'];
+    // Enregistrer ou mettre à jour le service worker
+    const registerServiceWorker = async () => {
+      try {
+        // Ajouter un timestamp pour forcer la mise à jour du SW lors du développement
+        const swUrl = `/service-worker.js?v=${version}&t=${new Date().getTime()}`;
+        const registration = await navigator.serviceWorker.register(swUrl);
         
-        // Nettoyer les autres entrées
-        Object.keys(localStorage).forEach(key => {
-          if (!keysToKeep.includes(key)) {
-            localStorage.removeItem(key);
+        console.log('Service Worker enregistré avec succès:', registration.scope);
+        
+        // Vérifier s'il y a une mise à jour du SW
+        registration.onupdatefound = () => {
+          const installingWorker = registration.installing;
+          if (installingWorker) {
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) {
+                  console.log('Nouvelle version du Service Worker disponible');
+                  toast("Mise à jour disponible", {
+                    description: "Une nouvelle version de l'application est disponible. Rechargez pour l'appliquer.",
+                    action: {
+                      label: "Recharger",
+                      onClick: () => window.location.reload()
+                    }
+                  });
+                }
+              }
+            };
           }
-        });
+        };
         
-        // Mettre à jour le timestamp
-        localStorage.setItem('cache-timestamp', now.toString());
-      } else if (!cacheTimestamp) {
-        // Initialiser le timestamp s'il n'existe pas
-        localStorage.setItem('cache-timestamp', now.toString());
+        // Nettoyer le cache si besoin
+        if (navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage({
+            type: 'CLEAR_OLD_CACHES'
+          });
+          
+          // Vérifier que le SW est fonctionnel avec un ping
+          setTimeout(() => {
+            navigator.serviceWorker.controller?.postMessage({
+              type: 'PING'
+            });
+          }, 1000);
+        }
+        
+      } catch (error) {
+        console.error('Erreur d\'enregistrement du Service Worker:', error);
       }
     };
     
-    // Exécuter le nettoyage
-    cleanupOldCache();
+    // Écouteur pour recevoir les messages du SW
+    const messageHandler = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'PONG') {
+        console.log('Service Worker actif, version:', event.data.version);
+      }
+    };
     
+    navigator.serviceWorker.addEventListener('message', messageHandler);
+    
+    // Enregistrer le SW ou le mettre à jour
+    registerServiceWorker();
+    
+    // Nettoyer l'écouteur à la destruction du composant
+    return () => {
+      navigator.serviceWorker.removeEventListener('message', messageHandler);
+    };
   }, [version]);
 
+  // Ce composant ne rend rien visuellement
   return null;
 };
 
