@@ -62,11 +62,11 @@ const EbookCard: React.FC<EbookCardProps> = ({ ebook, onDownload, isLoading }) =
             <Button 
               variant="default" 
               className="flex-1 flex items-center justify-center gap-2 bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
-              as={Link}
-              to={`/ebooks/${ebook.id}`}
             >
-              <BookOpen className="h-4 w-4" />
-              Lire
+              <Link to={`/ebooks/${ebook.id}`} className="flex items-center justify-center gap-2 w-full">
+                <BookOpen className="h-4 w-4" />
+                Lire
+              </Link>
             </Button>
           </div>
         </CardFooter>
