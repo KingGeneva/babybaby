@@ -10,7 +10,7 @@ import { Trash2, Upload, FileEdit, Download } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { ebooksData } from '@/components/ebooks/ebooksData';
 import { Ebook } from '@/components/ebooks/types';
-import { uploadEbook } from '@/components/ebooks/ebookService';
+import { uploadEbook, downloadEbook } from '@/components/ebooks/ebookService';
 
 const AdminEbooksTab = () => {
   const [ebooks, setEbooks] = useState<Ebook[]>([]);
@@ -75,6 +75,19 @@ const AdminEbooksTab = () => {
       });
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  // Fonction pour gérer le téléchargement d'un ebook existant
+  const handleDownloadEbook = async (ebook: Ebook) => {
+    try {
+      await downloadEbook(ebook);
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: 'Impossible de télécharger l\'ebook',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -193,7 +206,12 @@ const AdminEbooksTab = () => {
                   <Button size="sm" variant="outline" className="flex-1">
                     <FileEdit className="w-4 h-4 mr-1" /> Éditer
                   </Button>
-                  <Button size="sm" variant="outline" className="flex-1">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={() => handleDownloadEbook(ebook)}
+                  >
                     <Download className="w-4 h-4 mr-1" /> Télécharger
                   </Button>
                   <Button size="sm" variant="destructive" className="flex-none">

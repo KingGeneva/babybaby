@@ -1,6 +1,6 @@
 
 // Service Worker optimisé pour BabyBaby App avec support FlipBook amélioré
-const CACHE_NAME = 'babybaby-cache-v5';
+const CACHE_NAME = 'babybaby-cache-v6';
 const RESOURCES_TO_CACHE = [
   '/',
   '/index.html',
@@ -46,6 +46,21 @@ self.addEventListener('activate', event => {
   );
 });
 
+// Liste des PDFs externes autorisés pour la mise en cache
+const ALLOWED_EXTERNAL_PDFS = [
+  'pdfobject.com',
+  'africau.edu',
+  'w3.org',
+  'unec.edu.az',
+  'file-examples.com'
+];
+
+// Vérifier si une URL est dans la liste des PDFs externes autorisés
+const isAllowedExternalPdf = (url) => {
+  const urlObj = new URL(url);
+  return ALLOWED_EXTERNAL_PDFS.some(domain => urlObj.hostname.includes(domain));
+};
+
 // Gestion spécifique des requêtes PDF avec gestion d'erreur améliorée
 self.addEventListener('fetch', event => {
   // Ne pas intercepter les requêtes non-GET
@@ -55,6 +70,7 @@ self.addEventListener('fetch', event => {
   
   // Cache-first pour les PDF et les ressources FlowPaper
   if (event.request.url.endsWith('.pdf') || 
+      isAllowedExternalPdf(event.request.url) ||
       requestUrl.pathname.includes('/flowpaper/') || 
       requestUrl.searchParams.has('token')) {
     
@@ -69,7 +85,7 @@ self.addEventListener('fetch', event => {
           }
           
           console.log('Service Worker: PDF/FlowPaper non trouvé en cache, fetch réseau');
-          return fetch(event.request)
+          return fetch(event.request, { mode: 'cors', credentials: 'same-origin' })
             .then(networkResponse => {
               // Ne mettre en cache que les réponses valides
               if (!networkResponse || networkResponse.status !== 200) {
@@ -89,7 +105,7 @@ self.addEventListener('fetch', event => {
               console.error('Service Worker: Erreur fetch réseau pour PDF/FlowPaper', error);
               
               // Fallback pour PDF - page d'erreur personnalisée
-              if (event.request.url.endsWith('.pdf')) {
+              if (event.request.url.endsWith('.pdf') || isAllowedExternalPdf(event.request.url)) {
                 return new Response(
                   `<!DOCTYPE html>
                   <html>
@@ -97,6 +113,7 @@ self.addEventListener('fetch', event => {
                     <body>
                       <h1>Erreur de chargement</h1>
                       <p>Impossible de charger le PDF. Vérifiez votre connexion ou réessayez plus tard.</p>
+                      <button onclick="window.location.reload()">Réessayer</button>
                     </body>
                   </html>`,
                   { 
@@ -109,6 +126,13 @@ self.addEventListener('fetch', event => {
               // Pas de fallback pour autres requêtes
               throw error;
             });
+        })
+        .catch(error => {
+          console.error('Service Worker: Erreur critique:', error);
+          return new Response(
+            'Erreur lors de la récupération du document',
+            { status: 500, headers: { 'Content-Type': 'text/plain' } }
+          );
         })
     );
     return;
@@ -192,12 +216,25 @@ self.addEventListener('message', event => {
       });
       break;
       
+    case 'CLEAR_OLD_CACHES':
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames
+            .filter(name => name !== CACHE_NAME && name.startsWith('babybaby-cache'))
+            .map(name => {
+              console.log('Service Worker: Nettoyage cache obsolète:', name);
+              return caches.delete(name);
+            })
+        );
+      });
+      break;
+      
     case 'PING':
       // Répondre aux pings pour vérifier que le service worker est actif
       if (event.source) {
         event.source.postMessage({
           type: 'PONG',
-          version: 'v5'
+          version: 'v6'
         });
       }
       break;
@@ -205,4 +242,4 @@ self.addEventListener('message', event => {
 });
 
 // Version optimisée
-console.log('Service Worker chargé - version v5 avec support FlowPaper et cache PDF améliorés');
+console.log('Service Worker chargé - version v6 avec support FlowPaper et cache PDF améliorés');

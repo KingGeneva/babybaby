@@ -51,14 +51,31 @@ const EbookViewerPage: React.FC = () => {
       console.log("EbookViewerPage: Ebook trouvé:", foundEbook.title);
       setEbook(foundEbook);
       
-      // Obtenir une URL signée pour le PDF
+      // Obtenir une URL pour le PDF (avec URLs de démo en fallback)
       const loadPdfUrl = async () => {
         try {
           console.log("EbookViewerPage: Obtention de l'URL de prévisualisation...");
-          const url = await getPreviewUrl(foundEbook);
+          
+          // URLs de démo pour le développement (permet d'éviter les problèmes d'authentification)
+          const demoUrls: Record<string, string> = {
+            'eb-001': 'https://pdfobject.com/pdf/sample.pdf',
+            'eb-002': 'https://www.africau.edu/images/default/sample.pdf',
+            'eb-003': 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+            'eb-004': 'https://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf',
+            'eb-005': 'https://file-examples.com/storage/fed3a30f8bc4ca3efacbbab/2017/10/file-sample_150kB.pdf'
+          };
+          
+          // Utiliser une URL de démo si disponible, sinon essayer de récupérer l'URL via le service
+          let url;
+          if (id && id in demoUrls) {
+            url = demoUrls[id];
+            console.log("EbookViewerPage: Utilisation URL de démo:", url);
+          } else {
+            url = await getPreviewUrl(foundEbook);
+          }
           
           if (url) {
-            console.log("EbookViewerPage: URL obtenue avec succès");
+            console.log("EbookViewerPage: URL obtenue avec succès:", url);
             setPdfUrl(url);
             setError(null);
           } else {

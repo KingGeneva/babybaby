@@ -1,10 +1,11 @@
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AppProviders from "./components/layout/AppProviders";
 import LoadingFallback from "./components/layout/LoadingFallback";
 import ChatbotButton from "./components/chatbot/ChatbotButton";
 import { appRoutes } from "./routes";
+import CacheManager from "./components/common/CacheManager";
 
 const App = () => (
   <AppProviders>
@@ -20,6 +21,9 @@ const App = () => (
           ))}
         </Routes>
       </Suspense>
+      
+      {/* Ajout du gestionnaire de cache avec version */}
+      <CacheManager version="v6" />
       
       <ChatbotButton />
     </Router>
