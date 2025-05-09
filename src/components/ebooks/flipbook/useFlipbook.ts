@@ -45,27 +45,10 @@ export const useFlipbook = (pdfUrl: string) => {
     }
 
     try {
-      // Perform a preliminary check of the URL
-      const checkResponse = await fetch(pdfUrl, { method: 'HEAD' }).catch(() => null);
-      
-      if (!checkResponse || !checkResponse.ok) {
-        console.error("useFlipbook: URL inaccessible:", pdfUrl);
-        setLoadError(true);
-        setIsScriptLoading(false);
-        return;
-      }
-      
-      // Load the necessary scripts
-      const { loaded, error } = await loadFlowPaperScripts();
-      
-      if (!loaded || error) {
-        console.error("useFlipbook: Échec du chargement des scripts:", error);
-        usePdfJsViewer();
-        return;
-      }
-      
-      setIsScriptLoading(false);
-      setLoadError(false);
+      // Skip the HEAD check which was causing issues and use PDF.js viewer directly
+      // for a more reliable experience across different environments
+      usePdfJsViewer();
+      return;
     } catch (error) {
       console.error("useFlipbook: Erreur générale:", error);
       usePdfJsViewer();

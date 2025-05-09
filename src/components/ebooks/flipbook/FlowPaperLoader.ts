@@ -6,55 +6,19 @@ export interface FlowPaperLoaderResult {
 
 /**
  * Loads the necessary FlowPaper scripts
+ * Note: Cette fonction est maintenant simplifiée car nous utilisons principalement
+ * le visualiseur PDF natif pour plus de fiabilité
  */
 export const loadFlowPaperScripts = async (): Promise<FlowPaperLoaderResult> => {
-  // Check if the scripts are already loaded
-  if (window.$ && window.FlowPaperViewer) {
-    return { loaded: true };
-  }
-
   try {
-    // Load jQuery first if needed
-    if (!window.$) {
-      console.log("FlipbookViewer: Chargement de jQuery");
-      const jqueryScript = document.createElement('script');
-      jqueryScript.src = '/flowpaper/js/jquery.min.js';
-      jqueryScript.async = true;
-      document.head.appendChild(jqueryScript);
-      
-      await new Promise((resolve, reject) => {
-        jqueryScript.onload = resolve;
-        jqueryScript.onerror = () => {
-          reject(new Error("Échec de chargement de jQuery"));
-        };
-        
-        // Safety timeout
-        setTimeout(() => reject(new Error("Timeout loading jQuery")), 5000);
-      });
-      console.log("FlipbookViewer: jQuery chargé avec succès");
-    }
+    // Simuler un délai de chargement pour l'expérience utilisateur
+    await new Promise(resolve => setTimeout(resolve, 500));
     
-    // Then load FlowPaper
-    if (!window.FlowPaperViewer) {
-      console.log("FlipbookViewer: Chargement de FlowPaper");
-      const flowpaperScript = document.createElement('script');
-      flowpaperScript.src = '/flowpaper/js/flowpaper.js';
-      flowpaperScript.async = true;
-      document.head.appendChild(flowpaperScript);
-      
-      await new Promise((resolve, reject) => {
-        flowpaperScript.onload = resolve;
-        flowpaperScript.onerror = () => {
-          reject(new Error("Échec de chargement de FlowPaper"));
-        };
-        
-        // Safety timeout
-        setTimeout(() => reject(new Error("Timeout loading FlowPaper")), 5000);
-      });
-      console.log("FlipbookViewer: FlowPaper chargé avec succès");
-    }
+    // Nous ne chargeons plus réellement FlowPaper mais nous retournons un succès
+    // pour maintenir la compatibilité avec le code existant
+    console.log("FlipbookViewer: Transition vers le visualiseur PDF natif");
     
-    return { loaded: true };
+    return { loaded: false, error: new Error("Utilisation du visualiseur PDF natif pour une meilleure compatibilité") };
   } catch (error) {
     console.error("FlipbookViewer: Erreur lors du chargement des scripts:", error);
     return { loaded: false, error: error instanceof Error ? error : new Error(String(error)) };
