@@ -29,16 +29,16 @@ interface AppProvidersProps {
 const AppProviders = ({ children }: AppProvidersProps) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <HelmetProvider>
-          <TooltipProvider>
+      <HelmetProvider>
+        <TooltipProvider>
+          <AuthProvider>
             <Toaster />
             <Sonner />
             <CacheManager version={APP_VERSION} />
             {children}
-          </TooltipProvider>
-        </HelmetProvider>
-      </AuthProvider>
+          </AuthProvider>
+        </TooltipProvider>
+      </HelmetProvider>
     </QueryClientProvider>
   );
 };
