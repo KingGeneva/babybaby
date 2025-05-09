@@ -12,23 +12,12 @@ const FlipbookViewer: React.FC<FlipbookViewerProps> = ({ pdfUrl, title }) => {
     loadError,
     pdfjsViewer,
     currentUrl,
-    setPdfLoaded,
     openPdfDirectly,
     useFallbackUrl,
     handleRetry
   } = useFlipbook(pdfUrl);
 
-  // Show the appropriate component based on the current state
-  if (pdfjsViewer) {
-    return (
-      <PdfJsViewer 
-        pdfUrl={currentUrl || pdfUrl} 
-        title={title} 
-        onRetry={handleRetry} 
-      />
-    );
-  }
-
+  // Afficher l'état approprié selon la situation
   if (loadError) {
     return (
       <>
@@ -56,6 +45,7 @@ const FlipbookViewer: React.FC<FlipbookViewerProps> = ({ pdfUrl, title }) => {
     );
   }
 
+  // Par défaut, afficher le visualiseur PDF
   return (
     <PdfJsViewer 
       pdfUrl={currentUrl || pdfUrl} 
