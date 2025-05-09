@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, ExternalLink } from 'lucide-react';
+import { getNextFallbackUrl } from '../services/demoService';
 
 interface PdfJsViewerProps {
   pdfUrl: string;
@@ -13,34 +14,64 @@ const PdfJsViewer: React.FC<PdfJsViewerProps> = ({ pdfUrl, title, onRetry }) => 
   const [pdfLoaded, setPdfLoaded] = useState<boolean>(false);
   const [loadError, setLoadError] = useState<boolean>(false);
   const [retryCount, setRetryCount] = useState<number>(0);
+  const [currentUrl, setCurrentUrl] = useState<string>(pdfUrl);
+  const [iframeKey, setIframeKey] = useState<number>(0); // Pour forcer le rechargement de l'iframe
 
-  // Fonction pour vérifier si l'URL du PDF est accessible
+  // Fonction pour utiliser une URL de fallback
+  const useFallbackUrl = () => {
+    const fallbackUrl = getNextFallbackUrl();
+    console.log("PdfJsViewer: Utilisation d'une URL de fallback:", fallbackUrl);
+    setCurrentUrl(fallbackUrl);
+    setIframeKey(prevKey => prevKey + 1); // Force iframe refresh
+  };
+
+  // Vérifier si l'URL du PDF est accessible
   useEffect(() => {
     const checkPdfAccess = async () => {
       try {
-        // Vérifier si le PDF est accessible en créant une image temporaire
-        const img = new Image();
-        img.onerror = () => setLoadError(true);
-        img.onload = () => {
-          setPdfLoaded(true);
-          setLoadError(false);
-        };
-        // Ajouter un paramètre timestamp pour éviter la mise en cache
-        img.src = `${pdfUrl}#page=1&timestamp=${new Date().getTime()}`;
+        console.log("PdfJsViewer: Tentative d'accès au PDF:", currentUrl);
+        
+        // Essayer d'accéder au PDF via un fetch HEAD pour vérifier rapidement l'accès
+        const response = await fetch(currentUrl, { 
+          method: 'HEAD',
+          // Ajouter un cache-buster pour éviter les problèmes de cache
+          headers: { 'Cache-Control': 'no-cache' },
+          mode: 'cors' // Permettre les requêtes cross-origin
+        });
+        
+        if (!response.ok) {
+          console.error("PdfJsViewer: Erreur d'accès au PDF, statut:", response.status);
+          throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        
+        setPdfLoaded(true);
+        setLoadError(false);
       } catch (e) {
-        console.error("Erreur lors de la vérification du PDF:", e);
+        console.error("PdfJsViewer: Erreur lors de la vérification du PDF:", e);
         setLoadError(true);
+        // Après 2 essais, utiliser automatiquement une URL de fallback
+        if (retryCount >= 1 && currentUrl === pdfUrl) {
+          useFallbackUrl();
+        }
       }
     };
 
     checkPdfAccess();
-  }, [pdfUrl, retryCount]);
+  }, [currentUrl, retryCount, pdfUrl]);
 
   // Gérer un nouveau chargement
   const handleRetryLocal = () => {
     setPdfLoaded(false);
     setLoadError(false);
     setRetryCount(prev => prev + 1);
+    
+    // Si on a déjà essayé 3 fois avec la même URL, utiliser une URL de fallback
+    if (retryCount >= 2 && currentUrl === pdfUrl) {
+      useFallbackUrl();
+    } else {
+      // Forcer le rechargement de l'iframe
+      setIframeKey(prevKey => prevKey + 1);
+    }
   };
 
   return (
@@ -60,18 +91,32 @@ const PdfJsViewer: React.FC<PdfJsViewerProps> = ({ pdfUrl, title, onRetry }) => 
         {loadError ? (
           <div className="flex-grow flex flex-col items-center justify-center">
             <p className="text-red-500 mb-4">Impossible de charger le PDF</p>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button onClick={handleRetryLocal} size="sm">
                 Réessayer
               </Button>
-              <Button onClick={() => window.open(pdfUrl, '_blank')} size="sm" variant="outline">
-                Ouvrir dans un nouvel onglet
+              <Button 
+                onClick={useFallbackUrl} 
+                size="sm" 
+                variant="secondary"
+                className="mt-2 sm:mt-0"
+              >
+                Utiliser une URL alternative
+              </Button>
+              <Button 
+                onClick={() => window.open(currentUrl, '_blank')} 
+                size="sm" 
+                variant="outline"
+                className="mt-2 sm:mt-0 flex items-center gap-1"
+              >
+                Ouvrir directement <ExternalLink className="h-3 w-3" />
               </Button>
             </div>
           </div>
         ) : (
           <iframe 
-            src={`${pdfUrl}#toolbar=1&view=FitH&timestamp=${new Date().getTime()}`}
+            key={`pdf-iframe-${iframeKey}`}
+            src={`${currentUrl}#toolbar=1&view=FitH&timestamp=${new Date().getTime()}`}
             className="w-full h-full border-0" 
             title={title}
             onLoad={() => setPdfLoaded(true)}

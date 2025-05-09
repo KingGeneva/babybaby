@@ -1,43 +1,47 @@
 
 import { useState, useEffect } from 'react';
-import { loadFlowPaperScripts } from './FlowPaperLoader';
+import { getNextFallbackUrl } from '../services/demoService';
 
 export const useFlipbook = (pdfUrl: string) => {
-  const [isScriptLoading, setIsScriptLoading] = useState<boolean>(true);
+  const [isScriptLoading, setIsScriptLoading] = useState<boolean>(false);
   const [loadError, setLoadError] = useState<boolean>(false);
-  const [pdfjsViewer, setPdfjsViewer] = useState<boolean>(false);
+  const [pdfjsViewer, setPdfjsViewer] = useState<boolean>(true); // Toujours utiliser le visualiseur PDF natif
   const [pdfLoaded, setPdfLoaded] = useState<boolean>(false);
+  const [currentUrl, setCurrentUrl] = useState<string>(pdfUrl);
 
   // Function to open the PDF directly in a new tab
   const openPdfDirectly = () => {
-    if (pdfUrl) {
-      window.open(pdfUrl, '_blank');
+    if (currentUrl) {
+      window.open(currentUrl, '_blank');
     }
   };
 
-  // Function to use native PDF.js viewer instead of FlowPaper
-  const usePdfJsViewer = () => {
-    setPdfjsViewer(true);
-    setIsScriptLoading(false);
+  // Fonction pour utiliser une URL de fallback
+  const useFallbackUrl = () => {
+    const fallbackUrl = getNextFallbackUrl();
+    console.log("useFlipbook: Utilisation d'une URL de fallback:", fallbackUrl);
+    setCurrentUrl(fallbackUrl);
     setLoadError(false);
+    setIsScriptLoading(false);
+    setPdfjsViewer(true);
   };
 
-  // Function to retry loading FlowPaper
+  // Function to retry loading PDF
   const handleRetry = () => {
     setIsScriptLoading(true);
     setLoadError(false);
-    setPdfjsViewer(false);
+    setPdfjsViewer(true);
     
     setTimeout(() => {
-      initializeViewer();
+      checkPdfAccess();
     }, 500);
   };
 
-  // Function to initialize the viewer
-  const initializeViewer = async () => {
-    console.log("useFlipbook: Tentative de chargement avec URL:", pdfUrl);
+  // Fonction pour vérifier l'accessibilité du PDF
+  const checkPdfAccess = async () => {
+    console.log("useFlipbook: Vérification d'accès au PDF:", currentUrl);
     
-    if (!pdfUrl) {
+    if (!currentUrl) {
       console.error("useFlipbook: URL PDF manquante");
       setLoadError(true);
       setIsScriptLoading(false);
@@ -45,23 +49,38 @@ export const useFlipbook = (pdfUrl: string) => {
     }
 
     try {
-      // Skip the HEAD check which was causing issues and use PDF.js viewer directly
-      // for a more reliable experience across different environments
-      usePdfJsViewer();
-      return;
+      const response = await fetch(currentUrl, { 
+        method: 'HEAD',
+        headers: { 'Cache-Control': 'no-cache' }
+      }).catch(() => null);
+      
+      if (!response || !response.ok) {
+        throw new Error("PDF inaccessible");
+      }
+      
+      // Utiliser directement le visualiseur PDF natif
+      setPdfjsViewer(true);
+      setIsScriptLoading(false);
+      setLoadError(false);
+      
     } catch (error) {
-      console.error("useFlipbook: Erreur générale:", error);
-      usePdfJsViewer();
+      console.error("useFlipbook: Erreur d'accès au PDF:", error);
+      setLoadError(true);
+      setIsScriptLoading(false);
     }
   };
 
-  // Initialize the viewer when pdfUrl changes
+  // Initialize when pdfUrl changes
   useEffect(() => {
     setIsScriptLoading(true);
     setLoadError(false);
+    // Utiliser l'URL fournie
+    setCurrentUrl(pdfUrl);
     
     const initTimeout = setTimeout(() => {
-      initializeViewer();
+      // Toujours utiliser le visualiseur PDF natif directement
+      setPdfjsViewer(true);
+      setIsScriptLoading(false);
     }, 500);
 
     return () => {
@@ -75,8 +94,9 @@ export const useFlipbook = (pdfUrl: string) => {
     pdfjsViewer,
     pdfLoaded,
     setPdfLoaded,
+    currentUrl,
     openPdfDirectly,
-    usePdfJsViewer,
+    useFallbackUrl,
     handleRetry
   };
 };

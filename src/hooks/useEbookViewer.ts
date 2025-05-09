@@ -4,15 +4,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { Ebook } from '@/components/ebooks/types';
 import { ebooksData } from '@/components/ebooks/ebooksData';
-
-// Liste de PDFs publics fiables pour la démonstration
-const DEMO_PDFS = [
-  'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-  'https://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf',
-  'https://www.orimi.com/pdf-test.pdf',
-  'https://file-examples.com/storage/fe4358c310d635bdb9a6917/2017/10/file-sample_150kB.pdf',
-  'https://www.clickdimensions.com/links/TestPDFfile.pdf'
-];
+import { getDemoFileUrl, fallbackPdfUrls } from '@/components/ebooks/services/demoService';
 
 export const useEbookViewer = (id: string | undefined) => {
   const navigate = useNavigate();
@@ -37,26 +29,34 @@ export const useEbookViewer = (id: string | undefined) => {
       console.log("EbookViewerPage: Ebook trouvé:", foundEbook.title);
       setEbook(foundEbook);
       
-      // Utiliser un PDF de démonstration fiable
       try {
         console.log("EbookViewerPage: Obtention de l'URL de prévisualisation...");
         
-        // Sélectionner un PDF de démonstration basé sur l'ID de l'ebook pour avoir une URL cohérente
-        const demoIndex = parseInt(foundEbook.id.replace('eb-', '')) % DEMO_PDFS.length;
-        const url = DEMO_PDFS[demoIndex];
+        // Obtenir une URL de démonstration fiable basée sur l'ID de l'ebook
+        const demoUrl = getDemoFileUrl(foundEbook.id);
         
-        console.log("EbookViewerPage: URL de démonstration sélectionnée:", url);
-        setPdfUrl(url);
-        setError(null);
+        if (demoUrl) {
+          console.log("EbookViewerPage: URL de démonstration sélectionnée:", demoUrl);
+          setPdfUrl(demoUrl);
+          setError(null);
+        } else {
+          // Fallback sur la première URL de la liste si pas d'URL spécifique
+          const fallbackUrl = fallbackPdfUrls[0];
+          console.log("EbookViewerPage: URL de fallback utilisée:", fallbackUrl);
+          setPdfUrl(fallbackUrl);
+        }
+        
         setIsLoading(false);
       } catch (error) {
         console.error("EbookViewerPage: Erreur lors du chargement du PDF:", error);
-        setError("Impossible de charger le document. Veuillez réessayer plus tard.");
+        // En cas d'erreur, utiliser la première URL de fallback
+        setPdfUrl(fallbackPdfUrls[0]);
+        setError("Une erreur temporaire est survenue. Nous avons chargé une version de démonstration.");
         setIsLoading(false);
         toast({
-          title: "Erreur de chargement",
-          description: "Impossible de charger le livre. Veuillez réessayer plus tard.",
-          variant: "destructive"
+          title: "Attention",
+          description: "Version de démonstration chargée. Certaines fonctionnalités peuvent être limitées.",
+          variant: "default"
         });
       }
     } else {

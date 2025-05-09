@@ -4,7 +4,6 @@ import { useFlipbook } from './flipbook/useFlipbook';
 import LoadingState from './flipbook/LoadingState';
 import ErrorState from './flipbook/ErrorState';
 import PdfJsViewer from './flipbook/PdfJsViewer';
-import FlowPaperViewer from './flipbook/FlowPaperViewer';
 import { FlipbookViewerProps } from './flipbook/types';
 
 const FlipbookViewer: React.FC<FlipbookViewerProps> = ({ pdfUrl, title }) => {
@@ -12,9 +11,10 @@ const FlipbookViewer: React.FC<FlipbookViewerProps> = ({ pdfUrl, title }) => {
     isScriptLoading,
     loadError,
     pdfjsViewer,
+    currentUrl,
     setPdfLoaded,
     openPdfDirectly,
-    usePdfJsViewer,
+    useFallbackUrl,
     handleRetry
   } = useFlipbook(pdfUrl);
 
@@ -22,7 +22,7 @@ const FlipbookViewer: React.FC<FlipbookViewerProps> = ({ pdfUrl, title }) => {
   if (pdfjsViewer) {
     return (
       <PdfJsViewer 
-        pdfUrl={pdfUrl} 
+        pdfUrl={currentUrl || pdfUrl} 
         title={title} 
         onRetry={handleRetry} 
       />
@@ -34,8 +34,9 @@ const FlipbookViewer: React.FC<FlipbookViewerProps> = ({ pdfUrl, title }) => {
       <>
         <ErrorState 
           onRetry={handleRetry}
-          onUsePdfViewer={usePdfJsViewer}
+          onUsePdfViewer={() => {}}
           onOpenDirect={openPdfDirectly}
+          onUseFallback={useFallbackUrl}
         />
         <div className="text-center mt-4 text-sm text-gray-500">
           <p>Si le problème persiste, essayez de télécharger le document.</p>
@@ -56,12 +57,11 @@ const FlipbookViewer: React.FC<FlipbookViewerProps> = ({ pdfUrl, title }) => {
   }
 
   return (
-    <>
-      <FlowPaperViewer pdfUrl={pdfUrl} />
-      <div className="text-center mt-4 text-sm text-gray-500">
-        <p>{"Utilisez les contrôles pour naviguer dans le document"}</p>
-      </div>
-    </>
+    <PdfJsViewer 
+      pdfUrl={currentUrl || pdfUrl} 
+      title={title} 
+      onRetry={handleRetry} 
+    />
   );
 };
 
