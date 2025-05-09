@@ -4,18 +4,16 @@ import * as React from "react"
 const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
-  // Nous définissons isMobile par défaut en se basant sur la taille de la fenêtre
-  // plutôt que d'attendre l'effet pour éviter les changements d'affichage
-  const [isMobile, setIsMobile] = React.useState(
-    typeof window !== 'undefined' ? window.innerWidth < MOBILE_BREAKPOINT : false
-  )
+  const [isMobile, setIsMobile] = React.useState(false)
 
   React.useEffect(() => {
-    // Définit un délai pour le redimensionnement pour éviter trop d'appels
+    // Initialize the value when the component mounts (client-side only)
+    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+    
+    // Throttled resize handler
     let resizeTimer: ReturnType<typeof setTimeout>
     
     const handleResize = () => {
-      // Utilise un throttling pour limiter le nombre de mises à jour
       clearTimeout(resizeTimer)
       resizeTimer = setTimeout(() => {
         setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
@@ -23,6 +21,8 @@ export function useIsMobile() {
     }
     
     window.addEventListener("resize", handleResize)
+    
+    // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize)
       clearTimeout(resizeTimer)
