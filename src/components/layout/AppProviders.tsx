@@ -34,7 +34,6 @@ const AppProviders = ({ children }: AppProvidersProps) => {
           <AuthProvider>
             <Toaster />
             <Sonner />
-            <CacheManager version={APP_VERSION} />
             {children}
           </AuthProvider>
         </TooltipProvider>
