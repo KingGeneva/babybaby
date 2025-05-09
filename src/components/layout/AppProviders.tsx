@@ -28,8 +28,8 @@ interface AppProvidersProps {
 
 const AppProviders = ({ children }: AppProvidersProps) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <HelmetProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <AuthProvider>
             <Toaster />
@@ -38,8 +38,8 @@ const AppProviders = ({ children }: AppProvidersProps) => {
             {children}
           </AuthProvider>
         </TooltipProvider>
-      </HelmetProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 

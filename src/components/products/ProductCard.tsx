@@ -37,7 +37,7 @@ interface ProductCardProps {
 }
 
 // Utilisation de React.memo pour éviter les re-renders inutiles
-const ProductCard: React.FC<ProductCardProps> = memo(({ product, index }) => {
+const ProductCard = memo(({ product, index }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimationLoaded, setIsAnimationLoaded] = useState(false);
