@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -8,7 +9,6 @@ import TestimonialsCarousel from '@/components/testimonials/TestimonialsCarousel
 import PartnersCarousel from '@/components/partners/PartnersCarousel';
 import ProductsSection from '@/components/products/ProductsSection';
 import EbooksSection from '@/components/ebooks/EbooksSection';
-import PodcastsSection from '@/components/podcasts/PodcastsSection';
 import ToolsSection from '@/components/tools/ToolsSection';
 import ContactSection from '@/components/ContactSection';
 import NewsletterForm from '@/components/NewsletterForm';
@@ -200,9 +200,6 @@ const Index = () => {
       >
         {/* Article Section - Important for SEO with fresh content */}
         <ArticleSection />
-
-        {/* New Podcast Section */}
-        <PodcastsSection />
 
         {/* Témoignages Section */}
         <TestimonialsCarousel />
