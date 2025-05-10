@@ -5,9 +5,7 @@ export const demoFiles: Record<string, string> = {
   'eb-002': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf',
   'eb-003': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/TAMReview.pdf',
   'eb-004': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/annotation-strikeout.pdf',
-  'eb-005': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/basicapi.pdf',
-  'eb-006': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/issue3258.pdf',
-  'eb-007': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/rotation.pdf'
+  'eb-005': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/basicapi.pdf'
 };
 
 // Fonction pour obtenir l'URL de démonstration pour un ebook
