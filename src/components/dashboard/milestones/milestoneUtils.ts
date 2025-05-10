@@ -120,7 +120,7 @@ const getDemoMilestones = (): Milestone[] => {
       id: 'milestone-1',
       name: 'Soulève la tête en position ventrale',
       title: 'Contrôle de la tête',
-      description: 'Le bébé peut soulever et maintenir sa tête pendant quelques secondes lorsqu'il est sur le ventre',
+      description: "Le bébé peut soulever et maintenir sa tête pendant quelques secondes lorsqu'il est sur le ventre",
       expected_age_months: 1,
       category: 'Moteur'
     },
@@ -178,9 +178,9 @@ const getDemoMilestones = (): Milestone[] => {
     // Développement moteur (7-9 mois)
     {
       id: 'milestone-8',
-      name: 'S'asseoir sans soutien',
+      name: "S'asseoir sans soutien",
       title: 'Position assise autonome',
-      description: 'Le bébé peut s\'asseoir sans soutien pendant un moment',
+      description: "Le bébé peut s'asseoir sans soutien pendant un moment",
       expected_age_months: 7,
       category: 'Moteur'
     },
@@ -204,7 +204,7 @@ const getDemoMilestones = (): Milestone[] => {
       id: 'milestone-11',
       name: 'Réagit à son prénom',
       title: 'Reconnaissance du prénom',
-      description: 'Le bébé se retourne ou réagit quand on l\'appelle par son prénom',
+      description: "Le bébé se retourne ou réagit quand on l'appelle par son prénom",
       expected_age_months: 9,
       category: 'Social'
     },
@@ -214,7 +214,7 @@ const getDemoMilestones = (): Milestone[] => {
       id: 'milestone-12',
       name: 'Se tenir debout avec support',
       title: 'Position debout avec aide',
-      description: 'Le bébé peut se tenir debout en s\'appuyant sur un meuble',
+      description: "Le bébé peut se tenir debout en s'appuyant sur un meuble",
       expected_age_months: 10,
       category: 'Moteur'
     },
@@ -248,7 +248,7 @@ const getDemoMilestones = (): Milestone[] => {
       id: 'milestone-16',
       name: 'Phrases de deux mots',
       title: 'Combinaison de mots',
-      description: 'L\'enfant peut combiner deux mots pour former des phrases simples',
+      description: "L'enfant peut combiner deux mots pour former des phrases simples",
       expected_age_months: 18,
       category: 'Langage'
     },
@@ -256,7 +256,7 @@ const getDemoMilestones = (): Milestone[] => {
       id: 'milestone-17',
       name: 'Monte les escaliers',
       title: 'Monter les marches',
-      description: 'L\'enfant peut monter les escaliers en tenant la rampe ou votre main',
+      description: "L'enfant peut monter les escaliers en tenant la rampe ou votre main",
       expected_age_months: 18,
       category: 'Moteur'
     },
@@ -264,7 +264,7 @@ const getDemoMilestones = (): Milestone[] => {
       id: 'milestone-18',
       name: 'Empiler des cubes',
       title: 'Construction simple',
-      description: 'L\'enfant peut empiler 3 à 4 cubes les uns sur les autres',
+      description: "L'enfant peut empiler 3 à 4 cubes les uns sur les autres",
       expected_age_months: 18,
       category: 'Moteur fin'
     }

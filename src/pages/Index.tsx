@@ -1,6 +1,6 @@
 
-import React, { useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import NavBar from '@/components/NavBar';
 import HeroSection from '@/components/HeroSection';
@@ -21,18 +21,11 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 // Optimized Homepage without dashboard demo for better performance and SEO
 const Index = () => {
-  const controls = useAnimation();
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.05,
   });
   const isMobile = useIsMobile();
-  
-  useEffect(() => {
-    if (inView) {
-      controls.start('visible');
-    }
-  }, [controls, inView]);
   
   // Website schema structured data - enhanced for SEO
   const websiteSchema = {
@@ -185,8 +178,8 @@ const Index = () => {
       
       <motion.div
         ref={ref}
-        animate={controls}
         initial="hidden"
+        animate={inView ? "visible" : "hidden"}
         variants={{
           hidden: { opacity: 0 },
           visible: { 

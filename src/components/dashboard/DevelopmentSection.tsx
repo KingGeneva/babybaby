@@ -6,6 +6,8 @@ import MedicalWidget from '@/components/medical/MedicalWidget';
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import DevelopmentStagesGuide from './milestones/DevelopmentStagesGuide';
+import BabyAgeDisplay from './milestones/BabyAgeDisplay';
+import DevelopmentArticles from './milestones/DevelopmentArticles';
 
 interface DevelopmentSectionProps {
   childId: string;
@@ -83,7 +85,30 @@ const DevelopmentSection: React.FC<DevelopmentSectionProps> = ({ childId }) => {
     <div className="space-y-6 mb-12">
       {/* Guide des étapes de développement */}
       {!isLoading && (
-        <DevelopmentStagesGuide babyAgeMonths={babyAgeMonths} />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Section principale avec guide de développement */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg">Développement de votre enfant</CardTitle>
+                  {birthDate && <BabyAgeDisplay babyAgeMonths={babyAgeMonths} birthDate={birthDate} />}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <DevelopmentStagesGuide babyAgeMonths={babyAgeMonths} />
+                <div className="mt-6">
+                  <DevelopmentArticles ageMonths={babyAgeMonths} />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Widget médical */}
+          <div>
+            <MedicalWidget childId={childId} />
+          </div>
+        </div>
       )}
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -102,9 +127,6 @@ const DevelopmentSection: React.FC<DevelopmentSectionProps> = ({ childId }) => {
               )}
             </CardContent>
           </Card>
-        </div>
-        <div>
-          <MedicalWidget childId={childId} />
         </div>
       </div>
     </div>

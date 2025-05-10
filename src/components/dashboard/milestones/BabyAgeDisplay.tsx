@@ -38,12 +38,12 @@ const BabyAgeDisplay: React.FC<BabyAgeDisplayProps> = ({ babyAgeMonths, birthDat
   };
 
   return (
-    <div className="mb-6 flex items-center gap-2 p-3 bg-blue-50 rounded-lg border border-blue-100">
-      <Baby className="h-6 w-6 text-babybaby-cosmic" />
+    <div className="mb-3 flex items-center gap-2 p-2 bg-blue-50 rounded-lg border border-blue-100">
+      <Baby className="h-5 w-5 text-babybaby-cosmic" />
       {birthDate ? (
         <div>
           <p className="text-sm font-medium">
-            <span className="font-semibold text-base">{getDetailedAge()}</span>
+            <span className="font-semibold">{getDetailedAge()}</span>
           </p>
           <p className="text-xs text-gray-500">
             Né(e) le {format(parseISO(birthDate), 'dd MMMM yyyy', { locale: fr })}
