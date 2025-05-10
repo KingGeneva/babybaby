@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -21,6 +20,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 // Optimized Homepage without dashboard demo for better performance and SEO
 const Index = () => {
+  // Initialize these hooks only when component mounts
   const controls = useAnimation();
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -87,7 +87,7 @@ const Index = () => {
       "ratingCount": "1250"
     }
   };
-
+  
   return (
     <div className="min-h-screen overflow-hidden">
       <SEOHead 

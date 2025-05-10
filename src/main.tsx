@@ -11,5 +11,7 @@ const root = createRoot(rootElement);
 
 // Render the app inside StrictMode for better error detection
 root.render(
-  <App />
+  <StrictMode>
+    <App />
+  </StrictMode>
 );
