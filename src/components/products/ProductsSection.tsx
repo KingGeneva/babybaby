@@ -3,12 +3,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-
-// Import lazy du composant ProductCard avec preload
-const ProductCard = lazy(() => {
-  // Précharger le composant après un court délai pour donner la priorité aux éléments critiques
-  return import('./ProductCard');
-});
+import ProductCard from './ProductCard'; // Import directly instead of using lazy loading
 
 // Placeholder simplifié et optimisé
 const ProductCardPlaceholder = () => (
@@ -107,9 +102,7 @@ const ProductsSection: React.FC = () => {
               <CarouselItem key={product.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
                 <div className="p-1">
                   {visibleProducts.includes(product.id) ? (
-                    <Suspense fallback={<ProductCardPlaceholder />}>
-                      <ProductCard product={product} index={index} />
-                    </Suspense>
+                    <ProductCard product={product} index={index} />
                   ) : (
                     <ProductCardPlaceholder />
                   )}

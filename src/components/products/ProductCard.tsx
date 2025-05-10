@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, memo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -36,8 +36,7 @@ interface ProductCardProps {
   index: number;
 }
 
-// Utilisation de React.memo pour éviter les re-renders inutiles
-const ProductCard = memo(({ product, index }: ProductCardProps) => {
+const ProductCard = ({ product, index }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimationLoaded, setIsAnimationLoaded] = useState(false);
@@ -161,7 +160,6 @@ const ProductCard = memo(({ product, index }: ProductCardProps) => {
       </Card>
     </motion.div>
   );
-});
+};
 
-ProductCard.displayName = 'ProductCard';
 export default ProductCard;
