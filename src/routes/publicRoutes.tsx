@@ -13,6 +13,7 @@ const AboutPage = lazy(() => import("../pages/AboutPage"));
 const FreeOffersPage = lazy(() => import("../pages/FreeOffersPage"));
 const EbooksPage = lazy(() => import("../pages/EbooksPage"));
 const EbookViewerPage = lazy(() => import("../pages/EbookViewerPage"));
+const ContestsPage = lazy(() => import("../pages/ContestsPage"));
 
 export const publicRoutes: RouteObject[] = [
   { path: "/", element: <Index /> },
@@ -24,5 +25,6 @@ export const publicRoutes: RouteObject[] = [
   { path: "/free-offers", element: <FreeOffersPage /> },
   { path: "/ebooks", element: <EbooksPage /> },
   { path: "/ebooks/:id", element: <EbookViewerPage /> },
+  { path: "/contests", element: <ContestsPage /> },
   { path: "*", element: <NotFound /> }
 ];

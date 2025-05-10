@@ -62,6 +62,12 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
             >
               Quiz & Tests
             </Link>
+            <Link
+              to="/contests"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
+            >
+              Concours
+            </Link>
             
             {user && (
               <Link

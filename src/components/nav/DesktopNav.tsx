@@ -60,6 +60,13 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link to="/contests">
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Concours
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
           {user && (
             <>
               <NavigationMenuItem>
