@@ -1,56 +1,46 @@
 
-// Utilisation de PDFs fiables provenant de sources qui autorisent CORS ou utilisant des proxys
+// Liste des URLs de démonstration fiables pour les ebooks
 export const demoFiles: Record<string, string> = {
-  'eb-001': 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
-  'eb-002': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf',
-  'eb-003': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/TAMReview.pdf',
-  'eb-004': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/annotation-strikeout.pdf',
-  'eb-005': 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/basicapi.pdf'
+  "eb-001": "https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf",
+  "eb-002": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+  "eb-003": "https://www.africau.edu/images/default/sample.pdf",
+  "eb-004": "https://www.orimi.com/pdf-test.pdf",
+  "eb-005": "https://www.orimi.com/pdf-test.pdf",
+  "eb-006": "https://www.africau.edu/images/default/sample.pdf",
+  "eb-007": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
 };
 
-// Fonction pour obtenir l'URL de démonstration pour un ebook
-export const getDemoFileUrl = (ebookId: string): string | null => {
-  if (ebookId in demoFiles) {
-    return demoFiles[ebookId];
-  }
-  // URL par défaut si l'ID n'est pas trouvé (utilisant GitHub qui autorise CORS)
-  return 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf';
-};
-
-// Liste de URLs de fallback qui fonctionnent avec CORS
 export const fallbackPdfUrls = [
-  'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
-  'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/TAMReview.pdf',
-  'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/basicapi.pdf',
-  'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/annotation-line.pdf'
+  "https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf",
+  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+  "https://www.africau.edu/images/default/sample.pdf",
 ];
 
-// Fonction pour obtenir une URL de fallback
-export let currentFallbackIndex = 0;
-export const getNextFallbackUrl = (): string => {
-  const url = fallbackPdfUrls[currentFallbackIndex];
-  currentFallbackIndex = (currentFallbackIndex + 1) % fallbackPdfUrls.length;
-  return url;
+let currentFallbackIndex = 0;
+
+// Obtenir l'URL de démonstration pour un ID d'ebook spécifique
+export const getDemoFileUrl = (ebookId: string): string => {
+  return demoFiles[ebookId] || fallbackPdfUrls[0];
 };
 
-// Essaie de pré-vérifier si une URL est accessible
+// Obtenir une URL de fallback suivante
+export const getNextFallbackUrl = (): string => {
+  currentFallbackIndex = (currentFallbackIndex + 1) % fallbackPdfUrls.length;
+  return fallbackPdfUrls[currentFallbackIndex];
+};
+
+// Vérifier si une URL est accessible
 export const checkUrlAccess = async (url: string): Promise<boolean> => {
   try {
-    // Utilise l'API fetch avec un timeout court pour tester rapidement l'accès
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000);
-    
     const response = await fetch(url, {
       method: 'HEAD',
-      signal: controller.signal,
+      mode: 'no-cors',
       cache: 'no-store',
-      mode: 'cors' // Essaie en mode CORS
     });
     
-    clearTimeout(timeoutId);
-    return response.ok;
+    return true;
   } catch (error) {
-    console.error("URL inaccessible:", url, error);
+    console.error("Erreur lors de la vérification de l'URL:", error);
     return false;
   }
 };

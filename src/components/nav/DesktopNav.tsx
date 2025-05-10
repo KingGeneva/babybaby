@@ -54,9 +54,16 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link to="/quiz">
+            <Link to="/ebooks">
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Quiz
+                E-books
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link to="/podcasts">
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Podcasts
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
