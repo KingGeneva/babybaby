@@ -1,21 +1,103 @@
 
-import React from 'react';
+import React, { Suspense, lazy, ComponentType } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { 
-  LazySection, 
-  SectionLoader,
-  Dashboard,
-  TestimonialsCarousel,
-  ArticleSection,
-  Footer,
-  EbooksSection,
-  PartnersCarousel,
-  CoursesSection,
-  ProductsSection,
-  ToolsSection,
-  ContactSection,
-  NewsletterForm
-} from './lazy';
+
+// Standard lazy loading avec priorité élevée - chargement immédiat
+const Dashboard = lazy(() => import('@/components/dashboard/Dashboard'));
+const TestimonialsCarousel = lazy(() => import('@/components/testimonials/TestimonialsCarousel'));
+const ArticleSection = lazy(() => import('@/components/articles/ArticleSection'));
+const Footer = lazy(() => import('@/components/Footer'));
+
+// Type pour le lazy loading différé
+type LazyComponentType = Promise<{ default: ComponentType<any> }>;
+
+// Lazy loading légèrement différé pour les sections moins prioritaires - Tier 2
+const EbooksSection = lazy((): LazyComponentType => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      import('@/components/ebooks/EbooksSection')
+        .then(module => {
+          resolve({ default: module.default });
+        });
+    }, 300); // Réduit de 1000ms à 300ms
+  });
+});
+
+const PartnersCarousel = lazy((): LazyComponentType => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      import('@/components/partners/PartnersCarousel')
+        .then(module => {
+          resolve({ default: module.default });
+        });
+    }, 500); // Réduit de 1500ms à 500ms
+  });
+});
+
+// Tier 3 priorité - charge après le contenu principal
+const ProductsSection = lazy((): LazyComponentType => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      import('@/components/products/ProductsSection')
+        .then(module => {
+          resolve({ default: module.default });
+        });
+    }, 700); // Réduit de 2000ms à 700ms
+  });
+});
+
+const ToolsSection = lazy((): LazyComponentType => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      import('@/components/tools/ToolsSection')
+        .then(module => {
+          resolve({ default: module.default });
+        });
+    }, 900); // Réduit de 2500ms à 900ms
+  });
+});
+
+// Cours priorisés légèrement pour la valeur SEO
+const CoursesSection = lazy((): LazyComponentType => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      import('@/components/courses/CoursesSection')
+        .then(module => {
+          resolve({ default: module.default });
+        });
+    }, 600); // Réduit de 1800ms à 600ms
+  });
+});
+
+// Sections de priorité la plus basse chargées en dernier
+const ContactSection = lazy((): LazyComponentType => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      import('@/components/ContactSection')
+        .then(module => {
+          resolve({ default: module.default });
+        });
+    }, 1000); // Réduit de 3000ms à 1000ms
+  });
+});
+
+const NewsletterForm = lazy((): LazyComponentType => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      import('@/components/NewsletterForm')
+        .then(module => {
+          resolve({ default: module.default });
+        });
+    }, 1200); // Réduit de 3500ms à 1200ms
+  });
+});
+
+// Loaders optimisés pour une meilleure expérience utilisateur
+const SectionLoader = () => (
+  <div className="py-6 flex justify-center items-center">
+    <div className="animate-pulse w-full max-w-2xl h-16 bg-gray-100 rounded-lg"></div>
+  </div>
+);
 
 interface LazyLoadedSectionsProps {
   demoGrowthData: Array<{
@@ -42,59 +124,76 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
   return (
     <>
       {/* Dashboard Section - Priorité 1 */}
-      <LazySection 
-        Component={Dashboard} 
-        childId={childProfileId || 'demo'} 
-        demoMode={!isAuthenticated} 
-        demoData={demoGrowthData} 
-        showDevelopmentSection={showDevelopmentSection}
-      />
+      <Suspense fallback={<SectionLoader />}>
+        <div className="pt-24 relative">
+          <Dashboard 
+            childId={childProfileId || 'demo'} 
+            demoMode={!isAuthenticated} 
+            demoData={demoGrowthData} 
+            showDevelopmentSection={showDevelopmentSection}
+          />
+        </div>
+      </Suspense>
 
       {/* Témoignages - Priorité 2 */}
-      <LazySection Component={TestimonialsCarousel} />
+      <Suspense fallback={<SectionLoader />}>
+        <TestimonialsCarousel />
+      </Suspense>
 
       {/* Articles - Priorité 2 */}
-      <LazySection Component={ArticleSection} />
+      <Suspense fallback={<SectionLoader />}>
+        <ArticleSection />
+      </Suspense>
 
       {/* Contenu mobile uniquement si sur mobile */}
       {!isMobile && (
         <>
           {/* Partenaires - Priorité 3 */}
-          <LazySection Component={PartnersCarousel} />
+          <Suspense fallback={<SectionLoader />}>
+            <PartnersCarousel />
+          </Suspense>
           
           {/* Produits - Priorité 3 */}
-          <LazySection Component={ProductsSection} />
+          <Suspense fallback={<SectionLoader />}>
+            <ProductsSection />
+          </Suspense>
         </>
       )}
       
       {/* Section ebooks - Priorité 3 */}
-      <LazySection Component={EbooksSection} />
+      <Suspense fallback={<SectionLoader />}>
+        <EbooksSection />
+      </Suspense>
       
-      {/* Section cours - Priorité 3 */}
-      <LazySection Component={CoursesSection} />
+      {/* Section cours - Priorité 3 (réintégrée) */}
+      <Suspense fallback={<SectionLoader />}>
+        <CoursesSection />
+      </Suspense>
       
       {/* Contenu basse priorité - uniquement sur desktop ou si défilement */}
       {!isMobile && (
         <>
           {/* Outils - Priorité 4 */}
-          <LazySection Component={ToolsSection} />
+          <Suspense fallback={<SectionLoader />}>
+            <ToolsSection />
+          </Suspense>
           
           {/* Contact - Priorité 5 */}
-          <LazySection Component={ContactSection} />
+          <Suspense fallback={<SectionLoader />}>
+            <ContactSection />
+          </Suspense>
         </>
       )}
       
       {/* Newsletter - Priorité basse mais toujours présente */}
-      <LazySection 
-        Component={NewsletterForm} 
-        fallback={<div className="h-16 bg-gray-50"></div>}
-      />
+      <Suspense fallback={<div className="h-16 bg-gray-50"></div>}>
+        <NewsletterForm />
+      </Suspense>
       
       {/* Footer - Toujours présent */}
-      <LazySection 
-        Component={Footer} 
-        fallback={<div className="h-16 bg-gray-50"></div>}
-      />
+      <Suspense fallback={<div className="h-16 bg-gray-50"></div>}>
+        <Footer />
+      </Suspense>
     </>
   );
 };

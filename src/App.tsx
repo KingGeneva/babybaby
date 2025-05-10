@@ -1,5 +1,5 @@
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AppProviders from "./components/layout/AppProviders";
 import LoadingFallback from "./components/layout/LoadingFallback";
