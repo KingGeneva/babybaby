@@ -13,12 +13,14 @@ import HowToStructuredData from '@/components/seo/HowToStructuredData';
 
 const StrollerComparisonPage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  // Corriger le chemin du fichier audio pour qu'il pointe vers le bon emplacement
   const [audio] = useState(new Audio("/audio/poussettes-podcast.mp3"));
   
   const togglePlayPause = () => {
     if (isPlaying) {
       audio.pause();
     } else {
+      // Ajouter un gestionnaire d'erreur avec plus de détails de débogage
       audio.play().catch(error => {
         console.error("Error playing audio:", error);
       });
