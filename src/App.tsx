@@ -7,25 +7,23 @@ import ChatbotButton from "./components/chatbot/ChatbotButton";
 import { appRoutes } from "./routes";
 
 const App = () => (
-  <React.StrictMode>
-    <Router>
-      <AppProviders>
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            {appRoutes.map((route) => (
-              <Route
-                key={route.path || 'notfound'}
-                path={route.path}
-                element={route.element}
-              />
-            ))}
-          </Routes>
-        </Suspense>
-        
-        <ChatbotButton />
-      </AppProviders>
-    </Router>
-  </React.StrictMode>
+  <Router>
+    <AppProviders>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          {appRoutes.map((route) => (
+            <Route
+              key={route.path || 'notfound'}
+              path={route.path}
+              element={route.element}
+            />
+          ))}
+        </Routes>
+      </Suspense>
+      
+      <ChatbotButton />
+    </AppProviders>
+  </Router>
 );
 
 export default App;

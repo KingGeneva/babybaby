@@ -1,5 +1,4 @@
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import NavBar from '@/components/NavBar';
@@ -21,14 +20,15 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 // Optimized Homepage without dashboard demo for better performance and SEO
 const Index = () => {
+  // Initialize React hooks safely at the function component level
   const controls = useAnimation();
-  const [ref, inView] = useInView({
+  const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.05,
   });
   const isMobile = useIsMobile();
   
-  useEffect(() => {
+  React.useEffect(() => {
     if (inView) {
       controls.start('visible');
     }
@@ -87,7 +87,7 @@ const Index = () => {
       "ratingCount": "1250"
     }
   };
-
+  
   return (
     <div className="min-h-screen overflow-hidden">
       <SEOHead 
