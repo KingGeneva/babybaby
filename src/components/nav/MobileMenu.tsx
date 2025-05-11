@@ -60,7 +60,7 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
               to="/articles/meilleures-poussettes-2025"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
             >
-              Poussettes 2025
+              Les Meilleures Poussettes
             </Link>
             <Link
               to="/quiz"
