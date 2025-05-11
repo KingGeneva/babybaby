@@ -5,11 +5,13 @@ import HeroSection from '@/components/HeroSection';
 import Footer from '@/components/Footer';
 import SEOTags from '@/components/home/SEOTags';
 import HomePageContent from '@/components/home/HomePageContent';
+import ProductSchema from '@/components/home/ProductSchema';
 
-const Index: React.FC = () => {
+const Index = () => {
   return (
     <div className="min-h-screen overflow-hidden">
       <SEOTags />
+      <ProductSchema />
       <NavBar />
       <HeroSection />
       <HomePageContent />
