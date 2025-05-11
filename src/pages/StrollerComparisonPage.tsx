@@ -13,16 +13,18 @@ import HowToStructuredData from '@/components/seo/HowToStructuredData';
 
 const StrollerComparisonPage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  // Corriger le chemin du fichier audio pour qu'il pointe vers le bon emplacement
-  const [audio] = useState(new Audio("/audio/poussettes-podcast.mp3"));
+  // Utilisation du fichier audio WAV avec le bon nom de fichier
+  const [audio] = useState(new Audio("/audio/Guides des meilleures poussettes pour bebes.wav"));
   
   const togglePlayPause = () => {
     if (isPlaying) {
       audio.pause();
     } else {
-      // Ajouter un gestionnaire d'erreur avec plus de détails de débogage
+      // Gestionnaire d'erreur avec détails de débogage améliorés
       audio.play().catch(error => {
-        console.error("Error playing audio:", error);
+        console.error("Erreur lors de la lecture audio:", error);
+        console.log("Nom du fichier audio:", audio.src);
+        console.log("État de l'audio:", audio.readyState);
       });
     }
     setIsPlaying(!isPlaying);
