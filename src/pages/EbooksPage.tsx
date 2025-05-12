@@ -10,7 +10,7 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import SEOHead from '@/components/common/SEOHead';
-import { preloadEbooks } from '@/components/ebooks/ebookService';
+import { preloadEbooks } from '@/components/ebooks/services';
 
 const EbooksPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,20 +29,12 @@ const EbooksPage = () => {
   // Précharger les ebooks populaires en arrière-plan
   useEffect(() => {
     if (!isPreloaded) {
-      // On utilise requestIdleCallback pour ne pas bloquer le rendu initial
-      if ('requestIdleCallback' in window) {
-        // @ts-ignore
-        window.requestIdleCallback(() => {
-          preloadEbooks(ebooksData.slice(0, 3))
-            .then(() => setIsPreloaded(true));
-        });
-      } else {
-        // Fallback pour les navigateurs qui ne supportent pas requestIdleCallback
-        setTimeout(() => {
-          preloadEbooks(ebooksData.slice(0, 3))
-            .then(() => setIsPreloaded(true));
-        }, 2000);
-      }
+      // On utilise setTimeout pour ne pas bloquer le rendu initial
+      setTimeout(() => {
+        preloadEbooks(ebooksData.slice(0, 3))
+          .then(() => setIsPreloaded(true))
+          .catch(console.error);
+      }, 2000);
     }
   }, [isPreloaded]);
 

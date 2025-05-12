@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { useFlipbook } from './flipbook/useFlipbook';
+import PdfJsViewer from './flipbook/PdfJsViewer';
 import LoadingState from './flipbook/LoadingState';
 import ErrorState from './flipbook/ErrorState';
-import PdfJsViewer from './flipbook/PdfJsViewer';
 import { FlipbookViewerProps } from './flipbook/types';
 
 const FlipbookViewer: React.FC<FlipbookViewerProps> = ({ pdfUrl, title }) => {
@@ -17,42 +17,26 @@ const FlipbookViewer: React.FC<FlipbookViewerProps> = ({ pdfUrl, title }) => {
     handleRetry
   } = useFlipbook(pdfUrl);
 
-  // Afficher l'état approprié selon la situation
+  if (isScriptLoading) {
+    return <LoadingState />;
+  }
+
   if (loadError) {
     return (
-      <>
-        <ErrorState 
-          onRetry={handleRetry}
-          onUsePdfViewer={() => {}}
-          onOpenDirect={openPdfDirectly}
-          onUseFallback={useFallbackUrl}
-        />
-        <div className="text-center mt-4 text-sm text-gray-500">
-          <p>Si le problème persiste, essayez de télécharger le document.</p>
-        </div>
-      </>
+      <ErrorState
+        onRetry={handleRetry}
+        onUsePdfViewer={() => {}}
+        onOpenDirect={openPdfDirectly}
+        onUseFallback={useFallbackUrl}
+      />
     );
   }
 
-  if (isScriptLoading) {
-    return (
-      <>
-        <LoadingState />
-        <div className="text-center mt-4 text-sm text-gray-500">
-          <p>Préparation du document...</p>
-        </div>
-      </>
-    );
+  if (pdfjsViewer) {
+    return <PdfJsViewer pdfUrl={currentUrl} title={title} onRetry={handleRetry} />;
   }
 
-  // Par défaut, afficher le visualiseur PDF
-  return (
-    <PdfJsViewer 
-      pdfUrl={currentUrl || pdfUrl} 
-      title={title} 
-      onRetry={handleRetry} 
-    />
-  );
+  return null;
 };
 
 export default FlipbookViewer;
