@@ -62,7 +62,7 @@ const FloatingIncentive: React.FC<FloatingIncentiveProps> = ({
           </button>
           
           <h4 className="font-bold text-sm text-babybaby-cosmic mb-2">
-            Offre spéciale nouveaux membres
+            Offre spéciale nouveaux utilisateurs
           </h4>
           
           <p className="text-xs text-gray-600 mb-4">

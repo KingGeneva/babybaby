@@ -38,12 +38,12 @@ const SubscriptionBenefits: React.FC<SubscriptionBenefitsProps> = ({
     {
       icon: <Check className="h-4 w-4 text-babybaby-cosmic" />,
       title: "Contenus exclusifs",
-      description: "Accédez à des articles et guides réservés aux abonnés"
+      description: "Accédez à des articles et guides réservés aux utilisateurs inscrits"
     },
     {
       icon: <Star className="h-4 w-4 text-babybaby-cosmic" />,
-      title: "Outils premium",
-      description: "Profitez d'outils avancés pour suivre le développement de votre bébé"
+      title: "Outils avancés",
+      description: "Profitez d'outils pour suivre le développement de votre bébé"
     },
     {
       icon: <Gift className="h-4 w-4 text-babybaby-cosmic" />,

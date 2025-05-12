@@ -11,7 +11,7 @@ interface LimitedTimeOfferProps {
 
 const LimitedTimeOffer: React.FC<LimitedTimeOfferProps> = ({ 
   expiryDays = 3,
-  offerText = "Offre spéciale de lancement : 30% de réduction sur l'abonnement premium !",
+  offerText = "Offre spéciale de lancement : Accès à tous nos outils et contenus exclusifs !",
   className 
 }) => {
   const [timeLeft, setTimeLeft] = useState<{

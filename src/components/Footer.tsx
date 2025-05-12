@@ -103,13 +103,13 @@ const Footer: React.FC = () => {
                   <Bell size={16} />
                 </div>
                 <div>
-                  <h4 className="font-medium text-sm">Devenez membre premium</h4>
+                  <h4 className="font-medium text-sm">Rejoignez notre communauté</h4>
                   <p className="text-xs text-gray-600">Accédez à tous nos outils et contenus exclusifs</p>
                 </div>
               </div>
               <Link to="/free-offers">
                 <Button size="sm" className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 w-full md:w-auto">
-                  Découvrir les offres
+                  Découvrir nos offres
                 </Button>
               </Link>
             </div>
