@@ -4,7 +4,7 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Envelope } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import SEOHead from '@/components/common/SEOHead';
@@ -68,7 +68,7 @@ const ContestsPage = () => {
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <Envelope className="h-5 w-5 text-gray-400" />
+                        <Mail className="h-5 w-5 text-gray-400" />
                       </div>
                       <input
                         {...register('email', { 

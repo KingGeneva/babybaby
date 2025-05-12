@@ -5,8 +5,8 @@ import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import App from "./App";
 import "./index.css";
-import { LoadingFallback } from "@/components/layout/LoadingFallback";
-import { AppProviders } from "@/components/layout/AppProviders";
+import LoadingFallback from "@/components/layout/LoadingFallback";
+import AppProviders from "@/components/layout/AppProviders";
 import { Toaster } from "@/components/ui/sonner";
 import CacheManager from "@/components/common/CacheManager";
 
