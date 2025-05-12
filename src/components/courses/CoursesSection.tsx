@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { courses } from '@/data/courses';
 import ArticleStructuredData from '@/components/articles/ArticleStructuredData';
 import { useToast } from '@/components/ui/use-toast';
+import { Helmet } from 'react-helmet-async';
 
 const CoursesSection = () => {
   const { user } = useAuth();
@@ -149,7 +150,11 @@ const CoursesSection = () => {
         </div>
 
         {/* Structured Data for SEO */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(courseStructuredData) }} />
+        <Helmet>
+          <script type="application/ld+json">
+            {JSON.stringify(courseStructuredData)}
+          </script>
+        </Helmet>
       </div>
     </section>
   );

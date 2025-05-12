@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const WebsiteSchema: React.FC = () => {
   // Website schema structured data for SEO
@@ -18,9 +19,11 @@ const WebsiteSchema: React.FC = () => {
   };
 
   return (
-    <script type="application/ld+json">
-      {JSON.stringify(websiteSchema)}
-    </script>
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(websiteSchema)}
+      </script>
+    </Helmet>
   );
 };
 

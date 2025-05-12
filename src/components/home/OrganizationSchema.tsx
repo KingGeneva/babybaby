@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const OrganizationSchema: React.FC = () => {
   // Organization schema structured data for SEO
@@ -23,9 +24,11 @@ const OrganizationSchema: React.FC = () => {
   };
 
   return (
-    <script type="application/ld+json">
-      {JSON.stringify(organizationSchema)}
-    </script>
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(organizationSchema)}
+      </script>
+    </Helmet>
   );
 };
 

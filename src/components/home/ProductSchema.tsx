@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const ProductSchema: React.FC = () => {
   // Product schema for rich results
@@ -22,9 +23,11 @@ const ProductSchema: React.FC = () => {
   };
 
   return (
-    <script type="application/ld+json">
-      {JSON.stringify(productSchema)}
-    </script>
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(productSchema)}
+      </script>
+    </Helmet>
   );
 };
 
