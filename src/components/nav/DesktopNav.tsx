@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, LogOut } from "lucide-react";
+import { LayoutDashboard, LogOut, Store } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -73,6 +73,19 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
                 Concours
               </NavigationMenuLink>
             </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <a 
+              href="https://babybaby.boutique" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className={navigationMenuTriggerStyle()}
+            >
+              <span className="flex items-center">
+                <Store className="mr-1 h-4 w-4" />
+                Boutique
+              </span>
+            </a>
           </NavigationMenuItem>
           {user && (
             <>

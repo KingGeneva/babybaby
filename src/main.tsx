@@ -1,15 +1,30 @@
 
-import React from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import React, { Suspense } from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
+import App from "./App";
+import "./index.css";
+import { LoadingFallback } from "@/components/layout/LoadingFallback";
+import { AppProviders } from "@/components/layout/AppProviders";
+import { Toaster } from "@/components/ui/sonner";
+import CacheManager from "@/components/common/CacheManager";
 
-// Ensure React is properly initialized with the correct context
-const rootElement = document.getElementById('root');
-if (!rootElement) throw new Error('Failed to find the root element');
+// Version pour le cache
+const APP_VERSION = '1.0.0';
 
-createRoot(rootElement).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <HelmetProvider>
+        <AppProviders>
+          <Suspense fallback={<LoadingFallback />}>
+            <App />
+            <Toaster position="top-center" />
+            <CacheManager version={APP_VERSION} />
+          </Suspense>
+        </AppProviders>
+      </HelmetProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
