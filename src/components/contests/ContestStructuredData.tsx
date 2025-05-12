@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const ContestStructuredData: React.FC = () => {
   // Données structurées pour la page des concours
@@ -24,9 +25,11 @@ const ContestStructuredData: React.FC = () => {
   };
 
   return (
-    <script type="application/ld+json">
-      {JSON.stringify(contestSchema)}
-    </script>
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(contestSchema)}
+      </script>
+    </Helmet>
   );
 };
 
