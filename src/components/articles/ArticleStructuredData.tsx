@@ -9,6 +9,7 @@ interface ArticleStructuredDataProps {
   datePublished: string;
   authorName: string;
   url: string;
+  category?: string;  // Added category as an optional property
 }
 
 const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
@@ -17,7 +18,8 @@ const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
   image,
   datePublished,
   authorName,
-  url
+  url,
+  category
 }) => {
   const articleSchema = {
     "@context": "https://schema.org",
@@ -45,6 +47,11 @@ const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
       "@id": url
     }
   };
+
+  // Add category to schema if provided
+  if (category) {
+    articleSchema["articleSection"] = category;
+  }
 
   return (
     <Helmet>
