@@ -14,18 +14,31 @@ const CacheManager: React.FC<CacheManagerProps> = ({ version }) => {
       return;
     }
 
-    // Enregistrer ou mettre à jour le service worker
+    // Enregistrer ou mettre à jour le service worker avec gestion d'erreur améliorée
     const registerServiceWorker = async () => {
       try {
         // Ajouter un timestamp pour forcer la mise à jour du SW lors du développement
         const swUrl = `/service-worker.js?v=${version}&t=${new Date().getTime()}`;
-        const registration = await navigator.serviceWorker.register(swUrl);
         
-        console.log('Service Worker enregistré avec succès:', registration.scope);
+        // Vérifier si le service worker est déjà enregistré
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        let existingRegistration = registrations.find(reg => 
+          reg.active && reg.active.scriptURL.includes('service-worker.js'));
+        
+        if (existingRegistration) {
+          console.log('Service Worker déjà enregistré, mise à jour...');
+          await existingRegistration.update();
+          existingRegistration = await navigator.serviceWorker.register(swUrl);
+        } else {
+          console.log('Enregistrement du Service Worker...');
+          existingRegistration = await navigator.serviceWorker.register(swUrl);
+        }
+        
+        console.log('Service Worker enregistré avec succès:', existingRegistration.scope);
         
         // Vérifier s'il y a une mise à jour du SW
-        registration.onupdatefound = () => {
-          const installingWorker = registration.installing;
+        existingRegistration.onupdatefound = () => {
+          const installingWorker = existingRegistration.installing;
           if (installingWorker) {
             installingWorker.onstatechange = () => {
               if (installingWorker.state === 'installed') {
@@ -37,6 +50,11 @@ const CacheManager: React.FC<CacheManagerProps> = ({ version }) => {
                       label: "Recharger",
                       onClick: () => window.location.reload()
                     }
+                  });
+                } else {
+                  console.log('Service Worker installé pour la première fois');
+                  toast.success("Prêt pour une utilisation hors ligne", {
+                    description: "L'application peut maintenant fonctionner même sans connexion internet."
                   });
                 }
               }
@@ -60,6 +78,10 @@ const CacheManager: React.FC<CacheManagerProps> = ({ version }) => {
         
       } catch (error) {
         console.error('Erreur d\'enregistrement du Service Worker:', error);
+        // Notifier l'utilisateur des problèmes potentiels de mise en cache
+        toast.error("Problème de fonctionnement hors ligne", {
+          description: "Les fonctionnalités hors ligne peuvent être limitées. Veuillez recharger la page."
+        });
       }
     };
     
@@ -72,12 +94,17 @@ const CacheManager: React.FC<CacheManagerProps> = ({ version }) => {
     
     navigator.serviceWorker.addEventListener('message', messageHandler);
     
-    // Enregistrer le SW ou le mettre à jour
-    registerServiceWorker();
+    // Attendre que la page soit complètement chargée pour enregistrer le SW
+    if (document.readyState === 'complete') {
+      registerServiceWorker();
+    } else {
+      window.addEventListener('load', registerServiceWorker);
+    }
     
     // Nettoyer l'écouteur à la destruction du composant
     return () => {
       navigator.serviceWorker.removeEventListener('message', messageHandler);
+      window.removeEventListener('load', registerServiceWorker);
     };
   }, [version]);
 

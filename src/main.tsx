@@ -9,19 +9,19 @@ import LoadingFallback from "@/components/layout/LoadingFallback";
 import { Toaster } from "@/components/ui/sonner";
 import CacheManager from "@/components/common/CacheManager";
 
-// Version pour le cache
-const APP_VERSION = '1.0.0';
+// Version pour le cache - mise à jour pour forcer le rechargement du service worker
+const APP_VERSION = '1.1.0';
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <HelmetProvider>
+    <HelmetProvider>
+      <BrowserRouter>
         <Suspense fallback={<LoadingFallback />}>
           <App />
           <Toaster position="top-center" />
           <CacheManager version={APP_VERSION} />
         </Suspense>
-      </HelmetProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </HelmetProvider>
   </React.StrictMode>
 );

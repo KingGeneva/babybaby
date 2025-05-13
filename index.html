@@ -3,9 +3,9 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     
-    <!-- SEO Core Meta Tags -->
+    <!-- SEO Core Meta Tags - Ces valeurs seront remplacées par react-helmet-async -->
     <title>BabyBaby - Application de suivi de bébé | Santé, Croissance, Conseil</title>
     <meta name="description" content="BabyBaby : L'application indispensable pour les parents. Suivez la croissance, la santé et le développement de votre bébé. Outils, conseils et communauté de parents." />
     <meta name="keywords" content="suivi bébé, croissance infantile, santé bébé, conseil parental, développement enfant, carnet de santé numérique, alimentation bébé, sommeil bébé, courbe de croissance, forum parents" />
@@ -14,17 +14,19 @@
     <meta name="googlebot" content="index, follow" />
     
     <!-- Preconnects pour améliorer les performances -->
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
-    <link rel="preconnect" href="https://analytics.ahrefs.com" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
+    <link rel="preconnect" href="https://analytics.ahrefs.com" crossorigin />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
     <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
     
     <!-- Open Graph Meta Tags pour le partage social -->
     <meta property="og:title" content="BabyBaby - Application de suivi de bébé | La référence des parents" />
     <meta property="og:description" content="Suivez la croissance de votre bébé avec des outils innovants. Conseils d'experts, suivi personnalisé et communauté de parents." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png" />
+    <meta property="og:image" content="https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:url" content="https://babybaby.app" />
@@ -37,12 +39,16 @@
     <meta name="twitter:creator" content="@babybaby_app" />
     <meta name="twitter:title" content="BabyBaby - L'app des parents modernes" />
     <meta name="twitter:description" content="Suivez la croissance, la santé et le développement de votre bébé avec BabyBaby. Outils intelligents et conseils personnalisés." />
-    <meta name="twitter:image" content="/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png" />
+    <meta name="twitter:image" content="https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png" />
 
     <!-- Balises additionnelles pour le SEO -->
     <link rel="canonical" href="https://babybaby.app" />
-    <link rel="alternate" hreflang="fr" href="https://babybaby.app" />
+    <link rel="alternate" hrefLang="fr" href="https://babybaby.app" />
+    <link rel="alternate" hrefLang="fr-FR" href="https://babybaby.app" />
+    <link rel="alternate" hrefLang="x-default" href="https://babybaby.app" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    
+    <!-- Mobile optimizations -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="application-name" content="BabyBaby" />
@@ -53,57 +59,29 @@
     <meta name="msapplication-starturl" content="/" />
     <meta name="format-detection" content="telephone=no" />
 
-    <!-- Structured Data pour Google -->
-    <script type="application/ld+json">
-      {
-        "@context": "http://schema.org",
-        "@type": "WebApplication",
-        "name": "BabyBaby",
-        "description": "Application de suivi pour la santé et le développement des bébés",
-        "url": "https://babybaby.app",
-        "applicationCategory": "HealthApplication",
-        "operatingSystem": "Web",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "EUR"
-        },
-        "provider": {
-          "@type": "Organization",
-          "name": "BabyBaby",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
-            "width": "192",
-            "height": "192"
-          }
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.8",
-          "ratingCount": "1250",
-          "bestRating": "5",
-          "worstRating": "1"
-        },
-        "sameAs": [
-          "https://twitter.com/babybaby_app",
-          "https://facebook.com/babybaby",
-          "https://instagram.com/babybaby_app"
-        ]
-      }
+    <!-- Google Tag Manager - Implémentation optimisée -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-5G681EC');
     </script>
     
-    <!-- Favicon avec gestion des différentes tailles -->
-    <link rel="icon" type="image/png" sizes="192x192" href="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" />
-    
-    <!-- Google Analytics avec chargement différé -->
+    <!-- Google Analytics GA4 - Implémentation optimisée -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5G681ECSF1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-5G681ECSF1', { 'anonymize_ip': true });
+      gtag('config', 'G-5G681ECSF1', { 
+        'send_page_view': true,
+        'anonymize_ip': true,
+        'cookie_flags': 'SameSite=None;Secure',
+        'transport_type': 'beacon',
+        'page_title': document.title,
+        'page_location': window.location.href
+      });
     </script>
 
     <!-- Google AdSense avec chargement asynchrone -->
@@ -115,9 +93,17 @@
 
     <!-- Impact Site Verification -->
     <meta name="Impact-Site-Verification" content="87bc928e-9f4c-45a3-8aa7-eae705784996">
+    
+    <!-- Favicon avec gestion des différentes tailles -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" />
   </head>
 
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5G681EC"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    
     <div id="root"></div>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>

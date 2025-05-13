@@ -1,5 +1,6 @@
 
 import { Helmet } from 'react-helmet-async';
+import React from 'react';
 
 interface SEOProps {
   title: string;
@@ -18,11 +19,11 @@ interface SEOProps {
   keywords?: string[];
 }
 
-const SEOHead = ({ 
+const SEOHead: React.FC<SEOProps> = ({ 
   title, 
   description, 
   canonicalUrl, 
-  ogImage = "/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png", 
+  ogImage = "https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png", 
   ogType = "website",
   lang = "fr",
   alternateLanguages = [],
@@ -37,6 +38,16 @@ const SEOHead = ({
   const optimizedDescription = description.length > maxDescLength 
     ? `${description.substring(0, maxDescLength - 3)}...` 
     : description;
+
+  // Assurer que l'URL de l'image OG est absolue
+  const absoluteOgImage = ogImage.startsWith('http') 
+    ? ogImage 
+    : `https://babybaby.app${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
+
+  // Assurer que l'URL canonique est absolue
+  const absoluteCanonicalUrl = canonicalUrl 
+    ? (canonicalUrl.startsWith('http') ? canonicalUrl : `https://babybaby.app${canonicalUrl.startsWith('/') ? '' : '/'}${canonicalUrl}`)
+    : undefined;
   
   return (
     <Helmet htmlAttributes={{ lang }}>
@@ -50,12 +61,13 @@ const SEOHead = ({
       <meta name="googlebot" content="index, follow" />
       
       {/* Performance & mobile optimization */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
       <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://www.googletagmanager.com" />
+      <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://analytics.ahrefs.com" crossOrigin="anonymous" />
       
-      {/* Canonical URL */}
-      {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+      {/* Canonical URL - crucial pour éviter le contenu dupliqué */}
+      {absoluteCanonicalUrl && <link rel="canonical" href={absoluteCanonicalUrl} />}
       
       {/* Alternate language URLs */}
       {alternateLanguages.map(({ lang, url }) => (
@@ -66,10 +78,10 @@ const SEOHead = ({
       <meta property="og:type" content={ogType} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={optimizedDescription} />
-      <meta property="og:image" content={ogImage} />
+      <meta property="og:image" content={absoluteOgImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+      {absoluteCanonicalUrl && <meta property="og:url" content={absoluteCanonicalUrl} />}
       <meta property="og:site_name" content="BabyBaby" />
       <meta property="og:locale" content={lang === "fr" ? "fr_FR" : "en_US"} />
       
@@ -78,7 +90,7 @@ const SEOHead = ({
       <meta name="twitter:site" content="@babybaby_app" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={optimizedDescription} />
-      <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image" content={absoluteOgImage} />
       
       {/* Article specific structured data */}
       {ogType === 'article' && articleData && (
@@ -104,7 +116,7 @@ const SEOHead = ({
       <meta name="format-detection" content="telephone=no" />
       
       {/* Prevent indexation in non-production environments */}
-      {!canonicalUrl?.includes('babybaby.app') && (
+      {absoluteCanonicalUrl && !absoluteCanonicalUrl.includes('babybaby.app') && (
         <meta name="robots" content="noindex, nofollow" />
       )}
     </Helmet>
