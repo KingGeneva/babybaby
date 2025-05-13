@@ -12,11 +12,14 @@ import { Helmet } from 'react-helmet-async';
 
 const faqCategories = [
   "Général",
+  "Application",
+  "Fonctionnalités",
+  "Outils",
+  "Développement",
   "Santé",
   "Nutrition",
   "Sommeil",
-  "Développement",
-  "Application"
+  "Ressources"
 ];
 
 type FAQ = {
@@ -26,11 +29,43 @@ type FAQ = {
 };
 
 const faqs: FAQ[] = [
+  // Nouvelles questions optimisées pour le SEO
   {
-    question: "Qu'est-ce que BabyBaby ?",
-    answer: "BabyBaby est une application complète pour les parents qui permet de suivre la croissance, la santé et le développement de votre bébé. Nous proposons des outils personnalisés, des conseils d'experts et une communauté de soutien pour vous accompagner dans votre parcours parental.",
+    question: "Qu'est-ce que l'application BabyBaby ?",
+    answer: "L'application BabyBaby est une solution tout-en-un conçue spécifiquement pour les jeunes parents. Elle offre une interface utilisateur de pointe pour une expérience fluide, intuitive et personnalisée, centralisant divers outils essentiels pour suivre, comprendre et célébrer le développement de leur bébé.",
     category: "Général"
   },
+  {
+    question: "Quelles sont les fonctionnalités principales offertes par le tableau de bord intelligent ?",
+    answer: "Le tableau de bord intelligent permet de visualiser rapidement les informations importantes. Il inclut le suivi du sommeil de bébé pour assurer des nuits paisibles, le suivi des jalons de développement pour marquer les étapes importantes, le suivi de croissance avec graphiques et données sur la taille et le poids, un calendrier médical pour les rendez-vous, et un calendrier de vaccination avec rappels.",
+    category: "Fonctionnalités"
+  },
+  {
+    question: "Quels outils parentaux sont disponibles dans l'application ?",
+    answer: "BabyBaby propose une gamme d'outils pratiques pour aider les parents. Cela comprend un calculateur d'ovulation pour la planification de la conception, une checklist de préparation pour l'arrivée de bébé, un registre de cadeaux, un lecteur de berceuses et un générateur de bruit blanc pour faciliter le sommeil, un calculateur de coûts pour estimer le budget, et un générateur de prénoms.",
+    category: "Outils"
+  },
+  {
+    question: "L'application propose-t-elle des ressources interactives ?",
+    answer: "Oui, l'application inclut des quiz interactifs pour les parents et des tests amusants pour évaluer leurs connaissances sur la parentalité, offrant ainsi une approche ludique de l'apprentissage.",
+    category: "Ressources"
+  },
+  {
+    question: "Quel type de contenu éducatif est accessible via BabyBaby ?",
+    answer: "BabyBaby offre une variété de contenus éducatifs fiables. On y trouve des articles avec des conseils, des cours sur divers sujets liés à la parentalité, une bibliothèque d'e-books et de guides pratiques sur la grossesse, la naissance et la parentalité.",
+    category: "Ressources"
+  },
+  {
+    question: "L'application permet-elle d'interagir avec d'autres parents ?",
+    answer: "Oui, l'application dispose d'un forum où les utilisateurs peuvent rejoindre une communauté active de parents pour échanger des expériences et partager leurs parcours.",
+    category: "Fonctionnalités"
+  },
+  {
+    question: "Comment BabyBaby aide-t-elle à suivre le développement du bébé ?",
+    answer: "BabyBaby aide à suivre le développement du bébé à travers le suivi du sommeil, le suivi des jalons de développement, le suivi de croissance avec des données et graphiques, ainsi qu'un calendrier médical et de vaccination pour s'assurer que tous les rendez-vous importants sont respectés.",
+    category: "Développement"
+  },
+  // Questions existantes
   {
     question: "Comment puis-je créer un compte ?",
     answer: "Pour créer un compte, cliquez sur le bouton 'Se connecter' en haut à droite de la page, puis sélectionnez 'Créer un compte'. Remplissez le formulaire avec votre adresse e-mail et créez un mot de passe. Vous recevrez ensuite un e-mail de confirmation pour activer votre compte.",
@@ -97,9 +132,10 @@ const FAQPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-sky-50/50">
       <SEOHead 
-        title="FAQ - Questions Fréquentes" 
-        description="Trouvez des réponses à toutes vos questions sur BabyBaby, l'application de suivi pour votre bébé. Santé, nutrition, sommeil et plus encore."
+        title="FAQ - Questions Fréquentes sur l'Application BabyBaby" 
+        description="Découvrez les réponses à toutes vos questions sur l'application BabyBaby. Suivi de développement, outils parentaux, contenu éducatif et plus encore."
         canonicalUrl="https://babybaby.app/faq"
+        keywords={["application baby, suivi bébé", "développement enfant", "outils parentaux", "tableau de bord pour bébé", "calendrier vaccination bébé"]}
       />
       <Helmet>
         <script type="application/ld+json">
@@ -118,10 +154,10 @@ const FAQPage = () => {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-babybaby-cosmic mb-4">
-              Questions Fréquentes
+              Questions Fréquentes sur BabyBaby
             </h1>
             <p className="text-gray-600 mb-8">
-              Trouvez rapidement des réponses à vos questions sur BabyBaby et la parentalité
+              Trouvez rapidement des réponses à vos questions sur l'application BabyBaby et la parentalité
             </p>
 
             <div className="relative max-w-xl mx-auto mb-8">
