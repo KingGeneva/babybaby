@@ -6,6 +6,9 @@ import StrollerItem from './StrollerItem';
 import PodcastPlayer from './PodcastPlayer';
 
 const StrollerComparisonContent: React.FC = () => {
+  // Définir le chemin audio avec une gestion de fallback pour éviter les erreurs fatales
+  const audioPath = "/audio/Guides des meilleures poussettes pour bebes.wav";
+  
   return (
     <div className="prose max-w-none">
       <p className="mb-6 text-lg">
@@ -19,7 +22,7 @@ const StrollerComparisonContent: React.FC = () => {
       
       <h2 className="text-2xl font-semibold mt-10 mb-6 text-center text-babybaby-cosmic">Les 5 Meilleures Poussettes 2025</h2>
       
-      <PodcastPlayer audioSrc="/audio/Guides des meilleures poussettes pour bebes.wav" />
+      <PodcastPlayer audioSrc={audioPath} />
       
       <StrollerItem 
         title="1. Safety 1st Raya Travel System – Confort & Polyvalence"

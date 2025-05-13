@@ -16,7 +16,7 @@ const StrollerComparisonPage = () => {
     "description": "Guide complet pour choisir la poussette idéale selon vos besoins, votre style de vie et votre budget.",
     "image": {
       "@type": "ImageObject",
-      "url": "/lovable-uploads/cc398d50-38b3-477d-a1a5-9ff5dd303ae8.png"
+      "url": "https://babybaby.app/lovable-uploads/cc398d50-38b3-477d-a1a5-9ff5dd303ae8.png"
     },
     "totalTime": "PT10M",
     "step": [
@@ -123,6 +123,11 @@ const StrollerComparisonPage = () => {
               src="/lovable-uploads/cc398d50-38b3-477d-a1a5-9ff5dd303ae8.png" 
               alt="Top 5 des Meilleures Poussettes en 2025" 
               className="w-full max-w-3xl rounded-lg shadow-lg" 
+              onError={(e) => {
+                // Fallback en cas d'erreur de chargement de l'image
+                e.currentTarget.src = "/placeholder.svg";
+                e.currentTarget.alt = "Illustration de poussettes (image non disponible)";
+              }}
             />
           </div>
           

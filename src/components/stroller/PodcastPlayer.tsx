@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { PlayCircle, PauseCircle, Volume2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface PodcastPlayerProps {
   audioSrc: string;
@@ -10,16 +11,50 @@ interface PodcastPlayerProps {
 
 const PodcastPlayer: React.FC<PodcastPlayerProps> = ({ audioSrc }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audio] = useState(new Audio(audioSrc));
+  const [audioLoaded, setAudioLoaded] = useState(false);
+  const [audio] = useState(() => {
+    const audioElement = new Audio();
+    // Éviter les problèmes de CORS et les erreurs fatales de chargement
+    audioElement.addEventListener('error', (e) => {
+      console.error("Erreur de chargement audio:", e);
+      toast.error("Le fichier audio est indisponible", {
+        description: "Nous n'avons pas pu charger l'audio. Il sera disponible prochainement."
+      });
+      setAudioLoaded(false);
+    });
+    
+    audioElement.addEventListener('canplaythrough', () => {
+      setAudioLoaded(true);
+    });
+    
+    // Essayer de charger l'audio
+    try {
+      audioElement.src = audioSrc;
+      audioElement.load();
+    } catch (error) {
+      console.error("Erreur lors de l'initialisation audio:", error);
+    }
+    
+    return audioElement;
+  });
   
   const togglePlayPause = () => {
+    if (!audioLoaded) {
+      toast.error("Audio non disponible", { 
+        description: "L'enregistrement audio n'a pas pu être chargé." 
+      });
+      return;
+    }
+    
     if (isPlaying) {
       audio.pause();
     } else {
+      // Utilisation de catch pour gérer les erreurs de lecture
       audio.play().catch(error => {
         console.error("Erreur lors de la lecture audio:", error);
-        console.log("Nom du fichier audio:", audio.src);
-        console.log("État de l'audio:", audio.readyState);
+        toast.error("Impossible de lire l'audio", {
+          description: "Une erreur s'est produite lors de la lecture. Veuillez réessayer plus tard."
+        });
       });
     }
     setIsPlaying(!isPlaying);
@@ -27,10 +62,14 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({ audioSrc }) => {
 
   // Clean up audio on component unmount
   useEffect(() => {
-    audio.addEventListener('ended', () => setIsPlaying(false));
+    const handleEnded = () => setIsPlaying(false);
+    audio.addEventListener('ended', handleEnded);
+    
     return () => {
-      audio.removeEventListener('ended', () => setIsPlaying(false));
+      audio.removeEventListener('ended', handleEnded);
       audio.pause();
+      // Bonne pratique : libérer les ressources
+      audio.src = '';
     };
   }, [audio]);
 
@@ -55,7 +94,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({ audioSrc }) => {
             ) : (
               <>
                 <PlayCircle className="h-5 w-5" />
-                Écouter le segment du podcast
+                {audioLoaded ? "Écouter le segment du podcast" : "Audio bientôt disponible"}
               </>
             )}
           </Button>
