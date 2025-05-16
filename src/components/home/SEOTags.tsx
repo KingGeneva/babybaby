@@ -32,17 +32,6 @@ const SEOTags: React.FC = () => {
         <link rel="alternate" hrefLang="fr" href="https://babybaby.app/" />
         <link rel="alternate" hrefLang="fr-FR" href="https://babybaby.app/" />
         <link rel="alternate" hrefLang="x-default" href="https://babybaby.app/" />
-        
-        {/* Amélioration du tracking Google Analytics */}
-        <script type="application/ld+json">
-          {`{
-            "@context": "http://schema.org",
-            "@type": "WebPage",
-            "name": "BabyBaby - Application de suivi de bébé | Santé, Croissance et Développement",
-            "description": "Application complète pour suivre la croissance et le développement de votre bébé",
-            "url": "https://babybaby.app/"
-          }`}
-        </script>
       </Helmet>
       
       {/* Schemas structurés pour le SEO */}
