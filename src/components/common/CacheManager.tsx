@@ -53,7 +53,8 @@ const CacheManager = ({ version }: CacheManagerProps) => {
                     title: "Mise à jour disponible",
                     description: "Une nouvelle version de l'application est disponible. Rechargez pour l'appliquer.",
                     action: {
-                      label: "Recharger",
+                      // Fixed: Changed from label to children for React element compatibility
+                      children: "Recharger",
                       onClick: () => window.location.reload()
                     },
                     duration: 10000

@@ -6,7 +6,10 @@ import { toast as sonnerToast } from "sonner";
 export interface ToastProps {
   title?: string;
   description?: string;
-  action?: React.ReactNode;
+  action?: {
+    children: React.ReactNode;
+    onClick: () => void;
+  };
   variant?: "default" | "destructive";
   duration?: number;
 }
@@ -24,7 +27,10 @@ export function toast(props: ToastProps | string) {
     duration,
     // Map variant to Sonner's style
     className: variant === "destructive" ? "destructive" : undefined,
-    action
+    action: action ? {
+      label: action.children,
+      onClick: action.onClick
+    } : undefined
   });
 }
 
