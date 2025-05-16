@@ -1,12 +1,13 @@
 
 import { useEffect } from 'react';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/use-toast';
 
 interface CacheManagerProps {
   version: string;
 }
 
 const CacheManager = ({ version }: CacheManagerProps) => {
+  // Use useEffect to ensure this runs in a React context
   useEffect(() => {
     // Vérifier si le service worker est supporté
     if (!('serviceWorker' in navigator)) {
@@ -48,13 +49,13 @@ const CacheManager = ({ version }: CacheManagerProps) => {
                   console.log('Nouvelle version du Service Worker disponible');
                   // Afficher la notification seulement si elle n'a pas déjà été affichée
                   updateNotificationShown = true;
-                  toast("Mise à jour disponible", {
+                  toast({
+                    title: "Mise à jour disponible",
                     description: "Une nouvelle version de l'application est disponible. Rechargez pour l'appliquer.",
                     action: {
                       label: "Recharger",
                       onClick: () => window.location.reload()
                     },
-                    // Augmenter la durée avant que le toast ne disparaisse automatiquement
                     duration: 10000
                   });
                 } else if (installingWorker.state === 'installed' && !navigator.serviceWorker.controller && !updateNotificationShown) {

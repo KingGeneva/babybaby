@@ -25,15 +25,16 @@ interface AppProvidersProps {
 }
 
 const AppProviders = ({ children }: AppProvidersProps) => {
+  // This order is important - ThemeProvider must be the outermost context
   return (
     <ThemeProvider attribute="class" defaultTheme="light">
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <AuthProvider>
+        <AuthProvider>
+          <TooltipProvider>
             {children}
             <Toaster position="top-center" />
-          </AuthProvider>
-        </TooltipProvider>
+          </TooltipProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );

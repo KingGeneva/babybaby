@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Check, Gift, Send } from 'lucide-react';
-import { toast } from '@/components/ui/sonner';
+import { Check, Gift } from 'lucide-react';
+import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import SubscriptionBenefits from './subscription/SubscriptionBenefits';
 import SocialProof from './subscription/SocialProof';
@@ -158,7 +158,7 @@ const NewsletterForm: React.FC = () => {
               <Check size={20} aria-hidden="true" />
             ) : (
               <>
-                <Gift size={20} aria-hidden="true" />
+                <Gift size={20} aria-hidden="true" className="mr-2" />
                 <span>Recevoir les cadeaux exclusifs</span>
               </>
             )}

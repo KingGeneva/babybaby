@@ -1,6 +1,6 @@
 
 // Adapt Sonner toast to be compatible with shadcn/ui toast API
-import { toast as sonnerToast, type Toast as SonnerToast } from "sonner";
+import { toast as sonnerToast } from "sonner";
 
 // Define types that match the expected API across the codebase
 export interface ToastProps {
@@ -12,7 +12,7 @@ export interface ToastProps {
 }
 
 // Custom toast function that maps the shadcn/ui style API to sonner
-export function toast(props: ToastProps) {
+export function toast(props: ToastProps | string) {
   if (typeof props === 'string') {
     return sonnerToast(props);
   }
@@ -27,6 +27,13 @@ export function toast(props: ToastProps) {
     action
   });
 }
+
+// Additional utility methods to match sonner's API
+toast.error = (message: string, options?: any) => sonnerToast.error(message, options);
+toast.success = (message: string, options?: any) => sonnerToast.success(message, options);
+toast.info = (message: string, options?: any) => sonnerToast.info(message, options);
+toast.warning = (message: string, options?: any) => sonnerToast.warning(message, options);
+toast.dismiss = (toastId?: string) => sonnerToast.dismiss(toastId);
 
 // Create a custom useToast hook that is compatible with other code that might expect it
 export const useToast = () => {
