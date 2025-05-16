@@ -1,20 +1,20 @@
 
+import * as React from "react";
 import { useTheme } from "next-themes";
 import { Toaster as Sonner } from "sonner";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  // Safely access theme with fallbacks at every level
-  const themeContext = useTheme();
-  const resolvedTheme = themeContext?.resolvedTheme || themeContext?.theme || "light";
+  // Use optional chaining and provide default values to prevent null access
+  const { resolvedTheme = "light", theme = "light" } = useTheme() || {};
   
-  // Ensure we always have a valid theme string
-  const theme = (resolvedTheme as "light" | "dark");
+  // Set a safe default theme
+  const safeTheme = (resolvedTheme || theme || "light") as "light" | "dark";
 
   return (
     <Sonner
-      theme={theme}
+      theme={safeTheme}
       className="toaster group"
       toastOptions={{
         classNames: {
