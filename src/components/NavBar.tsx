@@ -18,8 +18,25 @@ const NavBar = () => {
 
   const toggleResources = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsResourcesOpen(!isResourcesOpen);
   };
+
+  // Effect to close menus when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      // Check if click is outside resources dropdown
+      if (isResourcesOpen && !target.closest('.resources-dropdown')) {
+        setIsResourcesOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isResourcesOpen]);
 
   useEffect(() => {
     setIsMenuOpen(false);

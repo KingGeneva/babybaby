@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, LogOut, Store } from "lucide-react";
+import ResourcesDropdown from "./ResourcesDropdown";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -105,17 +106,10 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
               </NavigationMenuItem>
             </>
           )}
-          <NavigationMenuItem>
-            <a
-              href="#"
-              onClick={toggleResources}
-              className={`${navigationMenuTriggerStyle()} ${
-                isResourcesOpen ? "bg-accent text-accent-foreground" : ""
-              }`}
-            >
-              Ressources
-            </a>
-          </NavigationMenuItem>
+          <ResourcesDropdown 
+            isOpen={isResourcesOpen}
+            onToggle={toggleResources}
+          />
         </NavigationMenuList>
       </NavigationMenu>
 

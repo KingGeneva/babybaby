@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronDown, Gift } from "lucide-react";
+import { NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 
 interface ResourcesDropdownProps {
   isOpen: boolean;
@@ -10,21 +11,24 @@ interface ResourcesDropdownProps {
 
 const ResourcesDropdown = ({ isOpen, onToggle }: ResourcesDropdownProps) => {
   return (
-    <div className="relative">
-      <a
-        href="#"
+    <NavigationMenuItem className="relative">
+      <div
         onClick={onToggle}
-        className="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic transition-all flex items-center"
+        className={`${navigationMenuTriggerStyle()} cursor-pointer ${
+          isOpen ? "bg-accent text-accent-foreground" : ""
+        }`}
       >
-        Ressources
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-          className="ml-1"
-        >
-          <ChevronDown size={16} />
-        </motion.div>
-      </a>
+        <span className="flex items-center">
+          Ressources
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="ml-1 inline-flex"
+          >
+            <ChevronDown size={16} />
+          </motion.div>
+        </span>
+      </div>
 
       <AnimatePresence>
         {isOpen && (
@@ -33,7 +37,7 @@ const ResourcesDropdown = ({ isOpen, onToggle }: ResourcesDropdownProps) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10"
+            className="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10"
           >
             <Link
               to="/ebooks"
@@ -69,7 +73,7 @@ const ResourcesDropdown = ({ isOpen, onToggle }: ResourcesDropdownProps) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </NavigationMenuItem>
   );
 };
 
