@@ -1,10 +1,8 @@
 
-// Re-export from sonner
-export { toast } from "sonner";
+// Export toast from sonner
+import { toast as sonnerToast, type ToastT } from "sonner";
 
-// Create a custom useToast hook for compatibility
-import { toast as sonnerToast } from "sonner";
-
+// Create a custom useToast hook that is compatible with other code that might expect it
 export const useToast = () => {
   return {
     toast: sonnerToast,
@@ -16,6 +14,9 @@ export const useToast = () => {
       }
     },
     // Add a minimal implementation to be compatible with previous code
-    toasts: []
+    toasts: [] as any[]
   };
 };
+
+// Re-export toast from sonner for direct imports
+export const toast = sonnerToast;

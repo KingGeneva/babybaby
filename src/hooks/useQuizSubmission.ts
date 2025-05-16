@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { QuizType } from '@/components/quiz/types';
 import { calculateDetailedResults } from '@/components/quiz/calculateUtils';
@@ -18,7 +18,6 @@ export const useQuizSubmission = ({
   questions
 }: UseQuizSubmissionProps) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleQuizSubmission = async () => {

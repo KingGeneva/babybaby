@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { Toaster } from "@/components/ui/sonner";
 
 // Version simplifiée
 const APP_VERSION = '1.1';
@@ -30,6 +31,7 @@ const AppProviders = ({ children }: AppProvidersProps) => {
         <TooltipProvider>
           <AuthProvider>
             {children}
+            <Toaster position="top-center" />
           </AuthProvider>
         </TooltipProvider>
       </QueryClientProvider>
