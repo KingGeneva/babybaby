@@ -14,6 +14,11 @@ const ArticlePromotion: React.FC = () => {
     try {
       // Pour l'article sur le sommeil
       if (id === '4') {
+        toast({
+          title: "Préparation du téléchargement",
+          description: "Veuillez patienter...",
+        });
+        
         const { data, error } = await supabase
           .storage
           .from('ebooks')
@@ -41,6 +46,11 @@ const ArticlePromotion: React.FC = () => {
         }
       } else if (id === '1') {
         // Pour l'article sur les coliques
+        toast({
+          title: "Préparation du téléchargement",
+          description: "Veuillez patienter...",
+        });
+        
         const { data, error } = await supabase
           .storage
           .from('ebooks')

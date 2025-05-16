@@ -30,4 +30,5 @@ const Toaster = ({ ...props }: ToasterProps) => {
 };
 
 export { Toaster };
-export { toast } from "sonner";
+// Export our custom toast function instead of sonner's directly
+export { toast, useToast } from "./use-toast";
