@@ -28,7 +28,6 @@ const AppProviders = ({ children }: AppProvidersProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light">
-        {/* Removed TooltipProvider temporarily */}
         <AuthProvider>
           {children}
           <Toaster position="top-center" />

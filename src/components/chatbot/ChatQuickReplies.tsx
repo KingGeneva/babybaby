@@ -1,10 +1,9 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { QuickReply } from './types';
 
 interface ChatQuickRepliesProps {
-  quickReplies: QuickReply[];
+  quickReplies: string[];
   onSelectReply: (reply: string) => void;
 }
 

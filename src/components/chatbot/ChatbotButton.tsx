@@ -23,10 +23,10 @@ const initialMessages: Message[] = [
   }
 ];
 
-const ChatbotButton = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const ChatbotButton: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
   
   const handleSendMessage = (inputValue: string) => {
     // Add user message
