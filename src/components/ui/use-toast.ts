@@ -28,7 +28,7 @@ export function toast(props: ToastProps | string) {
     // Map variant to Sonner's style
     className: variant === "destructive" ? "destructive" : undefined,
     action: action ? {
-      label: action.children,
+      label: typeof action.children === 'string' ? action.children : 'Action',
       onClick: action.onClick
     } : undefined
   });
