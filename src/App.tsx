@@ -4,7 +4,11 @@ import { Routes, Route } from "react-router-dom";
 import AppProviders from "./components/layout/AppProviders";
 import LoadingFallback from "./components/layout/LoadingFallback";
 import ChatbotButton from "./components/chatbot/ChatbotButton";
+import CacheManager from "./components/common/CacheManager";
 import { appRoutes } from "./routes";
+
+// Version pour le cache
+const APP_VERSION = '1.1.0';
 
 const App = () => (
   <AppProviders>
@@ -20,6 +24,7 @@ const App = () => (
       </Routes>
       
       <ChatbotButton />
+      <CacheManager version={APP_VERSION} />
     </Suspense>
   </AppProviders>
 );

@@ -6,7 +6,7 @@ interface CacheManagerProps {
   version: string;
 }
 
-const CacheManager: React.FC<CacheManagerProps> = ({ version }) => {
+const CacheManager = ({ version }: CacheManagerProps) => {
   useEffect(() => {
     // Vérifier si le service worker est supporté
     if (!('serviceWorker' in navigator)) {
