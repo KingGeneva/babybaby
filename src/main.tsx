@@ -6,7 +6,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from "./App";
 import "./index.css";
 import LoadingFallback from "@/components/layout/LoadingFallback";
-import { Toaster } from "@/components/ui/sonner";
 import CacheManager from "@/components/common/CacheManager";
 
 // Version pour le cache - mise à jour pour forcer le rechargement du service worker
@@ -18,7 +17,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Suspense fallback={<LoadingFallback />}>
           <App />
-          <Toaster position="top-center" />
           <CacheManager version={APP_VERSION} />
         </Suspense>
       </BrowserRouter>

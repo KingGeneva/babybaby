@@ -5,6 +5,7 @@ import AppProviders from "./components/layout/AppProviders";
 import LoadingFallback from "./components/layout/LoadingFallback";
 import ChatbotButton from "./components/chatbot/ChatbotButton";
 import { appRoutes } from "./routes";
+import { Toaster } from "./components/ui/sonner";
 
 const App = () => (
   <AppProviders>
@@ -18,9 +19,10 @@ const App = () => (
           />
         ))}
       </Routes>
+      
+      <Toaster position="top-center" />
+      <ChatbotButton />
     </Suspense>
-    
-    <ChatbotButton />
   </AppProviders>
 );
 
