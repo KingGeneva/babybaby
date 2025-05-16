@@ -27,18 +27,16 @@ interface AppProvidersProps {
 const AppProviders = ({ children }: AppProvidersProps) => {
   // The order of providers is crucial - we need to ensure React context is properly available
   return (
-    <>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
         <ThemeProvider attribute="class" defaultTheme="light">
-          <AuthProvider>
-            <TooltipProvider>
-              {children}
-              <Toaster position="top-center" />
-            </TooltipProvider>
-          </AuthProvider>
+          <TooltipProvider>
+            {children}
+            <Toaster position="top-center" />
+          </TooltipProvider>
         </ThemeProvider>
-      </QueryClientProvider>
-    </>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

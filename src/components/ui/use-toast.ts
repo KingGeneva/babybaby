@@ -1,17 +1,28 @@
 
 // Adapt Sonner toast to be compatible with shadcn/ui toast API
 import { toast as sonnerToast } from "sonner";
+import { ReactNode } from "react";
 
 // Define types that match the expected API across the codebase
 export interface ToastProps {
   title?: string;
   description?: string;
   action?: {
-    children: React.ReactNode;
+    children: ReactNode;
     onClick: () => void;
   };
   variant?: "default" | "destructive";
   duration?: number;
+}
+
+// Helper function to safely convert React nodes to string
+function reactNodeToString(node: ReactNode): string {
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return node.toString();
+  if (node === null || node === undefined) return 'Action';
+  if (Array.isArray(node)) return node.map(reactNodeToString).join('');
+  if (typeof node === 'object') return 'Action';
+  return String(node);
 }
 
 // Custom toast function that maps the shadcn/ui style API to sonner
@@ -28,7 +39,7 @@ export function toast(props: ToastProps | string) {
     // Map variant to Sonner's style
     className: variant === "destructive" ? "destructive" : undefined,
     action: action ? {
-      label: typeof action.children === 'string' ? action.children : 'Action',
+      label: reactNodeToString(action.children),
       onClick: action.onClick
     } : undefined
   });

@@ -5,10 +5,12 @@ import { Toaster as Sonner } from "sonner";
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { resolvedTheme = "light" } = useTheme() || {};
+  // Safely access theme with fallbacks at every level
+  const themeContext = useTheme();
+  const resolvedTheme = themeContext?.resolvedTheme || themeContext?.theme || "light";
   
-  // Using a definite value for theme to prevent null issues
-  const theme = (resolvedTheme || "light") as ToasterProps["theme"];
+  // Ensure we always have a valid theme string
+  const theme = (resolvedTheme as "light" | "dark");
 
   return (
     <Sonner
