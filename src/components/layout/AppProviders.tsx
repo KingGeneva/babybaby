@@ -27,18 +27,18 @@ interface AppProvidersProps {
 
 const AppProviders = ({ children }: AppProvidersProps) => {
   return (
-    <MotionConfig reducedMotion="user">
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider attribute="class" defaultTheme="light">
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute="class" defaultTheme="light">
+        <MotionConfig reducedMotion="user">
           <TooltipProvider>
             <AuthProvider>
               {children}
               <Toaster position="top-center" />
             </AuthProvider>
           </TooltipProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </MotionConfig>
+        </MotionConfig>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };
 
