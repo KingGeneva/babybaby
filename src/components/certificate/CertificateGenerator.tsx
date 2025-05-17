@@ -29,6 +29,9 @@ const CertificateGenerator = () => {
     signatureText: 'Créateur de BabyBaby',
   });
   
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
+  
   const certificateRef = useRef<HTMLDivElement>(null);
   
   const form = useForm<CertificateFormValues>({
@@ -41,11 +44,12 @@ const CertificateGenerator = () => {
   };
   
   const handleDownload = async () => {
-    toast.loading("Préparation du certificat...");
-    
     if (!certificateRef.current) return;
     
     try {
+      setIsDownloading(true);
+      const loadingToastId = toast("Préparation du certificat...");
+      
       // Attendre un peu pour s'assurer que le DOM est stable
       setTimeout(async () => {
         const canvas = await html2canvas(certificateRef.current!, {
@@ -62,13 +66,14 @@ const CertificateGenerator = () => {
         link.href = image;
         link.click();
         
-        toast.dismiss();
+        toast.dismiss(loadingToastId);
         toast.success("Certificat téléchargé avec succès !");
+        setIsDownloading(false);
       }, 500);
     } catch (error) {
       console.error('Erreur lors de la génération du certificat:', error);
-      toast.dismiss();
       toast.error("Une erreur est survenue lors de la génération du certificat.");
+      setIsDownloading(false);
     }
   };
   
@@ -76,7 +81,9 @@ const CertificateGenerator = () => {
     if (!certificateRef.current) return;
     
     try {
-      toast.loading("Préparation du partage...");
+      setIsSharing(true);
+      const loadingToastId = toast("Préparation du partage...");
+      
       const canvas = await html2canvas(certificateRef.current, {
         scale: 2,
         backgroundColor: null,
@@ -94,7 +101,7 @@ const CertificateGenerator = () => {
           text: `Certificat d'accomplissement pour ${certificate.recipientName}`,
           files: [new File([blob], 'certificat.png', { type: 'image/png' })],
         });
-        toast.dismiss();
+        toast.dismiss(loadingToastId);
         toast.success("Partage réussi !");
       } else {
         // Fallback pour les navigateurs qui ne supportent pas Web Share API
@@ -105,13 +112,14 @@ const CertificateGenerator = () => {
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
-        toast.dismiss();
+        toast.dismiss(loadingToastId);
         toast.success("Lien du certificat copié dans le presse-papier.");
       }
+      setIsSharing(false);
     } catch (error) {
       console.error('Erreur lors du partage:', error);
-      toast.dismiss();
       toast.error("Une erreur est survenue lors du partage.");
+      setIsSharing(false);
     }
   };
   
@@ -164,15 +172,19 @@ const CertificateGenerator = () => {
           <Button 
             onClick={handleDownload} 
             className="flex-1 flex items-center justify-center gap-2"
+            disabled={isDownloading}
           >
-            <Download size={18} /> Télécharger
+            <Download size={18} />
+            {isDownloading ? 'Téléchargement...' : 'Télécharger'}
           </Button>
           <Button 
             onClick={handleShare} 
             variant="outline" 
             className="flex-1 flex items-center justify-center gap-2"
+            disabled={isSharing}
           >
-            <Share2 size={18} /> Partager
+            <Share2 size={18} />
+            {isSharing ? 'Partage...' : 'Partager'}
           </Button>
         </div>
       </Card>
