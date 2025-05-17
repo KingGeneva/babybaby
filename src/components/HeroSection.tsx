@@ -113,16 +113,18 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
       
-      <style jsx>{`
-        @keyframes textGlow {
-          0%, 100% {
-            text-shadow: 0 0 5px rgba(14, 165, 233, 0);
+      <style>
+        {`
+          @keyframes textGlow {
+            0%, 100% {
+              text-shadow: 0 0 5px rgba(14, 165, 233, 0);
+            }
+            50% {
+              text-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
+            }
           }
-          50% {
-            text-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
-          }
-        }
-      `}</style>
+        `}
+      </style>
     </section>
   );
 };

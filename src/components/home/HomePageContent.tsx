@@ -1,7 +1,5 @@
 
-import React from 'react';
-import { motion, useAnimation } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import React, { useEffect, useState } from 'react';
 import ArticleSection from '@/components/articles/ArticleSection';
 import TestimonialsCarousel from '@/components/testimonials/TestimonialsCarousel';
 import PartnersCarousel from '@/components/partners/PartnersCarousel';
@@ -16,18 +14,17 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 const HomePageContent: React.FC = () => {
-  const controls = useAnimation();
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.05,
-  });
+  const [isInView, setIsInView] = useState(false);
   
-  React.useEffect(() => {
-    if (inView) {
-      controls.start('visible');
-    }
-  }, [controls, inView]);
-
+  useEffect(() => {
+    // Make content visible after a small delay to ensure context is properly set up
+    const timer = setTimeout(() => {
+      setIsInView(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
   // Mise à jour de la date de dernière modification pour les moteurs de recherche
   const lastMod = new Date().toISOString();
   
@@ -43,20 +40,8 @@ const HomePageContent: React.FC = () => {
         <link rel="prefetch" href="/about" />
       </Helmet>
 
-      <motion.div
-        ref={ref}
-        animate={controls}
-        initial="hidden"
-        variants={{
-          hidden: { opacity: 0 },
-          visible: { 
-            opacity: 1, 
-            transition: { 
-              duration: 0.3,
-              staggerChildren: 0.1
-            } 
-          },
-        }}
+      <div
+        className={`transition-opacity duration-500 ${isInView ? 'opacity-100' : 'opacity-0'}`}
       >
         <KeyFeaturesSection />
         
@@ -101,7 +86,7 @@ const HomePageContent: React.FC = () => {
             </div>
           </div>
         </section>
-      </motion.div>
+      </div>
     </>
   );
 };
