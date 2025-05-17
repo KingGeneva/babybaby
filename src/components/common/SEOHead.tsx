@@ -49,8 +49,11 @@ const SEOHead: React.FC<SEOProps> = ({
     ? (canonicalUrl.startsWith('http') ? canonicalUrl : `https://babybaby.app${canonicalUrl.startsWith('/') ? '' : '/'}${canonicalUrl}`)
     : undefined;
   
+  // Create a clean object of HTML attributes to avoid null values
+  const htmlAttributes = { lang };
+  
   return (
-    <Helmet htmlAttributes={{ lang }}>
+    <Helmet htmlAttributes={htmlAttributes}>
       <title>{fullTitle}</title>
       <meta name="description" content={optimizedDescription} />
       <meta name="keywords" content={keywords.join(', ')} />
@@ -63,20 +66,15 @@ const SEOHead: React.FC<SEOProps> = ({
       <meta name="rating" content="general" />
       
       {/* Performance & mobile optimization */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
-      <link rel="preconnect" href="https://analytics.ahrefs.com" crossOrigin="anonymous" />
-      <link rel="preconnect" href="https://babybaby.boutique" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://www.googletagmanager.com" />
+      <link rel="preconnect" href="https://analytics.ahrefs.com" />
+      <link rel="preconnect" href="https://babybaby.boutique" />
       <link rel="dns-prefetch" href="https://babybaby.boutique" />
       
       {/* Canonical URL - crucial pour éviter le contenu dupliqué */}
       {absoluteCanonicalUrl && <link rel="canonical" href={absoluteCanonicalUrl} />}
-      
-      {/* Alternate language URLs */}
-      {alternateLanguages.map(({ lang, url }) => (
-        <link key={lang} rel="alternate" hrefLang={lang} href={url} />
-      ))}
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={ogType} />
@@ -95,8 +93,6 @@ const SEOHead: React.FC<SEOProps> = ({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={optimizedDescription} />
       <meta name="twitter:image" content={absoluteOgImage} />
-      <meta name="twitter:creator" content="@babybaby_app" />
-      <meta name="twitter:domain" content="babybaby.app" />
       
       {/* Article specific structured data */}
       {ogType === 'article' && articleData && (

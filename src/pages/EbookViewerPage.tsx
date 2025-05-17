@@ -24,13 +24,19 @@ const EbookViewerPage: React.FC = () => {
     navigate('/ebooks');
   };
 
+  // Safe default values
+  const title = ebook ? `${ebook.title} | BabyBaby E-books` : 'Lecture d\'E-book | BabyBaby';
+  const description = ebook?.description || 'Consultez notre bibliothèque d\'e-books gratuits pour les parents.';
+  const canonicalUrl = id ? `https://babybaby.app/ebooks/${id}` : 'https://babybaby.app/ebooks';
+  const imageUrl = ebook?.coverImage || '/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png';
+
   return (
     <div className="min-h-screen flex flex-col">
       <SEOHead 
-        title={ebook ? `${ebook.title} | BabyBaby E-books` : 'Lecture d\'E-book | BabyBaby'}
-        description={ebook?.description || 'Consultez notre bibliothèque d\'e-books gratuits pour les parents.'}
-        canonicalUrl={`https://babybaby.app/ebooks/${id}`}
-        ogImage={ebook?.coverImage || '/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png'}
+        title={title}
+        description={description}
+        canonicalUrl={canonicalUrl}
+        ogImage={imageUrl}
       />
       
       <NavBar />

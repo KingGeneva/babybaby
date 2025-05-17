@@ -18,13 +18,18 @@ const HreflangTags: React.FC<HreflangTagsProps> = ({
   currentUrl,
   alternateLanguages
 }) => {
+  // Ensure safe values
+  const safeCurrentLang = currentLang || 'fr';
+  const safeCurrentUrl = currentUrl || 'https://babybaby.app/';
+  const safeAlternateLanguages = alternateLanguages || [];
+  
   return (
     <Helmet>
       {/* Balise hreflang pour la langue courante */}
-      <link rel="alternate" hrefLang={currentLang} href={currentUrl} />
+      <link rel="alternate" hrefLang={safeCurrentLang} href={safeCurrentUrl} />
       
       {/* Balises hreflang pour les langues alternatives */}
-      {alternateLanguages.map(({ lang, url }) => (
+      {safeAlternateLanguages.map(({ lang, url }) => (
         <link key={lang} rel="alternate" hrefLang={lang} href={url} />
       ))}
       
@@ -32,7 +37,7 @@ const HreflangTags: React.FC<HreflangTagsProps> = ({
       <link 
         rel="alternate" 
         hrefLang="x-default" 
-        href={alternateLanguages.find(l => l.lang === 'fr')?.url || currentUrl} 
+        href={safeAlternateLanguages.find(l => l.lang === 'fr')?.url || safeCurrentUrl} 
       />
     </Helmet>
   );

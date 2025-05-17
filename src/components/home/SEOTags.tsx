@@ -41,32 +41,22 @@ const SEOTags: React.FC = () => {
         alternateLanguages={alternateLanguages}
       />
       
-      {/* Google tag verification */}
+      {/* Additional meta tags in a single Helmet instance */}
       <Helmet>
         <meta name="google-site-verification" content="VGG79QXzkgBxlbUZl_WkUKyFVvUueDd22O_l40gXj0A" />
-        
-        {/* Balises pour améliorer l'indexation */}
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
-        
-        {/* Open Graph tags supplémentaires */}
         <meta property="og:locale:alternate" content="en_US" />
-        
-        {/* Balises spécifiques pour les réseaux sociaux */}
         <meta name="twitter:creator" content="@babybaby_app" />
         <meta name="twitter:domain" content="babybaby.app" />
+        <link rel="preconnect" href="https://babybaby.boutique" />
+        <link rel="dns-prefetch" href="https://babybaby.boutique" />
       </Helmet>
       
       {/* Schemas structurés pour le SEO */}
       <WebsiteSchema />
       <OrganizationSchema />
       <ProductSchema />
-      
-      {/* Lien vers la boutique pour le référencement croisé */}
-      <Helmet>
-        <link rel="preconnect" href="https://babybaby.boutique" />
-        <link rel="dns-prefetch" href="https://babybaby.boutique" />
-      </Helmet>
     </>
   );
 };

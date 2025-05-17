@@ -9,9 +9,12 @@ import "./index.css";
 // Version pour le cache - mise à jour pour forcer le rechargement du service worker
 const APP_VERSION = '1.2.0'; // Incrémentation pour rafraîchir le cache
 
+// Create helmet context object to share across components
+const helmetContext = {};
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <HelmetProvider>
+    <HelmetProvider context={helmetContext}>
       <BrowserRouter>
         <App />
       </BrowserRouter>

@@ -7,8 +7,8 @@ import ChatbotButton from "./components/chatbot/ChatbotButton";
 import CacheManager from "./components/common/CacheManager";
 import { appRoutes } from "./routes";
 
-// Version pour le cache
-const APP_VERSION = '1.1.0';
+// Version pour le cache - synchronisée avec main.tsx
+const APP_VERSION = '1.2.0';
 
 const App = () => (
   <AppProviders>
