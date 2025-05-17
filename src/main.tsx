@@ -16,11 +16,9 @@ const helmetContext = {};
 console.log(`BabyBaby App v${APP_VERSION} loaded successfully`);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <HelmetProvider context={helmetContext}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </HelmetProvider>
-  </React.StrictMode>
+  <HelmetProvider context={helmetContext}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </HelmetProvider>
 );
