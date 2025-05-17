@@ -86,9 +86,9 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
         autoplay={isVisible}
         className="w-24 h-24 object-contain"
         style={{ 
-          filter: isHovered ? 'drop-shadow(0 0 4px rgba(14, 165, 233, 0.4))' : 'none',
-          transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-          transition: 'all 0.2s ease'
+          filter: isHovered ? 'drop-shadow(0 0 8px rgba(14, 165, 233, 0.5))' : 'none',
+          transform: isHovered ? 'scale(1.1)' : 'scale(1)',
+          transition: 'all 0.3s ease'
         }}
         rendererSettings={{
           preserveAspectRatio: 'xMidYMid slice',
@@ -102,59 +102,92 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
     setImageError(true);
   };
 
+  // Format le prix avec séparateur de milliers et 2 décimales
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('fr-FR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(price);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.05 * index, duration: 0.3 }}
+      transition={{ delay: 0.05 * index, duration: 0.4 }}
       viewport={{ once: true, margin: '50px' }}
-      whileHover={{ y: -3 }}
+      whileHover={{ y: -5, transition: { duration: 0.2 } }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       ref={cardRef}
     >
-      <Card className="overflow-hidden h-full flex flex-col border hover:border-babybaby-cosmic/50 transition-all duration-200">
-        <div className="p-3 flex justify-center items-center bg-gradient-to-b from-sky-50 to-white">
+      <Card className="overflow-hidden h-full flex flex-col border border-gray-100 hover:border-babybaby-cosmic/40 transition-all duration-300 shadow-sm hover:shadow-lg">
+        <div className="p-5 flex justify-center items-center bg-gradient-to-b from-sky-50 to-white relative h-56">
           {product.image && !imageError ? (
-            <div className="h-40 w-full flex items-center justify-center">
+            <motion.div 
+              className="h-full w-full flex items-center justify-center"
+              initial={{ scale: 0.95 }}
+              animate={{ scale: isHovered ? 1.05 : 1 }}
+              transition={{ duration: 0.3 }}
+            >
               <img 
                 src={product.image} 
                 alt={product.title}
                 className="h-full object-contain" 
                 onError={handleImageError}
               />
-            </div>
+            </motion.div>
           ) : (
             <HoverCard>
               <HoverCardTrigger asChild>
-                <div className="w-full h-40 cursor-pointer flex items-center justify-center">
+                <div className="w-full h-full cursor-pointer flex items-center justify-center">
                   {renderLottieAnimation()}
                 </div>
               </HoverCardTrigger>
-              <HoverCardContent className="w-64">
+              <HoverCardContent className="w-64 p-4 shadow-lg border-babybaby-cosmic/10">
                 <div>
                   <h3 className="font-semibold">{product.title}</h3>
-                  <p className="text-sm text-gray-600">{product.description}</p>
+                  <p className="text-sm text-gray-600 mt-1">{product.description}</p>
                 </div>
               </HoverCardContent>
             </HoverCard>
           )}
+          
+          {isHovered && (
+            <motion.div 
+              className="absolute top-3 right-3"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Button 
+                size="sm" 
+                variant="outline"
+                className="rounded-full w-9 h-9 p-0 bg-white/80 backdrop-blur-sm hover:bg-white border-babybaby-cosmic/20"
+                onClick={() => window.open(product.link, '_blank')}
+              >
+                <ShoppingCart className="h-4 w-4 text-babybaby-cosmic" />
+              </Button>
+            </motion.div>
+          )}
         </div>
 
-        <CardContent className="pt-2 flex-grow">
-          <h3 className="font-bold text-lg mb-1">{product.title}</h3>
+        <CardContent className="pt-4 px-5 flex-grow">
+          <h3 className="font-semibold text-lg mb-1.5 line-clamp-2 leading-tight">{product.title}</h3>
           <p className="text-gray-600 text-sm line-clamp-2">{product.description}</p>
         </CardContent>
 
-        <CardFooter className="flex justify-between items-center pt-0 pb-3 px-4">
-          <div className="text-lg font-bold text-babybaby-cosmic">${product.id === 4 ? "338.99" : product.price.toFixed(2)}</div>
+        <CardFooter className="flex justify-between items-center pt-0 pb-5 px-5">
+          <div className="text-lg font-bold text-babybaby-cosmic">
+            {product.id === 4 ? formatPrice(338.99) : formatPrice(product.price)}€
+          </div>
           <Button 
             size="sm" 
-            className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80"
+            className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80 rounded-full"
             onClick={() => window.open(product.link, '_blank')}
           >
-            <ShoppingCart className="mr-1 h-4 w-4" />
-            Voir
+            Acheter
           </Button>
         </CardFooter>
       </Card>

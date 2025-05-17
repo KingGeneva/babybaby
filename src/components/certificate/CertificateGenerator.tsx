@@ -66,7 +66,7 @@ const CertificateGenerator = () => {
         link.href = image;
         link.click();
         
-        toast.dismiss(loadingToastId);
+        toast.dismiss(loadingToastId as string);
         toast.success("Certificat téléchargé avec succès !");
         setIsDownloading(false);
       }, 500);
@@ -101,7 +101,7 @@ const CertificateGenerator = () => {
           text: `Certificat d'accomplissement pour ${certificate.recipientName}`,
           files: [new File([blob], 'certificat.png', { type: 'image/png' })],
         });
-        toast.dismiss(loadingToastId);
+        toast.dismiss(loadingToastId as string);
         toast.success("Partage réussi !");
       } else {
         // Fallback pour les navigateurs qui ne supportent pas Web Share API
@@ -112,7 +112,7 @@ const CertificateGenerator = () => {
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
-        toast.dismiss(loadingToastId);
+        toast.dismiss(loadingToastId as string);
         toast.success("Lien du certificat copié dans le presse-papier.");
       }
       setIsSharing(false);
