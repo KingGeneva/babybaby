@@ -7,8 +7,15 @@ export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState(false)
 
   React.useEffect(() => {
-    // Initialize the value when the component mounts (client-side only)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+    // Function to check if the device is mobile based on window width
+    const checkIfMobile = () => {
+      return window.innerWidth < MOBILE_BREAKPOINT
+    }
+    
+    // Set the initial value only in browser environment
+    if (typeof window !== 'undefined') {
+      setIsMobile(checkIfMobile())
+    }
     
     // Throttled resize handler
     let resizeTimer: ReturnType<typeof setTimeout>
@@ -16,16 +23,21 @@ export function useIsMobile() {
     const handleResize = () => {
       clearTimeout(resizeTimer)
       resizeTimer = setTimeout(() => {
-        setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+        setIsMobile(checkIfMobile())
       }, 100)
     }
     
-    window.addEventListener("resize", handleResize)
+    // Only add event listener in browser environment
+    if (typeof window !== 'undefined') {
+      window.addEventListener("resize", handleResize)
+    }
     
     // Cleanup
     return () => {
-      window.removeEventListener("resize", handleResize)
-      clearTimeout(resizeTimer)
+      if (typeof window !== 'undefined') {
+        window.removeEventListener("resize", handleResize)
+        clearTimeout(resizeTimer)
+      }
     }
   }, [])
 
