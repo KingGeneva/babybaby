@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface LogoProps {
@@ -16,16 +15,17 @@ const Logo: React.FC<LogoProps> = ({ className, size = 'md' }) => {
   };
 
   return (
-    <motion.div 
-      className={cn("font-comfortaa font-bold", sizeClasses[size], className)}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      whileHover={{ scale: 1.05 }}
-      transition={{ duration: 0.3 }}
+    <div 
+      className={cn(
+        "font-comfortaa font-bold opacity-0 transition-opacity duration-300 ease-in hover:scale-105 transform transition-transform",
+        sizeClasses[size],
+        className
+      )}
+      style={{ animation: 'fadeIn 0.3s forwards' }}
     >
       <span className="text-babybaby-cosmic">Baby</span>
       <span className="text-babybaby-pink">Baby</span>
-    </motion.div>
+    </div>
   );
 };
 

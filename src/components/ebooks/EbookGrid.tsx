@@ -43,11 +43,11 @@ const EbookGrid: React.FC<EbookGridProps> = ({ ebooks }) => {
     <div 
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in"
     >
-      {ebooks.map((ebook) => (
+      {ebooks.map((ebook, index) => (
         <div
           key={ebook.id}
           className="animate-fade-in"
-          style={{ animationDelay: '100ms' }}
+          style={{ animationDelay: `${index * 100}ms` }}
         >
           <EbookCard 
             ebook={ebook} 

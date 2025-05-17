@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import Logo from './Logo';
 import { Instagram, Facebook, Twitter, Youtube, ArrowUp, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -61,17 +60,15 @@ const Footer: React.FC = () => {
               </p>
               <div className="flex mt-4 space-x-3">
                 {socialIcons.map((social, index) => (
-                  <motion.a
+                  <a
                     key={index}
                     href={social.href}
-                    className="w-8 h-8 rounded-full bg-babybaby-cosmic flex items-center justify-center text-white"
-                    whileHover={{ y: -3 }}
-                    transition={{ duration: 0.2 }}
+                    className="w-8 h-8 rounded-full bg-babybaby-cosmic flex items-center justify-center text-white transform hover:-translate-y-1 transition-transform duration-200"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     {social.icon}
-                  </motion.a>
+                  </a>
                 ))}
               </div>
             </div>
@@ -115,15 +112,12 @@ const Footer: React.FC = () => {
             </div>
           </div>
           
-          <motion.button
-            className="absolute -top-5 right-5 w-10 h-10 rounded-full bg-babybaby-cosmic text-white flex items-center justify-center shadow-lg"
+          <button
+            className="absolute -top-5 right-5 w-10 h-10 rounded-full bg-babybaby-cosmic text-white flex items-center justify-center shadow-lg hover:-translate-y-1 transition-transform duration-200"
             onClick={scrollToTop}
-            whileHover={{ y: -2 }}
-            whileTap={{ y: 0 }}
-            transition={{ duration: 0.2 }}
           >
             <ArrowUp size={20} />
-          </motion.button>
+          </button>
         </div>
         
         <div className="text-center text-sm text-gray-500">
