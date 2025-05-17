@@ -9,7 +9,6 @@ import HomePageContent from '@/components/home/HomePageContent';
 const Index = () => {
   return (
     <div className="min-h-screen overflow-hidden">
-      {/* SEO Tags component includes all necessary meta tags and structured data */}
       <SEOTags />
       <NavBar />
       <HeroSection />

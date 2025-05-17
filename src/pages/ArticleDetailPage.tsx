@@ -28,13 +28,6 @@ const ArticleDetailPage = () => {
   const articleId = parseInt(id || '0');
   const { formatDateForStructuredData, getArticleData } = useArticle(articleId);
   
-  // Calculate estimated reading time based on content length
-  const calculateReadingTime = (content: string): number => {
-    const wordsPerMinute = 200;
-    const wordCount = content.split(/\s+/).length;
-    return Math.ceil(wordCount / wordsPerMinute);
-  };
-  
   useEffect(() => {
     const loadArticle = async () => {
       setLoading(true);
@@ -86,13 +79,6 @@ const ArticleDetailPage = () => {
     return <ArticleNotFound />;
   }
 
-  // Calculate reading time for the article
-  const readingTime = calculateReadingTime(article.content);
-  const wordCount = article.content.split(/\s+/).length;
-
-  // Create canonical URL with babybaby.org domain
-  const canonicalUrl = `https://babybaby.org/articles/${article.id}`;
-
   return (
     <div className="min-h-screen">
       <SEOHead
@@ -100,11 +86,10 @@ const ArticleDetailPage = () => {
         description={article.excerpt}
         ogImage={article.image || "/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"}
         ogType="article"
-        canonicalUrl={canonicalUrl}
+        canonicalUrl={`https://babybaby.app/articles/${article.id}`}
         articleData={{
           publishedTime: formatDateForStructuredData(article.date),
-          tags: [article.category],
-          section: article.category
+          tags: [article.category]
         }}
       />
       
@@ -113,13 +98,8 @@ const ArticleDetailPage = () => {
         description={article.excerpt}
         image={article.image}
         datePublished={formatDateForStructuredData(article.date)}
-        dateModified={formatDateForStructuredData(new Date().toString())} // Consider tracking real update dates in production
         authorName="BabyBaby"
-        url={canonicalUrl}
-        category={article.category}
-        tags={[article.category, "parentalité", "enfant", "bébé"]}
-        wordCount={wordCount}
-        readingTime={readingTime}
+        url={`https://babybaby.app/articles/${article.id}`}
       />
       
       <NavBar />
@@ -148,11 +128,6 @@ const ArticleDetailPage = () => {
               />
               
               <ArticleImage image={article.image} title={article.title} />
-              
-              <div className="flex justify-between items-center text-sm text-gray-500 mb-6">
-                <span>Temps de lecture: {readingTime} min</span>
-                <span>{wordCount} mots</span>
-              </div>
               
               <ArticleContent content={article.content} excerpt={article.excerpt} />
               

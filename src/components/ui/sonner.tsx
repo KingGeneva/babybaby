@@ -6,22 +6,15 @@ import { Toaster as Sonner } from "sonner";
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  // Gérer le thème avec une approche plus sécurisée
-  const [theme, setTheme] = React.useState<"light" | "dark">("light");
-  const themeContext = useTheme();
+  // Use optional chaining and provide default values to prevent null access
+  const { resolvedTheme = "light", theme = "light" } = useTheme() || {};
   
-  React.useEffect(() => {
-    // Mettre à jour le thème selon le contexte lorsqu'il est disponible
-    if (themeContext?.theme === "dark" || themeContext?.resolvedTheme === "dark") {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
-  }, [themeContext?.theme, themeContext?.resolvedTheme]);
+  // Set a safe default theme
+  const safeTheme = (resolvedTheme || theme || "light") as "light" | "dark";
 
   return (
     <Sonner
-      theme={theme}
+      theme={safeTheme}
       className="toaster group"
       toastOptions={{
         classNames: {
@@ -40,5 +33,5 @@ const Toaster = ({ ...props }: ToasterProps) => {
 };
 
 export { Toaster };
-// Exporter notre fonction toast personnalisée au lieu de celle de sonner directement
-export { toast, useToast } from "@/components/ui/use-toast";
+// Export our custom toast function instead of sonner's directly
+export { toast, useToast } from "./use-toast";

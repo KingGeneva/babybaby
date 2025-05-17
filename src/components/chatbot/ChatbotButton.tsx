@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { MessageCircle, X } from 'lucide-react';
 import { Message } from './types';
 import { getBotResponse } from './botResponseService';
@@ -61,31 +61,33 @@ const ChatbotButton: React.FC = () => {
   return (
     <>
       {/* Chat button */}
-      <button
-        className="fixed bottom-6 right-6 z-50 bg-babybaby-cosmic text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-babybaby-cosmic/90 transition-colors"
-        onClick={toggleChat}
-      >
-        {isOpen ? (
-          <X className="h-6 w-6" />
-        ) : (
-          <MessageCircle className="h-6 w-6" />
-        )}
-      </button>
+      <div className="fixed bottom-6 right-6 z-50">
+        <motion.button
+          className="bg-babybaby-cosmic text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-babybaby-cosmic/90 transition-colors"
+          onClick={toggleChat}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {isOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <MessageCircle className="h-6 w-6" />
+          )}
+        </motion.button>
+      </div>
       
       {/* Chat window */}
-      <AnimatePresence>
-        {isOpen && (
-          <ChatWindow 
-            isOpen={isOpen}
-            onClose={toggleChat}
-            messages={messages}
-            quickReplies={quickReplies}
-            onSendMessage={handleSendMessage}
-            onQuickReplySelect={handleSendMessage}
-            isTyping={isTyping}
-          />
-        )}
-      </AnimatePresence>
+      <ChatWindow 
+        isOpen={isOpen}
+        onClose={toggleChat}
+        messages={messages}
+        quickReplies={quickReplies}
+        onSendMessage={handleSendMessage}
+        onQuickReplySelect={handleSendMessage}
+        isTyping={isTyping}
+      />
     </>
   );
 };

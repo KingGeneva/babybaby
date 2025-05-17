@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -22,18 +21,12 @@ const NewsletterForm: React.FC = () => {
     e.preventDefault();
     
     if (!email) {
-      toast({
-        title: "Veuillez saisir votre adresse email",
-        variant: "destructive"
-      });
+      toast.error("Veuillez saisir votre adresse email");
       return;
     }
     
     if (!consent) {
-      toast({
-        title: "Veuillez accepter notre politique de confidentialité",
-        variant: "destructive"
-      });
+      toast.error("Veuillez accepter notre politique de confidentialité");
       return;
     }
     
@@ -50,24 +43,15 @@ const NewsletterForm: React.FC = () => {
 
       if (error) {
         if (error.message.includes('Email already subscribed')) {
-          toast({
-            title: "Cet email est déjà abonné à notre newsletter",
-            variant: "destructive"
-          });
+          toast.error("Cet email est déjà abonné à notre newsletter");
         } else {
-          toast({
-            title: "Une erreur est survenue lors de l'inscription",
-            variant: "destructive"
-          });
+          toast.error("Une erreur est survenue lors de l'inscription");
         }
         throw error;
       }
 
       setSubmitted(true);
-      toast({
-        title: "Merci pour votre inscription !",
-        variant: "success"
-      });
+      toast.success("Merci pour votre inscription !");
       
       // Reset form after 3 seconds
       setTimeout(() => {

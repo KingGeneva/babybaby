@@ -1,71 +1,121 @@
 
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { toast } from '@/components/ui/use-toast';
 
 interface CacheManagerProps {
   version: string;
 }
 
-const CacheManager: React.FC<CacheManagerProps> = ({ version }) => {
-  const [needsRefresh, setNeedsRefresh] = useState(false);
-
+const CacheManager = ({ version }: CacheManagerProps) => {
+  // Use useEffect to ensure this runs in a React context
   useEffect(() => {
-    // Check if there's a stored version
-    const storedVersion = localStorage.getItem('app-version');
+    // Vérifier si le service worker est supporté
+    if (!('serviceWorker' in navigator)) {
+      console.log('Service Worker non supporté par ce navigateur');
+      return;
+    }
+
+    // Variable pour suivre si une notification a déjà été affichée
+    let updateNotificationShown = false;
+
+    // Enregistrer ou mettre à jour le service worker avec gestion d'erreur améliorée
+    const registerServiceWorker = async () => {
+      try {
+        // Ajouter un timestamp pour forcer la mise à jour du SW lors du développement
+        const swUrl = `/service-worker.js?v=${version}`;
+        
+        // Vérifier si le service worker est déjà enregistré
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        let existingRegistration = registrations.find(reg => 
+          reg.active && reg.active.scriptURL.includes('service-worker.js'));
+        
+        if (existingRegistration) {
+          console.log('Service Worker déjà enregistré');
+          // Ne pas mettre à jour à chaque chargement de page pour éviter les notifications inutiles
+          // await existingRegistration.update();
+        } else {
+          console.log('Enregistrement du Service Worker...');
+          existingRegistration = await navigator.serviceWorker.register(swUrl);
+          console.log('Service Worker enregistré avec succès:', existingRegistration.scope);
+        }
+        
+        // Vérifier s'il y a une mise à jour du SW
+        if (existingRegistration) {
+          existingRegistration.onupdatefound = () => {
+            const installingWorker = existingRegistration.installing;
+            if (installingWorker) {
+              installingWorker.onstatechange = () => {
+                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller && !updateNotificationShown) {
+                  console.log('Nouvelle version du Service Worker disponible');
+                  // Afficher la notification seulement si elle n'a pas déjà été affichée
+                  updateNotificationShown = true;
+                  toast({
+                    title: "Mise à jour disponible",
+                    description: "Une nouvelle version de l'application est disponible. Rechargez pour l'appliquer.",
+                    action: {
+                      // Fixed: Changed from label to children for React element compatibility
+                      children: "Recharger",
+                      onClick: () => window.location.reload()
+                    },
+                    duration: 10000
+                  });
+                } else if (installingWorker.state === 'installed' && !navigator.serviceWorker.controller && !updateNotificationShown) {
+                  console.log('Service Worker installé pour la première fois');
+                  // La notification pour la première installation est optionnelle
+                  // Nous la désactivons pour éviter les popups inutiles
+                }
+              };
+            }
+          };
+        }
+        
+        // Nettoyer le cache si besoin
+        if (navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage({
+            type: 'CLEAR_OLD_CACHES'
+          });
+          
+          // Vérifier que le SW est fonctionnel avec un ping
+          setTimeout(() => {
+            navigator.serviceWorker.controller?.postMessage({
+              type: 'PING'
+            });
+          }, 1000);
+        }
+        
+      } catch (error) {
+        console.error('Erreur d\'enregistrement du Service Worker:', error);
+        // Ne pas afficher de notification d'erreur à l'utilisateur pour éviter les popups
+      }
+    };
     
-    // If version differs, we need to refresh caches
-    if (storedVersion && storedVersion !== version) {
-      setNeedsRefresh(true);
-      
-      // Show toast notification
-      toast({
-        title: "Nouvelle mise à jour disponible",
-        description: "Pour une meilleure expérience, veuillez actualiser l'application.",
-        duration: 10000,
-        action: (
-          <button
-            onClick={() => refreshApp()}
-            className="bg-primary text-white px-3 py-1 rounded-md text-xs font-medium"
-          >
-            Actualiser maintenant
-          </button>
-        )
-      });
+    // Écouteur pour recevoir les messages du SW
+    const messageHandler = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'PONG') {
+        console.log('Service Worker actif, version:', event.data.version);
+      }
+    };
+    
+    navigator.serviceWorker.addEventListener('message', messageHandler);
+    
+    // Enregistrer le SW mais pas à chaque chargement de page
+    // Utiliser localStorage pour vérifier si on l'a déjà fait récemment
+    const lastRegistration = localStorage.getItem('swLastRegistration');
+    const now = Date.now();
+    if (!lastRegistration || (now - Number(lastRegistration)) > 3600000) { // 1 heure
+      registerServiceWorker();
+      localStorage.setItem('swLastRegistration', now.toString());
+    } else {
+      console.log('Enregistrement du SW ignoré, déjà fait récemment');
     }
     
-    // Update stored version
-    localStorage.setItem('app-version', version);
-    
-    // Register service worker if available
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js').then(
-          registration => {
-            console.log('ServiceWorker registered with scope: ', registration.scope);
-          },
-          error => {
-            console.error('ServiceWorker registration failed: ', error);
-          }
-        );
-      });
-    }
+    // Nettoyer l'écouteur à la destruction du composant
+    return () => {
+      navigator.serviceWorker.removeEventListener('message', messageHandler);
+    };
   }, [version]);
 
-  const refreshApp = () => {
-    // Clear caches
-    if ('caches' in window) {
-      caches.keys().then(cacheNames => {
-        cacheNames.forEach(cacheName => {
-          caches.delete(cacheName);
-        });
-      });
-    }
-    
-    // Hard reload the page
-    window.location.reload();
-  };
-
-  // Component doesn't render anything visible
+  // Ce composant ne rend rien visuellement
   return null;
 };
 

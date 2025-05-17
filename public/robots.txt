@@ -1,21 +1,17 @@
 
-# Global rules
 User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /dashboard/private/
+Disallow: /dashboard/
 Disallow: /auth/
-Disallow: /api/internal/
 
-# Priority pages for crawling
-Crawl-delay: 3
+# Prioritize important pages
+Crawl-delay: 5
 
-# Sitemap locations
-Sitemap: https://babybaby.org/sitemap.xml
-Sitemap: https://babybaby.org/sitemap-articles.xml
-Sitemap: https://babybaby.org/sitemap-images.xml
+# Sitemap location
+Sitemap: https://babybaby.app/sitemap.xml
 
-# Specific bot configurations
+# Additional rules for specific bots
 User-agent: Googlebot
 Allow: /
 Disallow: /admin/
@@ -28,9 +24,5 @@ Allow: /
 Disallow: /admin/
 
 User-agent: Slurp
-Allow: /
-Disallow: /admin/
-
-User-agent: DuckDuckBot
 Allow: /
 Disallow: /admin/
