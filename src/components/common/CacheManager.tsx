@@ -62,7 +62,7 @@ const CacheManager: React.FC<CacheManagerProps> = ({ version }) => {
     }
     
     // Hard reload the page
-    window.location.reload(true);
+    window.location.reload();
   };
 
   // Component doesn't render anything visible

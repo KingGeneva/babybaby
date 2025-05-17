@@ -5,9 +5,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
+import CacheManager from "@/components/common/CacheManager";
 
 // Version simplifiée
-const APP_VERSION = '1.2.0'; // Synchronisée avec main.tsx
+const APP_VERSION = '1.3.0'; // Synchronisée avec main.tsx
 
 // Configuration optimisée de React Query
 const queryClient = new QueryClient({
@@ -32,6 +33,7 @@ const AppProviders = ({ children }: AppProvidersProps) => {
           <AuthProvider>
             {children}
             <Toaster position="top-center" />
+            <CacheManager version={APP_VERSION} />
           </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>

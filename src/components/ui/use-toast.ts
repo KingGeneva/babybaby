@@ -167,9 +167,20 @@ function toast(props: Toast) {
   };
 }
 
-// Added helper methods for common toast variants
-toast.error = (props: Omit<Toast, "variant">) => toast({ ...props, variant: "destructive" });
-toast.success = (props: Omit<Toast, "variant">) => toast({ ...props, variant: "success" });
+// Helper functions to simplify toast creation
+toast.error = (props: Omit<Toast, "variant"> | string) => {
+  if (typeof props === 'string') {
+    return toast({ title: props, variant: "destructive" });
+  }
+  return toast({ ...props, variant: "destructive" });
+};
+
+toast.success = (props: Omit<Toast, "variant"> | string) => {
+  if (typeof props === 'string') {
+    return toast({ title: props, variant: "success" });
+  }
+  return toast({ ...props, variant: "success" });
+};
 
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState);
