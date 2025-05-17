@@ -125,7 +125,7 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
     <>
       {/* Dashboard Section - Priorité 1 */}
       <Suspense fallback={<SectionLoader />}>
-        <div className="pt-24 relative">
+        <div className="pt-24 relative animate-fade-in">
           <Dashboard 
             childId={childProfileId || 'demo'} 
             demoMode={!isAuthenticated} 
@@ -137,12 +137,16 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
 
       {/* Témoignages - Priorité 2 */}
       <Suspense fallback={<SectionLoader />}>
-        <TestimonialsCarousel />
+        <div className="animate-fade-in" style={{ animationDelay: '100ms' }}>
+          <TestimonialsCarousel />
+        </div>
       </Suspense>
 
       {/* Articles - Priorité 2 */}
       <Suspense fallback={<SectionLoader />}>
-        <ArticleSection />
+        <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
+          <ArticleSection />
+        </div>
       </Suspense>
 
       {/* Contenu mobile uniquement si sur mobile */}
@@ -150,24 +154,32 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
         <>
           {/* Partenaires - Priorité 3 */}
           <Suspense fallback={<SectionLoader />}>
-            <PartnersCarousel />
+            <div className="animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <PartnersCarousel />
+            </div>
           </Suspense>
           
           {/* Produits - Priorité 3 */}
           <Suspense fallback={<SectionLoader />}>
-            <ProductsSection />
+            <div className="animate-fade-in" style={{ animationDelay: '400ms' }}>
+              <ProductsSection />
+            </div>
           </Suspense>
         </>
       )}
       
       {/* Section ebooks - Priorité 3 */}
       <Suspense fallback={<SectionLoader />}>
-        <EbooksSection />
+        <div className="animate-fade-in" style={{ animationDelay: '500ms' }}>
+          <EbooksSection />
+        </div>
       </Suspense>
       
       {/* Section cours - Priorité 3 (réintégrée) */}
       <Suspense fallback={<SectionLoader />}>
-        <CoursesSection />
+        <div className="animate-fade-in" style={{ animationDelay: '600ms' }}>
+          <CoursesSection />
+        </div>
       </Suspense>
       
       {/* Contenu basse priorité - uniquement sur desktop ou si défilement */}
@@ -175,24 +187,32 @@ const LazyLoadedSections: React.FC<LazyLoadedSectionsProps> = ({
         <>
           {/* Outils - Priorité 4 */}
           <Suspense fallback={<SectionLoader />}>
-            <ToolsSection />
+            <div className="animate-fade-in" style={{ animationDelay: '700ms' }}>
+              <ToolsSection />
+            </div>
           </Suspense>
           
           {/* Contact - Priorité 5 */}
           <Suspense fallback={<SectionLoader />}>
-            <ContactSection />
+            <div className="animate-fade-in" style={{ animationDelay: '800ms' }}>
+              <ContactSection />
+            </div>
           </Suspense>
         </>
       )}
       
       {/* Newsletter - Priorité basse mais toujours présente */}
       <Suspense fallback={<div className="h-16 bg-gray-50"></div>}>
-        <NewsletterForm />
+        <div className="animate-fade-in" style={{ animationDelay: '900ms' }}>
+          <NewsletterForm />
+        </div>
       </Suspense>
       
       {/* Footer - Toujours présent */}
       <Suspense fallback={<div className="h-16 bg-gray-50"></div>}>
-        <Footer />
+        <div className="animate-fade-in" style={{ animationDelay: '1000ms' }}>
+          <Footer />
+        </div>
       </Suspense>
     </>
   );

@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Ebook } from './types';
 import EbookCard from './EbookCard';
 import { downloadEbook } from './ebookService';
-import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 
 interface EbookGridProps {
@@ -41,27 +40,23 @@ const EbookGrid: React.FC<EbookGridProps> = ({ ebooks }) => {
   }
 
   return (
-    <motion.div 
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, staggerChildren: 0.1 }}
+    <div 
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in"
     >
       {ebooks.map((ebook) => (
-        <motion.div
+        <div
           key={ebook.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          className="animate-fade-in"
+          style={{ animationDelay: '100ms' }}
         >
           <EbookCard 
             ebook={ebook} 
             onDownload={handleDownload}
             isLoading={downloadingId === ebook.id}
           />
-        </motion.div>
+        </div>
       ))}
-    </motion.div>
+    </div>
   );
 };
 
