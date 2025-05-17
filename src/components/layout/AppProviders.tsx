@@ -28,6 +28,7 @@ const AppProviders = ({ children }: AppProvidersProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light">
+        {/* ThemeProvider must come before components that use useTheme */}
         <TooltipProvider>
           <AuthProvider>
             {children}

@@ -6,11 +6,12 @@ import { Toaster as Sonner } from "sonner";
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  // Use optional chaining and provide default values to prevent null access
-  const { resolvedTheme = "light", theme = "light" } = useTheme() || {};
+  // Get the theme context safely with a default value
+  const themeContext = useTheme();
   
-  // Set a safe default theme
-  const safeTheme = (resolvedTheme || theme || "light") as "light" | "dark";
+  // Set a safe default theme - use system theme if context is not available
+  const theme = themeContext?.theme || themeContext?.resolvedTheme || "system";
+  const safeTheme = (theme === "dark" ? "dark" : "light") as "light" | "dark";
 
   return (
     <Sonner

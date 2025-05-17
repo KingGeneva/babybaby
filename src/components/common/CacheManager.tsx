@@ -1,12 +1,13 @@
 
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { toast } from '@/components/ui/use-toast';
 
 interface CacheManagerProps {
   version: string;
 }
 
-const CacheManager = ({ version }: CacheManagerProps) => {
+// Make sure we define this as a proper React functional component
+const CacheManager: React.FC<CacheManagerProps> = ({ version }) => {
   // Use useEffect to ensure this runs in a React context
   useEffect(() => {
     // Vérifier si le service worker est supporté
@@ -53,8 +54,7 @@ const CacheManager = ({ version }: CacheManagerProps) => {
                     title: "Mise à jour disponible",
                     description: "Une nouvelle version de l'application est disponible. Rechargez pour l'appliquer.",
                     action: {
-                      // Fixed: Changed from label to children for React element compatibility
-                      children: "Recharger",
+                      children: "Recharger", // Fixed: Changed from label to children
                       onClick: () => window.location.reload()
                     },
                     duration: 10000
