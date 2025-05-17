@@ -7,10 +7,12 @@ type ToasterProps = React.ComponentProps<typeof Sonner>;
 
 const Toaster = ({ ...props }: ToasterProps) => {
   // Safe theme handling to avoid context issues with react-helmet-async
-  const { theme, resolvedTheme } = useTheme();
+  const themeContext = useTheme();
   
   // Set a safe default theme that won't cause errors if context is unavailable
-  const safeTheme = (theme === "dark" || resolvedTheme === "dark") ? "dark" : "light";
+  const safeTheme = (themeContext?.theme === "dark" || themeContext?.resolvedTheme === "dark") 
+    ? "dark" 
+    : "light";
 
   return (
     <Sonner

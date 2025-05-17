@@ -13,6 +13,7 @@ type ToasterToast = ToastProps & {
   title?: React.ReactNode;
   description?: React.ReactNode;
   action?: ToastActionElement;
+  variant?: "default" | "destructive" | "success";
 };
 
 const actionTypes = {
@@ -137,10 +138,10 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">;
 
-function toast({ ...props }: Toast) {
+function toast(props: Toast) {
   const id = genId();
 
-  const update = (props: ToasterToast) =>
+  const update = (props: Partial<ToasterToast>) =>
     dispatch({
       type: "UPDATE_TOAST",
       toast: { ...props, id },
@@ -165,6 +166,10 @@ function toast({ ...props }: Toast) {
     update,
   };
 }
+
+// Added helper methods for common toast variants
+toast.error = (props: Omit<Toast, "variant">) => toast({ ...props, variant: "destructive" });
+toast.success = (props: Omit<Toast, "variant">) => toast({ ...props, variant: "success" });
 
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState);
