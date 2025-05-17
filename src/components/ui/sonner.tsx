@@ -6,11 +6,22 @@ import { Toaster as Sonner } from "sonner";
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const themeContext = useTheme();
+  // Use useState to track when component is mounted
+  const [mounted, setMounted] = React.useState(false);
+  const { theme, resolvedTheme } = useTheme();
+  
+  // Only access theme after component is mounted
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  if (!mounted) {
+    return null; // Don't render anything until client-side
+  }
   
   // Safely handle theme values with fallbacks
-  const resolvedTheme = themeContext?.resolvedTheme || themeContext?.theme || "light";
-  const safeTheme = (resolvedTheme === "dark" ? "dark" : "light") as "light" | "dark";
+  const currentTheme = resolvedTheme || theme || "light";
+  const safeTheme = (currentTheme === "dark" ? "dark" : "light") as "light" | "dark";
 
   return (
     <Sonner

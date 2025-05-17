@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
 
 interface CacheManagerProps {
@@ -7,8 +7,18 @@ interface CacheManagerProps {
 }
 
 const CacheManager = ({ version }: CacheManagerProps) => {
-  // Use useEffect to ensure this runs in a React context
+  // Add state to track client-side rendering
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Use useEffect to ensure this runs in a React context and only client-side
   useEffect(() => {
+    setIsMounted(true);
+    
+    // Early return if not in browser environment
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     // Vérifier si le service worker est supporté
     if (!('serviceWorker' in navigator)) {
       console.log('Service Worker non supporté par ce navigateur');
@@ -114,6 +124,11 @@ const CacheManager = ({ version }: CacheManagerProps) => {
       navigator.serviceWorker.removeEventListener('message', messageHandler);
     };
   }, [version]);
+
+  // Don't render anything server-side or until mounted
+  if (!isMounted) {
+    return null;
+  }
 
   // Ce composant ne rend rien visuellement
   return null;
