@@ -30,12 +30,10 @@ const AppProviders = ({ children }: AppProvidersProps) => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light">
         <TooltipProvider>
-          <MotionConfig reducedMotion="user">
-            <AuthProvider>
-              {children}
-              <Toaster position="top-center" />
-            </AuthProvider>
-          </MotionConfig>
+          <AuthProvider>
+            {children}
+            <Toaster position="top-center" />
+          </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
