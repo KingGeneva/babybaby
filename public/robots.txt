@@ -1,71 +1,28 @@
 
-# BabyBaby robots.txt
-# https://babybaby.app
-
-# Allow all crawlers
 User-agent: *
 Allow: /
-Allow: /articles/
-Allow: /ebooks/
-Allow: /tools/
-Allow: /faq/
-Allow: /about/
-Allow: /courses/
-Allow: /community/
-Allow: /forum/
-Allow: /forum/categories/
-Allow: /forum/topics/
-Allow: /ads.txt
-
-# Disallow access to admin areas
 Disallow: /admin/
-Disallow: /api/
-Disallow: /temp/
+Disallow: /dashboard/
+Disallow: /auth/
 
-# Image Directories
-Allow: /images/
-Allow: /lovable-uploads/
-
-# Social Media Bots - Allow specific paths
-User-agent: Twitterbot
-Allow: /
-Allow: /articles/
-Allow: /courses/
-Allow: /community/
-Allow: /forum/
-Allow: /images/
-Allow: /lovable-uploads/
-
-User-agent: facebookexternalhit
-Allow: /
-Allow: /articles/
-Allow: /courses/
-Allow: /community/
-Allow: /forum/
-Allow: /images/
-Allow: /lovable-uploads/
-
-# Google AdSense & Ad-related robots - explicit permissions
-User-agent: Mediapartners-Google
-Allow: /
-Allow: /ads.txt
-
-User-agent: AdsBot-Google
-Allow: /
-Allow: /ads.txt
-
-# Rate limiting for crawlers
-User-agent: AhrefsBot
-Crawl-delay: 2
-
-User-agent: SemrushBot
-Crawl-delay: 2
+# Prioritize important pages
+Crawl-delay: 5
 
 # Sitemap location
 Sitemap: https://babybaby.app/sitemap.xml
 
-# Host directive
-Host: babybaby.app
+# Additional rules for specific bots
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
 
-# Cache control hints
-# X-Robots-Tag: max-snippet:-1, max-image-preview:large, max-video-preview:-1
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+
+User-agent: Slurp
+Allow: /
+Disallow: /admin/

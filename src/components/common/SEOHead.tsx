@@ -55,16 +55,20 @@ const SEOHead: React.FC<SEOProps> = ({
       <meta name="description" content={optimizedDescription} />
       <meta name="keywords" content={keywords.join(', ')} />
       
-      {/* Additional SEO meta tags */}
+      {/* Meta tags améliorés */}
       <meta name="author" content="BabyBaby" />
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       <meta name="googlebot" content="index, follow" />
+      <meta name="revisit-after" content="7 days" />
+      <meta name="rating" content="general" />
       
       {/* Performance & mobile optimization */}
       <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
       <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
       <link rel="preconnect" href="https://analytics.ahrefs.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://babybaby.boutique" crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href="https://babybaby.boutique" />
       
       {/* Canonical URL - crucial pour éviter le contenu dupliqué */}
       {absoluteCanonicalUrl && <link rel="canonical" href={absoluteCanonicalUrl} />}
@@ -91,6 +95,8 @@ const SEOHead: React.FC<SEOProps> = ({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={optimizedDescription} />
       <meta name="twitter:image" content={absoluteOgImage} />
+      <meta name="twitter:creator" content="@babybaby_app" />
+      <meta name="twitter:domain" content="babybaby.app" />
       
       {/* Article specific structured data */}
       {ogType === 'article' && articleData && (

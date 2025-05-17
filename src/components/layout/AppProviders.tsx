@@ -7,7 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
 
 // Version simplifiée
-const APP_VERSION = '1.1';
+const APP_VERSION = '1.2.0'; // Synchronisée avec main.tsx
 
 // Configuration optimisée de React Query
 const queryClient = new QueryClient({

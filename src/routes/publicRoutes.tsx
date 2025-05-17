@@ -15,6 +15,7 @@ const EbooksPage = lazy(() => import("../pages/EbooksPage"));
 const EbookViewerPage = lazy(() => import("../pages/EbookViewerPage"));
 const ContestsPage = lazy(() => import("../pages/ContestsPage"));
 const StrollerComparisonPage = lazy(() => import("../pages/StrollerComparisonPage"));
+const BoutiquePage = lazy(() => import("../pages/BoutiquePage"));
 
 export const publicRoutes: RouteObject[] = [
   { path: "/", element: <Index /> },
@@ -28,5 +29,6 @@ export const publicRoutes: RouteObject[] = [
   { path: "/ebooks", element: <EbooksPage /> },
   { path: "/ebooks/:id", element: <EbookViewerPage /> },
   { path: "/contests", element: <ContestsPage /> },
+  { path: "/boutique", element: <BoutiquePage /> },
   { path: "*", element: <NotFound /> }
 ];
