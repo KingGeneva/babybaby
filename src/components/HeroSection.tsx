@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import P5Canvas from './P5Canvas';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
@@ -9,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const HeroSection: React.FC = () => {
   const [typedText, setTypedText] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
   const fullText = 'L\'application complète pour les parents modernes';
   const isMobile = useIsMobile();
   const navigate = useNavigate();
@@ -16,6 +16,8 @@ const HeroSection: React.FC = () => {
   useEffect(() => {
     let i = 0;
     const typingSpeed = isMobile ? 30 : 50; 
+    
+    setIsVisible(true);
     
     const typingInterval = setInterval(() => {
       if (i <= fullText.length) {
@@ -29,28 +31,6 @@ const HeroSection: React.FC = () => {
     return () => clearInterval(typingInterval);
   }, [isMobile]);
 
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-  
-  const itemVariants = {
-    hidden: { y: 15, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 80,
-        damping: 16
-      }
-    }
-  };
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
@@ -58,51 +38,44 @@ const HeroSection: React.FC = () => {
       </div>
       
       <div className="container mx-auto px-4 z-10">
-        <motion.div className="max-w-4xl mx-auto text-center">
-          <motion.div variants={itemVariants}>
-            <motion.h1 
+        <div className="max-w-4xl mx-auto text-center">
+          <div className={`transform transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} 
+               style={{ transitionDelay: '100ms' }}>
+            <h1 
               className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-babybaby-cosmic"
-              animate={{ 
-                textShadow: [
-                  "0 0 5px rgba(14, 165, 233, 0)",
-                  "0 0 10px rgba(14, 165, 233, 0.4)",
-                  "0 0 5px rgba(14, 165, 233, 0)"
-                ] 
-              }}
-              transition={{ 
-                repeat: Infinity, 
-                duration: 4,
-                ease: "easeInOut"
+              style={{ 
+                animation: 'textGlow 4s ease-in-out infinite'
               }}
             >
               BabyBaby
-            </motion.h1>
-          </motion.div>
+            </h1>
+          </div>
           
-          <motion.div variants={itemVariants}>
-            <motion.h2 
+          <div className={`transform transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+               style={{ transitionDelay: '300ms' }}>
+            <h2 
               className="text-xl md:text-2xl lg:text-3xl mb-6 text-gray-700 min-h-[2rem] font-nunito"
             >
               {typedText}
-              <motion.span 
-                animate={{ opacity: [1, 0, 1] }} 
-                transition={{ repeat: Infinity, duration: 1 }}
+              <span 
+                className="animate-pulse-soft"
               >
                 |
-              </motion.span>
-            </motion.h2>
-          </motion.div>
+              </span>
+            </h2>
+          </div>
 
-          <motion.div variants={itemVariants}>
+          <div className={`transform transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+               style={{ transitionDelay: '500ms' }}>
             <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
               Suivez la croissance, le développement et la santé de votre bébé avec des outils innovants et des conseils d'experts.
             </p>
-          </motion.div>
+          </div>
           
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center">
-            <motion.div 
-              className="inline-block"
-              whileHover={{ scale: 1.03 }}
+          <div className={`flex flex-col sm:flex-row gap-4 justify-center transform transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+               style={{ transitionDelay: '700ms' }}>
+            <div 
+              className="inline-block transition-transform duration-200 hover:scale-103"
             >
               <Button 
                 size={isMobile ? "default" : "lg"}
@@ -112,11 +85,10 @@ const HeroSection: React.FC = () => {
                 Créer un compte gratuit
                 <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
-            </motion.div>
+            </div>
             
-            <motion.div 
-              className="inline-block"
-              whileHover={{ scale: 1.03 }}
+            <div 
+              className="inline-block transition-transform duration-200 hover:scale-103"
             >
               <Button 
                 variant="outline"
@@ -127,19 +99,30 @@ const HeroSection: React.FC = () => {
                 Nos guides parentaux
                 <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
           
-          <motion.div 
-            variants={itemVariants}
-            className="mt-8 text-center"
+          <div 
+            className={`mt-8 text-center transform transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+            style={{ transitionDelay: '900ms' }}
           >
             <p className="text-sm text-gray-500">
               Plus de <span className="font-semibold">15,000</span> parents nous font déjà confiance
             </p>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
+      
+      <style jsx>{`
+        @keyframes textGlow {
+          0%, 100% {
+            text-shadow: 0 0 5px rgba(14, 165, 233, 0);
+          }
+          50% {
+            text-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
+          }
+        }
+      `}</style>
     </section>
   );
 };

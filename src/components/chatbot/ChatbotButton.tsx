@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { MessageCircle, X } from 'lucide-react';
 import { Message } from './types';
 import { getBotResponse } from './botResponseService';
@@ -62,20 +61,19 @@ const ChatbotButton: React.FC = () => {
     <>
       {/* Chat button */}
       <div className="fixed bottom-6 right-6 z-50">
-        <motion.button
-          className="bg-babybaby-cosmic text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-babybaby-cosmic/90 transition-colors"
+        <button
+          className="bg-babybaby-cosmic text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-babybaby-cosmic/90 transition-all duration-200 hover:scale-105 active:scale-95"
           onClick={toggleChat}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+          style={{
+            animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+          }}
         >
           {isOpen ? (
             <X className="h-6 w-6" />
           ) : (
             <MessageCircle className="h-6 w-6" />
           )}
-        </motion.button>
+        </button>
       </div>
       
       {/* Chat window */}
@@ -88,6 +86,23 @@ const ChatbotButton: React.FC = () => {
         onQuickReplySelect={handleSendMessage}
         isTyping={isTyping}
       />
+      
+      <style jsx>{`
+        @keyframes popIn {
+          0% {
+            transform: scale(0);
+            opacity: 0;
+          }
+          80% {
+            transform: scale(1.1);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </>
   );
 };

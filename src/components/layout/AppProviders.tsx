@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
+import { MotionConfig } from "framer-motion";
 
 // Version simplifiée
 const APP_VERSION = '1.2.0'; // Synchronisée avec main.tsx
@@ -30,8 +31,10 @@ const AppProviders = ({ children }: AppProvidersProps) => {
       <ThemeProvider attribute="class" defaultTheme="light">
         <TooltipProvider>
           <AuthProvider>
-            {children}
-            <Toaster position="top-center" />
+            <MotionConfig reducedMotion="user">
+              {children}
+              <Toaster position="top-center" />
+            </MotionConfig>
           </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>

@@ -12,6 +12,9 @@ const APP_VERSION = '1.2.0'; // Incrémentation pour rafraîchir le cache
 // Create helmet context object to share across components
 const helmetContext = {};
 
+// Console log pour vérifier que l'app est bien chargée avec la nouvelle version
+console.log(`BabyBaby App v${APP_VERSION} loaded successfully`);
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <HelmetProvider context={helmetContext}>
@@ -21,6 +24,3 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </HelmetProvider>
   </React.StrictMode>
 );
-
-// Console log pour vérifier que l'app est bien chargée avec la nouvelle version
-console.log(`BabyBaby App v${APP_VERSION} loaded successfully`);
