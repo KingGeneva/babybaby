@@ -1,9 +1,9 @@
+
 import React, { useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 
 // Import des outils
 import NameGenerator from '@/components/tools/NameGenerator';
@@ -63,26 +63,6 @@ const ToolsPage = () => {
                 <GiftRegistry />
                 <BabyChecklist />
                 <OvulationCalculator />
-                
-                {/* Ajout du lien vers le générateur de certificat */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="bg-white p-6 rounded-lg shadow-lg border border-gray-100 hover:shadow-xl transition-all"
-                >
-                  <h3 className="text-2xl font-bold mb-4 text-babybaby-cosmic">Générateur de Certificat</h3>
-                  <p className="text-gray-700 mb-4">
-                    Créez de jolis certificats d'accomplissement pour célébrer les étapes importantes
-                    du développement de votre enfant.
-                  </p>
-                  <Link 
-                    to="/certificate-generator"
-                    className="inline-block bg-babybaby-blue text-white px-5 py-2.5 rounded-md hover:bg-opacity-90 transition-colors"
-                  >
-                    Créer un certificat
-                  </Link>
-                </motion.div>
               </div>
             </TabsContent>
             
