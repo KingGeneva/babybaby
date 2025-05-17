@@ -1,0 +1,64 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <url>
+    <loc>https://babybaby.org/</loc>
+    <image:image>
+      <image:loc>https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png</image:loc>
+      <image:title>BabyBaby - Application de suivi de bébé</image:title>
+      <image:caption>Application pour suivre le développement et la croissance de votre bébé</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://babybaby.org/about</loc>
+    <image:image>
+      <image:loc>https://babybaby.org/lovable-uploads/021f4ab1-8b86-4ff2-80c1-c2c69ea963fb.png</image:loc>
+      <image:title>À propos de BabyBaby</image:title>
+      <image:caption>Découvrez l'équipe derrière BabyBaby</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://babybaby.org/tools</loc>
+    <image:image>
+      <image:loc>https://babybaby.org/lovable-uploads/3bc51bf4-12ed-45e7-959f-82b12db0f56e.png</image:loc>
+      <image:title>Outils parentaux BabyBaby</image:title>
+      <image:caption>Des outils pratiques pour les parents</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://babybaby.org/boutique</loc>
+    <image:image>
+      <image:loc>https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png</image:loc>
+      <image:title>Boutique BabyBaby</image:title>
+      <image:caption>Produits pour bébé et parents</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://babybaby.org/lovable-uploads/e7c9766d-1027-49c9-a9f7-1ac07f49b8b9.png</image:loc>
+      <image:title>Jouets éducatifs</image:title>
+      <image:caption>Jouets éducatifs pour le développement de votre enfant</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://babybaby.org/articles</loc>
+    <image:image>
+      <image:loc>https://babybaby.org/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png</image:loc>
+      <image:title>Articles BabyBaby</image:title>
+      <image:caption>Conseils et informations pour les parents</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://babybaby.org/community</loc>
+    <image:image>
+      <image:loc>https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png</image:loc>
+      <image:title>Communauté de parents BabyBaby</image:title>
+      <image:caption>Rejoignez notre communauté bienveillante de parents</image:caption>
+    </image:image>
+  </url>
+</urlset>

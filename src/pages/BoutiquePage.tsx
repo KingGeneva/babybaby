@@ -16,8 +16,9 @@ const BoutiquePage: React.FC = () => {
   }, []);
   
   const alternateLanguages = [
-    { lang: "fr", url: "https://babybaby.app/boutique" },
-    { lang: "fr-FR", url: "https://babybaby.app/boutique" }
+    { lang: "fr", url: "https://babybaby.org/boutique" },
+    { lang: "fr-FR", url: "https://babybaby.org/boutique" },
+    { lang: "en", url: "https://babybaby.org/en/boutique" },
   ];
   
   return (
@@ -25,13 +26,13 @@ const BoutiquePage: React.FC = () => {
       <SEOHead 
         title="Boutique BabyBaby | Produits pour bébés et parents"
         description="Découvrez notre sélection de produits premium pour bébés et parents. Accessoires, vêtements, jouets et plus encore pour accompagner votre aventure parentale."
-        canonicalUrl="https://babybaby.app/boutique"
+        canonicalUrl="https://babybaby.org/boutique"
         alternateLanguages={alternateLanguages}
-        keywords={["boutique bébé", "produits parentalité", "accessoires bébé", "vêtements enfant", "jouets éducatifs"]}
+        keywords={["boutique bébé", "produits parentalité", "accessoires bébé", "vêtements enfant", "jouets éducatifs", "puériculture", "boutique en ligne bébé"]}
       />
       
       <Helmet>
-        <link rel="canonical" href="https://babybaby.app/boutique" />
+        <link rel="canonical" href="https://babybaby.org/boutique" />
         <meta name="robots" content="index, follow" />
         <script type="application/ld+json">
           {JSON.stringify({
@@ -39,7 +40,7 @@ const BoutiquePage: React.FC = () => {
             "@type": "WebPage",
             "name": "Boutique BabyBaby",
             "description": "Boutique en ligne de produits pour bébés et parents",
-            "url": "https://babybaby.app/boutique",
+            "url": "https://babybaby.org/boutique",
             "mainEntity": {
               "@type": "ItemList",
               "itemListElement": [
@@ -47,29 +48,50 @@ const BoutiquePage: React.FC = () => {
                   "@type": "ListItem",
                   "position": 1,
                   "name": "Accessoires bébé",
-                  "url": "https://babybaby.boutique/categories/accessoires"
+                  "url": "https://babybaby.boutique/categories/accessoires",
+                  "image": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
                 },
                 {
                   "@type": "ListItem",
                   "position": 2,
                   "name": "Vêtements",
-                  "url": "https://babybaby.boutique/categories/vetements"
+                  "url": "https://babybaby.boutique/categories/vetements",
+                  "image": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
                 },
                 {
                   "@type": "ListItem",
                   "position": 3,
                   "name": "Jouets",
-                  "url": "https://babybaby.boutique/categories/jouets"
+                  "url": "https://babybaby.boutique/categories/jouets",
+                  "image": "https://babybaby.org/lovable-uploads/e7c9766d-1027-49c9-a9f7-1ac07f49b8b9.png"
                 }
               ]
             },
             "isPartOf": {
               "@type": "WebSite",
               "name": "BabyBaby",
-              "url": "https://babybaby.app"
+              "url": "https://babybaby.org"
+            },
+            "breadcrumb": {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Accueil",
+                  "item": "https://babybaby.org"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Boutique",
+                  "item": "https://babybaby.org/boutique"
+                }
+              ]
             }
           })}
         </script>
+        <link rel="alternate" href="https://babybaby.boutique" />
       </Helmet>
       
       <NavBar />
@@ -91,6 +113,7 @@ const BoutiquePage: React.FC = () => {
           <a 
             href="https://babybaby.boutique" 
             className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80 text-white px-8 py-3 rounded-full font-medium transition-colors inline-block"
+            rel="noopener"
           >
             Accéder maintenant à la boutique
           </a>

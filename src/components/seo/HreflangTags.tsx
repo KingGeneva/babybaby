@@ -18,13 +18,22 @@ const HreflangTags: React.FC<HreflangTagsProps> = ({
   currentUrl,
   alternateLanguages
 }) => {
+  // Ensure the current URL is using the correct domain
+  const normalizedCurrentUrl = currentUrl.replace("babybaby.app", "babybaby.org");
+  
+  // Normalize all alternate URLs to use the correct domain
+  const normalizedAlternateLanguages = alternateLanguages.map(alt => ({
+    ...alt,
+    url: alt.url.replace("babybaby.app", "babybaby.org")
+  }));
+  
   return (
     <Helmet>
       {/* Balise hreflang pour la langue courante */}
-      <link rel="alternate" hrefLang={currentLang} href={currentUrl} />
+      <link rel="alternate" hrefLang={currentLang} href={normalizedCurrentUrl} />
       
       {/* Balises hreflang pour les langues alternatives */}
-      {alternateLanguages.map(({ lang, url }) => (
+      {normalizedAlternateLanguages.map(({ lang, url }) => (
         <link key={lang} rel="alternate" hrefLang={lang} href={url} />
       ))}
       
@@ -32,7 +41,7 @@ const HreflangTags: React.FC<HreflangTagsProps> = ({
       <link 
         rel="alternate" 
         hrefLang="x-default" 
-        href={alternateLanguages.find(l => l.lang === 'fr')?.url || currentUrl} 
+        href={normalizedAlternateLanguages.find(l => l.lang === 'fr')?.url || normalizedCurrentUrl} 
       />
     </Helmet>
   );

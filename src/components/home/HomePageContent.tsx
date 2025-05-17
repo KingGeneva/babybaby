@@ -33,14 +33,35 @@ const HomePageContent: React.FC = () => {
   
   return (
     <>
-      {/* SEO optimization for cross-domain */}
+      {/* SEO optimization with updated domain */}
       <Helmet>
         <meta name="last-modified" content={lastMod} />
-        <link rel="alternate" href="https://babybaby.app/" hrefLang="x-default" />
-        <link rel="alternate" href="https://babybaby.app/" hrefLang="fr" />
-        <link rel="alternate" href="https://babybaby.app/" hrefLang="fr-FR" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://babybaby.org/" />
+        
+        {/* Language alternates */}
+        <link rel="alternate" href="https://babybaby.org/" hrefLang="x-default" />
+        <link rel="alternate" href="https://babybaby.org/" hrefLang="fr" />
+        <link rel="alternate" href="https://babybaby.org/fr/" hrefLang="fr-FR" />
+        
+        {/* Page resource hints */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://analytics.google.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://babybaby.boutique" />
+        
+        {/* Preload important pages */}
         <link rel="prefetch" href="/articles" />
         <link rel="prefetch" href="/about" />
+        <link rel="prefetch" href="/tools" />
+        
+        {/* Social media meta tags */}
+        <meta property="og:site_name" content="BabyBaby" />
+        <meta property="og:locale" content="fr_FR" />
+        <meta property="og:locale:alternate" content="en_US" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@babybaby_official" />
       </Helmet>
 
       <motion.div
