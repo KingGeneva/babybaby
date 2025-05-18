@@ -4,6 +4,10 @@ import { Helmet } from 'react-helmet-async';
 import SEOHead from '@/components/common/SEOHead';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
+import BoutiqueProductShowcase from '@/components/boutique/BoutiqueProductShowcase';
+import PromoBanner from '@/components/boutique/PromoBanner';
+import FeaturedCategories from '@/components/boutique/FeaturedCategories';
+import ProductsSection from '@/components/products/ProductsSection';
 
 const BoutiquePage: React.FC = () => {
   useEffect(() => {
@@ -74,27 +78,40 @@ const BoutiquePage: React.FC = () => {
       
       <NavBar />
       
-      <main className="flex-1 flex flex-col items-center justify-center p-4 text-center bg-gradient-to-b from-white to-sky-100">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold text-babybaby-cosmic mb-6">
-            Bienvenue à la boutique BabyBaby
-          </h1>
-          
-          <p className="text-gray-700 text-lg mb-8">
-            Vous allez être redirigé vers notre boutique en ligne dans quelques secondes...
-          </p>
-          
-          <div className="flex justify-center mb-12">
-            <div className="animate-pulse bg-babybaby-cosmic h-2 w-64 rounded-full"></div>
+      <main className="flex-1 flex flex-col w-full bg-gradient-to-b from-white to-sky-50">
+        <BoutiqueProductShowcase />
+        
+        <PromoBanner />
+        
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl md:text-4xl font-bold text-babybaby-cosmic mb-6">
+              Bienvenue à la boutique BabyBaby
+            </h1>
+            
+            <p className="text-gray-700 text-lg mb-8 max-w-3xl mx-auto">
+              Vous allez être redirigé vers notre boutique en ligne dans quelques secondes.
+              En attendant, découvrez notre sélection de produits premium.
+            </p>
+            
+            <div className="flex justify-center mb-12">
+              <div className="animate-pulse bg-babybaby-cosmic h-2 w-64 rounded-full"></div>
+            </div>
+            
+            <a 
+              href="https://babybaby.boutique" 
+              className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80 text-white px-8 py-3 rounded-full font-medium transition-colors inline-block"
+            >
+              Accéder maintenant à la boutique
+            </a>
           </div>
           
-          <a 
-            href="https://babybaby.boutique" 
-            className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80 text-white px-8 py-3 rounded-full font-medium transition-colors inline-block"
-          >
-            Accéder maintenant à la boutique
-          </a>
-          
+          <FeaturedCategories />
+        </div>
+        
+        <ProductsSection />
+        
+        <div className="container mx-auto px-4 py-12">
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold mb-3">Produits de qualité</h3>
