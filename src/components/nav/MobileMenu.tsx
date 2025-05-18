@@ -75,13 +75,15 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
               Concours
             </Link>
             
-            <Link
-              to="/boutique"
+            <a
+              href="https://babybaby.boutique"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
             >
               <Store className="h-4 w-4 mr-2" />
               Boutique
-            </Link>
+            </a>
             
             {user && (
               <Link
