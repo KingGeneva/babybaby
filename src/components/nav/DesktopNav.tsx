@@ -76,17 +76,15 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <a 
-              href="https://babybaby.boutique" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <Link 
+              to="/boutique" 
               className={navigationMenuTriggerStyle()}
             >
               <span className="flex items-center">
                 <Store className="mr-1 h-4 w-4" />
                 Boutique
               </span>
-            </a>
+            </Link>
           </NavigationMenuItem>
           {user && (
             <>
