@@ -5,15 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     
-    <!-- SEO Core Meta Tags - Ces valeurs seront remplacées par react-helmet-async -->
-    <title>BabyBaby - Application de suivi de bébé | Santé, Croissance, Conseil</title>
-    <meta name="description" content="BabyBaby : L'application indispensable pour les parents. Suivez la croissance, la santé et le développement de votre bébé. Outils, conseils et communauté de parents." />
-    <meta name="keywords" content="suivi bébé, croissance infantile, santé bébé, conseil parental, développement enfant, carnet de santé numérique, alimentation bébé, sommeil bébé, courbe de croissance, forum parents" />
-    <meta name="author" content="BabyBaby" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow" />
+    <!-- Preloading critical resources -->
+    <link rel="preload" href="/src/main.tsx" as="script" />
+    <link rel="preload" href="/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png" as="image" />
     
-    <!-- Preconnects pour améliorer les performances -->
+    <!-- Priority Hints for browser resource loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin fetchpriority="high" />
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
     <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
     <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
@@ -22,8 +19,32 @@
     <link rel="dns-prefetch" href="https://www.google-analytics.com" />
     <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
     
+    <!-- SEO Core Meta Tags - Ces valeurs seront remplacées par react-helmet-async -->
+    <title>BabyBaby - Application de suivi de bébé | Santé, Croissance, Développement Infantile</title>
+    <meta name="description" content="BabyBaby : L'application indispensable pour les parents modernes. Suivez la croissance, la santé et le développement de votre bébé avec des outils intelligents et personnalisés." />
+    <meta name="keywords" content="suivi bébé, croissance infantile, santé bébé, conseil parental, développement enfant, carnet de santé numérique, alimentation bébé, sommeil bébé, courbe de croissance, forum parents" />
+    <meta name="author" content="BabyBaby" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    
+    <!-- Structured Data en HTML pour indexation précoce -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://babybaby.app/",
+      "name": "BabyBaby",
+      "description": "Application complète pour le suivi de santé et développement de bébé",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://babybaby.app/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
     <!-- Open Graph Meta Tags pour le partage social -->
-    <meta property="og:title" content="BabyBaby - Application de suivi de bébé | La référence des parents" />
+    <meta property="og:title" content="BabyBaby - Application de suivi de bébé | La référence des parents modernes" />
     <meta property="og:description" content="Suivez la croissance de votre bébé avec des outils innovants. Conseils d'experts, suivi personnalisé et communauté de parents." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png" />
@@ -45,6 +66,9 @@
     <link rel="canonical" href="https://babybaby.app" />
     <link rel="alternate" hrefLang="fr" href="https://babybaby.app" />
     <link rel="alternate" hrefLang="fr-FR" href="https://babybaby.app" />
+    <link rel="alternate" hrefLang="fr-CA" href="https://babybaby.app" />
+    <link rel="alternate" hrefLang="fr-BE" href="https://babybaby.app" />
+    <link rel="alternate" hrefLang="fr-CH" href="https://babybaby.app" />
     <link rel="alternate" hrefLang="x-default" href="https://babybaby.app" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     
@@ -58,8 +82,16 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="msapplication-starturl" content="/" />
     <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Ajout des microdata pour la recherche vocale -->
+    <meta name="google-site-verification" content="VGG79QXzkgBxlbUZl_WkUKyFVvUueDd22O_l40gXj0A" />
+    <meta name="norton-safeweb-site-verification" content="norton-verification-code" />
+    <meta name="alexaVerifyID" content="alexa-verify-id" />
+    <meta name="p:domain_verify" content="pinterest-verification-code" />
+    <meta name="yandex-verification" content="yandex-verification-code" />
+    <meta name="msvalidate.01" content="bing-verification-code" />
 
-    <!-- Google Tag Manager - Implémentation optimisée -->
+    <!-- Google Tag Manager - Implémentation optimisée avec async -->
     <script>
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
