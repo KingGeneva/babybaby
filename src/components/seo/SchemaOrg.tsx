@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet-async';
 
 interface SchemaData {
   [key: string]: any;
+  '@context': string;
+  '@type': string;
 }
 
 interface SchemaOrgProps {
@@ -186,7 +188,7 @@ export const buildLocalBusinessSchema = (
       'https://www.instagram.com/babybaby_app/',
       'https://twitter.com/babybaby_app'
     ]
-  };
+  } as SchemaData;
 };
 
 /**
@@ -204,7 +206,7 @@ export const buildFAQSchema = (faqs: { question: string; answer: string }[]) => 
         'text': faq.answer
       }
     }))
-  };
+  } as SchemaData;
 };
 
 /**
@@ -229,7 +231,7 @@ export const buildHowToSchema = (
       'text': step.text,
       'url': step.url
     }))
-  };
+  } as SchemaData;
 };
 
 export default SchemaOrg;

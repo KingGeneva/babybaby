@@ -40,6 +40,13 @@ function AppProviders({ children }: { children: ReactNode }) {
   );
 };
 
+// Types pour les métriques de Core Web Vitals
+interface PerformanceEntryWithDetails extends PerformanceEntry {
+  processingStart?: number; // Pour FID
+  hadRecentInput?: boolean; // Pour CLS
+  value?: number; // Pour CLS
+}
+
 // Contexte pour suivre et signaler les métriques Web Vitals pour le SEO
 function WebVitalsReportingContext({ children }: { children: ReactNode }) {
   React.useEffect(() => {
@@ -56,20 +63,24 @@ function WebVitalsReportingContext({ children }: { children: ReactNode }) {
       // Mesure FID (First Input Delay)
       const fidObserver = new PerformanceObserver((entryList) => {
         for (const entry of entryList.getEntries()) {
-          const delay = entry.processingStart - entry.startTime;
-          console.info('FID metric:', delay);
+          const fidEntry = entry as PerformanceEntryWithDetails;
+          if (fidEntry.processingStart) {
+            const delay = fidEntry.processingStart - entry.startTime;
+            console.info('FID metric:', delay);
+          }
         }
       });
       fidObserver.observe({ type: 'first-input', buffered: true });
       
       // Mesure CLS (Cumulative Layout Shift)
       let clsValue = 0;
-      let clsEntries = [];
+      let clsEntries: PerformanceEntryWithDetails[] = [];
       const clsObserver = new PerformanceObserver((entryList) => {
         for (const entry of entryList.getEntries()) {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
-            clsEntries.push(entry);
+          const clsEntry = entry as PerformanceEntryWithDetails;
+          if (clsEntry && clsEntry.hadRecentInput === false && clsEntry.value !== undefined) {
+            clsValue += clsEntry.value;
+            clsEntries.push(clsEntry);
           }
         }
         console.info('CLS value:', clsValue);
