@@ -10,6 +10,8 @@ import TopicReplies from '@/components/forum/components/TopicReplies';
 import ReplyForm from '@/components/forum/components/ReplyForm';
 import AuthNotice from '@/components/forum/components/AuthNotice';
 import { useAuth } from '@/contexts/AuthContext';
+import SEOHead from '@/components/common/SEOHead';
+import ForumTopicStructuredData from '@/components/forum/ForumTopicStructuredData';
 
 const ForumTopicPage = () => {
   const { topicId } = useParams<{ topicId: string }>();
@@ -45,6 +47,22 @@ const ForumTopicPage = () => {
   return (
     <div className="min-h-screen">
       <NavBar />
+      {!loading && topic && (
+        <>
+          <SEOHead 
+            title={`${topic.title} | Forum BabyBaby`}
+            description={topic.meta_description || topic.content.substring(0, 160)}
+            canonicalUrl={`https://babybaby.app/forum/topics/${topicId}`}
+            keywords={topic.tags || ["forum parents", "discussion parentalité"]}
+          />
+          <ForumTopicStructuredData 
+            topic={topic}
+            posts={posts}
+            url={`https://babybaby.app/forum/topics/${topicId}`}
+            categoryName={topic.category?.name || "Forum"}
+          />
+        </>
+      )}
       <div className="pt-24 pb-20 px-4">
         <div className="container mx-auto">
           {loading ? (

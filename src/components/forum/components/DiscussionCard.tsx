@@ -1,65 +1,97 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { MessageCircle, Star, Clock } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { MessageCircle, Clock, User } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 export interface DiscussionProps {
-  id: number;
+  id: string;
   title: string;
   excerpt: string;
-  author: string;
-  comments: number;
-  likes: number;
-  tags: string[];
-  lastActive: string;
+  author: {
+    name: string;
+    avatar?: string;
+  };
+  category: {
+    name: string;
+    slug: string;
+  };
+  replies: number;
+  lastActivity: string;
 }
 
-const DiscussionCard = ({ discussion }: { discussion: DiscussionProps }) => {
+interface DiscussionCardProps {
+  discussion: DiscussionProps;
+}
+
+const DiscussionCard: React.FC<DiscussionCardProps> = ({ discussion }) => {
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
+  };
+
+  const formatDate = (dateString: string) => {
+    try {
+      return formatDistanceToNow(new Date(dateString), {
+        addSuffix: true,
+        locale: fr
+      });
+    } catch (error) {
+      console.error('Invalid date:', dateString, error);
+      return 'date inconnue';
+    }
+  };
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      viewport={{ once: true }}
-    >
-      <Card className="hover:shadow-md transition-shadow">
-        <CardContent className="p-5">
-          <div className="flex justify-between items-start">
-            <h4 className="text-lg font-medium hover:text-babybaby-cosmic transition-colors">
-              <Link to={`/forum/topics/${discussion.id}`}>
-                {discussion.title}
-              </Link>
-            </h4>
-            <div className="flex items-center gap-2 text-gray-500 text-sm">
-              <Star className="h-4 w-4" />
-              <span>{discussion.likes}</span>
-              <MessageCircle className="h-4 w-4 ml-2" />
-              <span>{discussion.comments}</span>
+    <Card className="hover:shadow-md transition-all">
+      <CardContent className="p-4">
+        <div className="flex items-start gap-3">
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={discussion.author.avatar} alt={discussion.author.name} />
+            <AvatarFallback>{getInitials(discussion.author.name)}</AvatarFallback>
+          </Avatar>
+          
+          <div className="flex-1 min-w-0">
+            <Link to={`/forum/topics/${discussion.id}`} className="hover:text-babybaby-cosmic">
+              <h3 className="font-medium text-lg line-clamp-1">{discussion.title}</h3>
+            </Link>
+            
+            <div className="text-sm text-gray-600 line-clamp-2 mt-1">
+              {discussion.excerpt}
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
+              <div className="flex items-center gap-1">
+                <User size={12} />
+                <span>{discussion.author.name}</span>
+              </div>
+              
+              <div className="flex items-center gap-1">
+                <Clock size={12} />
+                <span>{formatDate(discussion.lastActivity)}</span>
+              </div>
+              
+              <div className="flex items-center gap-1">
+                <MessageCircle size={12} />
+                <span>{discussion.replies} réponses</span>
+              </div>
+              
+              <Badge variant="outline" className="ml-auto text-xs">
+                {discussion.category.name}
+              </Badge>
             </div>
           </div>
-          <p className="text-gray-600 text-sm my-3 line-clamp-2">
-            {discussion.excerpt}
-          </p>
-          <div className="flex flex-wrap items-center justify-between mt-3">
-            <div className="flex flex-wrap gap-2 mb-2 sm:mb-0">
-              {discussion.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-xs">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-            <div className="flex items-center text-xs text-gray-500">
-              <span className="mr-2">Par <span className="font-medium">{discussion.author}</span></span>
-              <Clock className="h-3 w-3 mr-1" />
-              <span>{discussion.lastActive}</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

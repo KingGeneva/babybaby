@@ -32,7 +32,7 @@ const ForumTopicStructuredData: React.FC<ForumTopicStructuredDataProps> = ({
           "upvoteCount": topic.likes_count || 0,
           "author": {
             "@type": "Person",
-            "name": "Utilisateur BabyBaby"
+            "name": topic.user?.username || "Utilisateur BabyBaby"
           }
         }
       }
@@ -48,10 +48,10 @@ const ForumTopicStructuredData: React.FC<ForumTopicStructuredDataProps> = ({
     "datePublished": topic.created_at,
     "dateModified": posts && posts.length > 0 
       ? posts[posts.length - 1].created_at 
-      : topic.created_at,
+      : topic.updated_at || topic.created_at,
     "author": {
       "@type": "Person",
-      "name": "Utilisateur BabyBaby"
+      "name": topic.user?.username || "Utilisateur BabyBaby"
     },
     "interactionStatistic": [
       {
@@ -77,7 +77,7 @@ const ForumTopicStructuredData: React.FC<ForumTopicStructuredDataProps> = ({
       "upvoteCount": post.likes_count || 0,
       "author": {
         "@type": "Person",
-        "name": "Utilisateur BabyBaby"
+        "name": post.user?.username || "Utilisateur BabyBaby"
       }
     }))
   };
@@ -109,7 +109,7 @@ const ForumTopicStructuredData: React.FC<ForumTopicStructuredDataProps> = ({
         "@type": "ListItem",
         "position": 4,
         "name": categoryName,
-        "item": `https://babybaby.app/forum/categories/${topic.category_id}`
+        "item": `https://babybaby.app/forum/categories/${topic.category?.slug || topic.category_id}`
       },
       {
         "@type": "ListItem",
