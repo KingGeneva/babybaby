@@ -1,5 +1,5 @@
 
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 // Configuration optimisée de React Query avec meilleure gestion du cache
 function AppProviders({ children }: { children: ReactNode }) {
   // Instance QueryClient créée dans le composant pour éviter les problèmes de SSR
-  const [queryClient] = useState(() => new QueryClient({
+  const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         retry: 1,
@@ -19,7 +19,7 @@ function AppProviders({ children }: { children: ReactNode }) {
         refetchOnMount: true
       },
     },
-  }));
+  });
 
   return (
     <React.StrictMode>
@@ -27,18 +27,15 @@ function AppProviders({ children }: { children: ReactNode }) {
         <ThemeProvider attribute="class" defaultTheme="light">
           <TooltipProvider>
             <AuthProvider>
-              {/* Important: Context pour la gestion du Core Web Vitals */}
-              <WebVitalsReportingContext>
-                {children}
-                <Toaster position="top-center" />
-              </WebVitalsReportingContext>
+              {children}
+              <Toaster position="top-center" />
             </AuthProvider>
           </TooltipProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </React.StrictMode>
   );
-};
+}
 
 // Types pour les métriques de Core Web Vitals
 interface PerformanceEntryWithDetails extends PerformanceEntry {
@@ -47,8 +44,8 @@ interface PerformanceEntryWithDetails extends PerformanceEntry {
   value?: number; // Pour CLS
 }
 
-// Contexte pour suivre et signaler les métriques Web Vitals pour le SEO
-function WebVitalsReportingContext({ children }: { children: ReactNode }) {
+// Composant séparé pour le suivi des Web Vitals
+function WebVitalsReporting({ children }: { children: ReactNode }) {
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       // Mesure LCP (Largest Contentful Paint)
@@ -98,4 +95,5 @@ function WebVitalsReportingContext({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+// Exporter le composant principal et non le contexte directement
 export default AppProviders;
