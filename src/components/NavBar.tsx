@@ -7,6 +7,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import Logo from "./Logo";
 import DesktopNav from "./nav/DesktopNav";
 import MobileMenu from "./nav/MobileMenu";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const NavBar = () => {
   const { user } = useAuth();
@@ -54,15 +56,21 @@ const NavBar = () => {
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/95 shadow-sm backdrop-blur-sm" : "bg-transparent"
-      }`}
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        isScrolled 
+          ? "bg-white/80 dark:bg-gray-900/80 shadow-md backdrop-blur-md"
+          : "bg-transparent"
+      )}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/" className="flex items-center">
-            <Logo size="md" />
+            <Logo size="md" className="hover-lift" />
           </Link>
 
           <DesktopNav 
@@ -76,7 +84,7 @@ const NavBar = () => {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="border-babybaby-cosmic text-babybaby-cosmic hover:bg-babybaby-cosmic/10"
+                  className="border-babybaby-cosmic text-babybaby-cosmic hover:bg-babybaby-cosmic/10 hover-lift"
                 >
                   Se connecter
                 </Button>
@@ -85,7 +93,7 @@ const NavBar = () => {
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-md text-gray-600 hover:text-babybaby-cosmic md:hidden"
+              className="p-2 rounded-full bg-white/80 shadow-sm text-gray-600 hover:text-babybaby-cosmic md:hidden hover-lift"
             >
               {isMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -102,7 +110,7 @@ const NavBar = () => {
         isDropdownOpen={isDropdownOpen}
         toggleDropdown={() => setIsDropdownOpen(!isDropdownOpen)}
       />
-    </header>
+    </motion.header>
   );
 };
 

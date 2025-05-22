@@ -1,20 +1,19 @@
 
 import React from 'react';
-import NavBar from '@/components/NavBar';
+import MainLayout from '@/components/layout/MainLayout';
 import HeroSection from '@/components/HeroSection';
-import Footer from '@/components/Footer';
 import SEOTags from '@/components/home/SEOTags';
 import HomePageContent from '@/components/home/HomePageContent';
 
 const Index = () => {
   return (
-    <div className="min-h-screen overflow-hidden">
+    <MainLayout>
       <SEOTags />
-      <NavBar />
-      <HeroSection />
-      <HomePageContent />
-      <Footer />
-    </div>
+      <div className="overflow-hidden">
+        <HeroSection />
+        <HomePageContent />
+      </div>
+    </MainLayout>
   );
 };
 

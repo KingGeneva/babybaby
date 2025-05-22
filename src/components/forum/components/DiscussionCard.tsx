@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { MessageCircle, Clock, User } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { motion } from 'framer-motion';
 
 export interface DiscussionProps {
   id: string;
@@ -51,12 +51,15 @@ const DiscussionCard: React.FC<DiscussionCardProps> = ({ discussion }) => {
   };
 
   return (
-    <Card className="hover:shadow-md transition-all">
-      <CardContent className="p-4">
+    <motion.div 
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="glass-card p-4 hover:cosmic-glow transition-all duration-300">
         <div className="flex items-start gap-3">
-          <Avatar className="h-10 w-10">
+          <Avatar className="h-10 w-10 border-2 border-babybaby-cosmic/20">
             <AvatarImage src={discussion.author.avatar} alt={discussion.author.name} />
-            <AvatarFallback>{getInitials(discussion.author.name)}</AvatarFallback>
+            <AvatarFallback className="bg-gradient-to-br from-babybaby-cosmic to-blue-400 text-white">{getInitials(discussion.author.name)}</AvatarFallback>
           </Avatar>
           
           <div className="flex-1 min-w-0">
@@ -64,11 +67,11 @@ const DiscussionCard: React.FC<DiscussionCardProps> = ({ discussion }) => {
               <h3 className="font-medium text-lg line-clamp-1">{discussion.title}</h3>
             </Link>
             
-            <div className="text-sm text-gray-600 line-clamp-2 mt-1">
+            <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mt-1">
               {discussion.excerpt}
             </div>
             
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-500 dark:text-gray-400">
               <div className="flex items-center gap-1">
                 <User size={12} />
                 <span>{discussion.author.name}</span>
@@ -84,14 +87,14 @@ const DiscussionCard: React.FC<DiscussionCardProps> = ({ discussion }) => {
                 <span>{discussion.replies} réponses</span>
               </div>
               
-              <Badge variant="outline" className="ml-auto text-xs">
+              <Badge variant="outline" className="ml-auto text-xs cosmic-border">
                 {discussion.category.name}
               </Badge>
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </motion.div>
   );
 };
 

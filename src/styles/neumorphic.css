@@ -1,0 +1,47 @@
+
+/* Neumorphic Design System */
+@layer components {
+  .neu-shadow-sm {
+    @apply shadow-[5px_5px_10px_#d9d9d9,-5px_-5px_10px_#ffffff] dark:shadow-[5px_5px_10px_#151515,-5px_-5px_10px_#333333];
+  }
+  
+  .neu-shadow {
+    @apply shadow-[8px_8px_16px_#d1d1d1,-8px_-8px_16px_#ffffff] dark:shadow-[8px_8px_16px_#121212,-8px_-8px_16px_#2a2a2a];
+  }
+  
+  .neu-shadow-lg {
+    @apply shadow-[12px_12px_24px_#c8c8c8,-12px_-12px_24px_#ffffff] dark:shadow-[12px_12px_24px_#0d0d0d,-12px_-12px_24px_#313131];
+  }
+  
+  .neu-inset {
+    @apply shadow-[inset_5px_5px_10px_#d9d9d9,inset_-5px_-5px_10px_#ffffff] dark:shadow-[inset_5px_5px_10px_#151515,inset_-5px_-5px_10px_#333333];
+  }
+  
+  .neu-card {
+    @apply bg-[#f0f0f0] dark:bg-[#222222] rounded-xl p-6 neu-shadow;
+  }
+  
+  .glass {
+    @apply backdrop-blur-md bg-white/70 dark:bg-black/30 border border-white/20 dark:border-white/10;
+  }
+  
+  .glass-card {
+    @apply glass rounded-2xl shadow-lg;
+  }
+  
+  .cosmic-glow {
+    @apply shadow-[0_0_20px_rgba(14,165,233,0.3)];
+  }
+  
+  .cosmic-button {
+    @apply bg-gradient-to-r from-babybaby-cosmic to-blue-400 hover:from-babybaby-cosmic/90 hover:to-blue-500 text-white font-semibold rounded-full transition-all duration-300;
+  }
+  
+  .cosmic-border {
+    @apply border border-babybaby-cosmic/20;
+  }
+  
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:cosmic-glow;
+  }
+}

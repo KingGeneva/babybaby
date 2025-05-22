@@ -1,6 +1,6 @@
 
 import React, { ReactNode } from "react";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -24,11 +24,11 @@ function AppProviders({ children }: { children: ReactNode }) {
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider attribute="class" defaultTheme="light">
+        <ThemeProvider defaultTheme="light">
           <TooltipProvider>
             <AuthProvider>
               {children}
-              <Toaster position="top-center" />
+              <Toaster position="top-center" richColors />
             </AuthProvider>
           </TooltipProvider>
         </ThemeProvider>
@@ -95,5 +95,6 @@ function WebVitalsReporting({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
-// Exporter le composant principal et non le contexte directement
+// Export both components
+export { WebVitalsReporting };
 export default AppProviders;

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronDown, Gift } from "lucide-react";
 import { NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 
 interface ResourcesDropdownProps {
   isOpen: boolean;
@@ -11,12 +12,14 @@ interface ResourcesDropdownProps {
 
 const ResourcesDropdown = ({ isOpen, onToggle }: ResourcesDropdownProps) => {
   return (
-    <NavigationMenuItem className="relative">
+    <NavigationMenuItem className="relative resources-dropdown">
       <div
         onClick={onToggle}
-        className={`${navigationMenuTriggerStyle()} cursor-pointer ${
+        className={cn(
+          navigationMenuTriggerStyle(), 
+          "cursor-pointer",
           isOpen ? "bg-accent text-accent-foreground" : ""
-        }`}
+        )}
       >
         <span className="flex items-center">
           Ressources
@@ -37,7 +40,7 @@ const ResourcesDropdown = ({ isOpen, onToggle }: ResourcesDropdownProps) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-10"
+            className="absolute left-0 top-full mt-1 w-56 glass-card rounded-xl py-2 z-10 neu-shadow-sm"
           >
             <Link
               to="/ebooks"
