@@ -15,28 +15,30 @@ const APP_VERSION = '1.2.0';
 const helmetContext = {};
 
 const App = () => (
-  <BrowserRouter>
-    <HelmetProvider context={helmetContext}>
-      <AppProviders>
-        <WebVitalsReporting>
-          <Suspense fallback={<LoadingFallback />}>
-            <Routes>
-              {appRoutes.map((route) => (
-                <Route
-                  key={route.path || 'notfound'}
-                  path={route.path}
-                  element={route.element}
-                />
-              ))}
-            </Routes>
-            
-            <ChatbotButton />
-            <CacheManager version={APP_VERSION} />
-          </Suspense>
-        </WebVitalsReporting>
-      </AppProviders>
-    </HelmetProvider>
-  </BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <HelmetProvider context={helmetContext}>
+        <AppProviders>
+          <WebVitalsReporting>
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                {appRoutes.map((route) => (
+                  <Route
+                    key={route.path || 'notfound'}
+                    path={route.path}
+                    element={route.element}
+                  />
+                ))}
+              </Routes>
+              
+              <ChatbotButton />
+              <CacheManager version={APP_VERSION} />
+            </Suspense>
+          </WebVitalsReporting>
+        </AppProviders>
+      </HelmetProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 );
 
 export default App;
