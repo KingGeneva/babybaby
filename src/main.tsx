@@ -14,4 +14,8 @@ console.log(`BabyBaby App v${APP_VERSION} loaded successfully`);
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
 // Render the app
-root.render(<App />);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);

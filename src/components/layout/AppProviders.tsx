@@ -1,5 +1,6 @@
 
-import React, { ReactNode } from "react";
+import * as React from "react";
+import { ReactNode } from "react";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -9,7 +10,7 @@ import { Toaster } from "@/components/ui/sonner";
 // Configuration optimisée de React Query avec meilleure gestion du cache
 function AppProviders({ children }: { children: ReactNode }) {
   // Instance QueryClient créée dans le composant pour éviter les problèmes de SSR
-  const queryClient = new QueryClient({
+  const queryClient = React.useMemo(() => new QueryClient({
     defaultOptions: {
       queries: {
         retry: 1,
@@ -19,12 +20,12 @@ function AppProviders({ children }: { children: ReactNode }) {
         refetchOnMount: true
       },
     },
-  });
+  }), []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light">
-        <TooltipProvider>
+        <TooltipProvider delayDuration={0}>
           <AuthProvider>
             {children}
             <Toaster position="top-center" richColors />
