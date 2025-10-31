@@ -1,5 +1,6 @@
 
 import { Article } from '@/types/article';
+import { gentleParentingArticle } from './gentle_parenting_article';
 
 export const developpementArticles: Article[] = [
   {
@@ -15,5 +16,6 @@ export const developpementArticles: Article[] = [
     tags: ["développement", "motricité", "éveil"],
     author: "Prof. Jean Piaget",
     featured: true
-  }
+  },
+    gentleParentingArticle
 ];
