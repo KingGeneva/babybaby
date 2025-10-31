@@ -1,9 +1,9 @@
 // This file contains the new article object for insertion into developpementArticles array
 export const gentleParentingArticle = {
-  id: 10,
+  id:101,
   title: "« Gentle Parenting » : Au-delà de la Guerre des Likes, Retrouver son Cap Éducatif",
   excerpt: "Analyse de la polarisation autour de la parentalité douce et stricte sur les réseaux sociaux et guide pour retrouver un équilibre éducatif authentique.",
-  summary: "Cet article décrypte les tensions entre parentalité douce et discipline stricte, explore les mécanismes psychologiques et sociologiques alimentant la polarisation en ligne, et propose des pistes pour dépasser la culpabilité et construire un style parental équilibré et authentique.",
+  summ101ry: "Cet article décrypte les tensions entre parentalité douce et discipline stricte, explore les mécanismes psychologiques et sociologiques alimentant la polarisation en ligne, et propose des pistes pour dépasser la culpabilité et construire un style parental équilibré et authentique.",
   content: `« Gentle Parenting » : Au-delà de la Guerre des Likes, Retrouver son Cap Éducatif
 
 Introduction : La Guerre des Parents sur TikTok
@@ -53,7 +53,8 @@ Le style parental autoritaire se caractérise par un niveau d'exigence élevé e
 • Outils de Contrôle : Pour atteindre cet objectif, les parents autoritaires s'appuient sur un système de contrôle externe. Les principaux outils sont :
   • La Punition : En cas de manquement à la règle, la sanction est la réponse privilégiée. Elle peut être physique (fessée, tape) ou psychologique (retrait d'un jouet, isolement, retrait de l'attention ou de l'amour du parent). Il y a généralement peu de tolérance pour l'erreur, qui est vue comme une faute à corriger plutôt qu'une occasion d'apprendre.
   • La Récompense : Le bon comportement est encouragé par la promesse d'une récompense, apprenant à l'enfant à agir dans le but d'obtenir quelque chose en retour plutôt que par motivation intrinsèque.
-  • Communication Unidirectionnelle : La communication est descendante. Les règles sont imposées sans explication ou négociation. La phrase "parce que c'est moi qui le dis" est emblématique de ce style. L'obéissance est valorisée au détriment de l'autonomie et de l'expression personnelle.
+  • Communication Unidirectionnelle : La communication est descendante. Les règles sont imposées sans explication ou négociation. La phrase "parce que c'est moi qui le dis" est emblématique de ce style. L'obéissance est valorisée au détriment de l'autonomie et de
+  l'expression personnelle.
 
 Conséquences Psychologiques sur l'Enfant
 Des décennies de recherche en psychologie du développement ont permis d'identifier les conséquences à long terme de ce style éducatif sur l'enfant.
