@@ -150,6 +150,12 @@ La guerre des tranchées numériques entre la parentalité "douce" et "stricte" 
 L'analyse des différentes approches et des critiques expertes révèle qu'il n'existe pas de solution miracle ni de script universel. Le véritable enjeu de l'éducation ne réside pas dans l'adhésion scrupuleuse à une idéologie, qu'elle soit nouvelle ou ancienne, mais dans la capacité à construire une relation parent-enfant sécurisante, aimante et respectueuse. Cette relation est le terreau sur lequel l'enfant pourra développer son autonomie, son empathie et sa confiance en lui.
 
 L'appel final est donc un appel à l'empowerment et à la déconnexion. Il s'agit d'encourager les parents à se libérer de la tyrannie du jugement en ligne, à faire preuve d'auto-compassion et à reconnaître la valeur de leurs propres efforts. En puisant de manière éclairée dans les différents courants de pensée, ils peuvent trouver un équilibre personnel entre la chaleur et les limites, entre l'écoute et la guidance. L'objectif ultime est de se détourner de la performance pour les écrans et de se recentrer sur l'essentiel : la relation unique, non filmée et magnifiquement imparfaite qu'ils tissent, jour après jour, avec leur enfant.
+
+---
+
+📥 **Téléchargez gratuitement le guide complet en PDF**
+
+Pour approfondir ces concepts et avoir toujours sous la main nos conseils, téléchargez la version PDF complète de cet article dans notre [section ebooks](/ebooks).
 `,
   // Updated image to use user-provided photo
   image: "/lovable-uploads/gentle-parenting.jpg",

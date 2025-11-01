@@ -40,5 +40,18 @@ export const ebooksData: Ebook[] = [
     tags: ["coliques", "santé", "nouveau-né", "soulagement"],
     author: "Dr. Thomas Renaud",
     publishDate: "2024-04-10"
+  },
+  {
+    id: "eb-004",
+    title: "Gentle Parenting - Au-delà de la Guerre des Likes",
+    description: "Retrouvez votre cap éducatif au-delà de la polarisation des réseaux sociaux. Un guide complet pour comprendre la parentalité douce et construire un style parental équilibré et authentique.",
+    coverImage: "/lovable-uploads/gentle-parenting.jpg",
+    fileUrl: "gentle-parenting.pdf",
+    fileType: "PDF",
+    fileSize: "2.1 MB",
+    category: "Développement",
+    tags: ["gentle parenting", "éducation", "parentalité douce", "réseaux sociaux"],
+    author: "BabyBaby",
+    publishDate: "2025-01-31"
   }
 ];
