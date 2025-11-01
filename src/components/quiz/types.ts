@@ -32,7 +32,7 @@ export interface QuizResult {
   recommendations: string[];
 }
 
-export const quizTitles: Partial<Record<QuizType, string>> = {
+export const quizTitles: Record<QuizType, string> = {
   'personnalite': 'Style Parental',
   'developpement': 'Développement de l\'Enfant',
   'connaissance': 'Connaissances Parentales',
