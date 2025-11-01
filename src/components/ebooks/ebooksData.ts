@@ -3,11 +3,24 @@ import { Ebook } from './types';
 
 export const ebooksData: Ebook[] = [
   {
+    id: "eb-004",
+    title: "« Gentle Parenting » : Au-delà de la Guerre des Likes",
+    description: "Guide complet sur la parentalité bienveillante, décryptant les tensions entre douceur et discipline stricte pour construire un style parental équilibré.",
+    coverImage: "/lovable-uploads/gentle-parenting.jpg",
+    fileUrl: "/ebooks/gentle-parenting.pdf",
+    fileType: "PDF",
+    fileSize: "2.1 MB",
+    category: "Développement",
+    tags: ["parentalité", "éducation", "gentle parenting", "bienveillance"],
+    author: "BabyBaby",
+    publishDate: "2024-11-01"
+  },
+  {
     id: "eb-001",
     title: "Les 6 premiers mois - Guide complet",
     description: "Tout ce que vous devez savoir pour accompagner votre bébé durant ses 6 premiers mois de vie.",
     coverImage: "/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png",
-    fileUrl: "Les 6 premiers mois - Guide.pdf", // This is the exact filename in Supabase
+    fileUrl: "Les 6 premiers mois - Guide.pdf",
     fileType: "PDF",
     fileSize: "4.7 MB",
     category: "Développement",
@@ -40,18 +53,5 @@ export const ebooksData: Ebook[] = [
     tags: ["coliques", "santé", "nouveau-né", "soulagement"],
     author: "Dr. Thomas Renaud",
     publishDate: "2024-04-10"
-  },
-  {
-    id: "eb-004",
-    title: "Gentle Parenting - Au-delà de la Guerre des Likes",
-    description: "Retrouvez votre cap éducatif au-delà de la polarisation des réseaux sociaux. Un guide complet pour comprendre la parentalité douce et construire un style parental équilibré et authentique.",
-    coverImage: "/lovable-uploads/gentle-parenting.jpg",
-    fileUrl: "gentle-parenting.pdf",
-    fileType: "PDF",
-    fileSize: "2.1 MB",
-    category: "Développement",
-    tags: ["gentle parenting", "éducation", "parentalité douce", "réseaux sociaux"],
-    author: "BabyBaby",
-    publishDate: "2025-01-31"
   }
 ];
