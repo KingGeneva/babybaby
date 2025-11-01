@@ -33,10 +33,8 @@ export interface QuizResult {
 }
 
 export const quizTitles: Record<QuizType, string> = {
-  'personnalite': 'Style Parental',
-  'developpement': 'Développement de l\'Enfant',
-  'connaissance': 'Connaissances Parentales',
-  'nutrition': 'Nutrition et Alimentation',
-  'sommeil': 'Sommeil de Bébé'
+  'parenting_style': 'Style Parental',
+  'child_development': 'Développement de l\'Enfant',
+  'parental_burnout': 'Épuisement Parental'
 };
 

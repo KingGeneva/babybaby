@@ -1,5 +1,5 @@
 
-import * as React from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import { Routes, Route } from "react-router-dom";
@@ -19,7 +19,7 @@ const App = () => (
     <HelmetProvider context={helmetContext}>
       <AppProviders>
         <WebVitalsReporting>
-          <React.Suspense fallback={<LoadingFallback />}>
+          <Suspense fallback={<LoadingFallback />}>
             <Routes>
               {appRoutes.map((route) => (
                 <Route
@@ -32,7 +32,7 @@ const App = () => (
             
             <ChatbotButton />
             <CacheManager version={APP_VERSION} />
-          </React.Suspense>
+          </Suspense>
         </WebVitalsReporting>
       </AppProviders>
     </HelmetProvider>

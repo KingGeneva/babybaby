@@ -121,7 +121,6 @@ const getDemoMilestones = (): Milestone[] => {
       title: 'Sourire',
       description: 'Le bébé commence à sourire en réponse à votre voix ou à votre visage',
       expected_age_months: 1,
-      age_months: 1,
       category: 'Social'
     },
     {
@@ -130,7 +129,6 @@ const getDemoMilestones = (): Milestone[] => {
       title: 'Tenir sa tête',
       description: 'Le bébé peut tenir sa tête droite sans aide pendant quelques instants',
       expected_age_months: 2,
-      age_months: 2,
       category: 'Moteur'
     },
     {
@@ -139,7 +137,6 @@ const getDemoMilestones = (): Milestone[] => {
       title: 'Rire aux éclats',
       description: 'Le bébé commence à rire en réponse à des stimuli',
       expected_age_months: 3,
-      age_months: 3,
       category: 'Social'
     },
     {
@@ -148,7 +145,6 @@ const getDemoMilestones = (): Milestone[] => {
       title: 'Rouler du ventre au dos',
       description: 'Le bébé peut rouler du ventre au dos',
       expected_age_months: 4,
-      age_months: 4,
       category: 'Moteur'
     },
     {
@@ -157,7 +153,6 @@ const getDemoMilestones = (): Milestone[] => {
       title: 'Babiller',
       description: 'Le bébé commence à produire des sons variés comme "ba", "da", "ma"',
       expected_age_months: 5,
-      age_months: 5,
       category: 'Langage'
     },
     {
@@ -166,7 +161,6 @@ const getDemoMilestones = (): Milestone[] => {
       title: 'S\'asseoir sans soutien',
       description: 'Le bébé peut s\'asseoir sans soutien pendant un moment',
       expected_age_months: 6,
-      age_months: 6,
       category: 'Moteur'
     },
     {
@@ -175,7 +169,6 @@ const getDemoMilestones = (): Milestone[] => {
       title: 'Commencer à ramper',
       description: 'Le bébé commence à se déplacer en rampant',
       expected_age_months: 8,
-      age_months: 8,
       category: 'Moteur'
     },
     {
@@ -184,7 +177,6 @@ const getDemoMilestones = (): Milestone[] => {
       title: 'Premiers mots',
       description: 'Le bébé dit ses premiers mots reconnaissables comme "mama" ou "dada"',
       expected_age_months: 10,
-      age_months: 10,
       category: 'Langage'
     },
     {
@@ -193,7 +185,6 @@ const getDemoMilestones = (): Milestone[] => {
       title: 'Premiers pas',
       description: 'Le bébé fait ses premiers pas seul',
       expected_age_months: 12,
-      age_months: 12,
       category: 'Moteur'
     },
     {
@@ -202,7 +193,6 @@ const getDemoMilestones = (): Milestone[] => {
       title: 'Phrases simples',
       description: 'L\'enfant peut combiner deux mots pour former des phrases simples',
       expected_age_months: 18,
-      age_months: 18,
       category: 'Langage'
     }
   ];

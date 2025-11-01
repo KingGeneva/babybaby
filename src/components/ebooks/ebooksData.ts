@@ -3,24 +3,11 @@ import { Ebook } from './types';
 
 export const ebooksData: Ebook[] = [
   {
-    id: "eb-004",
-    title: "« Gentle Parenting » : Au-delà de la Guerre des Likes",
-    description: "Guide complet sur la parentalité bienveillante, décryptant les tensions entre douceur et discipline stricte pour construire un style parental équilibré.",
-    coverImage: "/lovable-uploads/gentle-parenting.jpg",
-    fileUrl: "/ebooks/gentle-parenting.pdf",
-    fileType: "PDF",
-    fileSize: "2.1 MB",
-    category: "Développement",
-    tags: ["parentalité", "éducation", "gentle parenting", "bienveillance"],
-    author: "BabyBaby",
-    publishDate: "2024-11-01"
-  },
-  {
     id: "eb-001",
     title: "Les 6 premiers mois - Guide complet",
     description: "Tout ce que vous devez savoir pour accompagner votre bébé durant ses 6 premiers mois de vie.",
     coverImage: "/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png",
-    fileUrl: "Les 6 premiers mois - Guide.pdf",
+    fileUrl: "Les 6 premiers mois - Guide.pdf", // This is the exact filename in Supabase
     fileType: "PDF",
     fileSize: "4.7 MB",
     category: "Développement",

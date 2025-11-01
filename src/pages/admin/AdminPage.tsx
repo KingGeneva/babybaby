@@ -28,9 +28,6 @@ const AdminPage = () => {
 
       try {
         // Check if the user's email is in the admin_users table
-        // For now, allow all authenticated users until admin table is set up
-        setIsAuthorized(true);
-        /*
         const { data, error } = await supabase
           .from('admin_users')
           .select('*')
@@ -40,7 +37,6 @@ const AdminPage = () => {
         if (error) throw error;
         
         setIsAuthorized(!!data);
-        */
       } catch (error) {
         console.error('Error checking admin status:', error);
         setIsAuthorized(false);
