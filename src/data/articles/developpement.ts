@@ -4,7 +4,7 @@ import { gentleParentingArticle } from './gentle_parenting_article';
 
 export const developpementArticles: Article[] = [
   {
-    id: 8, // Changed ID to avoid conflicts
+    id: 8,
     title: "Les étapes clés du développement moteur de 0 à 12 mois",
     excerpt: "Découvrez les jalons importants du développement physique de votre bébé.",
     summary: "Un aperçu des principales étapes de développement moteur durant la première année.",
@@ -17,5 +17,5 @@ export const developpementArticles: Article[] = [
     author: "Prof. Jean Piaget",
     featured: true
   },
-    gentleParentingArticle
+  gentleParentingArticle
 ];
