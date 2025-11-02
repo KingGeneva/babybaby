@@ -10,6 +10,10 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+    exclude: [],
+  },
   plugins: [
     react({
       // Configuration React optimisée
@@ -38,33 +42,8 @@ export default defineConfig(({ mode }) => ({
     // Optimisation du rollup pour mieux gérer la mémoire
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'vendor-react';
-            }
-            if (id.includes('@radix-ui')) {
-              return 'vendor-ui';
-            }
-            if (id.includes('lucide-react') || id.includes('date-fns')) {
-              return 'vendor-tools';
-            }
-            if (id.includes('react-router-dom')) {
-              return 'vendor-routing';
-            }
-            if (id.includes('@tanstack/react-query')) {
-              return 'vendor-data';
-            }
-            if (id.includes('framer-motion')) {
-              return 'vendor-animations';
-            }
-            if (id.includes('recharts')) {
-              return 'vendor-charts';
-            }
-            if (id.includes('react-hook-form') || id.includes('zod')) {
-              return 'vendor-forms';
-            }
-          }
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
         }
       },
       // Réduire les warnings pour économiser la mémoire
