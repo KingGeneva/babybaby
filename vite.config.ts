@@ -10,10 +10,6 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  optimizeDeps: {
-    include: ['react', 'react-dom'],
-    exclude: [],
-  },
   plugins: [
     react({
       // Configuration React optimisée
@@ -27,7 +23,6 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-    dedupe: ['react', 'react-dom'],
   },
   build: {
     // Configuration de build optimisée
@@ -43,7 +38,19 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-ui': [
+            '@radix-ui/react-toast',
+            '@radix-ui/react-label',
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-avatar',
+          ],
+          'vendor-tools': ['lucide-react', 'date-fns'],
+          'vendor-routing': ['react-router-dom'],
+          'vendor-data': ['@tanstack/react-query'],
+          'vendor-animations': ['framer-motion'],
+          'vendor-charts': ['recharts'],
+          'vendor-forms': ['react-hook-form', 'zod'],
         }
       },
       // Réduire les warnings pour économiser la mémoire

@@ -1,5 +1,6 @@
 
-import { ReactNode, useMemo, useEffect } from "react";
+import * as React from "react";
+import { ReactNode } from "react";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -9,7 +10,7 @@ import { Toaster } from "@/components/ui/sonner";
 // Configuration optimisée de React Query avec meilleure gestion du cache
 function AppProviders({ children }: { children: ReactNode }) {
   // Instance QueryClient créée dans le composant pour éviter les problèmes de SSR
-  const queryClient = useMemo(() => new QueryClient({
+  const queryClient = React.useMemo(() => new QueryClient({
     defaultOptions: {
       queries: {
         retry: 1,
@@ -44,7 +45,7 @@ interface PerformanceEntryWithDetails extends PerformanceEntry {
 
 // Composant séparé pour le suivi des Web Vitals
 function WebVitalsReporting({ children }: { children: ReactNode }) {
-  useEffect(() => {
+  React.useEffect(() => {
     if (typeof window !== 'undefined') {
       // Mesure LCP (Largest Contentful Paint)
       const observer = new PerformanceObserver((entryList) => {

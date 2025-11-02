@@ -1,9 +1,9 @@
 // This file contains the new article object for insertion into developpementArticles array
 export const gentleParentingArticle = {
-  id: 10,
+  id:101,
   title: "« Gentle Parenting » : Au-delà de la Guerre des Likes, Retrouver son Cap Éducatif",
   excerpt: "Analyse de la polarisation autour de la parentalité douce et stricte sur les réseaux sociaux et guide pour retrouver un équilibre éducatif authentique.",
-  summary: "Cet article décrypte les tensions entre parentalité douce et discipline stricte, explore les mécanismes psychologiques et sociologiques alimentant la polarisation en ligne, et propose des pistes pour dépasser la culpabilité et construire un style parental équilibré et authentique.",
+  summ101ry: "Cet article décrypte les tensions entre parentalité douce et discipline stricte, explore les mécanismes psychologiques et sociologiques alimentant la polarisation en ligne, et propose des pistes pour dépasser la culpabilité et construire un style parental équilibré et authentique.",
   content: `« Gentle Parenting » : Au-delà de la Guerre des Likes, Retrouver son Cap Éducatif
 
 Introduction : La Guerre des Parents sur TikTok
