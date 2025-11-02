@@ -37,20 +37,33 @@ export default defineConfig(({ mode }) => ({
     // Optimisation du rollup pour mieux gérer la mémoire
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-ui': [
-            '@radix-ui/react-toast',
-            '@radix-ui/react-label',
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-avatar',
-          ],
-          'vendor-tools': ['lucide-react', 'date-fns'],
-          'vendor-routing': ['react-router-dom'],
-          'vendor-data': ['@tanstack/react-query'],
-          'vendor-animations': ['framer-motion'],
-          'vendor-charts': ['recharts'],
-          'vendor-forms': ['react-hook-form', 'zod'],
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor-react';
+            }
+            if (id.includes('@radix-ui')) {
+              return 'vendor-ui';
+            }
+            if (id.includes('lucide-react') || id.includes('date-fns')) {
+              return 'vendor-tools';
+            }
+            if (id.includes('react-router-dom')) {
+              return 'vendor-routing';
+            }
+            if (id.includes('@tanstack/react-query')) {
+              return 'vendor-data';
+            }
+            if (id.includes('framer-motion')) {
+              return 'vendor-animations';
+            }
+            if (id.includes('recharts')) {
+              return 'vendor-charts';
+            }
+            if (id.includes('react-hook-form') || id.includes('zod')) {
+              return 'vendor-forms';
+            }
+          }
         }
       },
       // Réduire les warnings pour économiser la mémoire
