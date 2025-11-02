@@ -1,9 +1,8 @@
+
 import { Article } from '@/types/article';
-import { diversificationAlimentairePilier } from './diversification_alimentaire_pilier';
 
 // Liste des articles sur la nutrition
 export const nutritionArticles: Article[] = [
-  diversificationAlimentairePilier,
   {
     id: 10, // Changed ID to 10 so it appears first
     title: "Coliques du Bébé : Comprendre, Identifier et Soulager",
