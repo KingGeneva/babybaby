@@ -10,6 +10,8 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  // Force cache invalidation
+  cacheDir: 'node_modules/.vite-fresh',
   plugins: [
     react({
       // Configuration React optimisée
