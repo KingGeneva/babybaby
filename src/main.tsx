@@ -1,5 +1,5 @@
 
-import React from "react";
+import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
@@ -15,7 +15,7 @@ const root = ReactDOM.createRoot(document.getElementById("root")!);
 
 // Render the app
 root.render(
-  <React.StrictMode>
+  <StrictMode>
     <App />
-  </React.StrictMode>
+  </StrictMode>
 );
