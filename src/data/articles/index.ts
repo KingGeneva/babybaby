@@ -5,6 +5,7 @@ import { sommeilArticles } from './sommeil';
 import { developpementArticles } from './developpement';
 import { preparationArticles } from './preparation';
 import { croissanceArticles } from './croissance';
+import { gentleParentingArticle } from './gentle_parenting_article';
 import { Article } from '@/types/article';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -14,15 +15,56 @@ const categoryCache = new Map<string, { data: Article[], timestamp: number }>();
 const CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 const CACHE_VERSION = 1; // Incrémenter pour invalider tous les caches
 
-// Combine all articles from different categories
-export const articles: Article[] = [
+// Combine all static articles from different categories
+const staticArticles: Article[] = [
   ...nutritionArticles,
   ...amenagementArticles,
   ...sommeilArticles,
   ...developpementArticles,
   ...preparationArticles,
-  ...croissanceArticles
+  ...croissanceArticles,
+  gentleParentingArticle
 ].sort((a, b) => b.id - a.id); // Sort by ID in descending order (newest first)
+
+// Export static articles for backward compatibility
+export const articles = staticArticles;
+
+// Function to fetch and combine CMS articles with static articles
+export const getAllArticles = async (): Promise<Article[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('cms_articles')
+      .select('*')
+      .eq('published', true);
+
+    if (error) throw error;
+
+    const cmsArticles: Article[] = (data || []).map(article => ({
+      id: article.id,
+      title: article.title,
+      content: article.content,
+      summary: article.summary,
+      excerpt: article.excerpt,
+      category: article.category,
+      image: article.image,
+      date: article.date,
+      readingTime: article.reading_time,
+      tags: article.tags,
+      author: article.author,
+      featured: article.featured,
+      views: article.views
+    }));
+
+    return [...staticArticles, ...cmsArticles].sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateB - dateA;
+    });
+  } catch (error) {
+    console.error('Error fetching CMS articles:', error);
+    return staticArticles;
+  }
+};
 
 // Pré-remplir le cache avec les articles statiques
 articles.forEach(article => {
@@ -35,6 +77,7 @@ export * from './sommeil';
 export * from './developpement';
 export * from './preparation';
 export * from './croissance';
+export * from './gentle_parenting_article';
 
 // Vérifier si un élément du cache est encore valide
 const isCacheValid = (timestamp: number): boolean => {
@@ -69,10 +112,42 @@ export const getArticleById = async (id: number): Promise<Article | undefined> =
   }
   
   // Then, try to find in static articles (fastest)
-  const staticArticle = articles.find(article => article.id === id);
+  const staticArticle = staticArticles.find(article => article.id === id);
   if (staticArticle) {
     articleCache.set(id, { data: staticArticle, timestamp: Date.now() });
     return staticArticle;
+  }
+  
+  // Try to load from CMS
+  try {
+    const { data, error } = await supabase
+      .from('cms_articles')
+      .select('*')
+      .eq('id', id)
+      .eq('published', true)
+      .maybeSingle();
+
+    if (!error && data) {
+      const article: Article = {
+        id: data.id,
+        title: data.title,
+        content: data.content,
+        summary: data.summary,
+        excerpt: data.excerpt,
+        category: data.category,
+        image: data.image,
+        date: data.date,
+        readingTime: data.reading_time,
+        tags: data.tags,
+        author: data.author,
+        featured: data.featured,
+        views: data.views
+      };
+      articleCache.set(id, { data: article, timestamp: Date.now() });
+      return article;
+    }
+  } catch (error) {
+    console.error('Error fetching CMS article:', error);
   }
   
   // Finally, try to load from Supabase Storage
@@ -121,7 +196,37 @@ export const getArticlesByCategory = async (category: string): Promise<Article[]
     return cachedCategory.data;
   }
   
-  let result = [...articles];
+  let result = [...staticArticles];
+  
+  // Try to fetch CMS articles
+  try {
+    const { data, error } = await supabase
+      .from('cms_articles')
+      .select('*')
+      .eq('published', true);
+
+    if (!error && data) {
+      const cmsArticles: Article[] = data.map(article => ({
+        id: article.id,
+        title: article.title,
+        content: article.content,
+        summary: article.summary,
+        excerpt: article.excerpt,
+        category: article.category,
+        image: article.image,
+        date: article.date,
+        readingTime: article.reading_time,
+        tags: article.tags,
+        author: article.author,
+        featured: article.featured,
+        views: article.views
+      }));
+      
+      result = [...result, ...cmsArticles];
+    }
+  } catch (error) {
+    console.error('Error fetching CMS articles:', error);
+  }
   
   // Filter by category if not "Tous"
   if (category !== "Tous") {
@@ -194,7 +299,7 @@ export const invalidateArticleCache = () => {
   localStorage.removeItem('cached-articles-timestamp');
   
   // Re-populate with static articles
-  articles.forEach(article => {
+  staticArticles.forEach(article => {
     articleCache.set(article.id, { data: article, timestamp: Date.now() });
   });
 };
