@@ -56,8 +56,17 @@ const QuizPage = () => {
 
   const checkAdmin = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user?.email === 'admin@babybaby.app' || session?.user?.email === 'admin@example.com') {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) return;
+
+      // Use the has_role function to check admin status
+      const { data, error } = await supabase.rpc('has_role' as any, {
+        _user_id: user.id,
+        _role: 'admin'
+      }) as { data: boolean | null, error: any };
+
+      if (!error && data === true) {
         setIsAdmin(true);
       }
     } catch (error) {
@@ -86,12 +95,23 @@ const QuizPage = () => {
     setSeedError(null);
     
     try {
-      const response = await fetch("https://pxynugnbikiwbsqdgewx.supabase.co/functions/v1/seed-quiz-data", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error("Vous devez être connecté");
+      }
+
+      // Use environment variable for correct project URL
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/seed-quiz-data`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`
+          }
         }
-      });
+      );
       
       const result = await response.json();
       

@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ThumbsUp } from 'lucide-react';
+import { sanitizeHtml } from '@/utils/sanitize';
 
 interface PostItemProps {
   post: ForumPost;
@@ -42,7 +43,7 @@ const PostItem: React.FC<PostItemProps> = ({
                 {formatDate(post.created_at)}
               </div>
             </div>
-            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} />
+            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }} />
             <div className="flex justify-end mt-3">
               <Button 
                 variant="ghost" 

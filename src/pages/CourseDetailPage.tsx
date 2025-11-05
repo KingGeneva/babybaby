@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { CourseModule } from "@/types/course";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { sanitizeHtml } from "@/utils/sanitize";
 import {
   Accordion,
   AccordionContent,
@@ -128,7 +129,7 @@ const CourseDetailPage = () => {
                   
                   <TabsContent value="contenu" className="space-y-4">
                     <div className="prose max-w-none">
-                      <div dangerouslySetInnerHTML={{ __html: course.modules[0].content }} />
+                      <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(course.modules[0].content) }} />
                     </div>
                   </TabsContent>
                   

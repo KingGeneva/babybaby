@@ -8,6 +8,7 @@ import { ChevronLeft, Pin, Lock, User, Clock, Eye, MessageCircle, Heart } from '
 import { useNavigate } from 'react-router-dom';
 import { formatDistanceToNow, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { sanitizeHtml } from '@/utils/sanitize';
 
 interface TopicHeaderProps {
   topic: ForumTopic | null;
@@ -72,7 +73,7 @@ const TopicHeader: React.FC<TopicHeaderProps> = ({
           </div>
         </CardHeader>
         <CardContent className="py-4">
-          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: topic?.content || '' }} />
+          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(topic?.content || '') }} />
         </CardContent>
         <CardFooter className="flex justify-between pt-0 pb-3">
           <div></div>

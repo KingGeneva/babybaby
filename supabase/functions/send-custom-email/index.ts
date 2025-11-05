@@ -19,6 +19,49 @@ interface CustomEmailRequest {
   }
 }
 
+// Input validation function
+function validateInput(data: CustomEmailRequest): void {
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!data.email || !emailRegex.test(data.email)) {
+    throw new Error('Invalid email address');
+  }
+
+  // Validate email length
+  if (data.email.length > 255) {
+    throw new Error('Email address too long');
+  }
+
+  // Validate type
+  const validTypes = ['signup', 'magiclink', 'invite', 'recovery'];
+  if (!validTypes.includes(data.type)) {
+    throw new Error('Invalid email type');
+  }
+
+  // Validate optional fields
+  if (data.meta?.name) {
+    if (data.meta.name.length > 100) {
+      throw new Error('Name too long (max 100 characters)');
+    }
+    // Remove potentially dangerous characters
+    if (/<|>|&|"|'/.test(data.meta.name)) {
+      throw new Error('Name contains invalid characters');
+    }
+  }
+
+  if (data.meta?.action_link) {
+    try {
+      const url = new URL(data.meta.action_link);
+      // Only allow https URLs (and http for local dev)
+      if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+        throw new Error('Invalid URL protocol');
+      }
+    } catch {
+      throw new Error('Invalid action link URL');
+    }
+  }
+}
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -27,6 +70,10 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const data: CustomEmailRequest = await req.json();
+    
+    // Validate input before processing
+    validateInput(data);
+    
     const { email, type, meta } = data;
 
     if (!email) {

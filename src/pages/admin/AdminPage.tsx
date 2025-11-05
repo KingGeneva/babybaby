@@ -18,7 +18,7 @@ const AdminPage = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    // Check if the current user is an admin
+    // Check if the current user is an admin using has_role function
     const checkAdminStatus = async () => {
       if (!user) {
         setIsAuthorized(false);
@@ -27,16 +27,15 @@ const AdminPage = () => {
       }
 
       try {
-        // Check if the user's email is in the admin_users table
-        const { data, error } = await supabase
-          .from('admin_users')
-          .select('*')
-          .eq('id', user.id)
-          .single();
+        // Use the has_role function to check admin status
+        const { data, error } = await supabase.rpc('has_role' as any, {
+          _user_id: user.id,
+          _role: 'admin'
+        }) as { data: boolean | null, error: any };
           
         if (error) throw error;
         
-        setIsAuthorized(!!data);
+        setIsAuthorized(data === true);
       } catch (error) {
         console.error('Error checking admin status:', error);
         setIsAuthorized(false);
