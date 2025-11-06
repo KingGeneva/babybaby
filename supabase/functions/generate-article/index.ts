@@ -1,0 +1,214 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+    if (!LOVABLE_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('Missing required environment variables');
+    }
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    
+    console.log('Starting article generation process...');
+
+    // Step 1: Identify current trends related to parenting using AI
+    const trendResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash',
+        messages: [
+          { 
+            role: 'system', 
+            content: `Tu es un expert en parentalité et développement de l'enfant. Ta mission est d'identifier une tendance actuelle importante dans le domaine de la parentalité, du développement de l'enfant, de la nutrition infantile, du sommeil ou de l'aménagement pour bébés.` 
+          },
+          { 
+            role: 'user', 
+            content: `Identifie UNE tendance actuelle et pertinente dans le domaine de la parentalité. Réponds en une seule phrase claire et concise décrivant cette tendance. La tendance doit être récente, intéressante et utile pour des parents.` 
+          }
+        ],
+      }),
+    });
+
+    if (!trendResponse.ok) {
+      const errorText = await trendResponse.text();
+      console.error('Trend identification failed:', trendResponse.status, errorText);
+      throw new Error(`Failed to identify trend: ${trendResponse.status}`);
+    }
+
+    const trendData = await trendResponse.json();
+    const trend = trendData.choices[0].message.content.trim();
+    console.log('Identified trend:', trend);
+
+    // Step 2: Generate a comprehensive article based on the trend
+    const articleResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash',
+        messages: [
+          { 
+            role: 'system', 
+            content: `Tu es un expert rédacteur spécialisé en parentalité et développement de l'enfant. Tu rédiges des articles informatifs, bien structurés et utiles pour les parents. Tes articles doivent être en français, bien formatés en Markdown, et contenir des conseils pratiques.` 
+          },
+          { 
+            role: 'user', 
+            content: `Rédige un article complet et détaillé sur cette tendance: "${trend}"
+
+L'article doit:
+- Avoir un titre accrocheur et informatif
+- Contenir au moins 800 mots
+- Être structuré avec des titres et sous-titres (utiliser ## et ###)
+- Inclure des listes à puces pour les conseils pratiques
+- Avoir un ton bienveillant et accessible
+- Contenir des informations basées sur des faits
+- Se terminer par une conclusion encourageante
+
+Réponds UNIQUEMENT avec le contenu de l'article en Markdown, sans aucun texte d'introduction ou de conclusion de ta part.` 
+          }
+        ],
+      }),
+    });
+
+    if (!articleResponse.ok) {
+      const errorText = await articleResponse.text();
+      console.error('Article generation failed:', articleResponse.status, errorText);
+      throw new Error(`Failed to generate article: ${articleResponse.status}`);
+    }
+
+    const articleData = await articleResponse.json();
+    const fullContent = articleData.choices[0].message.content.trim();
+    console.log('Generated article length:', fullContent.length);
+
+    // Step 3: Extract metadata from the article using AI
+    const metadataResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash',
+        messages: [
+          { 
+            role: 'system', 
+            content: `Tu es un assistant qui extrait des métadonnées d'articles. Tu dois répondre UNIQUEMENT en JSON valide, sans aucun texte supplémentaire.` 
+          },
+          { 
+            role: 'user', 
+            content: `Analyse cet article et fournis les métadonnées au format JSON strict suivant:
+
+{
+  "title": "titre de l'article (max 100 caractères)",
+  "summary": "résumé en 2-3 phrases (max 300 caractères)",
+  "excerpt": "premier paragraphe ou introduction (max 200 caractères)",
+  "category": "une seule catégorie parmi: Préparation, Nutrition, Développement, Sommeil, Croissance, Aménagement",
+  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+  "reading_time": temps de lecture estimé en minutes (nombre entier)
+}
+
+Article:
+${fullContent}
+
+Réponds UNIQUEMENT avec le JSON, sans aucun autre texte.` 
+          }
+        ],
+      }),
+    });
+
+    if (!metadataResponse.ok) {
+      const errorText = await metadataResponse.text();
+      console.error('Metadata extraction failed:', metadataResponse.status, errorText);
+      throw new Error(`Failed to extract metadata: ${metadataResponse.status}`);
+    }
+
+    const metadataData = await metadataResponse.json();
+    let metadata;
+    
+    try {
+      const metadataText = metadataData.choices[0].message.content.trim();
+      // Remove markdown code blocks if present
+      const cleanedText = metadataText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      metadata = JSON.parse(cleanedText);
+      console.log('Extracted metadata:', metadata);
+    } catch (parseError) {
+      console.error('Failed to parse metadata JSON:', parseError);
+      // Fallback metadata
+      metadata = {
+        title: trend.substring(0, 100),
+        summary: `Article sur ${trend}`,
+        excerpt: fullContent.substring(0, 200),
+        category: 'Développement',
+        tags: ['parentalité', 'conseil', 'enfant'],
+        reading_time: Math.ceil(fullContent.split(' ').length / 200)
+      };
+    }
+
+    // Step 4: Save to database
+    const { data: article, error: dbError } = await supabase
+      .from('auto_generated_articles')
+      .insert({
+        title: metadata.title,
+        content: fullContent,
+        summary: metadata.summary,
+        excerpt: metadata.excerpt,
+        category: metadata.category,
+        tags: metadata.tags,
+        reading_time: metadata.reading_time,
+        source_trend: trend,
+        status: 'pending',
+        author: 'Assistant IA',
+      })
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error('Database error:', dbError);
+      throw dbError;
+    }
+
+    console.log('Article saved successfully:', article.id);
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        article: article,
+        message: 'Article généré avec succès et en attente de validation'
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+
+  } catch (error) {
+    console.error('Error in generate-article function:', error);
+    return new Response(
+      JSON.stringify({ 
+        error: error.message,
+        success: false 
+      }),
+      { 
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    );
+  }
+});

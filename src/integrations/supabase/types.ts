@@ -38,6 +38,63 @@ export type Database = {
         }
         Relationships: []
       }
+      auto_generated_articles: {
+        Row: {
+          author: string
+          category: string
+          content: string
+          created_at: string
+          excerpt: string
+          id: string
+          image_url: string | null
+          published_at: string | null
+          reading_time: number
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source_trend: string | null
+          status: string
+          summary: string
+          tags: string[]
+          title: string
+        }
+        Insert: {
+          author?: string
+          category: string
+          content: string
+          created_at?: string
+          excerpt: string
+          id?: string
+          image_url?: string | null
+          published_at?: string | null
+          reading_time?: number
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_trend?: string | null
+          status?: string
+          summary: string
+          tags?: string[]
+          title: string
+        }
+        Update: {
+          author?: string
+          category?: string
+          content?: string
+          created_at?: string
+          excerpt?: string
+          id?: string
+          image_url?: string | null
+          published_at?: string | null
+          reading_time?: number
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_trend?: string | null
+          status?: string
+          summary?: string
+          tags?: string[]
+          title?: string
+        }
+        Relationships: []
+      }
       child_profiles: {
         Row: {
           birth_date: string

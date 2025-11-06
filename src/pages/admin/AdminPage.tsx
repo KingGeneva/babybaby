@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import AdminEbooksTab from './AdminEbooksTab';
 import AdminLullabiesTab from './AdminLullabiesTab';
 import AdminArticlesTab from './AdminArticlesTab';
+import AdminAutoArticlesTab from './AdminAutoArticlesTab';
 
 const AdminPage = () => {
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
@@ -85,10 +86,11 @@ const AdminPage = () => {
           </h1>
 
           <Tabs defaultValue="ebooks">
-            <TabsList className="w-full mb-8">
-              <TabsTrigger value="ebooks" className="flex-1">Ebooks</TabsTrigger>
-              <TabsTrigger value="lullabies" className="flex-1">Berceuses</TabsTrigger>
-              <TabsTrigger value="articles" className="flex-1">Articles</TabsTrigger>
+            <TabsList className="w-full mb-8 grid grid-cols-4">
+              <TabsTrigger value="ebooks">Ebooks</TabsTrigger>
+              <TabsTrigger value="lullabies">Berceuses</TabsTrigger>
+              <TabsTrigger value="articles">Manuels</TabsTrigger>
+              <TabsTrigger value="auto-articles">Auto IA</TabsTrigger>
             </TabsList>
             
             <TabsContent value="ebooks">
@@ -101,6 +103,10 @@ const AdminPage = () => {
             
             <TabsContent value="articles">
               <AdminArticlesTab />
+            </TabsContent>
+
+            <TabsContent value="auto-articles">
+              <AdminAutoArticlesTab />
             </TabsContent>
           </Tabs>
         </div>
