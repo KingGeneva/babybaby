@@ -1,24 +1,25 @@
-import { ReactNode, useMemo, useEffect } from "react";
+import { type ReactNode, useMemo, useEffect } from "react";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
 
+// Create QueryClient instance outside component to avoid recreation
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 30000,
+      gcTime: 300000,
+      refetchOnWindowFocus: false,
+      refetchOnMount: true
+    },
+  },
+});
+
 // Configuration optimisée de React Query avec meilleure gestion du cache
 function AppProviders({ children }: { children: ReactNode }) {
-  // Instance QueryClient créée dans le composant pour éviter les problèmes de SSR
-  const queryClient = useMemo(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: 1,
-        staleTime: 30000,
-        gcTime: 300000,
-        refetchOnWindowFocus: false, // Amélioration des performances
-        refetchOnMount: true
-      },
-    },
-  }), []);
 
   return (
     <QueryClientProvider client={queryClient}>
