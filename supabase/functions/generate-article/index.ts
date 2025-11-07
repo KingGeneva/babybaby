@@ -104,13 +104,15 @@ Réponds en une seule phrase claire décrivant cette tendance UNIQUE. ID: ${rand
             content: `Rédige un article complet et détaillé sur cette tendance: "${trend}"
 
 L'article doit:
-- Avoir un titre accrocheur et informatif
+- Avoir un titre accrocheur et informatif QUI NE COMMENCE PAS PAR "Parentalité" (sois créatif et spécifique!)
 - Contenir au moins 800 mots
 - Être structuré avec des titres et sous-titres (utiliser ## et ###)
 - Inclure des listes à puces pour les conseils pratiques
 - Avoir un ton bienveillant et accessible
 - Contenir des informations basées sur des faits
 - Se terminer par une conclusion encourageante
+
+IMPORTANT: Le titre doit être unique et directement lié au sujet spécifique, pas un titre générique.
 
 Réponds UNIQUEMENT avec le contenu de l'article en Markdown, sans aucun texte d'introduction ou de conclusion de ta part.` 
           }

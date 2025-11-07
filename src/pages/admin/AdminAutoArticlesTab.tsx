@@ -22,6 +22,7 @@ interface AutoArticle {
   status: 'pending' | 'approved' | 'rejected' | 'published';
   created_at: string;
   author: string;
+  image_url?: string;
 }
 
 export default function AdminAutoArticlesTab() {
@@ -84,6 +85,8 @@ export default function AdminAutoArticlesTab() {
 
   const updateArticleStatus = async (articleId: string, status: 'approved' | 'rejected') => {
     try {
+      const article = articles.find(a => a.id === articleId);
+      
       const { error } = await supabase
         .from('auto_generated_articles')
         .update({ 
@@ -94,12 +97,44 @@ export default function AdminAutoArticlesTab() {
 
       if (error) throw error;
 
-      toast({
-        title: status === 'approved' ? "Article approuvé" : "Article rejeté",
-        description: status === 'approved' 
-          ? "L'article est maintenant prêt à être publié" 
-          : "L'article a été rejeté",
-      });
+      // If approved, generate image automatically
+      if (status === 'approved' && article) {
+        toast({
+          title: "Article approuvé",
+          description: "Génération de l'image en cours...",
+        });
+
+        try {
+          const { error: imageError } = await supabase.functions.invoke('generate-article-image', {
+            body: {
+              articleId: article.id,
+              title: article.title,
+              excerpt: article.excerpt
+            }
+          });
+
+          if (imageError) {
+            console.error('Image generation error:', imageError);
+            toast({
+              title: "Image non générée",
+              description: "L'article est approuvé mais l'image n'a pas pu être générée",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Image générée",
+              description: "L'article est prêt à être publié avec son image",
+            });
+          }
+        } catch (imgErr) {
+          console.error('Image generation failed:', imgErr);
+        }
+      } else if (status === 'rejected') {
+        toast({
+          title: "Article rejeté",
+          description: "L'article a été rejeté",
+        });
+      }
 
       fetchArticles();
     } catch (error) {
@@ -122,7 +157,7 @@ export default function AdminAutoArticlesTab() {
         summary: article.summary,
         excerpt: article.excerpt,
         category: article.category,
-        image: '/lovable-uploads/gentle-parenting.jpg',
+        image: article.image_url || '/lovable-uploads/gentle-parenting.jpg',
         date: new Date().toLocaleDateString('fr-FR', { 
           day: 'numeric',
           month: 'long', 
