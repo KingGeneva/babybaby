@@ -39,15 +39,28 @@ export const fetchMilestones = async (childId: string) => {
     }
     
     // Récupérer tous les jalons disponibles
-    const { data: milestones, error: milestonesError } = await supabase
+    const { data: milestonesData, error: milestonesError } = await supabase
       .from('milestones')
       .select('*')
-      .order('expected_age_months', { ascending: true });
+      .order('age_months', { ascending: true });
       
     if (milestonesError) {
       console.error('Error fetching milestones:', milestonesError);
       throw milestonesError;
     }
+    
+    // Transform DB milestones to match app Milestone type
+    const milestones: Milestone[] = (milestonesData || []).map(m => ({
+      id: m.id,
+      name: m.title,
+      title: m.title,
+      description: m.description || undefined,
+      notes: m.notes || undefined,
+      expected_age_months: m.age_months,
+      category: m.category,
+      achieved_date: m.achieved_date,
+      child_id: m.child_id
+    }));
     
     console.log('Fetched milestones:', milestones);
     
@@ -55,15 +68,13 @@ export const fetchMilestones = async (childId: string) => {
     // le champ achieved_date pour déterminer si un jalon est complété
     // Si achieved_date est défini, le jalon est complété
     const completedMilestones = milestones
-      ? milestones
-        .filter(milestone => milestone.achieved_date !== null && milestone.child_id === childId)
-        .map(milestone => milestone.id)
-      : [];
+      .filter(milestone => milestone.achieved_date !== null && milestone.child_id === childId)
+      .map(milestone => milestone.id);
     
     console.log('Completed milestones:', completedMilestones);
     
     return {
-      milestones: milestones || [],
+      milestones,
       completedMilestones
     };
   } catch (error) {

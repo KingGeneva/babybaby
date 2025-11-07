@@ -114,7 +114,7 @@ export default function AdminAutoArticlesTab() {
 
   const publishArticle = async (article: AutoArticle) => {
     try {
-      // Prepare article data for storage
+      // Prepare article data for storage in the correct format
       const articleData = {
         id: Date.now(),
         title: article.title,
@@ -122,7 +122,7 @@ export default function AdminAutoArticlesTab() {
         summary: article.summary,
         excerpt: article.excerpt,
         category: article.category,
-        image: '/lovable-uploads/gentle-parenting.jpg', // Default image
+        image: '/lovable-uploads/gentle-parenting.jpg',
         date: new Date().toLocaleDateString('fr-FR', { 
           day: 'numeric',
           month: 'long', 
@@ -135,12 +135,12 @@ export default function AdminAutoArticlesTab() {
         views: 0,
       };
 
-      // Upload to storage
+      // Upload to storage in the articles folder
       const blob = new Blob([JSON.stringify(articleData, null, 2)], { 
         type: 'application/json' 
       });
       
-      const fileName = `article-${articleData.id}.json`;
+      const fileName = `articles/${articleData.id}.json`;
       const { error: uploadError } = await supabase.storage
         .from('articles')
         .upload(fileName, blob, {
@@ -148,7 +148,10 @@ export default function AdminAutoArticlesTab() {
           upsert: true
         });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError);
+        throw uploadError;
+      }
 
       // Update status to published
       const { error: updateError } = await supabase
@@ -159,19 +162,28 @@ export default function AdminAutoArticlesTab() {
         })
         .eq('id', article.id);
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        console.error('Status update error:', updateError);
+        throw updateError;
+      }
 
       toast({
         title: "Article publié",
         description: "L'article est maintenant visible sur le site",
       });
 
+      // Invalidate article cache to show new article
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('cached-articles');
+        localStorage.removeItem('cached-articles-timestamp');
+      }
+
       fetchArticles();
     } catch (error) {
       console.error('Error publishing article:', error);
       toast({
         title: "Erreur",
-        description: "Impossible de publier l'article",
+        description: `Impossible de publier l'article: ${error instanceof Error ? error.message : 'Erreur inconnue'}`,
         variant: "destructive",
       });
     }

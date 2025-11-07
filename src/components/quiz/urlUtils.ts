@@ -5,9 +5,9 @@ export const convertToQuizType = (quizId: string | undefined): QuizType | undefi
   if (!quizId) return undefined;
   
   const mapping: Record<QuizIdParam, QuizType> = {
-    'parenting-style': 'parenting_style',
-    'child-development': 'child_development',
-    'parental-burnout': 'parental_burnout'
+    'parenting-style': 'connaissance',
+    'child-development': 'developpement',
+    'parental-burnout': 'personnalite'
   };
   
   return mapping[quizId as QuizIdParam];

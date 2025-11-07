@@ -27,7 +27,7 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   const navigate = useNavigate();
 
   const renderDetailedResults = () => {
-    if (quizType === 'parenting_style' && detailedResults.dominant_type) {
+    if (quizType === 'connaissance' && detailedResults.dominant_type) {
       return (
         <Alert>
           <Info className="h-4 w-4" />
@@ -39,7 +39,7 @@ const QuizResults: React.FC<QuizResultsProps> = ({
       );
     }
 
-    if (quizType === 'child_development' && detailedResults.development_areas) {
+    if (quizType === 'developpement' && detailedResults.development_areas) {
       return (
         <div className="space-y-4">
           {Object.entries(detailedResults.development_areas).map(([area, status]) => (
@@ -59,7 +59,7 @@ const QuizResults: React.FC<QuizResultsProps> = ({
       );
     }
 
-    if (quizType === 'parental_burnout' && detailedResults.burnout_level) {
+    if (quizType === 'personnalite' && detailedResults.burnout_level) {
       const variant = 
         detailedResults.burnout_level === 'critique' ? 'destructive' :
         detailedResults.burnout_level === 'élevé' ? 'destructive' :

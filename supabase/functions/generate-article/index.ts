@@ -25,7 +25,27 @@ serve(async (req) => {
     
     console.log('Starting article generation process...');
 
-    // Step 1: Identify current trends related to parenting using AI
+    // Step 1: Identify current trends related to parenting using AI with variety
+    const randomSeed = Date.now();
+    const topics = [
+      'nouvelles méthodes d\'éducation positive',
+      'alimentation bio et diversification alimentaire',
+      'impact des écrans sur le développement cognitif',
+      'routines de sommeil et chronobiologie infantile',
+      'aménagement Montessori et espaces d\'éveil',
+      'communication bienveillante et gestion des émotions',
+      'activités sensorielles et motricité libre',
+      'parentalité écologique et produits naturels',
+      'développement du langage et bilinguisme',
+      'prévention santé et vaccinations récentes',
+      'jeux éducatifs et apprentissage précoce',
+      'équilibre vie professionnelle et parentale',
+      'allaitement et nutrition maternelle',
+      'développement social et socialisation',
+      'gestion du stress parental et burn-out'
+    ];
+    const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+    
     const trendResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -37,11 +57,19 @@ serve(async (req) => {
         messages: [
           { 
             role: 'system', 
-            content: `Tu es un expert en parentalité et développement de l'enfant. Ta mission est d'identifier une tendance actuelle importante dans le domaine de la parentalité, du développement de l'enfant, de la nutrition infantile, du sommeil ou de l'aménagement pour bébés.` 
+            content: `Tu es un expert en parentalité et développement de l'enfant. Ta mission est d'identifier une tendance actuelle importante et UNIQUE dans le domaine spécifié. Évite les sujets génériques comme "parentalité positive" seule. Sois spécifique et innovant.` 
           },
           { 
             role: 'user', 
-            content: `Identifie UNE tendance actuelle et pertinente dans le domaine de la parentalité. Réponds en une seule phrase claire et concise décrivant cette tendance. La tendance doit être récente, intéressante et utile pour des parents.` 
+            content: `Identifie UNE tendance SPÉCIFIQUE, ACTUELLE et INNOVANTE concernant: "${randomTopic}". 
+
+IMPORTANT: 
+- La tendance doit être précise et concrète (pas juste "parentalité positive" mais par exemple "méthode de time-in vs time-out dans l'éducation positive")
+- Elle doit être récente (2024-2025)
+- Elle doit apporter une information ou approche nouvelle
+- Évite les généralités
+
+Réponds en une seule phrase claire décrivant cette tendance UNIQUE. ID: ${randomSeed}` 
           }
         ],
       }),
