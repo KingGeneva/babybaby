@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface ArticleImageProps {
   image: string;
@@ -7,29 +8,28 @@ interface ArticleImageProps {
 }
 
 const ArticleImage: React.FC<ArticleImageProps> = ({ image, title }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  
   if (!image || image === "/placeholder.svg") {
     return null;
   }
   
-  // Conversion des URL d'images pour utiliser WebP si possible
-  const imageUrl = image.includes('.webp') ? image : image;
-  const imageType = image.includes('.webp') ? 'image/webp' : 'image/jpeg';
-  
   return (
-    <div className="mb-8 relative w-full aspect-video overflow-hidden rounded-lg shadow-md">
-      <picture>
-        {/* Fallback pour les navigateurs qui ne supportent pas WebP */}
-        <img 
-          src={imageUrl} 
-          alt={title}
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-          decoding="async"
-          fetchPriority="high"
-          width="800"
-          height="450"
-        />
-      </picture>
+    <div className="mb-8 relative w-full aspect-video overflow-hidden rounded-lg shadow-md bg-muted">
+      {isLoading && (
+        <Skeleton className="absolute inset-0 w-full h-full" />
+      )}
+      <img 
+        src={image} 
+        alt={title}
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="eager"
+        decoding="async"
+        width="800"
+        height="450"
+        onLoad={() => setIsLoading(false)}
+        style={{ opacity: isLoading ? 0 : 1, transition: 'opacity 0.3s' }}
+      />
     </div>
   );
 };

@@ -34,36 +34,66 @@ serve(async (req) => {
     // Create a descriptive prompt for the image based on the article
     const imagePrompt = `Crée une illustration moderne et professionnelle pour un article de blog sur la parentalité intitulé "${title}". ${excerpt ? `L'article parle de: ${excerpt.substring(0, 150)}` : ''}. Style: doux, chaleureux, familial, avec des couleurs pastel. Format: 16:9 horizontal. Ultra high resolution.`;
 
-    // Generate image using Lovable AI
-    const imageResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash-image',
-        messages: [
-          { 
-            role: 'user', 
-            content: imagePrompt
-          }
-        ],
-        modalities: ["image", "text"]
-      }),
-    });
+    // Generate image using Lovable AI with retry logic
+    let imageData;
+    let base64Image;
+    
+    // Try with flash-image model first
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        console.log(`Image generation attempt ${attempt}/2`);
+        
+        const imageResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'google/gemini-2.5-flash-image',
+            messages: [
+              { 
+                role: 'user', 
+                content: imagePrompt
+              }
+            ],
+            modalities: ["image", "text"]
+          }),
+        });
 
-    if (!imageResponse.ok) {
-      const errorText = await imageResponse.text();
-      console.error('Image generation failed:', imageResponse.status, errorText);
-      throw new Error(`Failed to generate image: ${imageResponse.status}`);
+        if (!imageResponse.ok) {
+          const errorText = await imageResponse.text();
+          console.error(`Image generation failed (attempt ${attempt}):`, imageResponse.status, errorText);
+          if (attempt === 2) {
+            throw new Error(`Failed to generate image after 2 attempts: ${imageResponse.status}`);
+          }
+          continue;
+        }
+
+        imageData = await imageResponse.json();
+        console.log('Image response received:', JSON.stringify(imageData, null, 2));
+        
+        base64Image = imageData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+
+        if (!base64Image) {
+          console.error('No image in response:', JSON.stringify(imageData));
+          if (attempt === 2) {
+            throw new Error('No image returned from AI after 2 attempts');
+          }
+          continue;
+        }
+        
+        // Success
+        break;
+      } catch (error) {
+        if (attempt === 2) throw error;
+        console.error(`Attempt ${attempt} failed:`, error);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
+      }
     }
 
-    const imageData = await imageResponse.json();
-    const base64Image = imageData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-
     if (!base64Image) {
-      throw new Error('No image returned from AI');
+      throw new Error('Failed to generate image after all attempts');
     }
 
     console.log('Image generated successfully, uploading to storage...');

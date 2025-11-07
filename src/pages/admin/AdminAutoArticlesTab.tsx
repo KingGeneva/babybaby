@@ -228,6 +228,9 @@ export default function AdminAutoArticlesTab() {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) return;
 
     try {
+      const article = articles.find(a => a.id === articleId);
+      
+      // Delete from database
       const { error } = await supabase
         .from('auto_generated_articles')
         .delete()
@@ -235,10 +238,51 @@ export default function AdminAutoArticlesTab() {
 
       if (error) throw error;
 
+      // If article was published, also delete from storage
+      if (article?.status === 'published') {
+        // Find the corresponding article data to get the numeric ID
+        const { data: storageData } = await supabase
+          .from('auto_generated_articles')
+          .select('created_at')
+          .eq('id', articleId)
+          .single();
+        
+        // Try to delete the JSON file from storage
+        // We use a timestamp-based ID that was used during publish
+        const timestamp = Date.parse(storageData?.created_at || '');
+        if (timestamp) {
+          const { error: storageError } = await supabase.storage
+            .from('articles')
+            .remove([`articles/${timestamp}.json`]);
+          
+          if (storageError) {
+            console.error('Storage deletion error:', storageError);
+          }
+        }
+        
+        // Also try to delete the image if it exists
+        if (article.image_url) {
+          const imagePath = article.image_url.split('/').slice(-2).join('/');
+          const { error: imageError } = await supabase.storage
+            .from('articles')
+            .remove([imagePath]);
+          
+          if (imageError) {
+            console.error('Image deletion error:', imageError);
+          }
+        }
+      }
+
       toast({
         title: "Article supprimé",
-        description: "L'article a été supprimé définitivement",
+        description: "L'article a été supprimé définitivement du site",
       });
+
+      // Invalidate article cache
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('cached-articles');
+        localStorage.removeItem('cached-articles-timestamp');
+      }
 
       fetchArticles();
     } catch (error) {
