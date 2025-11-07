@@ -1,6 +1,5 @@
-
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
@@ -11,11 +10,14 @@ const APP_VERSION = '1.2.0'; // Incrémentation pour rafraîchir le cache
 console.log(`BabyBaby App v${APP_VERSION} loaded successfully`);
 
 // Create the root with React 18 API
-const root = ReactDOM.createRoot(document.getElementById("root")!);
+const rootElement = document.getElementById("root");
+if (!rootElement) throw new Error('Failed to find the root element');
+
+const root = createRoot(rootElement);
 
 // Render the app
 root.render(
-  <React.StrictMode>
+  <StrictMode>
     <App />
-  </React.StrictMode>
+  </StrictMode>
 );
