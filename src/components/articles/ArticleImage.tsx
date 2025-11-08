@@ -15,20 +15,24 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title }) => {
   }
   
   return (
-    <div className="mb-8 relative w-full aspect-video overflow-hidden rounded-lg shadow-md bg-muted">
+    <div className="mb-8 relative w-full overflow-hidden rounded-lg shadow-md bg-muted" style={{ aspectRatio: '16/9' }}>
       {isLoading && (
         <Skeleton className="absolute inset-0 w-full h-full" />
       )}
       <img 
         src={image} 
         alt={title}
-        className="absolute inset-0 w-full h-full object-cover"
+        className="w-full h-full object-cover"
         loading="eager"
         decoding="async"
-        width="800"
-        height="450"
+        width="1200"
+        height="675"
         onLoad={() => setIsLoading(false)}
-        style={{ opacity: isLoading ? 0 : 1, transition: 'opacity 0.3s' }}
+        style={{ 
+          opacity: isLoading ? 0 : 1, 
+          transition: 'opacity 0.3s ease-in-out',
+          display: 'block'
+        }}
       />
     </div>
   );

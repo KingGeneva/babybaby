@@ -9,6 +9,12 @@ import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import SubscriptionBenefits from './subscription/SubscriptionBenefits';
 import SocialProof from './subscription/SocialProof';
+import { z } from 'zod';
+
+const newsletterSchema = z.object({
+  email: z.string().trim().email("Email invalide").max(255, "L'email doit faire moins de 255 caractères"),
+  name: z.string().trim().max(100, "Le nom doit faire moins de 100 caractères").optional()
+});
 
 const NewsletterForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -20,11 +26,6 @@ const NewsletterForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email) {
-      toast.error("Veuillez saisir votre adresse email");
-      return;
-    }
-    
     if (!consent) {
       toast.error("Veuillez accepter notre politique de confidentialité");
       return;
@@ -33,11 +34,14 @@ const NewsletterForm: React.FC = () => {
     setSubmitting(true);
     
     try {
+      // Validate input
+      const validated = newsletterSchema.parse({ email, name: name || undefined });
+      
       const { error } = await supabase
         .from('newsletter_subscribers')
         .insert({
-          email,
-          name: name || null,
+          email: validated.email,
+          name: validated.name || null,
           consent_given: true
         });
 
@@ -61,8 +65,10 @@ const NewsletterForm: React.FC = () => {
         setSubmitted(false);
       }, 3000);
       
-    } catch (error) {
-      console.error('Subscription error:', error);
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      }
     } finally {
       setSubmitting(false);
     }

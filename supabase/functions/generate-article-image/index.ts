@@ -13,6 +13,47 @@ serve(async (req) => {
   }
 
   try {
+    // Verify authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('Missing Supabase configuration');
+    }
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Check if user has admin role
+    const { data: hasRole } = await supabase.rpc('has_role', {
+      _user_id: user.id,
+      _role: 'admin'
+    });
+
+    if (!hasRole) {
+      return new Response(JSON.stringify({ error: 'Forbidden: Admin access required' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
     const { articleId, title, excerpt } = await req.json();
 
     if (!articleId || !title) {
@@ -20,16 +61,10 @@ serve(async (req) => {
     }
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
-    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-    if (!LOVABLE_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      throw new Error('Missing required environment variables');
+    if (!LOVABLE_API_KEY) {
+      throw new Error('Missing Lovable API key');
     }
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-    
-    console.log(`Generating image for article: ${title}`);
 
     // Create a descriptive prompt for the image based on the article
     const imagePrompt = `Crée une illustration moderne et professionnelle pour un article de blog sur la parentalité intitulé "${title}". ${excerpt ? `L'article parle de: ${excerpt.substring(0, 150)}` : ''}. Style: doux, chaleureux, familial, avec des couleurs pastel. Format: 16:9 horizontal. Ultra high resolution.`;
@@ -41,8 +76,6 @@ serve(async (req) => {
     // Try with flash-image model first
     for (let attempt = 1; attempt <= 2; attempt++) {
       try {
-        console.log(`Image generation attempt ${attempt}/2`);
-        
         const imageResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
           method: 'POST',
           headers: {
@@ -62,8 +95,6 @@ serve(async (req) => {
         });
 
         if (!imageResponse.ok) {
-          const errorText = await imageResponse.text();
-          console.error(`Image generation failed (attempt ${attempt}):`, imageResponse.status, errorText);
           if (attempt === 2) {
             throw new Error(`Failed to generate image after 2 attempts: ${imageResponse.status}`);
           }
@@ -71,12 +102,9 @@ serve(async (req) => {
         }
 
         imageData = await imageResponse.json();
-        console.log('Image response received:', JSON.stringify(imageData, null, 2));
-        
         base64Image = imageData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
 
         if (!base64Image) {
-          console.error('No image in response:', JSON.stringify(imageData));
           if (attempt === 2) {
             throw new Error('No image returned from AI after 2 attempts');
           }
@@ -87,7 +115,6 @@ serve(async (req) => {
         break;
       } catch (error) {
         if (attempt === 2) throw error;
-        console.error(`Attempt ${attempt} failed:`, error);
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
       }
     }
@@ -95,8 +122,6 @@ serve(async (req) => {
     if (!base64Image) {
       throw new Error('Failed to generate image after all attempts');
     }
-
-    console.log('Image generated successfully, uploading to storage...');
 
     // Convert base64 to blob
     const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, '');
@@ -113,7 +138,6 @@ serve(async (req) => {
       });
 
     if (uploadError) {
-      console.error('Storage upload error:', uploadError);
       throw uploadError;
     }
 
@@ -122,8 +146,6 @@ serve(async (req) => {
       .from('articles')
       .getPublicUrl(fileName);
 
-    console.log('Image uploaded, updating article...');
-
     // Update article with image URL
     const { error: updateError } = await supabase
       .from('auto_generated_articles')
@@ -131,11 +153,8 @@ serve(async (req) => {
       .eq('id', articleId);
 
     if (updateError) {
-      console.error('Article update error:', updateError);
       throw updateError;
     }
-
-    console.log('Article image generated and saved successfully');
 
     return new Response(
       JSON.stringify({
@@ -147,7 +166,6 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Error in generate-article-image function:', error);
     return new Response(
       JSON.stringify({ 
         error: error.message,

@@ -7,6 +7,14 @@ import { Textarea } from './ui/textarea';
 import { Separator } from './ui/separator';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { z } from 'zod';
+
+const contactSchema = z.object({
+  name: z.string().trim().min(1, "Le nom est requis").max(100, "Le nom doit faire moins de 100 caractères"),
+  email: z.string().trim().email("Email invalide").max(255, "L'email doit faire moins de 255 caractères"),
+  subject: z.string().trim().min(1, "Le sujet est requis").max(200, "Le sujet doit faire moins de 200 caractères"),
+  message: z.string().trim().min(10, "Le message doit faire au moins 10 caractères").max(2000, "Le message doit faire moins de 2000 caractères")
+});
 
 const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -27,16 +35,17 @@ const ContactSection: React.FC = () => {
     setIsSubmitting(true);
     
     try {
+      // Validate input
+      const validated = contactSchema.parse(formData);
+      
       // Call the Supabase Edge Function
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: formData
+        body: validated
       });
 
       if (error) {
         throw new Error(error.message || 'Une erreur est survenue lors de l\'envoi du message.');
       }
-
-      console.log('Email sent successfully:', data);
       
       toast({
         title: "Message envoyé!",
@@ -47,12 +56,19 @@ const ContactSection: React.FC = () => {
       setFormData({ name: '', email: '', subject: '', message: '' });
       
     } catch (error: any) {
-      console.error('Error submitting form:', error);
-      toast({
-        title: "Erreur",
-        description: error.message || "Une erreur est survenue lors de l'envoi du message.",
-        variant: "destructive"
-      });
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Erreur de validation",
+          description: error.errors[0].message,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Erreur",
+          description: error.message || "Une erreur est survenue lors de l'envoi du message.",
+          variant: "destructive"
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }

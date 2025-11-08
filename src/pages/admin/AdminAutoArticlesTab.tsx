@@ -47,7 +47,6 @@ export default function AdminAutoArticlesTab() {
       if (error) throw error;
       setArticles((data as AutoArticle[]) || []);
     } catch (error) {
-      console.error('Error fetching articles:', error);
       toast({
         title: "Erreur",
         description: "Impossible de charger les articles",
@@ -61,7 +60,21 @@ export default function AdminAutoArticlesTab() {
   const generateArticle = async () => {
     setGenerating(true);
     try {
-      const { data, error } = await supabase.functions.invoke('generate-article');
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Non authentifié",
+          description: "Vous devez être connecté pour générer un article",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('generate-article', {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
+      });
 
       if (error) throw error;
 
@@ -72,7 +85,6 @@ export default function AdminAutoArticlesTab() {
 
       fetchArticles();
     } catch (error) {
-      console.error('Error generating article:', error);
       toast({
         title: "Erreur",
         description: "Impossible de générer l'article",
@@ -105,29 +117,40 @@ export default function AdminAutoArticlesTab() {
         });
 
         try {
-          const { error: imageError } = await supabase.functions.invoke('generate-article-image', {
-            body: {
-              articleId: article.id,
-              title: article.title,
-              excerpt: article.excerpt
-            }
-          });
-
-          if (imageError) {
-            console.error('Image generation error:', imageError);
+          const { data: { session } } = await supabase.auth.getSession();
+          if (!session) {
             toast({
               title: "Image non générée",
-              description: "L'article est approuvé mais l'image n'a pas pu être générée",
+              description: "Vous devez être connecté pour générer une image",
               variant: "destructive",
             });
           } else {
-            toast({
-              title: "Image générée",
-              description: "L'article est prêt à être publié avec son image",
+            const { error: imageError } = await supabase.functions.invoke('generate-article-image', {
+              body: {
+                articleId: article.id,
+                title: article.title,
+                excerpt: article.excerpt
+              },
+              headers: {
+                Authorization: `Bearer ${session.access_token}`
+              }
             });
+
+            if (imageError) {
+              toast({
+                title: "Image non générée",
+                description: "L'article est approuvé mais l'image n'a pas pu être générée",
+                variant: "destructive",
+              });
+            } else {
+              toast({
+                title: "Image générée",
+                description: "L'article est prêt à être publié avec son image",
+              });
+            }
           }
         } catch (imgErr) {
-          console.error('Image generation failed:', imgErr);
+          // Silent fail - article is still approved
         }
       } else if (status === 'rejected') {
         toast({
@@ -138,7 +161,6 @@ export default function AdminAutoArticlesTab() {
 
       fetchArticles();
     } catch (error) {
-      console.error('Error updating article:', error);
       toast({
         title: "Erreur",
         description: "Impossible de mettre à jour l'article",
@@ -184,7 +206,6 @@ export default function AdminAutoArticlesTab() {
         });
 
       if (uploadError) {
-        console.error('Storage upload error:', uploadError);
         throw uploadError;
       }
 
@@ -198,7 +219,6 @@ export default function AdminAutoArticlesTab() {
         .eq('id', article.id);
 
       if (updateError) {
-        console.error('Status update error:', updateError);
         throw updateError;
       }
 
@@ -215,7 +235,6 @@ export default function AdminAutoArticlesTab() {
 
       fetchArticles();
     } catch (error) {
-      console.error('Error publishing article:', error);
       toast({
         title: "Erreur",
         description: `Impossible de publier l'article: ${error instanceof Error ? error.message : 'Erreur inconnue'}`,
@@ -286,7 +305,6 @@ export default function AdminAutoArticlesTab() {
 
       fetchArticles();
     } catch (error) {
-      console.error('Error deleting article:', error);
       toast({
         title: "Erreur",
         description: "Impossible de supprimer l'article",

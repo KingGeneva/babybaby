@@ -13,17 +13,52 @@ serve(async (req) => {
   }
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    // Verify authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-
-    if (!LOVABLE_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      throw new Error('Missing required environment variables');
+    
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('Missing Supabase configuration');
     }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     
-    console.log('Starting article generation process...');
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Check if user has admin role
+    const { data: hasRole } = await supabase.rpc('has_role', {
+      _user_id: user.id,
+      _role: 'admin'
+    });
+
+    if (!hasRole) {
+      return new Response(JSON.stringify({ error: 'Forbidden: Admin access required' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    
+    if (!LOVABLE_API_KEY) {
+      throw new Error('Missing Lovable API key');
+    }
 
     // Step 1: Identify current trends related to parenting using AI with variety
     const randomSeed = Date.now();
@@ -83,7 +118,6 @@ Réponds en une seule phrase claire décrivant cette tendance UNIQUE. ID: ${rand
 
     const trendData = await trendResponse.json();
     const trend = trendData.choices[0].message.content.trim();
-    console.log('Identified trend:', trend);
 
     // Step 2: Generate a comprehensive article based on the trend
     const articleResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
@@ -128,7 +162,6 @@ Réponds UNIQUEMENT avec le contenu de l'article en Markdown, sans aucun texte d
 
     const articleData = await articleResponse.json();
     const fullContent = articleData.choices[0].message.content.trim();
-    console.log('Generated article length:', fullContent.length);
 
     // Step 3: Extract metadata from the article using AI
     const metadataResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
@@ -180,9 +213,7 @@ Réponds UNIQUEMENT avec le JSON, sans aucun autre texte.`
       // Remove markdown code blocks if present
       const cleanedText = metadataText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       metadata = JSON.parse(cleanedText);
-      console.log('Extracted metadata:', metadata);
     } catch (parseError) {
-      console.error('Failed to parse metadata JSON:', parseError);
       // Fallback metadata
       metadata = {
         title: trend.substring(0, 100),
@@ -213,11 +244,8 @@ Réponds UNIQUEMENT avec le JSON, sans aucun autre texte.`
       .single();
 
     if (dbError) {
-      console.error('Database error:', dbError);
       throw dbError;
     }
-
-    console.log('Article saved successfully:', article.id);
 
     return new Response(
       JSON.stringify({
@@ -228,8 +256,7 @@ Réponds UNIQUEMENT avec le JSON, sans aucun autre texte.`
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
-  } catch (error) {
-    console.error('Error in generate-article function:', error);
+    } catch (error) {
     return new Response(
       JSON.stringify({ 
         error: error.message,

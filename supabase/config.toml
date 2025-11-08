@@ -1,4 +1,3 @@
-
 project_id = "pxynugnbikiwbsqdgewx"
 
 [functions.send-contact-email]
@@ -8,10 +7,10 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.generate-article]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-article-image]
-verify_jwt = false
+verify_jwt = true
 
 [functions.seed-quiz-data]
 verify_jwt = false

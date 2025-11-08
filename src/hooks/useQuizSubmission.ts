@@ -5,6 +5,14 @@ import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { QuizType } from '@/components/quiz/types';
 import { calculateDetailedResults } from '@/components/quiz/calculateUtils';
+import { z } from 'zod';
+
+const quizAnswerSchema = z.record(z.string(), z.string().max(500));
+const quizResultsSchema = z.object({
+  score: z.number().min(0).max(100),
+  detailedResults: z.any(),
+  recommendations: z.any()
+});
 
 interface UseQuizSubmissionProps {
   quizType: QuizType | undefined;
@@ -25,17 +33,22 @@ export const useQuizSubmission = ({
     
     setIsSubmitting(true);
     try {
-      const results = calculateDetailedResults(answers, questions);
+      // Validate answers
+      const validatedAnswers = quizAnswerSchema.parse(answers);
+      
+      const results = calculateDetailedResults(validatedAnswers, questions);
+      const validatedResults = quizResultsSchema.parse(results);
+      
       const { data: sessionData } = await supabase.auth.getSession();
       
       if (sessionData.session?.user) {
         await supabase.from('quiz_responses').insert({
           user_id: sessionData.session.user.id,
           quiz_type: quizType,
-          answers,
-          score: results.score,
-          detailed_results: results.detailedResults,
-          recommendations: results.recommendations
+          answers: validatedAnswers,
+          score: validatedResults.score,
+          detailed_results: validatedResults.detailedResults,
+          recommendations: validatedResults.recommendations
         });
         
         toast({
@@ -46,17 +59,24 @@ export const useQuizSubmission = ({
       
       navigate(`/quiz/${quizType}/results`, { 
         state: { 
-          results,
+          results: validatedResults,
           quizType 
         }
       });
     } catch (error) {
-      console.error("Erreur lors de la soumission du quiz:", error);
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de l'enregistrement de vos réponses.",
-        variant: "destructive"
-      });
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Erreur de validation",
+          description: "Les réponses du quiz sont invalides.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Erreur",
+          description: "Une erreur est survenue lors de l'enregistrement de vos réponses.",
+          variant: "destructive"
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
