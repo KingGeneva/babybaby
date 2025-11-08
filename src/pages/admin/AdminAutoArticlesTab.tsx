@@ -23,6 +23,7 @@ interface AutoArticle {
   created_at: string;
   author: string;
   image_url?: string;
+  published_id?: number;
 }
 
 export default function AdminAutoArticlesTab() {
@@ -171,9 +172,11 @@ export default function AdminAutoArticlesTab() {
 
   const publishArticle = async (article: AutoArticle) => {
     try {
+      const publishedId = Date.now();
+      
       // Prepare article data for storage in the correct format
       const articleData = {
-        id: Date.now(),
+        id: publishedId,
         title: article.title,
         content: article.content,
         summary: article.summary,
@@ -197,7 +200,7 @@ export default function AdminAutoArticlesTab() {
         type: 'application/json' 
       });
       
-      const fileName = `articles/${articleData.id}.json`;
+      const fileName = `articles/${publishedId}.json`;
       const { error: uploadError } = await supabase.storage
         .from('articles')
         .upload(fileName, blob, {
@@ -209,12 +212,13 @@ export default function AdminAutoArticlesTab() {
         throw uploadError;
       }
 
-      // Update status to published
+      // Update status to published and store the published ID
       const { error: updateError } = await supabase
         .from('auto_generated_articles')
         .update({ 
           status: 'published',
           published_at: new Date().toISOString(),
+          published_id: publishedId
         })
         .eq('id', article.id);
 
@@ -249,6 +253,30 @@ export default function AdminAutoArticlesTab() {
     try {
       const article = articles.find(a => a.id === articleId);
       
+      // If article was published, delete from storage first
+      if (article?.status === 'published' && article.published_id) {
+        // Delete the JSON file from storage
+        const { error: storageError } = await supabase.storage
+          .from('articles')
+          .remove([`articles/${article.published_id}.json`]);
+        
+        if (storageError) {
+          toast({
+            title: "Erreur de suppression",
+            description: `Impossible de supprimer le fichier de l'article: ${storageError.message}`,
+            variant: "destructive",
+          });
+        }
+        
+        // Also delete the image if it exists
+        if (article.image_url) {
+          const imagePath = article.image_url.split('/').slice(-2).join('/');
+          await supabase.storage
+            .from('articles')
+            .remove([imagePath]);
+        }
+      }
+      
       // Delete from database
       const { error } = await supabase
         .from('auto_generated_articles')
@@ -256,41 +284,6 @@ export default function AdminAutoArticlesTab() {
         .eq('id', articleId);
 
       if (error) throw error;
-
-      // If article was published, also delete from storage
-      if (article?.status === 'published') {
-        // Find the corresponding article data to get the numeric ID
-        const { data: storageData } = await supabase
-          .from('auto_generated_articles')
-          .select('created_at')
-          .eq('id', articleId)
-          .single();
-        
-        // Try to delete the JSON file from storage
-        // We use a timestamp-based ID that was used during publish
-        const timestamp = Date.parse(storageData?.created_at || '');
-        if (timestamp) {
-          const { error: storageError } = await supabase.storage
-            .from('articles')
-            .remove([`articles/${timestamp}.json`]);
-          
-          if (storageError) {
-            console.error('Storage deletion error:', storageError);
-          }
-        }
-        
-        // Also try to delete the image if it exists
-        if (article.image_url) {
-          const imagePath = article.image_url.split('/').slice(-2).join('/');
-          const { error: imageError } = await supabase.storage
-            .from('articles')
-            .remove([imagePath]);
-          
-          if (imageError) {
-            console.error('Image deletion error:', imageError);
-          }
-        }
-      }
 
       toast({
         title: "Article supprimé",
@@ -307,7 +300,7 @@ export default function AdminAutoArticlesTab() {
     } catch (error) {
       toast({
         title: "Erreur",
-        description: "Impossible de supprimer l'article",
+        description: `Impossible de supprimer l'article: ${error instanceof Error ? error.message : 'Erreur inconnue'}`,
         variant: "destructive",
       });
     }
