@@ -126,7 +126,7 @@ export default function AdminAutoArticlesTab() {
               variant: "destructive",
             });
           } else {
-            const { error: imageError } = await supabase.functions.invoke('generate-article-image', {
+            const { data: imageData, error: imageError } = await supabase.functions.invoke('generate-article-image', {
               body: {
                 articleId: article.id,
                 title: article.title,
@@ -138,14 +138,22 @@ export default function AdminAutoArticlesTab() {
             });
 
             if (imageError) {
+              console.error('Image generation error:', imageError);
               toast({
                 title: "Image non générée",
-                description: "L'article est approuvé mais l'image n'a pas pu être générée",
+                description: `Erreur: ${imageError.message || 'Erreur inconnue'}`,
+                variant: "destructive",
+              });
+            } else if (imageData?.error) {
+              console.error('Image generation returned error:', imageData.error);
+              toast({
+                title: "Image non générée",
+                description: `Erreur: ${imageData.error}`,
                 variant: "destructive",
               });
             } else {
               toast({
-                title: "Image générée",
+                title: "Image générée avec succès",
                 description: "L'article est prêt à être publié avec son image",
               });
             }

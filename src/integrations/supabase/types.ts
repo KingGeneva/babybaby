@@ -48,6 +48,7 @@ export type Database = {
           id: string
           image_url: string | null
           published_at: string | null
+          published_id: number | null
           reading_time: number
           reviewed_at: string | null
           reviewed_by: string | null
@@ -66,6 +67,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           published_at?: string | null
+          published_id?: number | null
           reading_time?: number
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -84,6 +86,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           published_at?: string | null
+          published_id?: number | null
           reading_time?: number
           reviewed_at?: string | null
           reviewed_by?: string | null
