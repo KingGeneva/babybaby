@@ -113,6 +113,24 @@ const fetchArticleAndUpdateCache = async (id: number): Promise<Article | undefin
   }
 };
 
+// Function to invalidate all caches - to be called after article deletion/publication
+export const invalidateAllArticleCaches = () => {
+  // Clear memory caches
+  articleCache.clear();
+  categoryCache.clear();
+  
+  // Clear localStorage caches
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('cached-articles');
+    localStorage.removeItem('cached-articles-timestamp');
+  }
+  
+  // Re-populate with static articles
+  articles.forEach(article => {
+    articleCache.set(article.id, { data: article, timestamp: Date.now() });
+  });
+};
+
 // This function helps to get articles by category with cache
 export const getArticlesByCategory = async (category: string): Promise<Article[]> => {
   // Check memory cache first

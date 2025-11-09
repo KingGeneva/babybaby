@@ -15,14 +15,11 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title }) => {
   }
   
   return (
-    <div className="mb-8 w-full overflow-hidden rounded-lg shadow-md bg-muted" style={{ aspectRatio: '16/9' }}>
-      {isLoading && (
-        <Skeleton className="w-full h-full" />
-      )}
+    <div className="mb-8 w-full overflow-hidden rounded-lg shadow-md bg-muted relative" style={{ aspectRatio: '16/9', minHeight: '400px' }}>
       <img 
         src={image} 
         alt={title}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover absolute inset-0"
         loading="eager"
         decoding="async"
         width="1200"

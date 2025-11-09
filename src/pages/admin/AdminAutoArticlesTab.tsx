@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Markdown from 'react-markdown';
+import { invalidateAllArticleCaches } from '@/data/articles/index';
 
 interface AutoArticle {
   id: string;
@@ -239,11 +240,8 @@ export default function AdminAutoArticlesTab() {
         description: "L'article est maintenant visible sur le site",
       });
 
-      // Invalidate article cache to show new article
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('cached-articles');
-        localStorage.removeItem('cached-articles-timestamp');
-      }
+      // Invalidate ALL caches to show new article
+      invalidateAllArticleCaches();
 
       fetchArticles();
     } catch (error) {
@@ -298,11 +296,8 @@ export default function AdminAutoArticlesTab() {
         description: "L'article a été supprimé définitivement du site",
       });
 
-      // Invalidate article cache
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('cached-articles');
-        localStorage.removeItem('cached-articles-timestamp');
-      }
+      // Invalidate ALL caches to remove article from site
+      invalidateAllArticleCaches();
 
       fetchArticles();
     } catch (error) {
