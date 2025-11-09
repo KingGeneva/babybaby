@@ -14,23 +14,24 @@ const AuthForm: React.FC = () => {
   // Fonction pour envoyer un email personnalisé
   const sendCustomEmail = async (email: string, type: 'signup' | 'magiclink' | 'recovery', actionLink?: string) => {
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      
-      await fetch(`https://pxynugnbikiwbsqdgewx.supabase.co/functions/v1/send-custom-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionData?.session?.access_token || ''}`,
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('send-custom-email', {
+        body: {
           email,
           type,
           meta: {
             action_link: actionLink || '',
           }
-        }),
+        }
       });
-      console.log(`Email personnalisé de type ${type} envoyé à ${email}`);
+
+      if (error) {
+        console.error("Erreur lors de l'envoi de l'email personnalisé:", error);
+        return;
+      }
+
+      if (import.meta.env.DEV) {
+        console.log(`Email personnalisé de type ${type} envoyé à ${email}`);
+      }
     } catch (error) {
       console.error("Erreur lors de l'envoi de l'email personnalisé:", error);
     }
