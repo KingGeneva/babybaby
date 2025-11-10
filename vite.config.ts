@@ -25,10 +25,11 @@ export default defineConfig(({ mode }) => ({
       "react": path.resolve(__dirname, "./node_modules/react"),
       "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
-    dedupe: ['react', 'react-dom'],
+    dedupe: ['react', 'react-dom', 'react-router-dom'],
   },
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: ['react', 'react-dom', 'react-router-dom'],
+    force: true,
   },
   build: {
     // Configuration de build optimisée
