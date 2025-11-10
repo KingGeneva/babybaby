@@ -1,4 +1,4 @@
-import { Suspense, useMemo } from "react";
+import { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -13,22 +13,23 @@ import { appRoutes } from "./routes";
 
 const APP_VERSION = '1.2.0';
 
-function App() {
-  // Create QueryClient inside component to avoid HMR issues
-  const queryClient = useMemo(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: 1,
-        staleTime: 30000,
-        gcTime: 300000,
-        refetchOnWindowFocus: false,
-        refetchOnMount: true
-      },
+// Create QueryClient instance once
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 30000,
+      gcTime: 300000,
+      refetchOnWindowFocus: false,
+      refetchOnMount: true
     },
-  }), []);
+  },
+});
 
-  const helmetContext = useMemo(() => ({}), []);
+// Create helmet context once
+const helmetContext = {};
 
+function App() {
   return (
     <BrowserRouter>
       <HelmetProvider context={helmetContext}>
