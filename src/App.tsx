@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -11,26 +11,24 @@ import ChatbotButton from "./components/chatbot/ChatbotButton";
 import CacheManager from "./components/common/CacheManager";
 import { appRoutes } from "./routes";
 
-// Version pour le cache
 const APP_VERSION = '1.2.0';
 
-// Create QueryClient instance
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      staleTime: 30000,
-      gcTime: 300000,
-      refetchOnWindowFocus: false,
-      refetchOnMount: true
-    },
-  },
-});
-
-// Create helmet context
-const helmetContext = {};
-
 function App() {
+  // Create QueryClient inside component to avoid HMR issues
+  const queryClient = useMemo(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+        staleTime: 30000,
+        gcTime: 300000,
+        refetchOnWindowFocus: false,
+        refetchOnMount: true
+      },
+    },
+  }), []);
+
+  const helmetContext = useMemo(() => ({}), []);
+
   return (
     <BrowserRouter>
       <HelmetProvider context={helmetContext}>
