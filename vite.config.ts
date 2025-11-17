@@ -23,12 +23,11 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-    dedupe: ['react', 'react-dom', 'react-router-dom'],
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
+    exclude: ['react-router-dom'],
     esbuildOptions: {
-      plugins: [],
+      target: 'es2020',
     },
   },
   build: {
