@@ -11,23 +11,22 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [
-    react({
-      // Configuration React optimisée
-      tsDecorators: false,
-      jsxImportSource: undefined,
-    }),
+    react(),
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      'react': path.resolve(__dirname, './node_modules/react'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
     },
+    dedupe: ['react', 'react-dom'],
   },
   optimizeDeps: {
-    exclude: ['react-router-dom'],
+    include: ['react', 'react-dom', 'react/jsx-runtime'],
     esbuildOptions: {
-      target: 'es2020',
+      jsx: 'automatic',
     },
   },
   build: {
