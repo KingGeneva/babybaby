@@ -209,6 +209,51 @@ export type Database = {
         }
         Relationships: []
       }
+      ebooks: {
+        Row: {
+          author: string | null
+          category: string
+          cover_image: string
+          created_at: string | null
+          description: string
+          file_size: string
+          file_type: string
+          file_url: string
+          id: string
+          publish_date: string | null
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          author?: string | null
+          category: string
+          cover_image: string
+          created_at?: string | null
+          description: string
+          file_size: string
+          file_type?: string
+          file_url: string
+          id: string
+          publish_date?: string | null
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          author?: string | null
+          category?: string
+          cover_image?: string
+          created_at?: string | null
+          description?: string
+          file_size?: string
+          file_type?: string
+          file_url?: string
+          id?: string
+          publish_date?: string | null
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
       growth_measurements: {
         Row: {
           child_id: string
