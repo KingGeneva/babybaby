@@ -12,19 +12,25 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development' &&
-    componentTagger(),
+    mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    dedupe: ['react', 'react-dom'],
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
   build: {
     sourcemap: false,
     minify: 'esbuild',
     target: 'es2018',
     chunkSizeWarningLimit: 1000,
+    commonjsOptions: {
+      include: [/node_modules/],
+    },
     rollupOptions: {
       onwarn(warning, warn) {
         if (warning.code === 'CIRCULAR_DEPENDENCY') return;
