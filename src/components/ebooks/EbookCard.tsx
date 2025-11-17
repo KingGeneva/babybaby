@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Download, BookOpen } from 'lucide-react';
+import { Download, BookOpen, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import {
@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Ebook } from './types';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface EbookCardProps {
   ebook: Ebook;
@@ -21,6 +22,8 @@ interface EbookCardProps {
 }
 
 const EbookCard: React.FC<EbookCardProps> = ({ ebook, onDownload, isLoading }) => {
+  const { user } = useAuth();
+  
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -49,26 +52,39 @@ const EbookCard: React.FC<EbookCardProps> = ({ ebook, onDownload, isLoading }) =
             <span>{ebook.fileType}</span>
             <span>{ebook.fileSize}</span>
           </div>
-          <div className="flex gap-2 w-full">
-            <Button 
-              variant="outline" 
-              className="flex-1 flex items-center justify-center gap-2 border-babybaby-cosmic text-babybaby-cosmic hover:bg-babybaby-cosmic hover:text-white"
-              onClick={() => onDownload(ebook)}
-              disabled={isLoading}
-            >
-              <Download className="h-4 w-4" />
-              {isLoading ? 'Préparation...' : 'Télécharger'}
-            </Button>
+          {user ? (
+            <div className="flex gap-2 w-full">
+              <Button 
+                variant="outline" 
+                className="flex-1 flex items-center justify-center gap-2 border-babybaby-cosmic text-babybaby-cosmic hover:bg-babybaby-cosmic hover:text-white"
+                onClick={() => onDownload(ebook)}
+                disabled={isLoading}
+              >
+                <Download className="h-4 w-4" />
+                {isLoading ? 'Préparation...' : 'Télécharger'}
+              </Button>
+              <Button 
+                variant="default" 
+                className="flex-1 flex items-center justify-center gap-2 bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
+              >
+                <Link to={`/ebooks/${ebook.id}`} className="flex items-center justify-center gap-2 w-full">
+                  <BookOpen className="h-4 w-4" />
+                  Lire
+                </Link>
+              </Button>
+            </div>
+          ) : (
             <Button 
               variant="default" 
-              className="flex-1 flex items-center justify-center gap-2 bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
+              className="w-full flex items-center justify-center gap-2 bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
+              asChild
             >
-              <Link to={`/ebooks/${ebook.id}`} className="flex items-center justify-center gap-2 w-full">
-                <BookOpen className="h-4 w-4" />
-                Lire
+              <Link to="/auth">
+                <Lock className="h-4 w-4" />
+                Connectez-vous pour accéder
               </Link>
             </Button>
-          </div>
+          )}
         </CardFooter>
       </Card>
     </motion.div>

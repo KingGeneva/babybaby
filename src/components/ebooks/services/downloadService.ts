@@ -7,6 +7,16 @@ import { recordDownload } from './analyticsService';
 
 // Téléchargement d'un ebook
 export const downloadEbook = async (ebook: Ebook): Promise<void> => {
+  // Vérifier si l'utilisateur est authentifié
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  if (!session) {
+    toast.error("Vous devez être connecté pour télécharger des e-books", {
+      description: "Créez un compte gratuit pour accéder à tous nos guides"
+    });
+    return;
+  }
+  
   try {
     // Feedback de chargement
     toast.loading(`Préparation de ${ebook.title}...`);
