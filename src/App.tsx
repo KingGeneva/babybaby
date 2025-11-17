@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/ui/theme-provider";
@@ -31,7 +31,7 @@ const helmetContext = {};
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <HelmetProvider context={helmetContext}>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider defaultTheme="light">
@@ -57,7 +57,7 @@ function App() {
           </ThemeProvider>
         </QueryClientProvider>
       </HelmetProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
