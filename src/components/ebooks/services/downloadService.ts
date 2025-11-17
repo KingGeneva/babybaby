@@ -27,9 +27,10 @@ export const downloadEbook = async (ebook: Ebook): Promise<void> => {
     
     console.log(`Téléchargement de l'ebook depuis: bucket=${bucketName}, fichier=${filePath}`);
     
-    // Si l'URL est déjà une URL complète (directe), on l'utilise directement
-    if (filePath.startsWith('http')) {
-      const response = await fetch(filePath);
+    // Si l'URL est déjà une URL complète (directe) ou un chemin public
+    if (filePath.startsWith('http') || filePath.startsWith('/')) {
+      const fetchUrl = filePath.startsWith('http') ? filePath : `${window.location.origin}${filePath}`;
+      const response = await fetch(fetchUrl);
       if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
       
       const blob = await response.blob();
