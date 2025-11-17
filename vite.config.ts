@@ -22,14 +22,14 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "react": path.resolve(__dirname, "./node_modules/react"),
-      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
     dedupe: ['react', 'react-dom', 'react-router-dom'],
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
-    force: true,
+    esbuildOptions: {
+      plugins: [],
+    },
   },
   build: {
     // Configuration de build optimisée
@@ -45,7 +45,7 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-ui': [
             '@radix-ui/react-toast',
             '@radix-ui/react-label',
@@ -53,7 +53,6 @@ export default defineConfig(({ mode }) => ({
             '@radix-ui/react-avatar',
           ],
           'vendor-tools': ['lucide-react', 'date-fns'],
-          'vendor-routing': ['react-router-dom'],
           'vendor-data': ['@tanstack/react-query'],
           'vendor-animations': ['framer-motion'],
           'vendor-charts': ['recharts'],
