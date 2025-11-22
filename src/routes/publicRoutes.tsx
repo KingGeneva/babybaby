@@ -17,7 +17,8 @@ const EbooksPage = lazy(() => import("../pages/EbooksPage"));
 const EbookViewerPage = lazy(() => import("../pages/EbookViewerPage"));
 const ContestsPage = lazy(() => import("../pages/ContestsPage"));
 const StrollerComparisonPage = lazy(() => import("../pages/StrollerComparisonPage"));
-const BoutiquePage = lazy(() => import("../pages/BoutiquePage"));
+const ShopPage = lazy(() => import("../pages/ShopPage"));
+const ProductDetailPage = lazy(() => import("../pages/ProductDetailPage"));
 
 // Wrap page components with transition effects and layout
 const wrapWithLayout = (Component: React.ComponentType, variant: 'fade' | 'slide' | 'scale' = 'fade') => {
@@ -42,6 +43,7 @@ export const publicRoutes: RouteObject[] = [
   { path: "/ebooks", element: wrapWithLayout(EbooksPage, 'slide') },
   { path: "/ebooks/:id", element: wrapWithLayout(EbookViewerPage, 'fade') },
   { path: "/contests", element: wrapWithLayout(ContestsPage, 'slide') },
-  { path: "/boutique", element: wrapWithLayout(BoutiquePage, 'slide') },
+  { path: "/boutique", element: wrapWithLayout(ShopPage, 'slide') },
+  { path: "/boutique/:handle", element: wrapWithLayout(ProductDetailPage, 'fade') },
   { path: "*", element: wrapWithLayout(NotFound, 'scale') }
 ];
