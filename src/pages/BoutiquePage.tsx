@@ -1,24 +1,14 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import SEOHead from '@/components/common/SEOHead';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import HreflangTags from '@/components/seo/HreflangTags';
 import { Badge } from '@/components/ui/badge';
-import { ExternalLink } from 'lucide-react';
 
 const BoutiquePage: React.FC = () => {
-  useEffect(() => {
-    // Optimized delay for search engine bots while still redirecting users
-    // Permet aux moteurs de recherche d'indexer cette page tout en redirigeant l'utilisateur
-    const redirectTimer = setTimeout(() => {
-      window.location.href = 'https://babybaby.boutique';
-    }, 3000);
-    
-    // Clean up to prevent memory leaks
-    return () => clearTimeout(redirectTimer);
-  }, []);
+  // Redirection désactivée car le domaine babybaby.boutique n'est pas accessible
   
   // Configuration avancée des langues alternatives pour la boutique
   const alternateLanguages = [
@@ -219,27 +209,21 @@ const BoutiquePage: React.FC = () => {
           </div>
           
           <p className="text-gray-700 text-lg mb-8">
-            Vous allez être redirigé vers notre boutique en ligne dans quelques secondes...
+            Notre boutique en ligne sera bientôt disponible. Restez connectés!
           </p>
           
           <div className="flex justify-center mb-12">
-            <div className="animate-pulse bg-babybaby-cosmic h-2 w-64 rounded-full" 
+            <div className="bg-babybaby-cosmic/20 h-2 w-64 rounded-full" 
                  role="progressbar" 
-                 aria-label="Indicateur de redirection" 
-                 aria-valuenow={50} 
+                 aria-label="Boutique en préparation" 
+                 aria-valuenow={0} 
                  aria-valuemin={0} 
                  aria-valuemax={100}></div>
           </div>
           
-          <a 
-            href="https://babybaby.boutique" 
-            className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80 text-white px-8 py-3 rounded-full font-medium transition-colors inline-flex items-center gap-2"
-            rel="noopener noreferrer"
-            aria-label="Accéder maintenant à la boutique BabyBaby"
-          >
-            Accéder maintenant à la boutique
-            <ExternalLink size={16} aria-hidden="true" />
-          </a>
+          <div className="text-muted-foreground text-sm">
+            La boutique BabyBaby est actuellement en construction
+          </div>
           
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md" data-aos="fade-up">
