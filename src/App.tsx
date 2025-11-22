@@ -33,25 +33,23 @@ function App() {
       <HelmetProvider context={helmetContext}>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider defaultTheme="light">
-            <TooltipProvider delayDuration={0}>
-              <AuthProvider>
-                <Suspense fallback={<LoadingFallback />}>
-                  <Routes>
-                    {appRoutes.map((route) => (
-                      <Route
-                        key={route.path || 'notfound'}
-                        path={route.path}
-                        element={route.element}
-                      />
-                    ))}
-                  </Routes>
-                  
-                  <ChatbotButton />
-                  <CacheManager version={APP_VERSION} />
-                </Suspense>
-                <Toaster position="top-center" richColors />
-              </AuthProvider>
-            </TooltipProvider>
+            <AuthProvider>
+              <Suspense fallback={<LoadingFallback />}>
+                <Routes>
+                  {appRoutes.map((route) => (
+                    <Route
+                      key={route.path || 'notfound'}
+                      path={route.path}
+                      element={route.element}
+                    />
+                  ))}
+                </Routes>
+                
+                <ChatbotButton />
+                <CacheManager version={APP_VERSION} />
+              </Suspense>
+              <Toaster position="top-center" richColors />
+            </AuthProvider>
           </ThemeProvider>
         </QueryClientProvider>
       </HelmetProvider>
