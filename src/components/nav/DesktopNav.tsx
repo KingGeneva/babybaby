@@ -1,8 +1,9 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, LogOut, Store } from "lucide-react";
+import { LayoutDashboard, LogOut, Store, Shield } from "lucide-react";
 import ResourcesDropdown from "./ResourcesDropdown";
 import { motion } from "framer-motion";
 import {
@@ -32,6 +33,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
   toggleResources,
 }) => {
   const { user, signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const location = useLocation();
 
   const getUserInitials = () => {
@@ -161,6 +163,17 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
                 <span>Tableau de bord</span>
               </Link>
             </DropdownMenuItem>
+            {isAdmin && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/admin" className="flex items-center cursor-pointer">
+                    <Shield className="mr-2 h-4 w-4" />
+                    <span>Administration</span>
+                  </Link>
+                </DropdownMenuItem>
+              </>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={signOut}
