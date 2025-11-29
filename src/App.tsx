@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "@/components/ui/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
@@ -32,25 +31,23 @@ function App() {
     <HashRouter>
       <HelmetProvider context={helmetContext}>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider defaultTheme="light">
-            <AuthProvider>
-              <Suspense fallback={<LoadingFallback />}>
-                <Routes>
-                  {appRoutes.map((route) => (
-                    <Route
-                      key={route.path || 'notfound'}
-                      path={route.path}
-                      element={route.element}
-                    />
-                  ))}
-                </Routes>
-                
-                <ChatbotButton />
-                <CacheManager version={APP_VERSION} />
-              </Suspense>
-              <Toaster position="top-center" richColors />
-            </AuthProvider>
-          </ThemeProvider>
+          <AuthProvider>
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                {appRoutes.map((route) => (
+                  <Route
+                    key={route.path || 'notfound'}
+                    path={route.path}
+                    element={route.element}
+                  />
+                ))}
+              </Routes>
+              
+              <ChatbotButton />
+              <CacheManager version={APP_VERSION} />
+            </Suspense>
+            <Toaster position="top-center" richColors />
+          </AuthProvider>
         </QueryClientProvider>
       </HelmetProvider>
     </HashRouter>
