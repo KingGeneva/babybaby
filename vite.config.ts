@@ -21,6 +21,6 @@ export default defineConfig(({ mode }) => ({
     dedupe: ["react", "react-dom", "react-router-dom"],
   },
   optimizeDeps: {
-    exclude: ["react", "react-dom", "react-router-dom"],
+    include: ["react", "react-dom", "react-router-dom"],
   },
 }));
