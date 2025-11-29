@@ -1,8 +1,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronRight, BookOpen, Gift, LayoutDashboard, LogOut, Store } from "lucide-react";
+import { ChevronRight, BookOpen, Gift, LayoutDashboard, LogOut, Store, Shield } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface MobileMenuProps {
 
 const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps) => {
   const { user, signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
   
   return (
     <AnimatePresence>
@@ -34,6 +36,15 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
                   <LayoutDashboard className="h-4 w-4 mr-2" />
                   Tableau de bord
                 </Link>
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    Administration
+                  </Link>
+                )}
                 <button
                   onClick={signOut}
                   className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
