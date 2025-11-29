@@ -9,7 +9,7 @@ const corsHeaders = {
 
 // Configuration pour tous les types de quiz
 const quizData = {
-  parenting_style: [
+  connaissance: [
     {
       question: "Comment réagissez-vous lorsque votre enfant fait une crise ?",
       options: [
@@ -38,7 +38,7 @@ const quizData = {
       ]
     }
   ],
-  child_development: [
+  developpement: [
     {
       question: "À quel âge la plupart des bébés commencent-ils à marcher ?",
       options: [
@@ -67,7 +67,7 @@ const quizData = {
       ]
     }
   ],
-  parental_burnout: [
+  personnalite: [
     {
       question: "À quelle fréquence vous sentez-vous épuisé(e) par votre rôle de parent ?",
       options: [
@@ -116,13 +116,15 @@ serve(async (req) => {
 
     // Insérer les questions pour chaque type de quiz
     for (const [quizType, questions] of Object.entries(quizData)) {
-      for (const question of questions) {
+      for (let i = 0; i < questions.length; i++) {
+        const question = questions[i];
         const { data, error } = await supabaseClient
           .from('quiz_questions')
           .upsert({
             quiz_type: quizType,
             question: question.question,
-            options: question.options
+            options: question.options,
+            order_index: i
           }, { onConflict: 'quiz_type,question' });
         
         if (error) {
