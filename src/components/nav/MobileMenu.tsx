@@ -23,7 +23,7 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="md:hidden glass-card mx-4 mt-2 overflow-hidden z-50"
+          className="md:hidden bg-background border border-border rounded-xl shadow-lg mx-4 mt-2 overflow-hidden z-50"
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {user && (
