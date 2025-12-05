@@ -46,6 +46,6 @@ export const publicRoutes: RouteObject[] = [
   { path: "/contests", element: wrapWithLayout(ContestsPage, 'slide') },
   { path: "/boutique", element: wrapWithLayout(ShopPage, 'slide') },
   { path: "/boutique/:handle", element: wrapWithLayout(ProductDetailPage, 'fade') },
-  { path: "/rapport-puericulture-2026", element: wrapWithLayout(BabyProductsReportPage, 'fade') },
+  { path: "/meilleurs-produits-bebe-2026", element: wrapWithLayout(BabyProductsReportPage, 'fade') },
   { path: "*", element: wrapWithLayout(NotFound, 'scale') }
 ];

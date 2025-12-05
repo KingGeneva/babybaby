@@ -37,9 +37,9 @@ const BabyProductsReportPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title={reportMetadata.shortTitle}
+        title="Les meilleurs produits pour bébé à acheter en 2026 | Guide complet"
         description={reportMetadata.description}
-        canonicalUrl="https://babybaby.app/rapport-puericulture-2026"
+        canonicalUrl="https://babybaby.app/meilleurs-produits-bebe-2026"
         ogType="article"
         keywords={reportMetadata.keywords}
         articleData={{
