@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -10,6 +9,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   clearScreen: false,
+  cacheDir: ".vite-cache-v4",
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
@@ -17,15 +17,13 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "react": path.resolve(__dirname, "./node_modules/react"),
+      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
     dedupe: ["react", "react-dom", "react-router-dom"],
   },
   optimizeDeps: {
-    include: [
-      "react", 
-      "react-dom", 
-      "react-router-dom",
-    ],
+    include: ["react", "react-dom", "react-router-dom", "react/jsx-runtime"],
     force: true,
   },
 }));
