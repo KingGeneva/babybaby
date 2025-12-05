@@ -10,7 +10,6 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   clearScreen: false,
-  cacheDir: ".vite-cache-v3",
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
@@ -18,31 +17,15 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "react": path.resolve(__dirname, "./node_modules/react"),
-      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
-      "react-router-dom": path.resolve(__dirname, "./node_modules/react-router-dom"),
     },
-    dedupe: ["react", "react-dom", "react-router-dom", "framer-motion", "@radix-ui/react-navigation-menu"],
+    dedupe: ["react", "react-dom", "react-router-dom"],
   },
   optimizeDeps: {
     include: [
       "react", 
       "react-dom", 
-      "react-router-dom", 
-      "framer-motion", 
-      "@radix-ui/react-navigation-menu",
-      "react/jsx-runtime",
-      "react/jsx-dev-runtime"
+      "react-router-dom",
     ],
     force: true,
-    esbuildOptions: {
-      target: 'esnext',
-    },
-  },
-  build: {
-    commonjsOptions: {
-      include: [/node_modules/],
-      transformMixedEsModules: true,
-    },
   },
 }));
