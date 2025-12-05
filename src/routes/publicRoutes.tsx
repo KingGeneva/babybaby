@@ -16,7 +16,7 @@ const FreeOffersPage = lazy(() => import("../pages/FreeOffersPage"));
 const EbooksPage = lazy(() => import("../pages/EbooksPage"));
 const EbookViewerPage = lazy(() => import("../pages/EbookViewerPage"));
 const ContestsPage = lazy(() => import("../pages/ContestsPage"));
-const StrollerComparisonPage = lazy(() => import("../pages/StrollerComparisonPage"));
+
 const ShopPage = lazy(() => import("../pages/ShopPage"));
 const ProductDetailPage = lazy(() => import("../pages/ProductDetailPage"));
 const BabyProductsReportPage = lazy(() => import("../pages/BabyProductsReportPage"));
@@ -37,7 +37,6 @@ export const publicRoutes: RouteObject[] = [
   { path: "/auth", element: <AuthPage /> }, // Authentication page typically uses a separate layout
   { path: "/articles", element: wrapWithLayout(ArticlesPage, 'slide') },
   { path: "/articles/:id", element: wrapWithLayout(ArticleDetailPage, 'fade') },
-  { path: "/articles/meilleures-poussettes-2025", element: wrapWithLayout(StrollerComparisonPage, 'fade') },
   { path: "/faq", element: wrapWithLayout(FAQPage, 'fade') },
   { path: "/about", element: wrapWithLayout(AboutPage, 'fade') },
   { path: "/free-offers", element: wrapWithLayout(FreeOffersPage, 'slide') },
