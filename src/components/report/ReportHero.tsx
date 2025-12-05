@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, Clock, BookOpen, Snowflake, Leaf, Cpu } from 'lucide-react';
+import { Clock, BookOpen, Snowflake, Leaf, Cpu } from 'lucide-react';
 import { introContent, reportMetadata, productCategories } from '@/data/babyProductsReport';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -30,13 +30,6 @@ const ReportHero: React.FC = () => {
         >
           {/* Badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-            <Badge variant="secondary" className="px-3 py-1">
-              <Calendar className="w-3 h-3 mr-1" />
-              {new Date(reportMetadata.publishDate).toLocaleDateString('fr-CA', { 
-                year: 'numeric', 
-                month: 'long' 
-              })}
-            </Badge>
             <Badge variant="secondary" className="px-3 py-1">
               <Clock className="w-3 h-3 mr-1" />
               {readingTime} min de lecture
