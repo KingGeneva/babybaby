@@ -78,16 +78,6 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link to="/articles/meilleures-poussettes-2025">
-              <NavigationMenuLink className={cn(
-                navigationMenuTriggerStyle(),
-                isActive("/articles/meilleures-poussettes-2025") && "bg-babybaby-cosmic/10 text-babybaby-cosmic font-medium"
-              )}>
-                Meilleures Poussettes
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
             <Link to="/quiz">
               <NavigationMenuLink className={cn(
                 navigationMenuTriggerStyle(),
