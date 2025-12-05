@@ -29,9 +29,9 @@ export interface ProductCategory {
 }
 
 export const reportMetadata = {
-  title: "Rapport Stratégique : L'État du Marché de la Puériculture au Québec et au Canada – Horizon 2026",
-  shortTitle: "Comparatif Produits Bébé 2026",
-  description: "Analyse exhaustive des 10 catégories critiques de produits bébé. Synthèse des données techniques, avis d'experts certifiés et recommandations pour les parents canadiens.",
+  title: "Les meilleurs produits pour bébé à acheter en 2026",
+  shortTitle: "Les meilleurs produits pour bébé à acheter en 2026",
+  description: "Guide complet des meilleurs produits pour bébé en 2026 : analyse de 10 catégories, avis d'experts et recommandations pour les parents canadiens et québécois.",
   publishDate: "2026-01-15",
   updateDate: "2026-01-15",
   author: "BabyBaby Expert Team",

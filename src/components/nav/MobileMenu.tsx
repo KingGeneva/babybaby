@@ -68,10 +68,10 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
               Articles
             </Link>
             <Link
-              to="/rapport-puericulture-2026"
+              to="/meilleurs-produits-bebe-2026"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
             >
-              Rapport 2026
+              Meilleurs Produits 2026
             </Link>
             <Link
               to="/articles/meilleures-poussettes-2025"
