@@ -1,12 +1,12 @@
-
 # Fichier robots.txt optimisé pour https://babybaby.app/
-# Dernière mise à jour: 2025-05-19
+# Dernière mise à jour: 2024-12-12
 
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /auth/
+Disallow: /api/
 
 # Instructions spécifiques pour Googlebot
 User-agent: Googlebot
@@ -17,7 +17,6 @@ Crawl-delay: 1
 # Instructions pour Googlebot-Image
 User-agent: Googlebot-Image
 Allow: /
-Crawl-delay: 1
 
 # Instructions pour Bingbot
 User-agent: Bingbot
@@ -25,25 +24,8 @@ Allow: /
 Disallow: /admin/
 Crawl-delay: 1
 
-# Instructions pour Yahoo Slurp
-User-agent: Slurp
-Allow: /
-Disallow: /admin/
-Crawl-delay: 2
-
-# Prioritisation des pages importantes
-User-agent: *
-Crawl-delay: 2
-
-# Directives spécifiques pour les pages sous embargo
-# Disallow: /articles/upcoming-article-1/
-# Disallow: /articles/upcoming-article-2/
-
-# Emplacement des sitemaps
+# Emplacement du sitemap principal
 Sitemap: https://babybaby.app/sitemap.xml
-Sitemap: https://babybaby.app/sitemaps/articles-sitemap.xml
-Sitemap: https://babybaby.app/sitemaps/pages-sitemap.xml
-Sitemap: https://babybaby.app/sitemaps/products-sitemap.xml
 
 # Host
-Host: babybaby.app
+Host: https://babybaby.app
