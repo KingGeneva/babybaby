@@ -188,6 +188,24 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_rate_limits: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: string
+        }
+        Relationships: []
+      }
       ebook_downloads: {
         Row: {
           downloaded_at: string | null
@@ -342,6 +360,24 @@ export type Database = {
           },
         ]
       }
+      newsletter_rate_limits: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           email: string
@@ -482,6 +518,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_old_rate_limits: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
