@@ -158,7 +158,9 @@ export const productCategories: ProductCategory[] = [
         tagline: "Le Meilleur Rapport Sécurité/Prix",
         description: "Le choix rationnel par excellence. Il offre les limites de poids dos à la route les plus élevées du marché (50 lbs), surpassant des sièges trois fois plus chers. Son panneau d'extension de jambes résout la plainte numéro un des parents.",
         pros: ["50 lbs dos à la route", "Panneau d'extension jambes", "Installation simple", "Compact"],
-        cons: ["Moins premium que Clek"]
+        cons: ["Moins premium que Clek"],
+        imageUrl: "/lovable-uploads/graco-extend2fit.jpg",
+        affiliateLink: "https://www.amazon.ca/dp/B09SSYYNC2/ref=cm_sw_r_cso_cp_apan_dp_49J8PCD6EMM09J24MT51?th=1"
       },
       {
         id: "clek-foonf",
