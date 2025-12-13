@@ -10,7 +10,7 @@ import ChatbotButton from "./components/chatbot/ChatbotButton";
 import CacheManager from "./components/common/CacheManager";
 import { appRoutes } from "./routes";
 
-const APP_VERSION = '1.2.2';
+const APP_VERSION = '1.2.3';
 
 const queryClient = new QueryClient({
   defaultOptions: {

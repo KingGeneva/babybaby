@@ -1,6 +1,6 @@
 
 // Service Worker optimisé pour BabyBaby App
-const CACHE_NAME = 'babybaby-cache-v7'; // Incrémentation de la version
+const CACHE_NAME = 'babybaby-cache-v8'; // Incrémentation de la version
 const RESOURCES_TO_CACHE = [
   '/',
   '/index.html',
@@ -279,7 +279,7 @@ self.addEventListener('message', event => {
       if (event.source) {
         event.source.postMessage({
           type: 'PONG',
-          version: 'v7' // Mise à jour de la version
+          version: 'v8' // Mise à jour de la version
         });
       }
       break;
@@ -287,4 +287,4 @@ self.addEventListener('message', event => {
 });
 
 // Version optimisée
-console.log('Service Worker chargé - version v7 avec optimisations réseau et analytics améliorées');
+console.log('Service Worker chargé - version v8 avec optimisations réseau et analytics améliorées');
