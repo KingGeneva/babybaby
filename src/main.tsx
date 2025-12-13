@@ -4,7 +4,7 @@ import App from "./App";
 import "./index.css";
 
 // Version for the cache - mise à jour pour forcer le rechargement du service worker
-const APP_VERSION = '1.2.2'; // Incrémentation pour rafraîchir le cache
+const APP_VERSION = '1.2.3'; // Incrémentation pour rafraîchir le cache
 
 // Console log pour vérifier que l'app est bien chargée avec la nouvelle version
 console.log(`BabyBaby App v${APP_VERSION} loaded successfully`);
