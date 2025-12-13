@@ -1,6 +1,6 @@
-
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
+import { Resend } from "npm:resend@4.0.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -62,6 +62,41 @@ function validateInput(data: CustomEmailRequest): void {
   }
 }
 
+// Rate limiting check using Supabase
+async function checkRateLimit(supabase: any, ip: string): Promise<{ allowed: boolean; retryAfter?: number }> {
+  const RATE_LIMIT_WINDOW_MS = 3600000; // 1 hour
+  const MAX_REQUESTS = 10; // 10 requests per hour per IP for custom emails
+  
+  const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+  
+  // Check recent requests from this IP
+  const { data: recentRequests, error } = await supabase
+    .from('contact_rate_limits')
+    .select('created_at')
+    .eq('ip_address', ip)
+    .gte('created_at', windowStart)
+    .order('created_at', { ascending: false });
+  
+  if (error) {
+    console.error("Rate limit check error:", error);
+    // If we can't check, allow the request but log the error
+    return { allowed: true };
+  }
+  
+  if (recentRequests && recentRequests.length >= MAX_REQUESTS) {
+    const oldestInWindow = new Date(recentRequests[recentRequests.length - 1].created_at);
+    const retryAfter = Math.ceil((oldestInWindow.getTime() + RATE_LIMIT_WINDOW_MS - Date.now()) / 1000);
+    return { allowed: false, retryAfter };
+  }
+  
+  // Record this request
+  await supabase
+    .from('contact_rate_limits')
+    .insert({ ip_address: ip });
+  
+  return { allowed: true };
+}
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -69,6 +104,60 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Get client IP for rate limiting
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+               req.headers.get('cf-connecting-ip') || 
+               'unknown';
+    
+    // Initialize Supabase client
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    
+    // Verify JWT authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.log("Missing authorization header");
+      return new Response(
+        JSON.stringify({ error: "Authentication required" }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+    
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    
+    if (authError || !user) {
+      console.log("Invalid authentication:", authError?.message);
+      return new Response(
+        JSON.stringify({ error: "Invalid authentication" }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+    
+    // Check rate limit
+    const rateLimitResult = await checkRateLimit(supabase, ip);
+    if (!rateLimitResult.allowed) {
+      console.log(`Rate limit exceeded for IP: ${ip}, user: ${user.id}`);
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please try again later." }),
+        {
+          status: 429,
+          headers: { 
+            "Content-Type": "application/json", 
+            "Retry-After": String(rateLimitResult.retryAfter || 3600),
+            ...corsHeaders 
+          },
+        }
+      );
+    }
+    
     const data: CustomEmailRequest = await req.json();
     
     // Validate input before processing
@@ -78,6 +167,24 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!email) {
       throw new Error("Email address is required");
+    }
+    
+    // Security: Validate that the authenticated user can only send emails to their own address
+    // Exception for admins who may need to send to other users
+    const { data: hasAdminRole } = await supabase.rpc('has_role', {
+      _user_id: user.id,
+      _role: 'admin'
+    });
+    
+    if (!hasAdminRole && user.email !== email) {
+      console.log(`User ${user.id} attempted to send email to ${email} but is not admin`);
+      return new Response(
+        JSON.stringify({ error: "You can only send emails to your own address" }),
+        {
+          status: 403,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
     }
 
     let emailSubject = "";
@@ -113,7 +220,7 @@ const handler = async (req: Request): Promise<Response> => {
       html: emailContent,
     });
 
-    console.log("Email personnalisé envoyé avec succès:", emailResponse);
+    console.log(`Custom email (${type}) sent successfully to ${email} by user ${user.id}:`, emailResponse);
 
     return new Response(JSON.stringify(emailResponse), {
       status: 200,
@@ -125,7 +232,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Erreur dans la fonction send-custom-email:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "An error occurred while processing your request." }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
