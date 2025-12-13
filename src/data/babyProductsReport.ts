@@ -117,6 +117,8 @@ export const productCategories: ProductCategory[] = [
         tagline: "Le Meilleur Choix Manuel / Budget",
         description: "Souvent sous-estimé, le Medela Harmony est un outil essentiel dans l'arsenal de toute mère allaitante. Sa poignée ergonomique pivotante permet de simuler manuellement les deux phases de succion.",
         price: "40$ - 60$",
+        imageUrl: "/lovable-uploads/medela-harmony.jpg",
+        affiliateLink: "https://a.co/d/ezkfddI",
         pros: ["Économique", "Silencieux", "Portable", "Compatible biberons Medela"],
         cons: ["Manuel (fatigue possible)"]
       },
