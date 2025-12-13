@@ -131,6 +131,8 @@ export const productCategories: ProductCategory[] = [
         tagline: "Le Meilleur Choix Wearable",
         description: "Le Momcozy M5 s'impose comme le leader du segment portable grâce à son rapport performance/prix agressif. Le design discret \"Baby Mouth\" tente d'imiter la succion naturelle.",
         price: "200$ - 250$",
+        imageUrl: "/lovable-uploads/momcozy-m5.jpg",
+        affiliateLink: "https://a.co/d/axD8NnI",
         pros: ["Mains libres", "Design discret", "Rapport qualité/prix", "Portable"],
         cons: ["Ne remplace pas un tire-lait de table pour usage exclusif"]
       }
