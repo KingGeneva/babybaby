@@ -103,6 +103,8 @@ export const productCategories: ProductCategory[] = [
         tagline: "Le Meilleur Choix Global",
         description: "Le Spectra S1 Plus conserve sa couronne en 2026. Il représente le meilleur équilibre entre puissance \"clinique\" et autonomie. Sa batterie rechargeable intégrée offre environ 3 heures de pompage, libérant les mères de la prise murale sans sacrifier la puissance d'aspiration (jusqu'à 270 mmHg).",
         price: "250$ - 300$",
+        imageUrl: "/lovable-uploads/spectra-s1-plus.jpg",
+        affiliateLink: "https://a.co/d/7IXOTs7",
         pros: ["Batterie rechargeable intégrée", "Mode massage efficace", "Puissance grade hospitalier", "Réglages personnalisables"],
         cons: ["Volumineux", "Disponibilité variable au Canada"]
       },
