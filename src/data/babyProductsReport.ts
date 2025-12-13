@@ -148,6 +148,16 @@ export const productCategories: ProductCategory[] = [
       "L'année 2025-2026 a été marquée par des turbulences dans le segment des sièges rotatifs, notamment avec le cas de l'Evenflo Revolve360.",
       "La marque canadienne Clek représente le summum de la sécurité passive avec leur structure en acier et barre anti-rebond."
     ],
+    comparisonTable: {
+      headers: ["Caractéristique", "Graco Extend2Fit", "Clek Foonf", "Britax One4Life"],
+      rows: [
+        { "Caractéristique": "Limite dos à la route", "Graco Extend2Fit": "50 lbs", "Clek Foonf": "40 lbs", "Britax One4Life": "40 lbs" },
+        { "Caractéristique": "Durabilité", "Graco Extend2Fit": "10 ans", "Clek Foonf": "9 ans", "Britax One4Life": "10 ans" },
+        { "Caractéristique": "Fabriqué au", "Graco Extend2Fit": "USA", "Clek Foonf": "Canada 🇨🇦", "Britax One4Life": "USA" },
+        { "Caractéristique": "Installation", "Graco Extend2Fit": "Standard", "Clek Foonf": "Rigid LATCH", "Britax One4Life": "ClickTight" },
+        { "Caractéristique": "Prix (CAD)", "Graco Extend2Fit": "350$ - 450$", "Clek Foonf": "650$ - 750$", "Britax One4Life": "500$ - 600$" }
+      ]
+    },
     products: [
       {
         id: "graco-extend2fit",
@@ -195,6 +205,16 @@ export const productCategories: ProductCategory[] = [
       "La jambe de force et la barre anti-rebond sont devenues les standards de sécurité avancée en 2026.",
       "Pour les citadins, le poids de la coquille est crucial, avec des modèles pesant parfois moins de 6 livres."
     ],
+    comparisonTable: {
+      headers: ["Caractéristique", "Clek Liing", "Nuna PIPA RX", "Graco SnugRide 35"],
+      rows: [
+        { "Caractéristique": "Poids coquille", "Clek Liing": "9 lbs", "Nuna PIPA RX": "7.9 lbs", "Graco SnugRide 35": "8.5 lbs" },
+        { "Caractéristique": "Limite poids", "Clek Liing": "35 lbs", "Nuna PIPA RX": "32 lbs", "Graco SnugRide 35": "35 lbs" },
+        { "Caractéristique": "Jambe de force", "Clek Liing": "Oui (métal)", "Nuna PIPA RX": "Oui", "Graco SnugRide 35": "Non" },
+        { "Caractéristique": "Installation sans base", "Clek Liing": "Oui", "Nuna PIPA RX": "Oui (excellente)", "Graco SnugRide 35": "Oui" },
+        { "Caractéristique": "Prix (CAD)", "Clek Liing": "550$ - 650$", "Nuna PIPA RX": "450$ - 550$", "Graco SnugRide 35": "200$ - 280$" }
+      ]
+    },
     products: [
       {
         id: "clek-liing",
@@ -240,6 +260,16 @@ export const productCategories: ProductCategory[] = [
       "Le verre borosilicate résiste aux chocs thermiques brutaux, est inerte, ne se raye pas et ne retient pas les odeurs.",
       "Pour les bébés souffrant de RGO ou de coliques, le système de ventilation interne de Dr. Brown's reste inégalé cliniquement."
     ],
+    comparisonTable: {
+      headers: ["Caractéristique", "Philips Avent Natural", "Dr. Brown's Options+", "Comotomo"],
+      rows: [
+        { "Caractéristique": "Matériau", "Philips Avent Natural": "Verre borosilicate", "Dr. Brown's Options+": "Verre borosilicate", "Comotomo": "Silicone médical" },
+        { "Caractéristique": "Système anti-colique", "Philips Avent Natural": "Tétine AirFree", "Dr. Brown's Options+": "Ventilation interne", "Comotomo": "Double valve" },
+        { "Caractéristique": "Col", "Philips Avent Natural": "Large", "Dr. Brown's Options+": "Large", "Comotomo": "Large" },
+        { "Caractéristique": "Facilité nettoyage", "Philips Avent Natural": "Facile", "Dr. Brown's Options+": "Moyen (pièces)", "Comotomo": "Très facile" },
+        { "Caractéristique": "Prix (CAD)", "Philips Avent Natural": "25$ - 35$", "Dr. Brown's Options+": "20$ - 30$", "Comotomo": "20$ - 25$" }
+      ]
+    },
     products: [
       {
         id: "philips-avent-natural",
@@ -285,6 +315,16 @@ export const productCategories: ProductCategory[] = [
       "Face aux histoires de caméras IP piratées, une large part du marché revient aux moniteurs utilisant la technologie FHSS (ondes radio locales cryptées).",
       "Les moniteurs intelligents comme le Nanit Pro utilisent la vision par ordinateur pour analyser le sommeil de l'enfant."
     ],
+    comparisonTable: {
+      headers: ["Caractéristique", "Eufy SpaceView Pro", "Nanit Pro", "VTech DM1211"],
+      rows: [
+        { "Caractéristique": "Type", "Eufy SpaceView Pro": "Vidéo Non-WiFi", "Nanit Pro": "Vidéo WiFi", "VTech DM1211": "Audio DECT" },
+        { "Caractéristique": "Résolution", "Eufy SpaceView Pro": "2K", "Nanit Pro": "1080p HD", "VTech DM1211": "N/A (audio)" },
+        { "Caractéristique": "Portée", "Eufy SpaceView Pro": "300m+", "Nanit Pro": "Illimitée (WiFi)", "VTech DM1211": "500m+" },
+        { "Caractéristique": "Sécurité", "Eufy SpaceView Pro": "Excellente (local)", "Nanit Pro": "Cryptage cloud", "VTech DM1211": "Excellente (DECT)" },
+        { "Caractéristique": "Prix (CAD)", "Eufy SpaceView Pro": "200$ - 280$", "Nanit Pro": "350$ - 450$", "VTech DM1211": "50$ - 80$" }
+      ]
+    },
     products: [
       {
         id: "eufy-spaceview",
@@ -332,6 +372,16 @@ export const productCategories: ProductCategory[] = [
       "La catégorie \"Crossover\" domine le marché en 2026.",
       "La UPPAbaby Vista reste le statut-symbole ultime grâce à sa modularité."
     ],
+    comparisonTable: {
+      headers: ["Caractéristique", "UPPAbaby Vista V3", "Bumbleride Indie", "Thule Urban Glide 3"],
+      rows: [
+        { "Caractéristique": "Poids", "UPPAbaby Vista V3": "27 lbs", "Bumbleride Indie": "24 lbs", "Thule Urban Glide 3": "25 lbs" },
+        { "Caractéristique": "Type de roues", "UPPAbaby Vista V3": "PU mousse", "Bumbleride Indie": "Pneus gonflables", "Thule Urban Glide 3": "Pneus gonflables" },
+        { "Caractéristique": "Convertible double", "UPPAbaby Vista V3": "Oui", "Bumbleride Indie": "Non (Indie Twin)", "Thule Urban Glide 3": "Non" },
+        { "Caractéristique": "Capacité panier", "UPPAbaby Vista V3": "30 lbs", "Bumbleride Indie": "10 lbs", "Thule Urban Glide 3": "10 lbs" },
+        { "Caractéristique": "Prix (CAD)", "UPPAbaby Vista V3": "1200$ - 1400$", "Bumbleride Indie": "700$ - 850$", "Thule Urban Glide 3": "750$ - 900$" }
+      ]
+    },
     products: [
       {
         id: "uppababy-vista",
@@ -378,6 +428,16 @@ export const productCategories: ProductCategory[] = [
       "Les couches Kirkland Signature de Costco offrent une performance premium pour un prix imbattable.",
       "Les couches lavables bénéficient souvent de subventions municipales couvrant jusqu'à 50% de l'achat."
     ],
+    comparisonTable: {
+      headers: ["Caractéristique", "Attitude", "Kirkland Signature", "La Petite Ourse"],
+      rows: [
+        { "Caractéristique": "Type", "Attitude": "Jetable éco", "Kirkland Signature": "Jetable standard", "La Petite Ourse": "Lavable" },
+        { "Caractéristique": "Biodégradable", "Attitude": "50%+", "Kirkland Signature": "Non", "La Petite Ourse": "N/A (réutilisable)" },
+        { "Caractéristique": "Sans parfum", "Attitude": "Oui", "Kirkland Signature": "Oui", "La Petite Ourse": "Oui" },
+        { "Caractéristique": "Coût/an (est.)", "Attitude": "1200$ - 1500$", "Kirkland Signature": "600$ - 800$", "La Petite Ourse": "400$ - 600$*" },
+        { "Caractéristique": "Origine", "Attitude": "Québec 🇨🇦", "Kirkland Signature": "USA", "La Petite Ourse": "Québec 🇨🇦" }
+      ]
+    },
     products: [
       {
         id: "attitude",
@@ -423,6 +483,16 @@ export const productCategories: ProductCategory[] = [
       "Pour les nouveau-nés (0-3 mois), les écharpes extensibles comme Beluga Baby ont redéfini la catégorie.",
       "Une fois le bébé plus lourd, Ergobaby et Tula restent les leaders techniques, tandis que WildBird et Artipoppe introduisent une dimension fashion."
     ],
+    comparisonTable: {
+      headers: ["Caractéristique", "Ergobaby Omni Breeze", "Beluga Baby Wrap", "WildBird Aerial"],
+      rows: [
+        { "Caractéristique": "Type", "Ergobaby Omni Breeze": "Structuré à clips", "Beluga Baby Wrap": "Écharpe extensible", "WildBird Aerial": "Hybride (clips + tissu)" },
+        { "Caractéristique": "Âge recommandé", "Ergobaby Omni Breeze": "0-48 mois", "Beluga Baby Wrap": "0-12 mois", "WildBird Aerial": "0-36 mois" },
+        { "Caractéristique": "Positions", "Ergobaby Omni Breeze": "4 positions", "Beluga Baby Wrap": "Ventrale", "WildBird Aerial": "3 positions" },
+        { "Caractéristique": "Respirabilité", "Ergobaby Omni Breeze": "Excellente (mesh)", "Beluga Baby Wrap": "Bonne (bambou)", "WildBird Aerial": "Très bonne (lin)" },
+        { "Caractéristique": "Prix (CAD)", "Ergobaby Omni Breeze": "200$ - 250$", "Beluga Baby Wrap": "80$ - 120$", "WildBird Aerial": "250$ - 350$" }
+      ]
+    },
     products: [
       {
         id: "ergobaby-omni-breeze",
@@ -468,6 +538,16 @@ export const productCategories: ProductCategory[] = [
       "La marque montréalaise Lambert a totalement conquis le marché québécois avec ses sacs en cuir vegan.",
       "Lululemon a capturé le segment des parents sportifs avec le New Parent Backpack."
     ],
+    comparisonTable: {
+      headers: ["Caractéristique", "Lambert Mia/Raven", "Lululemon New Parent", "Poppy & Peonies"],
+      rows: [
+        { "Caractéristique": "Matériau", "Lambert Mia/Raven": "Cuir vegan", "Lululemon New Parent": "Tissu technique", "Poppy & Peonies": "Cuir vegan" },
+        { "Caractéristique": "Style", "Lambert Mia/Raven": "Élégant urbain", "Lululemon New Parent": "Sport/Actif", "Poppy & Peonies": "Classique chic" },
+        { "Caractéristique": "Tapis intégré", "Lambert Mia/Raven": "Oui", "Lululemon New Parent": "Oui", "Poppy & Peonies": "Oui" },
+        { "Caractéristique": "Origine", "Lambert Mia/Raven": "Montréal 🇨🇦", "Lululemon New Parent": "Canada 🇨🇦", "Poppy & Peonies": "Canada 🇨🇦" },
+        { "Caractéristique": "Prix (CAD)", "Lambert Mia/Raven": "180$ - 250$", "Lululemon New Parent": "200$ - 250$", "Poppy & Peonies": "150$ - 200$" }
+      ]
+    },
     products: [
       {
         id: "lambert-mia",
@@ -513,6 +593,16 @@ export const productCategories: ProductCategory[] = [
       "La Stokke Tripp Trapp, créée en 1972, n'a jamais été égalée avec sa conception en \"Z\" ajustable.",
       "Pour les budgets serrés, la IKEA Antilop reste incontournable, mais nécessite un repose-pieds ajouté."
     ],
+    comparisonTable: {
+      headers: ["Caractéristique", "Stokke Tripp Trapp", "Abiie Beyond", "IKEA Antilop"],
+      rows: [
+        { "Caractéristique": "Évolutive", "Stokke Tripp Trapp": "6 mois à adulte", "Abiie Beyond": "6 mois à 250 lbs", "IKEA Antilop": "Non" },
+        { "Caractéristique": "Repose-pieds ajustable", "Stokke Tripp Trapp": "Oui", "Abiie Beyond": "Oui", "IKEA Antilop": "Non (accessoire)" },
+        { "Caractéristique": "Facilité nettoyage", "Stokke Tripp Trapp": "Bonne", "Abiie Beyond": "Excellente", "IKEA Antilop": "Excellente" },
+        { "Caractéristique": "Valeur revente", "Stokke Tripp Trapp": "70-80%", "Abiie Beyond": "50-60%", "IKEA Antilop": "Faible" },
+        { "Caractéristique": "Prix (CAD)", "Stokke Tripp Trapp": "450$ - 550$", "Abiie Beyond": "300$ - 400$", "IKEA Antilop": "30$ + 40$ (pieds)" }
+      ]
+    },
     products: [
       {
         id: "stokke-tripp-trapp",
