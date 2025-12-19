@@ -17,6 +17,51 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
+    // Verify authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.error('No authorization header provided');
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser(token);
+
+    if (userError || !user) {
+      console.error('Invalid user token:', userError?.message);
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Verify admin role
+    const { data: hasAdminRole, error: roleError } = await supabaseClient.rpc('has_role', {
+      _user_id: user.id,
+      _role: 'admin'
+    });
+
+    if (roleError) {
+      console.error('Error checking admin role:', roleError.message);
+      return new Response(
+        JSON.stringify({ error: 'Error verifying permissions' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!hasAdminRole) {
+      console.error('User is not an admin:', user.id);
+      return new Response(
+        JSON.stringify({ error: 'Admin access required' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log('Admin user verified:', user.id);
+
     // Liste des ebooks à uploader
     const ebooks = [
       {
@@ -52,6 +97,7 @@ serve(async (req) => {
       const fileResponse = await fetch(`${Deno.env.get('SUPABASE_URL')}${ebook.path}`);
       
       if (!fileResponse.ok) {
+        console.error(`File not found: ${ebook.filename}`);
         results.push({
           id: ebook.id,
           success: false,
@@ -71,6 +117,12 @@ serve(async (req) => {
           contentType: 'application/pdf',
           upsert: true
         });
+
+      if (error) {
+        console.error(`Upload error for ${ebook.filename}:`, error.message);
+      } else {
+        console.log(`Successfully uploaded: ${ebook.filename}`);
+      }
 
       results.push({
         id: ebook.id,
@@ -94,6 +146,7 @@ serve(async (req) => {
       }
     );
   } catch (error) {
+    console.error('Unexpected error:', error.message);
     return new Response(
       JSON.stringify({ 
         error: error.message 
