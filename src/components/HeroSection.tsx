@@ -1,15 +1,18 @@
 
-import React, { useEffect, useState } from 'react';
-import P5Canvas from './P5Canvas';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
+// Lazy load P5Canvas to improve Speed Index
+const P5Canvas = lazy(() => import('./P5Canvas'));
+
 const HeroSection: React.FC = () => {
   const [typedText, setTypedText] = useState('');
   const [isVisible, setIsVisible] = useState(false);
+  const [showCanvas, setShowCanvas] = useState(false);
   const fullText = 'L\'application complète pour les parents modernes';
   const isMobile = useIsMobile();
   const navigate = useNavigate();
@@ -32,6 +35,14 @@ const HeroSection: React.FC = () => {
     return () => clearInterval(typingInterval);
   }, [isMobile]);
 
+  // Defer P5Canvas loading to improve initial paint
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCanvas(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -50,10 +61,13 @@ const HeroSection: React.FC = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <P5Canvas className={`w-full h-full ${isMobile ? 'opacity-20' : ''}`} />
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-background to-muted">
+        {showCanvas && (
+          <Suspense fallback={null}>
+            <P5Canvas className={`w-full h-full ${isMobile ? 'opacity-20' : ''}`} />
+          </Suspense>
+        )}
       </div>
-      
       <div className="container mx-auto px-4 z-10">
         <motion.div 
           className="max-w-4xl mx-auto text-center"
