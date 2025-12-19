@@ -134,6 +134,8 @@ const PartnersCarousel = () => {
                   <img 
                     src={partner.logo} 
                     alt={`${partner.name} logo`} 
+                    width={112}
+                    height={64}
                     className="max-w-full max-h-full object-contain absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" 
                   />
                   {hoveredIndex === index && (
@@ -181,6 +183,8 @@ const PartnersCarousel = () => {
                       <img 
                         src={partner.logo} 
                         alt={`${partner.name} logo`} 
+                        width={112}
+                        height={80}
                         className={cn(
                           "max-w-[80%] max-h-[80%] object-contain",
                           "transition-all duration-300",

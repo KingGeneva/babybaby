@@ -84,9 +84,9 @@ const HeroSection: React.FC = () => {
           </motion.div>
           
           <motion.div variants={item}>
-            <h2 className="text-xl md:text-2xl lg:text-3xl mb-6 text-gray-700 dark:text-gray-300 min-h-[2rem] font-nunito">
-              {typedText}
-              <span className="animate-pulse-soft">|</span>
+            <h2 className="text-xl md:text-2xl lg:text-3xl mb-6 text-gray-700 dark:text-gray-300 min-h-[2rem] md:min-h-[2.5rem] lg:min-h-[3rem] font-nunito">
+              <span className="inline">{typedText}</span>
+              <span className="animate-pulse-soft inline-block w-[6px]">|</span>
             </h2>
           </motion.div>
 
