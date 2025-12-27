@@ -63,29 +63,6 @@ const HomePageContent: React.FC = () => {
         <ToolsSection />
         <ContactSection />
         
-        {/* Section pour le cross-domain référencement avec SEO amélioré */}
-        <section className="py-8 px-4 bg-gradient-to-br from-sky-50 to-blue-50" aria-labelledby="boutique-heading">
-          <div className="container mx-auto">
-            <div className="max-w-4xl mx-auto text-center">
-              <h2 id="boutique-heading" className="text-2xl md:text-3xl font-bold mb-4 text-babybaby-cosmic">
-                Découvrez notre boutique de produits pour bébé
-              </h2>
-              <p className="text-gray-700 mb-6 text-lg">
-                Visitez notre boutique pour découvrir des produits sélectionnés avec soin pour vous et votre bébé. 
-                Articles de puériculture, vêtements et accessoires de qualité.
-              </p>
-              <div className="flex justify-center">
-                <Link 
-                  to="/boutique" 
-                  className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80 text-white px-8 py-4 rounded-full font-medium transition-all text-lg shadow-lg hover:shadow-xl"
-                  aria-label="Visiter la boutique BabyBaby"
-                >
-                  Visiter la boutique
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
         
         {/* Newsletter avec loader minimal */}
         <section className="py-8 px-4" aria-labelledby="newsletter-heading">
