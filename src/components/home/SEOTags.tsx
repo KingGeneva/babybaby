@@ -1,4 +1,3 @@
-
 import React from 'react';
 import SEOHead from '@/components/common/SEOHead';
 import WebsiteSchema from './WebsiteSchema';
@@ -6,6 +5,9 @@ import OrganizationSchema from './OrganizationSchema';
 import ProductSchema from './ProductSchema';
 import { Helmet } from 'react-helmet-async';
 import HreflangTags from '@/components/seo/HreflangTags';
+import SoftwareApplicationSchema from '@/components/seo/SoftwareApplicationSchema';
+import LocalBusinessSchema from '@/components/seo/LocalBusinessSchema';
+import FAQPageSchema from '@/components/seo/FAQPageSchema';
 
 const SEOTags: React.FC = () => {
   // URL canonique de la page d'accueil
@@ -15,7 +17,27 @@ const SEOTags: React.FC = () => {
   const alternateLanguages = [
     { lang: "fr", url: "https://babybaby.app/" },
     { lang: "fr-FR", url: "https://babybaby.app/" },
-    // Ajoutez d'autres langues si nécessaire
+    { lang: "fr-CA", url: "https://babybaby.app/" },
+  ];
+
+  // FAQs principales pour le schema FAQ sur la page d'accueil
+  const homepageFAQs = [
+    {
+      question: "Qu'est-ce que l'application BabyBaby ?",
+      answer: "BabyBaby est une application tout-en-un pour les parents modernes. Elle permet de suivre la croissance, la santé et le développement de votre bébé avec des outils intelligents, des conseils d'experts et une communauté bienveillante."
+    },
+    {
+      question: "L'application BabyBaby est-elle gratuite ?",
+      answer: "Oui, BabyBaby propose une version gratuite avec toutes les fonctionnalités essentielles : suivi de croissance, calendrier de vaccination, articles et forum communautaire. Une version premium offre des fonctionnalités avancées."
+    },
+    {
+      question: "Comment suivre la croissance de mon bébé ?",
+      answer: "BabyBaby permet d'enregistrer le poids, la taille et le périmètre crânien de votre bébé. Les données sont affichées sur des courbes de croissance comparées aux normes OMS pour un suivi précis."
+    },
+    {
+      question: "L'application propose-t-elle des outils pour le sommeil de bébé ?",
+      answer: "Oui, BabyBaby inclut un générateur de bruit blanc avec différents sons apaisants (pluie, océan, ventilateur) et un lecteur de berceuses pour aider votre bébé à s'endormir paisiblement."
+    }
   ];
   
   return (
@@ -29,7 +51,9 @@ const SEOTags: React.FC = () => {
         keywords={[
           "suivi bébé", "application bébé", "croissance infantile", "santé bébé", 
           "développement enfant", "conseil parental", "outils parents", 
-          "carnet santé numérique", "milestones bébé", "courbe croissance"
+          "carnet santé numérique", "milestones bébé", "courbe croissance",
+          "vaccination bébé", "sommeil bébé", "alimentation bébé", "diversification alimentaire",
+          "application parents", "suivi croissance", "calendrier vaccinal"
         ]}
         alternateLanguages={alternateLanguages}
       />
@@ -46,7 +70,11 @@ const SEOTags: React.FC = () => {
         <meta name="google-site-verification" content="VGG79QXzkgBxlbUZl_WkUKyFVvUueDd22O_l40gXj0A" />
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
+        <meta name="geo.region" content="FR" />
+        <meta name="geo.placename" content="France" />
+        <meta name="ICBM" content="48.8566, 2.3522" />
         <meta property="og:locale:alternate" content="en_US" />
+        <meta property="og:locale:alternate" content="fr_CA" />
         <meta name="twitter:creator" content="@babybaby_app" />
         <meta name="twitter:domain" content="babybaby.app" />
         <link rel="preconnect" href="https://babybaby.boutique" />
@@ -57,6 +85,9 @@ const SEOTags: React.FC = () => {
       <WebsiteSchema />
       <OrganizationSchema />
       <ProductSchema />
+      <SoftwareApplicationSchema />
+      <LocalBusinessSchema />
+      <FAQPageSchema faqs={homepageFAQs} />
     </>
   );
 };

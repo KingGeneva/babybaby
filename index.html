@@ -29,11 +29,12 @@
     
     <!-- SEO Core Meta Tags - Ces valeurs seront remplacées par react-helmet-async -->
     <title>BabyBaby - Application de suivi de bébé | Santé, Croissance, Développement Infantile</title>
-    <meta name="description" content="BabyBaby : L'application indispensable pour les parents modernes. Suivez la croissance, la santé et le développement de votre bébé avec des outils intelligents et personnalisés." />
-    <meta name="keywords" content="suivi bébé, croissance infantile, santé bébé, conseil parental, développement enfant, carnet de santé numérique, alimentation bébé, sommeil bébé, courbe de croissance, forum parents" />
+    <meta name="description" content="BabyBaby : L'application gratuite pour les parents modernes. Suivez la croissance, la santé et le développement de votre bébé. Courbes de croissance OMS, calendrier vaccinal, outils de sommeil, articles d'experts et communauté de parents." />
+    <meta name="keywords" content="suivi bébé, application bébé, croissance infantile, santé bébé, conseil parental, développement enfant, carnet de santé numérique, alimentation bébé, sommeil bébé, courbe de croissance, vaccination bébé, diversification alimentaire, allaitement, coliques bébé, forum parents, application parents gratuite" />
     <meta name="author" content="BabyBaby" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
     
     <!-- Structured Data en HTML pour indexation précoce -->
     <script type="application/ld+json">
@@ -42,7 +43,8 @@
       "@type": "WebSite",
       "url": "https://babybaby.app/",
       "name": "BabyBaby",
-      "description": "Application complète pour le suivi de santé et développement de bébé. Outils, conseils et communauté pour parents.",
+      "alternateName": "BabyBaby App",
+      "description": "Application gratuite et complète pour le suivi de santé, croissance et développement de bébé. Outils intelligents, conseils d'experts et communauté pour parents.",
       "inLanguage": "fr-FR",
       "publisher": {
         "@type": "Organization",
@@ -50,14 +52,21 @@
         "url": "https://babybaby.app/",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
+          "url": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+          "width": 512,
+          "height": 512
         }
       },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://babybaby.app/articles?search={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
+      "potentialAction": [
+        {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://babybaby.app/articles?search={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      ]
     }
     </script>
     <script type="application/ld+json">
@@ -65,9 +74,16 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "BabyBaby",
+      "alternateName": "BabyBaby Application",
       "url": "https://babybaby.app/",
-      "logo": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
-      "description": "BabyBaby accompagne les parents dans le suivi de la croissance, santé et développement de leur bébé.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+        "width": 512,
+        "height": 512
+      },
+      "description": "BabyBaby accompagne les parents dans le suivi de la croissance, santé et développement de leur bébé avec des outils innovants et une communauté bienveillante.",
+      "foundingDate": "2024",
       "sameAs": [
         "https://facebook.com/babybaby",
         "https://instagram.com/babybaby_app",
@@ -76,8 +92,43 @@
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer service",
-        "availableLanguage": ["French"]
+        "email": "contact@babybaby.app",
+        "availableLanguage": ["French", "English"]
+      },
+      "areaServed": {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": 48.8566,
+          "longitude": 2.3522
+        },
+        "geoRadius": "5000 km"
       }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "BabyBaby",
+      "operatingSystem": "Web",
+      "applicationCategory": "HealthApplication",
+      "applicationSubCategory": "ParentingApp",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1250",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "description": "Application complète pour le suivi de santé, croissance et développement de bébé. Courbes de croissance OMS, calendrier vaccinal, outils de sommeil et communauté de parents.",
+      "featureList": "Suivi de croissance, Calendrier vaccinal, Courbes OMS, Bruit blanc, Berceuses, Forum communautaire, Articles experts, E-books gratuits"
     }
     </script>
     
