@@ -36,8 +36,10 @@ const HomePageContent: React.FC = () => {
         <link rel="alternate" href="https://babybaby.app/" hrefLang="x-default" />
         <link rel="alternate" href="https://babybaby.app/" hrefLang="fr" />
         <link rel="alternate" href="https://babybaby.app/" hrefLang="fr-FR" />
+        <link rel="alternate" href="https://babybaby.app/" hrefLang="fr-CA" />
         <link rel="prefetch" href="/articles" />
-        <link rel="prefetch" href="/about" />
+        <link rel="prefetch" href="/ebooks" />
+        <link rel="prefetch" href="/tools" />
       </Helmet>
 
       <div
@@ -61,16 +63,23 @@ const HomePageContent: React.FC = () => {
         <ToolsSection />
         <ContactSection />
         
-        {/* Section pour le cross-domain référencement */}
-        <section className="py-6 px-4 bg-sky-50">
+        {/* Section pour le cross-domain référencement avec SEO amélioré */}
+        <section className="py-8 px-4 bg-gradient-to-br from-sky-50 to-blue-50" aria-labelledby="boutique-heading">
           <div className="container mx-auto">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-2xl font-bold mb-4 text-babybaby-cosmic">Découvrez notre boutique</h2>
-              <p className="text-gray-700 mb-6">
-                Visitez notre boutique pour découvrir des produits sélectionnés spécialement pour vous et votre bébé.
+              <h2 id="boutique-heading" className="text-2xl md:text-3xl font-bold mb-4 text-babybaby-cosmic">
+                Découvrez notre boutique de produits pour bébé
+              </h2>
+              <p className="text-gray-700 mb-6 text-lg">
+                Visitez notre boutique pour découvrir des produits sélectionnés avec soin pour vous et votre bébé. 
+                Articles de puériculture, vêtements et accessoires de qualité.
               </p>
               <div className="flex justify-center">
-                <Link to="/boutique" className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80 text-white px-6 py-3 rounded-full font-medium transition-all">
+                <Link 
+                  to="/boutique" 
+                  className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/80 text-white px-8 py-4 rounded-full font-medium transition-all text-lg shadow-lg hover:shadow-xl"
+                  aria-label="Visiter la boutique BabyBaby"
+                >
                   Visiter la boutique
                 </Link>
               </div>
@@ -79,9 +88,10 @@ const HomePageContent: React.FC = () => {
         </section>
         
         {/* Newsletter avec loader minimal */}
-        <section className="py-6 px-4">
+        <section className="py-8 px-4" aria-labelledby="newsletter-heading">
           <div className="container mx-auto">
             <div className="max-w-2xl mx-auto">
+              <h2 id="newsletter-heading" className="sr-only">Inscription à la newsletter</h2>
               <NewsletterForm />
             </div>
           </div>
