@@ -36,7 +36,8 @@ export const publicRoutes: RouteObject[] = [
   { path: "/", element: <Index /> }, // Index already has MainLayout
   { path: "/auth", element: <AuthPage /> }, // Authentication page typically uses a separate layout
   { path: "/articles", element: wrapWithLayout(ArticlesPage, 'slide') },
-  { path: "/articles/:id", element: wrapWithLayout(ArticleDetailPage, 'fade') },
+  // ArticleDetailPage gère déjà sa mise en page (NavBar/Footer) : on évite le double layout
+  { path: "/articles/:id", element: <ArticleDetailPage /> },
   { path: "/faq", element: wrapWithLayout(FAQPage, 'fade') },
   { path: "/about", element: wrapWithLayout(AboutPage, 'fade') },
   { path: "/free-offers", element: wrapWithLayout(FreeOffersPage, 'slide') },
