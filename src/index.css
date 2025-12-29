@@ -3,9 +3,11 @@
 
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
 
+/* Must be imported after `@tailwind components` so `@layer components` is registered */
 @import './styles/neumorphic.css';
+
+@tailwind utilities;
 
 /* Animation utilities */
 @layer utilities {
@@ -191,9 +193,16 @@
   * {
     @apply border-border;
   }
+
+  html {
+    /* Prevent horizontal layout shift when scrollbars appear/disappear */
+    scrollbar-gutter: stable;
+  }
   
   body {
     @apply bg-background text-foreground font-nunito;
+    /* Stable viewport height on mobile (prevents 100vh jumps when address bar shows/hides) */
+    min-height: 100svh;
   }
 
   h1, h2, h3, h4, h5, h6 {
