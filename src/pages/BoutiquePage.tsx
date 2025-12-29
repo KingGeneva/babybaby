@@ -54,7 +54,7 @@ const BoutiquePage: React.FC = () => {
     ],
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+33-1-23-45-67-89",
+      "telephone": "+1-581-333-3173",
       "contactType": "customer service",
       "availableLanguage": ["French"]
     }
@@ -82,7 +82,7 @@ const BoutiquePage: React.FC = () => {
     "url": "https://babybaby.boutique",
     "logo": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
     "image": "https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png",
-    "telephone": "+33-1-23-45-67-89",
+    "telephone": "+1-581-333-3173",
     "priceRange": "€€",
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
