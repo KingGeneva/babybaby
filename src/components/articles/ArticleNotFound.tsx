@@ -10,7 +10,7 @@ const ArticleNotFound: React.FC = () => {
   const navigate = useNavigate();
   
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-[100svh] flex flex-col">
       <SEOHead
         title="Article introuvable"
         description="L'article que vous recherchez n'existe pas ou a été supprimé."

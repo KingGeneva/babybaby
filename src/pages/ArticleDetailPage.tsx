@@ -53,7 +53,7 @@ const ArticleDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-[100svh]">
         <NavBar />
         <div className="pt-24 pb-16">
           <div className="container mx-auto px-4">
@@ -80,7 +80,7 @@ const ArticleDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-[100svh]">
       <SEOHead
         title={article.title}
         description={article.excerpt}
