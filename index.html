@@ -24,7 +24,7 @@
     <!-- DNS prefetch for non-critical resources -->
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+    
     <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
     
     <!-- SEO Core Meta Tags - Ces valeurs seront remplacées par react-helmet-async -->
@@ -203,12 +203,6 @@
           });
         };
         
-        // Google AdSense
-        var adsScript = document.createElement('script');
-        adsScript.async = true;
-        adsScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5223592381026830';
-        adsScript.crossOrigin = 'anonymous';
-        document.head.appendChild(adsScript);
         
         // Ahrefs Analytics
         var ahrefsScript = document.createElement('script');
@@ -218,7 +212,7 @@
         document.head.appendChild(ahrefsScript);
       });
     </script>
-    <meta name="google-adsense-account" content="ca-pub-5223592381026830">
+    
 
     <!-- Impact Site Verification -->
     <meta name="Impact-Site-Verification" content="87bc928e-9f4c-45a3-8aa7-eae705784996">
