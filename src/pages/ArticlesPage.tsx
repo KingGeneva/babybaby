@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
@@ -13,6 +12,8 @@ import ArticleEmpty from '@/components/articles/ArticleEmpty';
 import ArticlePagination from '@/components/articles/ArticlePagination';
 import { useArticles } from '@/hooks/useArticles';
 import { ArticleCardSkeleton, ArticleListItemSkeleton } from '@/components/articles/ArticleSkeleton';
+import SEOHead from '@/components/common/SEOHead';
+import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 
 const categories = [
   "Tous",
@@ -55,6 +56,23 @@ const ArticlesPage = () => {
 
   return (
     <div className="min-h-screen">
+      <SEOHead 
+        title="Articles sur la Parentalité et le Développement de Bébé | BabyBaby"
+        description="Découvrez nos articles experts sur l'alimentation, le sommeil, le développement et la santé de bébé. Conseils pratiques pour les jeunes parents."
+        canonicalUrl="https://babybaby.app/articles"
+        ogImage="https://babybaby.app/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png"
+        keywords={[
+          "articles bébé", "conseils parents", "développement enfant", "nutrition bébé",
+          "sommeil bébé", "santé bébé", "éducation enfant", "parentalité positive",
+          "diversification alimentaire", "allaitement", "coliques", "croissance bébé"
+        ]}
+      />
+      <BreadcrumbSchema 
+        items={[
+          { name: "Accueil", url: "https://babybaby.app" },
+          { name: "Articles", url: "https://babybaby.app/articles" }
+        ]}
+      />
       <NavBar />
 
       <div className="relative">
@@ -66,10 +84,10 @@ const ArticlesPage = () => {
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-babybaby-cosmic mb-4">
-                Tous nos articles
+                Articles Parentalité et Développement Bébé
               </h1>
               <p className="text-gray-600 mb-8">
-                Découvrez nos conseils d'experts et astuces pour accompagner votre parentalité
+                Conseils d'experts validés pour accompagner chaque étape du développement de votre enfant
               </p>
 
               <ArticleSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />

@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Search } from 'lucide-react';
@@ -10,6 +9,8 @@ import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import SEOHead from '@/components/common/SEOHead';
+import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
+import { Helmet } from 'react-helmet-async';
 import { preloadEbooks } from '@/components/ebooks/services';
 
 const EbooksPage = () => {
@@ -26,10 +27,37 @@ const EbooksPage = () => {
     });
   }, [searchQuery, selectedFileType]);
 
+  // Schema pour les ebooks (ItemList)
+  const ebooksSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "E-books gratuits pour parents",
+    "description": "Collection de guides gratuits sur la parentalité, le développement de bébé et l'éducation positive.",
+    "numberOfItems": ebooksData.length,
+    "itemListElement": ebooksData.slice(0, 10).map((ebook, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Book",
+        "name": ebook.title,
+        "description": ebook.description,
+        "author": {
+          "@type": "Organization",
+          "name": "BabyBaby"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "BabyBaby"
+        },
+        "inLanguage": "fr",
+        "isAccessibleForFree": true
+      }
+    }))
+  };
+
   // Précharger les ebooks populaires en arrière-plan
   useEffect(() => {
     if (!isPreloaded) {
-      // On utilise setTimeout pour ne pas bloquer le rendu initial
       setTimeout(() => {
         preloadEbooks(ebooksData.slice(0, 3))
           .then(() => setIsPreloaded(true))
@@ -41,11 +69,27 @@ const EbooksPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <SEOHead 
-        title="E-books pour Parents | BabyBaby"
-        description="Découvrez notre collection d'e-books gratuits pour accompagner les parents dans leur parcours. Guides, conseils et ressources expertisées."
+        title="E-books Gratuits pour Parents | Guides Parentalité, Sommeil, Développement Bébé"
+        description="Téléchargez gratuitement nos e-books sur la parentalité : guides sommeil bébé, développement enfant, gentle parenting, diversification alimentaire et plus."
         canonicalUrl="https://babybaby.app/ebooks"
-        ogImage="/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
+        ogImage="https://babybaby.app/lovable-uploads/etapes-developpement-cover.jpg"
+        keywords={[
+          "ebook gratuit parentalité", "guide bébé pdf", "livre sommeil bébé gratuit",
+          "guide développement enfant", "ebook gentle parenting", "livre diversification alimentaire",
+          "guide coliques bébé", "ebook allaitement"
+        ]}
       />
+      <BreadcrumbSchema 
+        items={[
+          { name: "Accueil", url: "https://babybaby.app" },
+          { name: "E-books", url: "https://babybaby.app/ebooks" }
+        ]}
+      />
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(ebooksSchema)}
+        </script>
+      </Helmet>
       
       <NavBar />
       
@@ -57,8 +101,11 @@ const EbooksPage = () => {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl font-bold text-center mb-8 text-babybaby-cosmic">
-              Bibliothèque d'E-books
+              E-books Gratuits pour Parents
             </h1>
+            <p className="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
+              Téléchargez nos guides gratuits sur le sommeil, le développement et la parentalité positive
+            </p>
             
             <div className="flex flex-col md:flex-row gap-6 mb-8">
               {/* Search bar */}
