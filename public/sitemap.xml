@@ -8,7 +8,7 @@
   <!-- Page d'accueil - Priorité maximale -->
   <url>
     <loc>https://babybaby.app/</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -21,31 +21,33 @@
   <!-- Boutique - E-commerce prioritaire -->
   <url>
     <loc>https://babybaby.app/boutique</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png</image:loc>
-      <image:title>Boutique BabyBaby - Produits pour bébé</image:title>
+      <image:title>Boutique BabyBaby - Produits pour bébé sélectionnés</image:title>
+      <image:caption>Découvrez notre sélection de produits essentiels pour bébé</image:caption>
     </image:image>
   </url>
 
   <!-- Articles - Hub de contenu principal -->
   <url>
     <loc>https://babybaby.app/articles</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>https://babybaby.app/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png</image:loc>
       <image:title>Articles sur la parentalité et le développement de bébé</image:title>
+      <image:caption>Conseils d'experts pour accompagner les parents</image:caption>
     </image:image>
   </url>
 
   <!-- Rapport Produits Bébé 2026 -->
   <url>
     <loc>https://babybaby.app/meilleurs-produits-bebe-2026</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -55,122 +57,44 @@
     </image:image>
   </url>
 
-  <!-- Articles individuels avec images -->
-  <url>
-    <loc>https://babybaby.app/articles/101</loc>
-    <lastmod>2024-12-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://babybaby.app/lovable-uploads/gentle-parenting.jpg</image:loc>
-      <image:title>Gentle Parenting - Parentalité douce</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://babybaby.app/articles/11</loc>
-    <lastmod>2024-12-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://babybaby.app/lovable-uploads/b2c5e7ec-a925-435a-b899-ce3a4cfe7aed.png</image:loc>
-      <image:title>Courbe de croissance bébé - Percentiles</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://babybaby.app/articles/10</loc>
-    <lastmod>2024-12-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://babybaby.app/lovable-uploads/b38422af-2f1b-4427-aad4-cee8e9d3d887.png</image:loc>
-      <image:title>Coliques du bébé - Guide complet</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://babybaby.app/articles/9</loc>
-    <lastmod>2024-12-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://babybaby.app/lovable-uploads/c03dc99f-150b-4ef6-8fba-2089a3f2d709.png</image:loc>
-      <image:title>Sommeil bébé - 5 astuces efficaces</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://babybaby.app/articles/8</loc>
-    <lastmod>2024-12-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://babybaby.app/lovable-uploads/d50b4331-6d8b-45e6-9e58-e8fc2d198a37.png</image:loc>
-      <image:title>Développement moteur bébé 0-12 mois</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://babybaby.app/articles/7</loc>
-    <lastmod>2024-12-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://babybaby.app/articles/5</loc>
-    <lastmod>2024-12-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://babybaby.app/articles/3</loc>
-    <lastmod>2024-12-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://babybaby.app/lovable-uploads/f5a21dc5-5eb0-4077-b04f-d7d3f4d44ccd.png</image:loc>
-      <image:title>Diversification alimentaire bébé</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://babybaby.app/articles/2</loc>
-    <lastmod>2024-12-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://babybaby.app/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png</image:loc>
-      <image:title>Bienfaits de l'allaitement maternel</image:title>
-    </image:image>
-  </url>
-
   <!-- E-books -->
   <url>
     <loc>https://babybaby.app/ebooks</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://babybaby.app/lovable-uploads/etapes-developpement-cover.jpg</image:loc>
-      <image:title>E-books gratuits pour parents</image:title>
+      <image:title>E-books gratuits pour parents - Guides parentalité</image:title>
+      <image:caption>Collection complète de guides gratuits pour les parents</image:caption>
     </image:image>
   </url>
 
   <!-- Outils -->
   <url>
     <loc>https://babybaby.app/tools</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png</image:loc>
+      <image:title>Outils gratuits pour parents - Calculateurs et trackers</image:title>
+      <image:caption>Générateur de prénoms, suivi sommeil, bruit blanc et plus</image:caption>
+    </image:image>
   </url>
 
   <!-- FAQ - Important pour SEO avec structured data -->
   <url>
     <loc>https://babybaby.app/faq</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
 
   <!-- Forum -->
   <url>
     <loc>https://babybaby.app/forum</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -178,7 +102,7 @@
   <!-- Communauté -->
   <url>
     <loc>https://babybaby.app/community</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -186,15 +110,19 @@
   <!-- Cours -->
   <url>
     <loc>https://babybaby.app/courses</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png</image:loc>
+      <image:title>Cours en ligne pour parents - Formation parentalité</image:title>
+    </image:image>
   </url>
 
   <!-- Quiz -->
   <url>
     <loc>https://babybaby.app/quiz</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -202,15 +130,15 @@
   <!-- Offres gratuites -->
   <url>
     <loc>https://babybaby.app/offres-gratuites</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
 
   <!-- Concours -->
   <url>
     <loc>https://babybaby.app/contests</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -218,9 +146,100 @@
   <!-- À propos -->
   <url>
     <loc>https://babybaby.app/about</loc>
-    <lastmod>2024-12-27</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+  </url>
+
+  <!-- Articles individuels avec images -->
+  <url>
+    <loc>https://babybaby.app/articles/101</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://babybaby.app/lovable-uploads/gentle-parenting.jpg</image:loc>
+      <image:title>Gentle Parenting - Guide complet de la parentalité douce</image:title>
+      <image:caption>Découvrez les principes du gentle parenting</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://babybaby.app/articles/11</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://babybaby.app/lovable-uploads/b2c5e7ec-a925-435a-b899-ce3a4cfe7aed.png</image:loc>
+      <image:title>Courbe de croissance bébé - Comprendre les percentiles OMS</image:title>
+      <image:caption>Guide complet pour interpréter les courbes de croissance</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://babybaby.app/articles/10</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://babybaby.app/lovable-uploads/b38422af-2f1b-4427-aad4-cee8e9d3d887.png</image:loc>
+      <image:title>Coliques du bébé - Solutions et conseils</image:title>
+      <image:caption>Comprendre et soulager les coliques de votre bébé</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://babybaby.app/articles/9</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://babybaby.app/lovable-uploads/c03dc99f-150b-4ef6-8fba-2089a3f2d709.png</image:loc>
+      <image:title>Sommeil bébé - 5 astuces efficaces pour mieux dormir</image:title>
+      <image:caption>Conseils pratiques pour améliorer le sommeil de bébé</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://babybaby.app/articles/8</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://babybaby.app/lovable-uploads/d50b4331-6d8b-45e6-9e58-e8fc2d198a37.png</image:loc>
+      <image:title>Développement moteur bébé 0-12 mois - Étapes clés</image:title>
+      <image:caption>Les étapes du développement moteur de la première année</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://babybaby.app/articles/7</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://babybaby.app/articles/5</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://babybaby.app/articles/3</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://babybaby.app/lovable-uploads/f5a21dc5-5eb0-4077-b04f-d7d3f4d44ccd.png</image:loc>
+      <image:title>Diversification alimentaire bébé - Guide complet DME</image:title>
+      <image:caption>Tout savoir sur l'introduction des aliments solides</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://babybaby.app/articles/2</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://babybaby.app/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png</image:loc>
+      <image:title>Bienfaits de l'allaitement maternel</image:title>
+      <image:caption>Pourquoi l'allaitement est bénéfique pour bébé et maman</image:caption>
+    </image:image>
   </url>
 
 </urlset>
