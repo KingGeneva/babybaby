@@ -1,23 +1,29 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import MainLayout from "@/components/layout/MainLayout";
 import SEOHead from "@/components/common/SEOHead";
+import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
+import { ShopHero } from "@/components/shop/ShopHero";
 import { ShopProductCard } from "@/components/shop/ShopProductCard";
+import { ShopEmptyState } from "@/components/shop/ShopEmptyState";
+import { ShopFilters } from "@/components/shop/ShopFilters";
 import { CartDrawer } from "@/components/shop/CartDrawer";
 import { fetchShopifyProducts } from "@/lib/shopify";
 import type { ShopifyProduct } from "@/lib/shopify";
-import { Loader2, ShoppingBag } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 const ShopPage = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [gridCols, setGridCols] = useState<3 | 4>(4);
 
   useEffect(() => {
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const fetchedProducts = await fetchShopifyProducts(20);
+        const fetchedProducts = await fetchShopifyProducts(24);
         setProducts(fetchedProducts);
       } catch (err) {
         console.error('Error loading products:', err);
@@ -30,79 +36,105 @@ const ShopPage = () => {
     loadProducts();
   }, []);
 
+  const breadcrumbItems = [
+    { name: "Accueil", url: "https://babybaby.app/" },
+    { name: "Boutique", url: "https://babybaby.app/boutique" },
+  ];
+
   return (
     <MainLayout>
       <SEOHead
-        title="Boutique - Produits pour bébés | BabyBaby"
-        description="Découvrez notre sélection de produits pour bébés soigneusement choisis pour accompagner votre enfant dans ses premiers mois."
+        title="Boutique Bébé - Produits Premium pour Nourrissons | BabyBaby"
+        description="Découvrez notre sélection exclusive de produits pour bébés : vêtements, accessoires, jouets et équipements de qualité premium. Livraison rapide et garantie satisfait."
         canonicalUrl="https://babybaby.app/boutique"
       />
+      
+      <BreadcrumbSchema items={breadcrumbItems} />
+      
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Store",
+            "name": "BabyBaby Boutique",
+            "description": "Boutique en ligne de produits pour bébés - Qualité premium et livraison rapide",
+            "url": "https://babybaby.app/boutique",
+            "image": "https://babybaby.app/og-image.png",
+            "priceRange": "€€",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "FR"
+            }
+          })}
+        </script>
+      </Helmet>
 
       <div className="min-h-screen bg-gradient-to-b from-background via-secondary/5 to-background">
         {/* Hero Section */}
-        <section className="relative py-16 px-4 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5" />
-          
-          <div className="container mx-auto relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-center max-w-3xl mx-auto space-y-6"
-            >
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <ShoppingBag className="w-12 h-12 text-primary" />
-                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                  Notre Boutique
-                </h1>
-              </div>
-              
-              <p className="text-lg md:text-xl text-muted-foreground">
-                Des produits de qualité pour accompagner bébé dans ses premiers moments
-              </p>
+        <ShopHero />
 
-              <div className="flex justify-center pt-4">
-                <CartDrawer />
-              </div>
-            </motion.div>
-          </div>
-        </section>
+        {/* Floating Cart Button */}
+        <div className="fixed bottom-8 right-8 z-50">
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+          >
+            <CartDrawer />
+          </motion.div>
+        </div>
 
         {/* Products Section */}
         <section className="py-12 px-4">
           <div className="container mx-auto">
             {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                <span className="ml-3 text-muted-foreground">Chargement des produits...</span>
-              </div>
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center py-20 gap-4"
+              >
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                  </div>
+                  <motion.div
+                    className="absolute inset-0 rounded-full border-2 border-primary/20"
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </div>
+                <span className="text-muted-foreground font-medium">
+                  Chargement de la boutique...
+                </span>
+              </motion.div>
             ) : error ? (
               <div className="text-center py-20">
                 <p className="text-destructive">{error}</p>
               </div>
             ) : products.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-center py-20 space-y-4"
-              >
-                <ShoppingBag className="w-16 h-16 text-muted-foreground mx-auto" />
-                <h2 className="text-2xl font-semibold">Aucun produit disponible</h2>
-                <p className="text-muted-foreground max-w-md mx-auto">
-                  Notre boutique sera bientôt remplie de produits merveilleux pour votre bébé. 
-                  Revenez nous voir prochainement !
-                </p>
-              </motion.div>
+              <ShopEmptyState />
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {products.map((product, index) => (
-                  <ShopProductCard
-                    key={product.node.id}
-                    product={product}
-                    index={index}
-                  />
-                ))}
-              </div>
+              <>
+                <ShopFilters 
+                  productCount={products.length} 
+                  gridCols={gridCols}
+                  setGridCols={setGridCols}
+                />
+                
+                <div className={`grid grid-cols-1 sm:grid-cols-2 ${
+                  gridCols === 3 
+                    ? 'lg:grid-cols-3' 
+                    : 'lg:grid-cols-3 xl:grid-cols-4'
+                } gap-6 md:gap-8`}>
+                  {products.map((product, index) => (
+                    <ShopProductCard
+                      key={product.node.id}
+                      product={product}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </section>

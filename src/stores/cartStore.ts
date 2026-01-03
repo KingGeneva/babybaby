@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { createStorefrontCheckout } from '@/lib/shopify';
-import type { ShopifyProduct } from '@/lib/shopify';
+import { createStorefrontCheckout, type ShopifyProduct } from '@/lib/shopify';
 
 export interface CartItem {
   product: ShopifyProduct;
@@ -92,7 +91,12 @@ export const useCartStore = create<CartStore>()(
 
         setLoading(true);
         try {
-          const checkoutUrl = await createStorefrontCheckout(items);
+          const checkoutUrl = await createStorefrontCheckout(
+            items.map(item => ({
+              quantity: item.quantity,
+              variantId: item.variantId
+            }))
+          );
           setCheckoutUrl(checkoutUrl);
         } catch (error) {
           console.error('Failed to create checkout:', error);
@@ -103,7 +107,7 @@ export const useCartStore = create<CartStore>()(
       }
     }),
     {
-      name: 'shopify-cart',
+      name: 'babybaby-cart',
       storage: createJSONStorage(() => localStorage),
     }
   )

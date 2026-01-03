@@ -1,10 +1,10 @@
 import { toast } from "sonner";
 
-// Shopify configuration
-export const SHOPIFY_API_VERSION = '2025-07';
-export const SHOPIFY_STORE_PERMANENT_DOMAIN = 'babybaby-n1cr5.myshopify.com';
-export const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-export const SHOPIFY_STOREFRONT_TOKEN = 'ff0606d705006f481b085076671d63db';
+// Shopify Configuration
+const SHOPIFY_API_VERSION = '2025-07';
+const SHOPIFY_STORE_PERMANENT_DOMAIN = 'babybaby-n1cr5.myshopify.com';
+const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
+const SHOPIFY_STOREFRONT_TOKEN = 'ff0606d705006f481b085076671d63db';
 
 // TypeScript interfaces
 export interface ShopifyProduct {
@@ -52,7 +52,7 @@ export interface ShopifyProduct {
 }
 
 // Storefront API helper function
-export async function storefrontApiRequest(query: string, variables: any = {}) {
+export async function storefrontApiRequest(query: string, variables: Record<string, unknown> = {}) {
   const response = await fetch(SHOPIFY_STOREFRONT_URL, {
     method: 'POST',
     headers: {
@@ -67,9 +67,9 @@ export async function storefrontApiRequest(query: string, variables: any = {}) {
 
   if (response.status === 402) {
     toast.error("Shopify: Payment required", {
-      description: "Shopify API access requires an active Shopify billing plan. Visit https://admin.shopify.com to upgrade.",
+      description: "Shopify API access requires an active Shopify billing plan.",
     });
-    return;
+    return null;
   }
 
   if (!response.ok) {
@@ -79,14 +79,14 @@ export async function storefrontApiRequest(query: string, variables: any = {}) {
   const data = await response.json();
   
   if (data.errors) {
-    throw new Error(`Error calling Shopify: ${data.errors.map((e: any) => e.message).join(', ')}`);
+    throw new Error(`Error calling Shopify: ${data.errors.map((e: { message: string }) => e.message).join(', ')}`);
   }
 
   return data;
 }
 
-// GraphQL query to fetch products
-export const STOREFRONT_PRODUCTS_QUERY = `
+// GraphQL query for products
+const STOREFRONT_PRODUCTS_QUERY = `
   query GetProducts($first: Int!, $query: String) {
     products(first: $first, query: $query) {
       edges {
@@ -136,22 +136,17 @@ export const STOREFRONT_PRODUCTS_QUERY = `
   }
 `;
 
-// Fetch products from Shopify
-export async function fetchShopifyProducts(first: number = 20, query?: string) {
-  try {
-    const data = await storefrontApiRequest(STOREFRONT_PRODUCTS_QUERY, {
-      first,
-      query,
-    });
-    return data?.data?.products?.edges || [];
-  } catch (error) {
-    console.error('Error fetching Shopify products:', error);
-    throw error;
-  }
+// Fetch products function
+export async function fetchShopifyProducts(first: number = 20, query?: string): Promise<ShopifyProduct[]> {
+  const data = await storefrontApiRequest(STOREFRONT_PRODUCTS_QUERY, { first, query });
+  
+  if (!data) return [];
+  
+  return data.data?.products?.edges || [];
 }
 
 // Cart creation mutation
-export const CART_CREATE_MUTATION = `
+const CART_CREATE_MUTATION = `
   mutation cartCreate($input: CartInput!) {
     cartCreate(input: $input) {
       cart {
@@ -196,32 +191,91 @@ export const CART_CREATE_MUTATION = `
 `;
 
 // Create checkout function
-export async function createStorefrontCheckout(items: any[]): Promise<string> {
-  try {
-    const lines = items.map(item => ({
-      quantity: item.quantity,
-      merchandiseId: item.variantId,
-    }));
+export async function createStorefrontCheckout(items: Array<{ quantity: number; variantId: string }>): Promise<string> {
+  const lines = items.map(item => ({
+    quantity: item.quantity,
+    merchandiseId: item.variantId,
+  }));
 
-    const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
-      input: { lines },
-    });
+  const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
+    input: { lines },
+  });
 
-    if (cartData.data.cartCreate.userErrors.length > 0) {
-      throw new Error(`Cart creation failed: ${cartData.data.cartCreate.userErrors.map((e: any) => e.message).join(', ')}`);
-    }
-
-    const cart = cartData.data.cartCreate.cart;
-    
-    if (!cart.checkoutUrl) {
-      throw new Error('No checkout URL returned from Shopify');
-    }
-
-    const url = new URL(cart.checkoutUrl);
-    url.searchParams.set('channel', 'online_store');
-    return url.toString();
-  } catch (error) {
-    console.error('Error creating storefront checkout:', error);
-    throw error;
+  if (!cartData) {
+    throw new Error('Failed to create cart');
   }
+
+  if (cartData.data.cartCreate.userErrors.length > 0) {
+    throw new Error(`Cart creation failed: ${cartData.data.cartCreate.userErrors.map((e: { message: string }) => e.message).join(', ')}`);
+  }
+
+  const cart = cartData.data.cartCreate.cart;
+  
+  if (!cart.checkoutUrl) {
+    throw new Error('No checkout URL returned from Shopify');
+  }
+
+  const url = new URL(cart.checkoutUrl);
+  url.searchParams.set('channel', 'online_store');
+  return url.toString();
+}
+
+// Get single product query
+const PRODUCT_BY_HANDLE_QUERY = `
+  query GetProductByHandle($handle: String!) {
+    product(handle: $handle) {
+      id
+      title
+      description
+      descriptionHtml
+      handle
+      priceRange {
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+        maxVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+      images(first: 10) {
+        edges {
+          node {
+            url
+            altText
+          }
+        }
+      }
+      variants(first: 50) {
+        edges {
+          node {
+            id
+            title
+            price {
+              amount
+              currencyCode
+            }
+            availableForSale
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+      options {
+        name
+        values
+      }
+    }
+  }
+`;
+
+export async function fetchProductByHandle(handle: string) {
+  const data = await storefrontApiRequest(PRODUCT_BY_HANDLE_QUERY, { handle });
+  
+  if (!data) return null;
+  
+  return data.data?.product || null;
 }
