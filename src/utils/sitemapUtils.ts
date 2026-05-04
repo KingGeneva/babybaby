@@ -1,6 +1,6 @@
 
-import fs from 'fs';
-import path from 'path';
+// Note: fs/path imports removed — this file runs in the browser bundle.
+// Server-side write logic should live in a Node script or edge function.
 
 /**
  * Utilitaires pour la génération dynamique et l'optimisation des sitemaps

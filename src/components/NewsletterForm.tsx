@@ -41,8 +41,6 @@ const NewsletterForm: React.FC = () => {
         .from('newsletter_subscribers')
         .insert({
           email: validated.email,
-          name: validated.name || null,
-          consent_given: true
         });
 
       if (error) {
