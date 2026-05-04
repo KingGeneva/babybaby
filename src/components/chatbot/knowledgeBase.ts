@@ -32,11 +32,6 @@ export const knowledgeBase: KnowledgeEntry[] = [
     category: 'application'
   },
   {
-    keywords: ['ressources', 'interactives', 'quiz', 'interactif', 'test'],
-    response: "BabyBaby propose des ressources interactives pour apprendre en s'amusant :\n\n🎯 **Quiz parentalité** : Testez vos connaissances sur les soins aux bébés\n🧩 **Quiz développement** : Découvrez les étapes clés par âge\n🍼 **Quiz nutrition** : Apprenez les bonnes pratiques alimentaires\n😴 **Quiz sommeil** : Évaluez vos habitudes et obtenez des conseils personnalisés\n\nChaque quiz offre des résultats détaillés avec recommandations adaptées à votre situation !",
-    category: 'application'
-  },
-  {
     keywords: ['contenu', 'éduca', 'apprendre', 'cours', 'formation'],
     response: "BabyBaby offre un contenu éducatif riche et fiable :\n\n📖 **Articles experts** : Plus de 50 articles rédigés par des pédiatres et spécialistes\n🎓 **Cours en ligne** : Formations vidéo sur les soins aux nouveau-nés, le sommeil, l'alimentation\n📚 **E-books gratuits** : Guides pratiques téléchargeables sur la grossesse, naissance, parentalité\n📋 **Fiches pratiques** : Conseils rapides et applicables au quotidien\n\nTout le contenu est validé par des professionnels de santé.",
     category: 'application'

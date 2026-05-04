@@ -119,14 +119,6 @@
     </image:image>
   </url>
 
-  <!-- Quiz -->
-  <url>
-    <loc>https://babybaby.org/quiz</loc>
-    <lastmod>2026-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
   <!-- Offres gratuites -->
   <url>
     <loc>https://babybaby.org/offres-gratuites</loc>

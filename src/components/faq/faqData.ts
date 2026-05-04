@@ -47,11 +47,6 @@ export const faqs: FAQ[] = [
     category: "Outils"
   },
   {
-    question: "L'application propose-t-elle des ressources interactives ?",
-    answer: "Oui, l'application inclut des quiz interactifs pour les parents et des tests amusants pour évaluer leurs connaissances sur la parentalité, offrant ainsi une approche ludique de l'apprentissage.",
-    category: "Ressources"
-  },
-  {
     question: "Quel type de contenu éducatif est accessible via BabyBaby ?",
     answer: "BabyBaby offre une variété de contenus éducatifs fiables. On y trouve des articles avec des conseils, des cours sur divers sujets liés à la parentalité, une bibliothèque d'e-books et de guides pratiques sur la grossesse, la naissance et la parentalité.",
     category: "Ressources"
