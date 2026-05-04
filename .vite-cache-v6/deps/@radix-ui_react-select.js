@@ -3,11 +3,12 @@ import {
   clamp
 } from "./chunk-TCQMTAGU.js";
 import {
-  VisuallyHidden
-} from "./chunk-FWMB4JYE.js";
-import {
-  usePrevious
-} from "./chunk-XSAN5JCE.js";
+  Anchor,
+  Arrow,
+  Content,
+  Root2,
+  createPopperScope
+} from "./chunk-KK2RQ2SG.js";
 import {
   createCollection
 } from "./chunk-TH3MZ4ZL.js";
@@ -15,13 +16,15 @@ import {
   useDirection
 } from "./chunk-WDOEHMLS.js";
 import {
-  Anchor,
-  Arrow,
-  Content,
-  Root2,
-  createPopperScope
-} from "./chunk-W6TQM2K5.js";
-import "./chunk-IYTRS3XW.js";
+  VisuallyHidden
+} from "./chunk-FWMB4JYE.js";
+import "./chunk-EAZQIME6.js";
+import {
+  usePrevious
+} from "./chunk-XSAN5JCE.js";
+import {
+  createContextScope
+} from "./chunk-77EU5DFA.js";
 import {
   FocusScope,
   RemoveScrollBar,
@@ -35,26 +38,23 @@ import {
   styleSingleton,
   useMergeRefs,
   zeroRightClassName
-} from "./chunk-RC6HAV4T.js";
+} from "./chunk-6VH7SGGS.js";
 import {
   useId
-} from "./chunk-5DK3BDYL.js";
-import {
-  createContextScope
-} from "./chunk-77EU5DFA.js";
+} from "./chunk-ZUFBO6NE.js";
 import {
   useEscapeKeydown
-} from "./chunk-RHSD74HD.js";
+} from "./chunk-XNA63NCL.js";
 import {
   useControllableState
-} from "./chunk-Z4DTJN2Y.js";
+} from "./chunk-2CLPDTU7.js";
 import {
   composeEventHandlers
 } from "./chunk-XY4SNB44.js";
 import {
   useCallbackRef,
   useLayoutEffect2
-} from "./chunk-TVCOGUU4.js";
+} from "./chunk-YSYISR2F.js";
 import {
   Primitive,
   dispatchDiscreteCustomEvent
