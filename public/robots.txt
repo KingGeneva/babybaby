@@ -11,7 +11,7 @@ Allow: /tools
 Allow: /faq
 Allow: /forum
 Allow: /courses
-Allow: /quiz
+
 Allow: /boutique
 Allow: /meilleurs-produits-bebe-2026
 Allow: /offres-gratuites
