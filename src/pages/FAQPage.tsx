@@ -28,7 +28,7 @@ const FAQPage = () => {
       <SEOHead 
         title="FAQ - Questions Fréquentes sur l'Application BabyBaby" 
         description="Découvrez les réponses à toutes vos questions sur l'application BabyBaby. Suivi de développement, outils parentaux, contenu éducatif et plus encore."
-        canonicalUrl="https://babybaby.app/faq"
+        canonicalUrl="https://babybaby.org/faq"
         keywords={["application baby, suivi bébé", "développement enfant", "outils parentaux", "tableau de bord pour bébé", "calendrier vaccination bébé"]}
       />
       <FAQStructuredData />

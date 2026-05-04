@@ -86,7 +86,7 @@ const ArticleDetailPage = () => {
         description={article.excerpt}
         ogImage={article.image || "/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"}
         ogType="article"
-        canonicalUrl={`https://babybaby.app/articles/${article.id}`}
+        canonicalUrl={`https://babybaby.org/articles/${article.id}`}
         articleData={{
           publishedTime: formatDateForStructuredData(article.date),
           tags: [article.category]
@@ -99,7 +99,7 @@ const ArticleDetailPage = () => {
         image={article.image}
         datePublished={formatDateForStructuredData(article.date)}
         authorName="BabyBaby"
-        url={`https://babybaby.app/articles/${article.id}`}
+        url={`https://babybaby.org/articles/${article.id}`}
       />
       
       <NavBar />

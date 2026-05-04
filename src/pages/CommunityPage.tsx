@@ -19,7 +19,7 @@ const CommunityPage = () => {
       <SEOHead 
         title="Communauté de Parents | BabyBaby"
         description="Rejoignez notre communauté bienveillante de parents. Échangez, partagez et trouvez du soutien dans tous les aspects de la parentalité, des premiers jours à la petite enfance."
-        canonicalUrl="https://babybaby.app/community"
+        canonicalUrl="https://babybaby.org/community"
         keywords={["communauté parents", "entraide parentale", "soutien parents", "forum grossesse", "échanges mamans", "conseils jeunes parents"]}
       />
       <NavBar />

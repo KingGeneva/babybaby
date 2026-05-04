@@ -12,11 +12,11 @@ const BoutiquePage: React.FC = () => {
   
   // Configuration avancée des langues alternatives pour la boutique
   const alternateLanguages = [
-    { lang: "fr", url: "https://babybaby.app/boutique" },
-    { lang: "fr-FR", url: "https://babybaby.app/boutique" },
-    { lang: "fr-CA", url: "https://babybaby.app/boutique" },
-    { lang: "fr-BE", url: "https://babybaby.app/boutique" },
-    { lang: "fr-CH", url: "https://babybaby.app/boutique" }
+    { lang: "fr", url: "https://babybaby.org/boutique" },
+    { lang: "fr-FR", url: "https://babybaby.org/boutique" },
+    { lang: "fr-CA", url: "https://babybaby.org/boutique" },
+    { lang: "fr-BE", url: "https://babybaby.org/boutique" },
+    { lang: "fr-CH", url: "https://babybaby.org/boutique" }
   ];
 
   // Structured data for BreadcrumbList
@@ -28,13 +28,13 @@ const BoutiquePage: React.FC = () => {
         "@type": "ListItem",
         "position": 1,
         "name": "Accueil",
-        "item": "https://babybaby.app/"
+        "item": "https://babybaby.org/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Boutique",
-        "item": "https://babybaby.app/boutique"
+        "item": "https://babybaby.org/boutique"
       }
     ]
   };
@@ -45,7 +45,7 @@ const BoutiquePage: React.FC = () => {
     "@type": "Organization",
     "name": "BabyBaby Boutique",
     "url": "https://babybaby.boutique",
-    "logo": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+    "logo": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
     "description": "Boutique en ligne de produits premium pour bébés et parents.",
     "sameAs": [
       "https://facebook.com/babybaby",
@@ -80,8 +80,8 @@ const BoutiquePage: React.FC = () => {
     "name": "BabyBaby Boutique",
     "description": "Boutique en ligne de produits premium pour bébés et parents",
     "url": "https://babybaby.boutique",
-    "logo": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
-    "image": "https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png",
+    "logo": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+    "image": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png",
     "telephone": "+1-581-333-3173",
     "priceRange": "€€",
     "openingHoursSpecification": {
@@ -102,21 +102,21 @@ const BoutiquePage: React.FC = () => {
       <SEOHead 
         title="Boutique BabyBaby | Produits Premium pour bébés et parents"
         description="Découvrez notre sélection exclusive de produits de haute qualité pour bébés et parents. Accessoires, vêtements bio, jouets éducatifs et plus encore pour un quotidien plus serein."
-        canonicalUrl="https://babybaby.app/boutique"
+        canonicalUrl="https://babybaby.org/boutique"
         alternateLanguages={alternateLanguages}
         keywords={["boutique bébé", "produits parentalité bio", "accessoires bébé premium", "vêtements enfant bio", "jouets éducatifs montessori", "produits puériculture"]}
-        ogImage="https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
+        ogImage="https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
       />
       
       {/* Utilisation du composant HreflangTags pour une gestion centralisée */}
       <HreflangTags
         currentLang="fr"
-        currentUrl="https://babybaby.app/boutique"
+        currentUrl="https://babybaby.org/boutique"
         alternateLanguages={alternateLanguages}
       />
       
       <Helmet>
-        <link rel="canonical" href="https://babybaby.app/boutique" />
+        <link rel="canonical" href="https://babybaby.org/boutique" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow" />
         
@@ -133,7 +133,7 @@ const BoutiquePage: React.FC = () => {
             "@type": "WebPage",
             "name": "Boutique BabyBaby",
             "description": "Boutique en ligne de produits premium pour bébés et parents",
-            "url": "https://babybaby.app/boutique",
+            "url": "https://babybaby.org/boutique",
             "mainEntity": {
               "@type": "ItemList",
               "itemListElement": [
@@ -142,35 +142,35 @@ const BoutiquePage: React.FC = () => {
                   "position": 1,
                   "name": "Accessoires bébé premium",
                   "url": "https://babybaby.boutique/categories/accessoires",
-                  "image": "https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
+                  "image": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
                 },
                 {
                   "@type": "ListItem",
                   "position": 2,
                   "name": "Vêtements bio",
                   "url": "https://babybaby.boutique/categories/vetements",
-                  "image": "https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
+                  "image": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
                 },
                 {
                   "@type": "ListItem",
                   "position": 3,
                   "name": "Jouets Montessori",
                   "url": "https://babybaby.boutique/categories/jouets",
-                  "image": "https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
+                  "image": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
                 },
                 {
                   "@type": "ListItem",
                   "position": 4,
                   "name": "Puériculture naturelle",
                   "url": "https://babybaby.boutique/categories/puericulture",
-                  "image": "https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
+                  "image": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
                 }
               ]
             },
             "isPartOf": {
               "@type": "WebSite",
               "name": "BabyBaby",
-              "url": "https://babybaby.app"
+              "url": "https://babybaby.org"
             },
             "speakable": {
               "@type": "SpeakableSpecification",

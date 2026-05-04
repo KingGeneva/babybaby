@@ -124,9 +124,9 @@ const ProductDetailPage = () => {
   const price = parseFloat(selectedVariant?.price?.amount || product.priceRange.minVariantPrice.amount);
 
   const breadcrumbItems = [
-    { name: "Accueil", url: "https://babybaby.app/" },
-    { name: "Boutique", url: "https://babybaby.app/boutique" },
-    { name: product.title, url: `https://babybaby.app/boutique/${handle}` },
+    { name: "Accueil", url: "https://babybaby.org/" },
+    { name: "Boutique", url: "https://babybaby.org/boutique" },
+    { name: product.title, url: `https://babybaby.org/boutique/${handle}` },
   ];
 
   return (
@@ -134,7 +134,7 @@ const ProductDetailPage = () => {
       <SEOHead
         title={`${product.title} | Boutique BabyBaby`}
         description={product.description?.slice(0, 160) || `Découvrez ${product.title} dans notre boutique BabyBaby`}
-        canonicalUrl={`https://babybaby.app/boutique/${handle}`}
+        canonicalUrl={`https://babybaby.org/boutique/${handle}`}
       />
       
       <BreadcrumbSchema items={breadcrumbItems} />

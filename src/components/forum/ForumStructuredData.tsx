@@ -36,7 +36,7 @@ const ForumStructuredData: React.FC<ForumStructuredDataProps> = ({
       "name": "BabyBaby",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+        "url": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
         "width": "192",
         "height": "192"
       }
@@ -73,19 +73,19 @@ const ForumStructuredData: React.FC<ForumStructuredDataProps> = ({
         "@type": "ListItem",
         "position": 1,
         "name": "Accueil",
-        "item": "https://babybaby.app"
+        "item": "https://babybaby.org"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Communauté",
-        "item": "https://babybaby.app/community"
+        "item": "https://babybaby.org/community"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Forum des Parents",
-        "item": "https://babybaby.app/forum"
+        "item": "https://babybaby.org/forum"
       }
     ]
   };

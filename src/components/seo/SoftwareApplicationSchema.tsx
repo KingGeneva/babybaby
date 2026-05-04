@@ -22,7 +22,7 @@ const SoftwareApplicationSchema: React.FC = () => {
       "bestRating": "5",
       "worstRating": "1"
     },
-    "screenshot": "https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png",
+    "screenshot": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png",
     "description": "Application complète pour le suivi de santé, croissance et développement de bébé. Outils intelligents, conseils d'experts et communauté de parents.",
     "featureList": [
       "Suivi de croissance avec courbes OMS",
@@ -37,7 +37,7 @@ const SoftwareApplicationSchema: React.FC = () => {
     "author": {
       "@type": "Organization",
       "name": "BabyBaby",
-      "url": "https://babybaby.app"
+      "url": "https://babybaby.org"
     },
     "datePublished": "2024-01-01",
     "dateModified": "2024-12-27",

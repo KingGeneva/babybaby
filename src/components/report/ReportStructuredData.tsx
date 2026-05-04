@@ -8,25 +8,25 @@ const ReportStructuredData: React.FC = () => {
     "@type": "Article",
     "headline": reportMetadata.title,
     "description": reportMetadata.description,
-    "image": "https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png",
+    "image": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png",
     "datePublished": reportMetadata.publishDate,
     "dateModified": reportMetadata.updateDate,
     "author": {
       "@type": "Organization",
       "name": reportMetadata.author,
-      "url": "https://babybaby.app"
+      "url": "https://babybaby.org"
     },
     "publisher": {
       "@type": "Organization",
       "name": "BabyBaby",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
+        "url": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
       }
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://babybaby.app/rapport-puericulture-2026"
+      "@id": "https://babybaby.org/rapport-puericulture-2026"
     },
     "keywords": reportMetadata.keywords.join(", ")
   };
@@ -52,19 +52,19 @@ const ReportStructuredData: React.FC = () => {
         "@type": "ListItem",
         "position": 1,
         "name": "Accueil",
-        "item": "https://babybaby.app"
+        "item": "https://babybaby.org"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Guides",
-        "item": "https://babybaby.app/guides"
+        "item": "https://babybaby.org/guides"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Rapport Puériculture 2026",
-        "item": "https://babybaby.app/rapport-puericulture-2026"
+        "item": "https://babybaby.org/rapport-puericulture-2026"
       }
     ]
   };

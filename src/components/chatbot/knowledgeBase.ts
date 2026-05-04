@@ -264,7 +264,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   },
   {
     keywords: ['problème', 'bug', 'aide', 'support', 'erreur', 'contact'],
-    response: "Besoin d'aide ? Voici comment nous joindre :\n\n**Support technique :**\n📧 support@babybaby.app\n📞 Disponible du lundi au vendredi, 9h-18h\n⏱️ Réponse sous 24h\n\n**Problèmes courants :**\n• Videz le cache de votre navigateur\n• Essayez une connexion/déconnexion\n• Vérifiez votre connexion internet\n• Mettez l'application à jour\n\n**FAQ :**\nConsultez notre page FAQ pour les questions fréquentes !\n\n📝 Pour signaler un bug, précisez :\n• Votre appareil et navigateur\n• Les étapes pour reproduire le problème\n• Des captures d'écran si possible",
+    response: "Besoin d'aide ? Voici comment nous joindre :\n\n**Support technique :**\n📧 support@babybaby.org\n📞 Disponible du lundi au vendredi, 9h-18h\n⏱️ Réponse sous 24h\n\n**Problèmes courants :**\n• Videz le cache de votre navigateur\n• Essayez une connexion/déconnexion\n• Vérifiez votre connexion internet\n• Mettez l'application à jour\n\n**FAQ :**\nConsultez notre page FAQ pour les questions fréquentes !\n\n📝 Pour signaler un bug, précisez :\n• Votre appareil et navigateur\n• Les étapes pour reproduire le problème\n• Des captures d'écran si possible",
     category: 'application'
   },
   {
@@ -274,7 +274,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   },
   {
     keywords: ['confidentialité', 'données', 'sécurité', 'rgpd', 'vie privée'],
-    response: "Protection de vos données chez BabyBaby :\n\n**Nos engagements :**\n🔒 Données chiffrées (SSL/TLS)\n🏢 Serveurs sécurisés en Europe\n🚫 Aucune vente de données\n✅ Conformité RGPD\n\n**Vos droits :**\n• Accéder à toutes vos données\n• Les modifier ou corriger\n• Les exporter (format standard)\n• Les supprimer définitivement\n\n**Comment exercer vos droits :**\n• Paramètres du compte → \"Mes données\"\n• Contact : privacy@babybaby.app\n\n👶 Les données de vos enfants sont particulièrement protégées et ne sont jamais utilisées à des fins commerciales.",
+    response: "Protection de vos données chez BabyBaby :\n\n**Nos engagements :**\n🔒 Données chiffrées (SSL/TLS)\n🏢 Serveurs sécurisés en Europe\n🚫 Aucune vente de données\n✅ Conformité RGPD\n\n**Vos droits :**\n• Accéder à toutes vos données\n• Les modifier ou corriger\n• Les exporter (format standard)\n• Les supprimer définitivement\n\n**Comment exercer vos droits :**\n• Paramètres du compte → \"Mes données\"\n• Contact : privacy@babybaby.org\n\n👶 Les données de vos enfants sont particulièrement protégées et ne sont jamais utilisées à des fins commerciales.",
     category: 'application'
   }
 ];

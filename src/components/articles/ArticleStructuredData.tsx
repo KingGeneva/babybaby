@@ -37,7 +37,7 @@ const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
       "name": "BabyBaby",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+        "url": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
         "width": "192",
         "height": "192"
       }

@@ -71,8 +71,8 @@ const EbooksPage = () => {
       <SEOHead 
         title="E-books Gratuits pour Parents | Guides Parentalité, Sommeil, Développement Bébé"
         description="Téléchargez gratuitement nos e-books sur la parentalité : guides sommeil bébé, développement enfant, gentle parenting, diversification alimentaire et plus."
-        canonicalUrl="https://babybaby.app/ebooks"
-        ogImage="https://babybaby.app/lovable-uploads/etapes-developpement-cover.jpg"
+        canonicalUrl="https://babybaby.org/ebooks"
+        ogImage="https://babybaby.org/lovable-uploads/etapes-developpement-cover.jpg"
         keywords={[
           "ebook gratuit parentalité", "guide bébé pdf", "livre sommeil bébé gratuit",
           "guide développement enfant", "ebook gentle parenting", "livre diversification alimentaire",
@@ -81,8 +81,8 @@ const EbooksPage = () => {
       />
       <BreadcrumbSchema 
         items={[
-          { name: "Accueil", url: "https://babybaby.app" },
-          { name: "E-books", url: "https://babybaby.app/ebooks" }
+          { name: "Accueil", url: "https://babybaby.org" },
+          { name: "E-books", url: "https://babybaby.org/ebooks" }
         ]}
       />
       <Helmet>

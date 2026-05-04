@@ -50,8 +50,8 @@ const ToolsPage = () => {
       <SEOHead 
         title="Outils Gratuits pour Parents | Générateur Prénoms, Bruit Blanc, Suivi Sommeil"
         description="Découvrez nos outils gratuits pour parents : générateur de prénoms, calculateur budget bébé, suivi du sommeil, bruit blanc, berceuses et checklist naissance."
-        canonicalUrl="https://babybaby.app/tools"
-        ogImage="https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
+        canonicalUrl="https://babybaby.org/tools"
+        ogImage="https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
         keywords={[
           "outils parents gratuit", "générateur prénoms bébé", "bruit blanc bébé",
           "berceuse bébé", "suivi sommeil bébé", "calculateur budget bébé",
@@ -60,8 +60,8 @@ const ToolsPage = () => {
       />
       <BreadcrumbSchema 
         items={[
-          { name: "Accueil", url: "https://babybaby.app" },
-          { name: "Outils Parents", url: "https://babybaby.app/tools" }
+          { name: "Accueil", url: "https://babybaby.org" },
+          { name: "Outils Parents", url: "https://babybaby.org/tools" }
         ]}
       />
       <Helmet>

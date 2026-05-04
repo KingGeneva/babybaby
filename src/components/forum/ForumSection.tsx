@@ -16,7 +16,7 @@ const ForumSection = () => {
             "@type": "DiscussionForumPosting",
             "mainEntityOfPage": {
               "@type": "WebPage",
-              "@id": "https://babybaby.app/community"
+              "@id": "https://babybaby.org/community"
             },
             "headline": "Forum communautaire BabyBaby",
             "description": "Échangez avec d'autres parents sur des sujets comme la grossesse, le développement et la santé des enfants.",
@@ -25,7 +25,7 @@ const ForumSection = () => {
               "name": "BabyBaby",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
+                "url": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
               }
             },
             "interactionStatistic": [

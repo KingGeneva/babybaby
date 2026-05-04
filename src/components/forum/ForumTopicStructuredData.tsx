@@ -91,25 +91,25 @@ const ForumTopicStructuredData: React.FC<ForumTopicStructuredDataProps> = ({
         "@type": "ListItem",
         "position": 1,
         "name": "Accueil",
-        "item": "https://babybaby.app"
+        "item": "https://babybaby.org"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Communauté",
-        "item": "https://babybaby.app/community"
+        "item": "https://babybaby.org/community"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Forum",
-        "item": "https://babybaby.app/forum"
+        "item": "https://babybaby.org/forum"
       },
       {
         "@type": "ListItem",
         "position": 4,
         "name": categoryName,
-        "item": `https://babybaby.app/forum/categories/${topic.category?.slug || topic.category_id}`
+        "item": `https://babybaby.org/forum/categories/${topic.category?.slug || topic.category_id}`
       },
       {
         "@type": "ListItem",

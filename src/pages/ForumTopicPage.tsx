@@ -52,13 +52,13 @@ const ForumTopicPage = () => {
           <SEOHead 
             title={`${topic.title} | Forum BabyBaby`}
             description={topic.meta_description || topic.content.substring(0, 160)}
-            canonicalUrl={`https://babybaby.app/forum/topics/${topicId}`}
+            canonicalUrl={`https://babybaby.org/forum/topics/${topicId}`}
             keywords={topic.tags || ["forum parents", "discussion parentalité"]}
           />
           <ForumTopicStructuredData 
             topic={topic}
             posts={posts}
-            url={`https://babybaby.app/forum/topics/${topicId}`}
+            url={`https://babybaby.org/forum/topics/${topicId}`}
             categoryName={topic.category?.name || "Forum"}
           />
         </>

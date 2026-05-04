@@ -59,8 +59,8 @@ const ArticlesPage = () => {
       <SEOHead 
         title="Articles sur la Parentalité et le Développement de Bébé | BabyBaby"
         description="Découvrez nos articles experts sur l'alimentation, le sommeil, le développement et la santé de bébé. Conseils pratiques pour les jeunes parents."
-        canonicalUrl="https://babybaby.app/articles"
-        ogImage="https://babybaby.app/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png"
+        canonicalUrl="https://babybaby.org/articles"
+        ogImage="https://babybaby.org/lovable-uploads/f17afad4-d5f6-413a-935d-83d0053d4541.png"
         keywords={[
           "articles bébé", "conseils parents", "développement enfant", "nutrition bébé",
           "sommeil bébé", "santé bébé", "éducation enfant", "parentalité positive",
@@ -69,8 +69,8 @@ const ArticlesPage = () => {
       />
       <BreadcrumbSchema 
         items={[
-          { name: "Accueil", url: "https://babybaby.app" },
-          { name: "Articles", url: "https://babybaby.app/articles" }
+          { name: "Accueil", url: "https://babybaby.org" },
+          { name: "Articles", url: "https://babybaby.org/articles" }
         ]}
       />
       <NavBar />

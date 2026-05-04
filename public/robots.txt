@@ -1,4 +1,4 @@
-# Fichier robots.txt optimisé pour https://babybaby.app/
+# Fichier robots.txt optimisé pour https://babybaby.org/
 # Dernière mise à jour: 2026-01-01
 
 # Règles générales pour tous les robots
@@ -96,7 +96,7 @@ User-agent: CCBot
 Disallow: /
 
 # Emplacement du sitemap principal
-Sitemap: https://babybaby.app/sitemap.xml
+Sitemap: https://babybaby.org/sitemap.xml
 
 # Host préféré
-Host: https://babybaby.app
+Host: https://babybaby.org

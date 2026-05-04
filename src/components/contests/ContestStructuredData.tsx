@@ -12,7 +12,7 @@ const ContestStructuredData: React.FC = () => {
     "description": "Inscrivez-vous pour être informé des prochains concours et promotions exclusives pour parents et bébés.",
     "datePosted": new Date().toISOString(),
     "expires": new Date(new Date().setMonth(new Date().getMonth() + 3)).toISOString(),
-    "url": "https://babybaby.app/contests",
+    "url": "https://babybaby.org/contests",
     "spatialCoverage": {
       "@type": "Country",
       "name": "France"
@@ -20,7 +20,7 @@ const ContestStructuredData: React.FC = () => {
     "publisher": {
       "@type": "Organization",
       "name": "BabyBaby",
-      "url": "https://babybaby.app"
+      "url": "https://babybaby.org"
     }
   };
 

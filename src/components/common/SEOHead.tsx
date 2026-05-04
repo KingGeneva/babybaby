@@ -31,7 +31,7 @@ const SEOHead: React.FC<SEOProps> = ({
   title, 
   description, 
   canonicalUrl, 
-  ogImage = "https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png", 
+  ogImage = "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png", 
   ogType = "website",
   lang = "fr",
   alternateLanguages = [],
@@ -52,11 +52,11 @@ const SEOHead: React.FC<SEOProps> = ({
   // Assurer que l'URL de l'image OG est absolue
   const absoluteOgImage = ogImage.startsWith('http') 
     ? ogImage 
-    : `https://babybaby.app${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
+    : `https://babybaby.org${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
 
   // Assurer que l'URL canonique est absolue
   const absoluteCanonicalUrl = canonicalUrl 
-    ? (canonicalUrl.startsWith('http') ? canonicalUrl : `https://babybaby.app${canonicalUrl.startsWith('/') ? '' : '/'}${canonicalUrl}`)
+    ? (canonicalUrl.startsWith('http') ? canonicalUrl : `https://babybaby.org${canonicalUrl.startsWith('/') ? '' : '/'}${canonicalUrl}`)
     : undefined;
   
   // Create a clean object of HTML attributes to avoid null values
@@ -115,8 +115,8 @@ const SEOHead: React.FC<SEOProps> = ({
       <meta name="twitter:description" content={optimizedDescription} />
       <meta name="twitter:image" content={absoluteOgImage} />
       <meta name="twitter:image:alt" content={title} />
-      <meta name="twitter:domain" content="babybaby.app" />
-      <meta name="twitter:url" content={absoluteCanonicalUrl || "https://babybaby.app"} />
+      <meta name="twitter:domain" content="babybaby.org" />
+      <meta name="twitter:url" content={absoluteCanonicalUrl || "https://babybaby.org"} />
       
       {/* Article specific structured data */}
       {ogType === 'article' && articleData && (
@@ -163,7 +163,7 @@ const SEOHead: React.FC<SEOProps> = ({
       <meta name="format-detection" content="telephone=no" />
       
       {/* Prevent indexation in non-production environments */}
-      {absoluteCanonicalUrl && !absoluteCanonicalUrl.includes('babybaby.app') && (
+      {absoluteCanonicalUrl && !absoluteCanonicalUrl.includes('babybaby.org') && (
         <meta name="robots" content="noindex, nofollow" />
       )}
     </Helmet>

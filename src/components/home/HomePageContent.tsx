@@ -33,10 +33,10 @@ const HomePageContent: React.FC = () => {
       {/* SEO optimization for cross-domain */}
       <Helmet>
         <meta name="last-modified" content={lastMod} />
-        <link rel="alternate" href="https://babybaby.app/" hrefLang="x-default" />
-        <link rel="alternate" href="https://babybaby.app/" hrefLang="fr" />
-        <link rel="alternate" href="https://babybaby.app/" hrefLang="fr-FR" />
-        <link rel="alternate" href="https://babybaby.app/" hrefLang="fr-CA" />
+        <link rel="alternate" href="https://babybaby.org/" hrefLang="x-default" />
+        <link rel="alternate" href="https://babybaby.org/" hrefLang="fr" />
+        <link rel="alternate" href="https://babybaby.org/" hrefLang="fr-FR" />
+        <link rel="alternate" href="https://babybaby.org/" hrefLang="fr-CA" />
         <link rel="prefetch" href="/articles" />
         <link rel="prefetch" href="/ebooks" />
         <link rel="prefetch" href="/tools" />
