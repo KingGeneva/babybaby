@@ -1,12 +1,22 @@
 import {
   useCallbackRef
-} from "./chunk-YSYISR2F.js";
+} from "./chunk-TVCOGUU4.js";
 import {
   require_react
 } from "./chunk-OC5S6P4L.js";
 import {
   __toESM
 } from "./chunk-SNAQBZPT.js";
+
+// node_modules/@radix-ui/primitive/dist/index.mjs
+function composeEventHandlers(originalEventHandler, ourEventHandler, { checkForDefaultPrevented = true } = {}) {
+  return function handleEvent(event) {
+    originalEventHandler == null ? void 0 : originalEventHandler(event);
+    if (checkForDefaultPrevented === false || !event.defaultPrevented) {
+      return ourEventHandler == null ? void 0 : ourEventHandler(event);
+    }
+  };
+}
 
 // node_modules/@radix-ui/react-use-controllable-state/dist/index.mjs
 var React = __toESM(require_react(), 1);
@@ -52,6 +62,7 @@ function useUncontrolledState({
 }
 
 export {
+  composeEventHandlers,
   useControllableState
 };
-//# sourceMappingURL=chunk-2CLPDTU7.js.map
+//# sourceMappingURL=chunk-ZRGYVYS6.js.map
