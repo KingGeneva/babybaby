@@ -31,8 +31,7 @@ const SoftwareApplicationSchema: React.FC = () => {
       "Générateur de prénoms",
       "Bruit blanc et berceuses",
       "Forum communautaire",
-      "Articles et e-books gratuits",
-      "Quiz interactifs"
+      "Articles et e-books gratuits"
     ],
     "author": {
       "@type": "Organization",
