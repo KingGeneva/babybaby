@@ -426,72 +426,6 @@ export type Database = {
         }
         Relationships: []
       }
-      quiz_questions: {
-        Row: {
-          correct_answer: string | null
-          created_at: string | null
-          explanation: string | null
-          id: string
-          options: Json
-          order_index: number
-          question: string
-          quiz_type: Database["public"]["Enums"]["quiz_type"]
-        }
-        Insert: {
-          correct_answer?: string | null
-          created_at?: string | null
-          explanation?: string | null
-          id?: string
-          options: Json
-          order_index: number
-          question: string
-          quiz_type: Database["public"]["Enums"]["quiz_type"]
-        }
-        Update: {
-          correct_answer?: string | null
-          created_at?: string | null
-          explanation?: string | null
-          id?: string
-          options?: Json
-          order_index?: number
-          question?: string
-          quiz_type?: Database["public"]["Enums"]["quiz_type"]
-        }
-        Relationships: []
-      }
-      quiz_responses: {
-        Row: {
-          answers: Json
-          completed_at: string | null
-          detailed_results: Json | null
-          id: string
-          quiz_type: Database["public"]["Enums"]["quiz_type"]
-          recommendations: Json | null
-          score: number | null
-          user_id: string
-        }
-        Insert: {
-          answers: Json
-          completed_at?: string | null
-          detailed_results?: Json | null
-          id?: string
-          quiz_type: Database["public"]["Enums"]["quiz_type"]
-          recommendations?: Json | null
-          score?: number | null
-          user_id: string
-        }
-        Update: {
-          answers?: Json
-          completed_at?: string | null
-          detailed_results?: Json | null
-          id?: string
-          quiz_type?: Database["public"]["Enums"]["quiz_type"]
-          recommendations?: Json | null
-          score?: number | null
-          user_id?: string
-        }
-        Relationships: []
-      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -529,12 +463,6 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
-      quiz_type:
-        | "personnalite"
-        | "connaissance"
-        | "developpement"
-        | "nutrition"
-        | "sommeil"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -663,13 +591,6 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
-      quiz_type: [
-        "personnalite",
-        "connaissance",
-        "developpement",
-        "nutrition",
-        "sommeil",
-      ],
     },
   },
 } as const
