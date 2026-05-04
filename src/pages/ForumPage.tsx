@@ -81,7 +81,7 @@ const ForumPage = () => {
         <SEOHead 
           title="Forum des Parents | BabyBaby"
           description="Rejoignez notre forum pour échanger avec d'autres parents, poser vos questions et partager vos expériences sur la parentalité, la grossesse et le développement des enfants."
-          canonicalUrl="https://babybaby.app/forum"
+          canonicalUrl="https://babybaby.org/forum"
           keywords={["forum parents", "communauté parents", "questions parentalité", "échanges bébé", "conseils jeunes parents", "entraide parentale"]}
         />
         <NavBar />
@@ -104,7 +104,7 @@ const ForumPage = () => {
       <SEOHead 
         title="Forum des Parents | BabyBaby"
         description="Échangez avec d'autres parents sur notre forum. Discussions par thématiques : grossesse, nouveaux-nés, alimentation, éducation et santé des enfants."
-        canonicalUrl="https://babybaby.app/forum"
+        canonicalUrl="https://babybaby.org/forum"
         keywords={["forum parents", "communauté parents", "questions parentalité", "échanges bébé", "conseils jeunes parents", "entraide parentale"]}
       />
       <NavBar />

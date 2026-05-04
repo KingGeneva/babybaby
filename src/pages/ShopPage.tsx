@@ -37,8 +37,8 @@ const ShopPage = () => {
   }, []);
 
   const breadcrumbItems = [
-    { name: "Accueil", url: "https://babybaby.app/" },
-    { name: "Boutique", url: "https://babybaby.app/boutique" },
+    { name: "Accueil", url: "https://babybaby.org/" },
+    { name: "Boutique", url: "https://babybaby.org/boutique" },
   ];
 
   return (
@@ -46,7 +46,7 @@ const ShopPage = () => {
       <SEOHead
         title="Boutique Bébé - Produits Premium pour Nourrissons | BabyBaby"
         description="Découvrez notre sélection exclusive de produits pour bébés : vêtements, accessoires, jouets et équipements de qualité premium. Livraison rapide et garantie satisfait."
-        canonicalUrl="https://babybaby.app/boutique"
+        canonicalUrl="https://babybaby.org/boutique"
       />
       
       <BreadcrumbSchema items={breadcrumbItems} />
@@ -58,8 +58,8 @@ const ShopPage = () => {
             "@type": "Store",
             "name": "BabyBaby Boutique",
             "description": "Boutique en ligne de produits pour bébés - Qualité premium et livraison rapide",
-            "url": "https://babybaby.app/boutique",
-            "image": "https://babybaby.app/og-image.png",
+            "url": "https://babybaby.org/boutique",
+            "image": "https://babybaby.org/og-image.png",
             "priceRange": "€€",
             "address": {
               "@type": "PostalAddress",

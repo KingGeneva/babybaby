@@ -29,7 +29,7 @@ const ContestsPage = () => {
       <SEOHead 
         title="Concours et Promotions Exclusives | BabyBaby"
         description="Participez à nos concours exclusifs pour gagner des produits pour bébé et profitez d'offres spéciales. Inscrivez-vous pour être informé des prochains concours."
-        canonicalUrl="https://babybaby.app/contests"
+        canonicalUrl="https://babybaby.org/contests"
         keywords={["concours bébé", "promotions puériculture", "gagner produits bébé", "offres parents"]}
       />
       <ContestStructuredData />

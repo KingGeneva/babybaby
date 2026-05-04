@@ -13,7 +13,7 @@ const AboutPage = () => {
       <SEOHead 
         title="À propos de BabyBaby - Notre histoire et notre mission" 
         description="Découvrez l'histoire de BabyBaby, une plateforme créée pour les parents afin de rendre leur parcours parental plus serein et épanouissant."
-        canonicalUrl="https://babybaby.app/about"
+        canonicalUrl="https://babybaby.org/about"
         ogType="website"
         articleData={{
           publishedTime: "2023-09-15T08:00:00+00:00",

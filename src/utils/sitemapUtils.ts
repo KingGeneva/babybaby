@@ -130,7 +130,7 @@ const escapeXml = (unsafe: string): string => {
  * Cette fonction peut être utilisée pour générer un sitemap.xml dynamique
  * basé sur le contenu de votre application
  */
-export const buildDynamicSitemap = async (baseUrl: string = 'https://babybaby.app'): Promise<void> => {
+export const buildDynamicSitemap = async (baseUrl: string = 'https://babybaby.org'): Promise<void> => {
   // Logic to dynamically generate sitemap entries based on your content
   // Pour une implémentation réelle, vous récupéreriez des données de votre base de données
   // ou API pour construire les URLs dynamiquement

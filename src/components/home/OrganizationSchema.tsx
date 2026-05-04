@@ -9,8 +9,8 @@ const OrganizationSchema: React.FC = () => {
     "@type": "Organization",
     "name": "BabyBaby",
     "alternateName": "BabyBaby App",
-    "url": "https://babybaby.app",
-    "logo": "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+    "url": "https://babybaby.org",
+    "logo": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
     "description": "Plateforme leader pour le suivi de développement et santé infantile",
     "foundingDate": "2024",
     "founders": [
@@ -29,13 +29,13 @@ const OrganizationSchema: React.FC = () => {
       {
         "@type": "ContactPoint",
         "contactType": "customer support",
-        "email": "contact@babybaby.app",
+        "email": "contact@babybaby.org",
         "availableLanguage": ["French"]
       },
       {
         "@type": "ContactPoint",
         "contactType": "technical support",
-        "email": "support@babybaby.app",
+        "email": "support@babybaby.org",
         "availableLanguage": ["French"]
       }
     ],

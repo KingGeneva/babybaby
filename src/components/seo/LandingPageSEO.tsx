@@ -23,14 +23,14 @@ const LandingPageSEO: React.FC<LandingPageSEOProps> = ({
   description,
   canonicalUrl,
   keywords,
-  image = "https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+  image = "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
   publishedDate = new Date().toISOString(),
   modifiedDate = new Date().toISOString(),
   authorName = "BabyBaby"
 }) => {
   // Construction du breadcrumb pour cette page
   const breadcrumbSchema = buildBreadcrumbSchema([
-    { name: "Accueil", url: "https://babybaby.app" },
+    { name: "Accueil", url: "https://babybaby.org" },
     { name: title, url: canonicalUrl }
   ]);
 
@@ -130,7 +130,7 @@ function buildArticleSchema(
       'name': 'BabyBaby',
       'logo': {
         '@type': 'ImageObject',
-        'url': 'https://babybaby.app/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png',
+        'url': 'https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png',
         'width': '192',
         'height': '192'
       }
@@ -148,12 +148,12 @@ function buildWebsiteSchema() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     'name': 'BabyBaby',
-    'url': 'https://babybaby.app',
+    'url': 'https://babybaby.org',
     'potentialAction': {
       '@type': 'SearchAction',
       'target': {
         '@type': 'EntryPoint',
-        'urlTemplate': 'https://babybaby.app/recherche?q={search_term_string}'
+        'urlTemplate': 'https://babybaby.org/recherche?q={search_term_string}'
       },
       'query-input': 'required name=search_term_string'
     }

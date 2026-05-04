@@ -11,13 +11,13 @@ import FAQPageSchema from '@/components/seo/FAQPageSchema';
 
 const SEOTags: React.FC = () => {
   // URL canonique de la page d'accueil
-  const homeCanonicalUrl = "https://babybaby.app/";
+  const homeCanonicalUrl = "https://babybaby.org/";
   
   // Définition des langues alternatives pour la page d'accueil
   const alternateLanguages = [
-    { lang: "fr", url: "https://babybaby.app/" },
-    { lang: "fr-FR", url: "https://babybaby.app/" },
-    { lang: "fr-CA", url: "https://babybaby.app/" },
+    { lang: "fr", url: "https://babybaby.org/" },
+    { lang: "fr-FR", url: "https://babybaby.org/" },
+    { lang: "fr-CA", url: "https://babybaby.org/" },
   ];
 
   // FAQs principales pour le schema FAQ sur la page d'accueil
@@ -47,7 +47,7 @@ const SEOTags: React.FC = () => {
         description="BabyBaby : L'application complète pour les parents modernes. Suivez la croissance, la santé et le développement de votre bébé avec des outils innovants. Conseils d'experts et communauté bienveillante."
         canonicalUrl={homeCanonicalUrl}
         ogType="website"
-        ogImage="https://babybaby.app/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
+        ogImage="https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
         keywords={[
           "suivi bébé", "application bébé", "croissance infantile", "santé bébé", 
           "développement enfant", "conseil parental", "outils parents", 
@@ -76,7 +76,7 @@ const SEOTags: React.FC = () => {
         <meta property="og:locale:alternate" content="en_US" />
         <meta property="og:locale:alternate" content="fr_CA" />
         <meta name="twitter:creator" content="@babybaby_app" />
-        <meta name="twitter:domain" content="babybaby.app" />
+        <meta name="twitter:domain" content="babybaby.org" />
         <link rel="preconnect" href="https://babybaby.boutique" />
         <link rel="dns-prefetch" href="https://babybaby.boutique" />
       </Helmet>

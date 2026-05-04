@@ -20,7 +20,7 @@ const HreflangTags: React.FC<HreflangTagsProps> = ({
 }) => {
   // Ensure safe values
   const safeCurrentLang = currentLang || 'fr';
-  const safeCurrentUrl = currentUrl || 'https://babybaby.app/';
+  const safeCurrentUrl = currentUrl || 'https://babybaby.org/';
   const safeAlternateLanguages = alternateLanguages || [];
   
   return (
