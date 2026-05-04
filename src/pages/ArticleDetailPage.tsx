@@ -24,32 +24,38 @@ const ArticleDetailPage = () => {
   const navigate = useNavigate();
   const [article, setArticle] = useState<Article | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
-  
-  const articleId = parseInt(id || '0');
+
+  // Old FreshStore-style slugs (e.g. "2025-baby-astrology-charts") are non-numeric.
+  // Treat them as Gone immediately so Google can drop them from the index
+  // instead of silently redirecting (which preserves the bad URL).
+  const isValidNumericId = /^\d+$/.test(id || '');
+  const articleId = isValidNumericId ? parseInt(id as string, 10) : 0;
   const { formatDateForStructuredData, getArticleData } = useArticle(articleId);
-  
+
   useEffect(() => {
+    if (!isValidNumericId) {
+      setLoading(false);
+      return;
+    }
+
     const loadArticle = async () => {
       setLoading(true);
-      
+
       const articleData = await getArticleData(articleId);
-      
+
       if (!articleData) {
-        toast({
-          title: "Article introuvable",
-          description: "L'article que vous recherchez n'existe pas ou a été supprimé.",
-          variant: "destructive"
-        });
-        navigate('/articles');
+        // No toast + no redirect: render the 404/410 page so the URL itself
+        // signals "gone" to crawlers.
+        setArticle(undefined);
       } else {
         setArticle(articleData);
       }
-      
+
       setLoading(false);
     };
-    
+
     loadArticle();
-  }, [articleId, navigate, getArticleData]);
+  }, [articleId, isValidNumericId, getArticleData]);
 
   if (loading) {
     return (

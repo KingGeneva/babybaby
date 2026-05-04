@@ -29,6 +29,14 @@ Disallow: /parental-dashboard/
 Disallow: /*.json$
 Disallow: /*?*
 
+# Anciennes URLs FreshStore (slugs textuels) — supprimées, ne plus crawler
+# Les nouveaux articles utilisent /articles/<id-numerique>
+Disallow: /articles/*-*
+Disallow: /articles/2025-*
+Disallow: /articles/2024-*
+Disallow: /articles/baby-*
+Disallow: /articles/best-*
+
 # Instructions spécifiques pour Googlebot
 User-agent: Googlebot
 Allow: /
