@@ -1,16 +1,12 @@
 
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from '@/components/ui/use-toast';
+import { useCallback } from 'react';
 import { Article } from '@/types/article';
 import { articles } from '@/data/articles';
 import { supabase } from '@/integrations/supabase/client';
 
 export const useArticle = (articleId: number) => {
-  const navigate = useNavigate();
-  
   // Format date for structured data with more robust parsing
-  const formatDateForStructuredData = (dateString: string) => {
+  const formatDateForStructuredData = useCallback((dateString: string) => {
     try {
       // French month names to number mapping
       const monthMap: Record<string, string> = {
@@ -40,28 +36,27 @@ export const useArticle = (articleId: number) => {
       // Return a fallback valid ISO date
       return new Date().toISOString();
     }
-  };
-  
+  }, []);
+
   // Get article data
-  const getArticleData = async (id: number): Promise<Article | undefined> => {
+  const getArticleData = useCallback(async (id: number): Promise<Article | undefined> => {
     try {
       // First check static articles
       const staticArticle = articles.find(article => article.id === id);
       if (staticArticle) return staticArticle;
-      
+
       // Then check Supabase
       try {
         const { data, error } = await supabase
           .storage
           .from('articles')
           .download(`articles/${id}.json`);
-          
+
         if (error || !data) return undefined;
-        
-        // Read the content of the file JSON
+
         const text = await data.text();
         const article: Article = JSON.parse(text);
-        
+
         return article;
       } catch (error) {
         console.error('Error loading article from Supabase:', error);
@@ -71,7 +66,7 @@ export const useArticle = (articleId: number) => {
       console.error('Error fetching article:', error);
       return undefined;
     }
-  };
+  }, []);
 
   return {
     getArticleData,
