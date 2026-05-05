@@ -1,16 +1,12 @@
 
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from '@/components/ui/use-toast';
+import { useCallback } from 'react';
 import { Article } from '@/types/article';
 import { articles } from '@/data/articles';
 import { supabase } from '@/integrations/supabase/client';
 
 export const useArticle = (articleId: number) => {
-  const navigate = useNavigate();
-  
   // Format date for structured data with more robust parsing
-  const formatDateForStructuredData = (dateString: string) => {
+  const formatDateForStructuredData = useCallback((dateString: string) => {
     try {
       // French month names to number mapping
       const monthMap: Record<string, string> = {
