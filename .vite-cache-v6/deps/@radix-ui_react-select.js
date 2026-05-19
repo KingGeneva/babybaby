@@ -3,6 +3,9 @@ import {
   clamp
 } from "./chunk-TCQMTAGU.js";
 import {
+  VisuallyHidden
+} from "./chunk-FWMB4JYE.js";
+import {
   FocusScope,
   RemoveScrollBar,
   __assign,
@@ -24,15 +27,12 @@ import {
   createPopperScope
 } from "./chunk-FMJ26NYH.js";
 import {
-  VisuallyHidden
-} from "./chunk-FWMB4JYE.js";
-import {
   useEscapeKeydown
 } from "./chunk-XNA63NCL.js";
-import "./chunk-EAZQIME6.js";
 import {
   usePrevious
 } from "./chunk-XSAN5JCE.js";
+import "./chunk-EAZQIME6.js";
 import {
   createCollection,
   useDirection
