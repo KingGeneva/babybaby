@@ -3,11 +3,11 @@ import {
   clamp
 } from "./chunk-TCQMTAGU.js";
 import {
-  useSize
-} from "./chunk-EAZQIME6.js";
-import {
   usePrevious
 } from "./chunk-XSAN5JCE.js";
+import {
+  useSize
+} from "./chunk-EAZQIME6.js";
 import {
   createCollection,
   useDirection
