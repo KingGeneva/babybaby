@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { calculateAge } from '@/lib/date-utils';
 import { ArrowLeft } from 'lucide-react';
+import MilestoneBadges from './milestones/MilestoneBadges';
 
 interface Props {
   childId: string;
