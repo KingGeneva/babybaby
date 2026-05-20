@@ -8,7 +8,7 @@ const items = [
   { to: '/articles', label: 'Articles', icon: BookOpen },
   { to: '/ebooks', label: 'E-books', icon: Library },
   { to: '/forum', label: 'Forum', icon: MessageCircle },
-  { to: '/dashboard', label: 'Compte', icon: User },
+  { to: '/parental-dashboard', label: 'Compte', icon: User },
 ];
 
 /**
