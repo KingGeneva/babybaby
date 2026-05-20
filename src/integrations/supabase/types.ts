@@ -38,51 +38,6 @@ export type Database = {
         }
         Relationships: []
       }
-      baby_events: {
-        Row: {
-          body: string | null
-          child_id: string
-          created_at: string
-          created_by: string
-          id: string
-          media_type: string | null
-          media_url: string | null
-          metadata: Json | null
-          occurred_at: string
-          title: string | null
-          type: Database["public"]["Enums"]["baby_event_type"]
-          updated_at: string
-        }
-        Insert: {
-          body?: string | null
-          child_id: string
-          created_at?: string
-          created_by: string
-          id?: string
-          media_type?: string | null
-          media_url?: string | null
-          metadata?: Json | null
-          occurred_at?: string
-          title?: string | null
-          type: Database["public"]["Enums"]["baby_event_type"]
-          updated_at?: string
-        }
-        Update: {
-          body?: string | null
-          child_id?: string
-          created_at?: string
-          created_by?: string
-          id?: string
-          media_type?: string | null
-          media_url?: string | null
-          metadata?: Json | null
-          occurred_at?: string
-          title?: string | null
-          type?: Database["public"]["Enums"]["baby_event_type"]
-          updated_at?: string
-        }
-        Relationships: []
-      }
       child_profiles: {
         Row: {
           birth_date: string
@@ -191,36 +146,6 @@ export type Database = {
         }
         Relationships: []
       }
-      diapers: {
-        Row: {
-          child_id: string
-          created_at: string
-          id: string
-          logged_by: string
-          notes: string | null
-          occurred_at: string
-          type: Database["public"]["Enums"]["diaper_type"]
-        }
-        Insert: {
-          child_id: string
-          created_at?: string
-          id?: string
-          logged_by: string
-          notes?: string | null
-          occurred_at?: string
-          type: Database["public"]["Enums"]["diaper_type"]
-        }
-        Update: {
-          child_id?: string
-          created_at?: string
-          id?: string
-          logged_by?: string
-          notes?: string | null
-          occurred_at?: string
-          type?: Database["public"]["Enums"]["diaper_type"]
-        }
-        Relationships: []
-      }
       ebook_downloads: {
         Row: {
           downloaded_at: string | null
@@ -287,75 +212,6 @@ export type Database = {
         }
         Relationships: []
       }
-      family_members: {
-        Row: {
-          accepted_at: string | null
-          child_id: string
-          created_at: string
-          id: string
-          invited_by: string | null
-          role: Database["public"]["Enums"]["family_role"]
-          user_id: string
-        }
-        Insert: {
-          accepted_at?: string | null
-          child_id: string
-          created_at?: string
-          id?: string
-          invited_by?: string | null
-          role?: Database["public"]["Enums"]["family_role"]
-          user_id: string
-        }
-        Update: {
-          accepted_at?: string | null
-          child_id?: string
-          created_at?: string
-          id?: string
-          invited_by?: string | null
-          role?: Database["public"]["Enums"]["family_role"]
-          user_id?: string
-        }
-        Relationships: []
-      }
-      feedings: {
-        Row: {
-          amount_ml: number | null
-          child_id: string
-          created_at: string
-          ended_at: string | null
-          id: string
-          logged_by: string
-          notes: string | null
-          started_at: string
-          type: Database["public"]["Enums"]["feeding_type"]
-          updated_at: string
-        }
-        Insert: {
-          amount_ml?: number | null
-          child_id: string
-          created_at?: string
-          ended_at?: string | null
-          id?: string
-          logged_by: string
-          notes?: string | null
-          started_at?: string
-          type: Database["public"]["Enums"]["feeding_type"]
-          updated_at?: string
-        }
-        Update: {
-          amount_ml?: number | null
-          child_id?: string
-          created_at?: string
-          ended_at?: string | null
-          id?: string
-          logged_by?: string
-          notes?: string | null
-          started_at?: string
-          type?: Database["public"]["Enums"]["feeding_type"]
-          updated_at?: string
-        }
-        Relationships: []
-      }
       growth_measurements: {
         Row: {
           child_id: string
@@ -396,39 +252,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      memory_capsules: {
-        Row: {
-          body: string
-          child_id: string
-          created_at: string
-          created_by: string
-          id: string
-          media_url: string | null
-          title: string
-          unlock_at: string
-        }
-        Insert: {
-          body: string
-          child_id: string
-          created_at?: string
-          created_by: string
-          id?: string
-          media_url?: string | null
-          title: string
-          unlock_at: string
-        }
-        Update: {
-          body?: string
-          child_id?: string
-          created_at?: string
-          created_by?: string
-          id?: string
-          media_url?: string | null
-          title?: string
-          unlock_at?: string
-        }
-        Relationships: []
       }
       milestones: {
         Row: {
@@ -516,39 +339,6 @@ export type Database = {
         }
         Relationships: []
       }
-      parent_wellness: {
-        Row: {
-          created_at: string
-          hydration_glasses: number | null
-          id: string
-          logged_at: string
-          mood: Database["public"]["Enums"]["parent_mood"] | null
-          notes: string | null
-          sleep_hours: number | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          hydration_glasses?: number | null
-          id?: string
-          logged_at?: string
-          mood?: Database["public"]["Enums"]["parent_mood"] | null
-          notes?: string | null
-          sleep_hours?: number | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          hydration_glasses?: number | null
-          id?: string
-          logged_at?: string
-          mood?: Database["public"]["Enums"]["parent_mood"] | null
-          notes?: string | null
-          sleep_hours?: number | null
-          user_id?: string
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -573,45 +363,6 @@ export type Database = {
           full_name?: string | null
           id?: string
           updated_at?: string | null
-        }
-        Relationships: []
-      }
-      sleeps: {
-        Row: {
-          child_id: string
-          created_at: string
-          ended_at: string | null
-          id: string
-          location: string | null
-          logged_by: string
-          notes: string | null
-          quality: Database["public"]["Enums"]["sleep_quality"] | null
-          started_at: string
-          updated_at: string
-        }
-        Insert: {
-          child_id: string
-          created_at?: string
-          ended_at?: string | null
-          id?: string
-          location?: string | null
-          logged_by: string
-          notes?: string | null
-          quality?: Database["public"]["Enums"]["sleep_quality"] | null
-          started_at?: string
-          updated_at?: string
-        }
-        Update: {
-          child_id?: string
-          created_at?: string
-          ended_at?: string | null
-          id?: string
-          location?: string | null
-          logged_by?: string
-          notes?: string | null
-          quality?: Database["public"]["Enums"]["sleep_quality"] | null
-          started_at?: string
-          updated_at?: string
         }
         Relationships: []
       }
@@ -649,31 +400,9 @@ export type Database = {
         }
         Returns: boolean
       }
-      is_family_member: {
-        Args: { _child_id: string; _user_id: string }
-        Returns: boolean
-      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
-      baby_event_type:
-        | "milestone"
-        | "photo"
-        | "note"
-        | "voice"
-        | "measurement"
-        | "first"
-        | "memory"
-      diaper_type: "wet" | "dirty" | "mixed" | "dry"
-      family_role: "parent" | "caregiver" | "grandparent"
-      feeding_type:
-        | "breast_left"
-        | "breast_right"
-        | "bottle_formula"
-        | "bottle_breastmilk"
-        | "solid"
-      parent_mood: "great" | "ok" | "tired" | "stressed" | "overwhelmed"
-      sleep_quality: "great" | "ok" | "restless" | "bad"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -802,26 +531,6 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
-      baby_event_type: [
-        "milestone",
-        "photo",
-        "note",
-        "voice",
-        "measurement",
-        "first",
-        "memory",
-      ],
-      diaper_type: ["wet", "dirty", "mixed", "dry"],
-      family_role: ["parent", "caregiver", "grandparent"],
-      feeding_type: [
-        "breast_left",
-        "breast_right",
-        "bottle_formula",
-        "bottle_breastmilk",
-        "solid",
-      ],
-      parent_mood: ["great", "ok", "tired", "stressed", "overwhelmed"],
-      sleep_quality: ["great", "ok", "restless", "bad"],
     },
   },
 } as const
