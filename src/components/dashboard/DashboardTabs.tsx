@@ -3,7 +3,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ChildProfilesList from './ChildProfilesList';
 import ChildProfileForm from './ChildProfileForm';
 import GrowthDashboard from './growth/GrowthDashboard';
-import { Button } from '@/components/ui/button';
+import SelectedChildHeader from './SelectedChildHeader';
+import DevelopmentSection from './DevelopmentSection';
+import { Baby, LineChart, Sparkles, Stethoscope } from 'lucide-react';
 
 interface DashboardTabsProps {
   activeTab: string;
@@ -24,40 +26,59 @@ const DashboardTabs: React.FC<DashboardTabsProps> = ({
   onChildSelected,
   onMeasurementSuccess,
   onBackToProfiles,
-  onViewDashboard,
 }) => {
+  const hasChild = !!selectedChildId;
+
   return (
-    <Tabs value={activeTab} onValueChange={onTabChange}>
-      <TabsList className="grid grid-cols-2 w-full max-w-md mx-auto mb-8">
-        <TabsTrigger value="profiles">Profils</TabsTrigger>
-        <TabsTrigger value="growth" disabled={!selectedChildId}>
-          Croissance
-        </TabsTrigger>
-      </TabsList>
+    <div>
+      {hasChild && activeTab !== 'profiles' && (
+        <SelectedChildHeader childId={selectedChildId!} onChange={onBackToProfiles} />
+      )}
 
-      <TabsContent value="profiles" className="space-y-8">
-        <ChildProfilesList onSelectChild={onChildSelected} />
-        <ChildProfileForm onSuccess={(childId) => {
-          onChildSelected(childId);
-          onTabChange('growth');
-        }} />
-      </TabsContent>
+      <Tabs value={activeTab} onValueChange={onTabChange}>
+        <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto mb-8">
+          <TabsTrigger value="profiles" className="gap-1.5">
+            <Baby className="h-4 w-4" />
+            <span className="hidden sm:inline">Profils</span>
+          </TabsTrigger>
+          <TabsTrigger value="growth" disabled={!hasChild} className="gap-1.5">
+            <LineChart className="h-4 w-4" />
+            <span className="hidden sm:inline">Croissance</span>
+          </TabsTrigger>
+          <TabsTrigger value="milestones" disabled={!hasChild} className="gap-1.5">
+            <Sparkles className="h-4 w-4" />
+            <span className="hidden sm:inline">Étapes</span>
+          </TabsTrigger>
+          <TabsTrigger value="medical" disabled={!hasChild} className="gap-1.5">
+            <Stethoscope className="h-4 w-4" />
+            <span className="hidden sm:inline">Médical</span>
+          </TabsTrigger>
+        </TabsList>
 
-      <TabsContent value="growth">
-        {selectedChildId && (
-          <div className="space-y-6">
-            <GrowthDashboard childId={selectedChildId} onMutated={onMeasurementSuccess} />
+        <TabsContent value="profiles" className="space-y-8">
+          <ChildProfilesList onSelectChild={onChildSelected} />
+          <ChildProfileForm onSuccess={(childId) => {
+            onChildSelected(childId);
+            onTabChange('growth');
+          }} />
+        </TabsContent>
 
-            <div className="flex justify-center gap-3">
-              <Button variant="outline" onClick={onBackToProfiles}>Retour aux profils</Button>
-              <Button onClick={onViewDashboard}>Voir le tableau de bord complet</Button>
-            </div>
-          </div>
-        )}
-      </TabsContent>
-    </Tabs>
+        <TabsContent value="growth">
+          {hasChild && (
+            <GrowthDashboard childId={selectedChildId!} onMutated={onMeasurementSuccess} />
+          )}
+        </TabsContent>
+
+        <TabsContent value="milestones">
+          {hasChild && <DevelopmentSection childId={selectedChildId!} />}
+        </TabsContent>
+
+        <TabsContent value="medical">
+          {hasChild && <DevelopmentSection childId={selectedChildId!} />}
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 
 export default DashboardTabs;
-
