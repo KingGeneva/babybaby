@@ -9,6 +9,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@
 import { Baby, Calendar, Ruler, Weight } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { calculateAge } from '@/lib/date-utils';
+import MilestoneBadges from './milestones/MilestoneBadges';
 
 interface ChildProfile {
   id: string;
@@ -137,6 +138,7 @@ const ChildProfilesList: React.FC<{
                         <div className="text-xs text-gray-500">
                           {new Date(profile.birth_date).toLocaleDateString()}
                         </div>
+                        <MilestoneBadges childId={profile.id} max={3} className="mt-1.5" />
                       </div>
                     </div>
                   </TableCell>
