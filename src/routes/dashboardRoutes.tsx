@@ -14,6 +14,10 @@ const NowPage = lazy(() => import("../pages/NowPage"));
 
 export const dashboardRoutes: RouteObject[] = [
   { 
+    path: "/now", 
+    element: <ProtectedRoute><NowPage /></ProtectedRoute> 
+  },
+  { 
     path: "/dashboard", 
     element: <ProtectedRoute><DashboardPage /></ProtectedRoute> 
   },
