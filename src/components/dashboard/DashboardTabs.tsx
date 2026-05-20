@@ -71,11 +71,11 @@ const DashboardTabs: React.FC<DashboardTabsProps> = ({
         </TabsContent>
 
         <TabsContent value="milestones">
-          {hasChild && <DevelopmentSection childId={selectedChildId!} />}
+          {hasChild && <MilestonesPanel childId={selectedChildId!} />}
         </TabsContent>
 
         <TabsContent value="medical">
-          {hasChild && <DevelopmentSection childId={selectedChildId!} />}
+          {hasChild && <MedicalWidget childId={selectedChildId!} />}
         </TabsContent>
       </Tabs>
     </div>
