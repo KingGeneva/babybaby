@@ -110,8 +110,7 @@ const tables: Record<Sex, Record<Metric, Row[]>> = {
 export function normalizeSex(gender?: string | null): Sex {
   if (!gender) return 'M';
   const g = gender.toString().trim().toLowerCase();
-  if (g.startsWith('f') || g.startsWith('g')) return g.startsWith('g') && !g.startsWith('ga') ? 'F' : (g.startsWith('f') ? 'F' : 'M');
-  // 'fille', 'female', 'f', 'girl' -> F ; 'garçon','garcon','boy','male','m' -> M
+  if (g.startsWith('f') || g.startsWith('girl')) return 'F';
   return 'M';
 }
 
