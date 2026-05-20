@@ -1,36 +1,17 @@
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ArticleSection from '@/components/articles/ArticleSection';
 import TestimonialsCarousel from '@/components/testimonials/TestimonialsCarousel';
-import PartnersCarousel from '@/components/partners/PartnersCarousel';
-import ProductsSection from '@/components/products/ProductsSection';
 import EbooksSection from '@/components/ebooks/EbooksSection';
-import ToolsSection from '@/components/tools/ToolsSection';
-import ContactSection from '@/components/ContactSection';
 import NewsletterForm from '@/components/NewsletterForm';
 import KeyFeaturesSection from './KeyFeaturesSection';
 import CTASection from './CTASection';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 const HomePageContent: React.FC = () => {
-  const [isInView, setIsInView] = useState(false);
-  
-  useEffect(() => {
-    // Make content visible after a small delay to ensure context is properly set up
-    const timer = setTimeout(() => {
-      setIsInView(true);
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
-  // Mise à jour de la date de dernière modification pour les moteurs de recherche
   const lastMod = new Date().toISOString();
-  
+
   return (
     <>
-      {/* SEO optimization for cross-domain */}
       <Helmet>
         <meta name="last-modified" content={lastMod} />
         <link rel="alternate" href="https://babybaby.org/" hrefLang="x-default" />
@@ -42,35 +23,26 @@ const HomePageContent: React.FC = () => {
         <link rel="prefetch" href="/tools" />
       </Helmet>
 
-      <div
-        className={`transition-opacity duration-500 ${isInView ? 'opacity-100' : 'opacity-0'}`}
-      >
+      <div className="animate-fade-in">
+        {/* 1. Promesse & features */}
         <KeyFeaturesSection />
-        
-        {/* Article Section - Important for SEO with fresh content */}
+
+        {/* 2. Contenu frais (articles) */}
         <ArticleSection />
 
-        {/* Témoignages Section */}
+        {/* 3. Preuve sociale */}
         <TestimonialsCarousel />
-        
-        {/* Call-to-Action Section */}
-        <CTASection />
-        
-        {/* Sections moins prioritaires */}
-        <PartnersCarousel />
-        <ProductsSection />
+
+        {/* 4. Ressources gratuites */}
         <EbooksSection />
-        <ToolsSection />
-        <ContactSection />
-        
-        
-        {/* Newsletter avec loader minimal */}
-        <section className="py-8 px-4" aria-labelledby="newsletter-heading">
-          <div className="container mx-auto">
-            <div className="max-w-2xl mx-auto">
-              <h2 id="newsletter-heading" className="sr-only">Inscription à la newsletter</h2>
-              <NewsletterForm />
-            </div>
+
+        {/* 5. CTA final + newsletter */}
+        <CTASection />
+
+        <section className="py-16 px-4 bg-muted/30" aria-labelledby="newsletter-heading">
+          <div className="container mx-auto max-w-2xl">
+            <h2 id="newsletter-heading" className="sr-only">Inscription à la newsletter</h2>
+            <NewsletterForm />
           </div>
         </section>
       </div>
