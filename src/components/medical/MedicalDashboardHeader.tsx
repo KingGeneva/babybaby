@@ -25,7 +25,7 @@ const MedicalDashboardHeader: React.FC<MedicalDashboardHeaderProps> = ({
           variant="ghost" 
           size="sm" 
           className="mr-2"
-          onClick={() => navigate(`/dashboard/${childId}`)}
+          onClick={() => navigate('/parental-dashboard')}
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Retour
