@@ -19,6 +19,27 @@ const CacheManager = ({ version }: CacheManagerProps) => {
       return;
     }
 
+    const isDevelopmentHost =
+      window.location.hostname === 'localhost' ||
+      window.location.hostname.includes('lovableproject.com') ||
+      window.location.hostname.includes('lovable.app') ||
+      window.location.pathname.includes('/.vite-cache');
+
+    if (isDevelopmentHost && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations()
+        .then((registrations) => registrations.forEach((registration) => registration.unregister()))
+        .catch((error) => console.error('Erreur de désactivation du Service Worker:', error));
+
+      if ('caches' in window) {
+        caches.keys()
+          .then((cacheNames) => Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName))))
+          .catch((error) => console.error('Erreur de nettoyage du cache navigateur:', error));
+      }
+
+      localStorage.removeItem('swLastRegistration');
+      return;
+    }
+
     // Vérifier si le service worker est supporté
     if (!('serviceWorker' in navigator)) {
       console.log('Service Worker non supporté par ce navigateur');
