@@ -44,7 +44,7 @@ export default function MedicalDashboardPage() {
   return (
     <div className="min-h-screen">
       <NavBar />
-      <P5Canvas className="fixed inset-0 -z-10" />
+      <P5Canvas className="fixed inset-0 -z-10 opacity-10" />
       
       <div className="container mx-auto px-4 pt-24 pb-16">
         <MedicalDashboardHeader 

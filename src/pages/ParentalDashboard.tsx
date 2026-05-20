@@ -106,7 +106,7 @@ const ParentalDashboard = () => {
   return (
     <div className="min-h-screen">
       <NavBar />
-      <P5Canvas className="fixed inset-0 -z-10" />
+      <P5Canvas className="fixed inset-0 -z-10 opacity-10" />
       
       <div className="container mx-auto px-4 py-20">
         <h1 className="text-3xl font-bold mb-8 text-center text-babybaby-cosmic">
