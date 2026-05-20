@@ -39,7 +39,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   
   return (
     <div 
-      className="fixed bottom-24 right-6 w-80 sm:w-96 h-96 bg-white rounded-2xl shadow-xl overflow-hidden z-50 flex flex-col opacity-0 scale-95 animate-enter"
+      className="fixed bottom-44 right-6 md:bottom-24 w-80 sm:w-96 h-96 bg-white rounded-2xl shadow-xl overflow-hidden z-50 flex flex-col opacity-0 scale-95 animate-enter"
       style={{
         animation: 'fadeIn 0.2s ease-out forwards',
       }}
