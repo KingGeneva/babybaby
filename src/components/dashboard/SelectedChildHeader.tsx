@@ -42,6 +42,7 @@ const SelectedChildHeader: React.FC<Props> = ({ childId, onChange }) => {
           <div className="min-w-0">
             <div className="font-semibold truncate">{child.name}</div>
             <div className="text-sm text-muted-foreground">{calculateAge(child.birth_date)}</div>
+            <MilestoneBadges childId={childId} max={5} className="mt-2" />
           </div>
         </div>
         <Button variant="outline" size="sm" onClick={onChange}>
