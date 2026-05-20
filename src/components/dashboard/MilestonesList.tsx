@@ -5,10 +5,11 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import MilestoneItem from './milestones/MilestoneItem';
 import MilestoneFilters from './milestones/MilestoneFilters';
 import BabyAgeDisplay from './milestones/BabyAgeDisplay';
-import { 
-  calculateBabyAgeMonths, 
-  fetchMilestones, 
-  updateMilestoneCompletion 
+import GamificationPanel from './milestones/GamificationPanel';
+import {
+  calculateBabyAgeMonths,
+  fetchMilestones,
+  updateMilestoneCompletion
 } from './milestones/milestoneUtils';
 
 interface MilestonesListProps {
