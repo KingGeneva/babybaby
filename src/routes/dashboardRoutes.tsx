@@ -10,6 +10,7 @@ const CommunityPage = lazy(() => import("../pages/CommunityPage"));
 const ParentalDashboard = lazy(() => import("../pages/ParentalDashboard"));
 const MedicalDashboardPage = lazy(() => import("../pages/MedicalDashboardPage"));
 const MedicalAppointmentPage = lazy(() => import("../pages/MedicalAppointmentPage"));
+const NowPage = lazy(() => import("../pages/NowPage"));
 
 export const dashboardRoutes: RouteObject[] = [
   { 
