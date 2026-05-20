@@ -138,6 +138,7 @@ const ChildProfilesList: React.FC<{
                         <div className="text-xs text-gray-500">
                           {new Date(profile.birth_date).toLocaleDateString()}
                         </div>
+                        <MilestoneBadges childId={profile.id} max={3} className="mt-1.5" />
                       </div>
                     </div>
                   </TableCell>
