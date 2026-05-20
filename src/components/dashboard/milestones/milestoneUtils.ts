@@ -90,29 +90,22 @@ export const fetchMilestones = async (childId: string) => {
  */
 export const updateMilestoneCompletion = async (childId: string, milestoneId: string, isCurrentlyCompleted: boolean) => {
   try {
-    console.log(`Updating milestone ${milestoneId} for child ${childId}, currently completed: ${isCurrentlyCompleted}`);
-    
-    // Si mode démo, simuler la mise à jour
-    if (childId === 'demo') {
-      console.log(`Demo: ${isCurrentlyCompleted ? 'Suppression' : 'Ajout'} du jalon ${milestoneId}`);
-      return;
-    }
-    
-    // Mettre à jour le jalon en définissant ou en effaçant la date d'achèvement
+    if (childId === 'demo') return;
+
     const { error } = await supabase
       .from('milestones')
-      .update({ 
-        achieved_date: isCurrentlyCompleted ? null : new Date().toISOString() 
+      .update({
+        achieved_date: isCurrentlyCompleted ? null : new Date().toISOString().slice(0, 10),
+        achieved: !isCurrentlyCompleted,
       })
       .eq('id', milestoneId)
       .eq('child_id', childId);
-      
-    if (error) {
-      console.error('Error updating milestone:', error);
-      throw error;
+
+    if (error) throw error;
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('milestone-updated', { detail: { childId, milestoneId } }));
     }
-    
-    console.log('Milestone update successful');
   } catch (error) {
     console.error('Erreur lors de la mise à jour du jalon:', error);
   }
