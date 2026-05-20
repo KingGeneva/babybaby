@@ -60,9 +60,9 @@ const ChatbotButton: React.FC = () => {
   return (
     <>
       {/* Chat button */}
-      <div className="fixed bottom-24 right-6 md:bottom-6 z-50">
+      <div className="fixed bottom-20 right-6 md:bottom-6 z-50">
         <button
-          className="bg-babybaby-cosmic text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-babybaby-cosmic/90 transition-all duration-200 hover:scale-105 active:scale-95"
+          className="bg-babybaby-cosmic text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-babybaby-cosmic/90 transition-all duration-200 hover:scale-105 active:scale-95"
           onClick={toggleChat}
           style={{
             animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
