@@ -22,7 +22,7 @@ const CacheManager = ({ version }: CacheManagerProps) => {
     const isDevelopmentHost =
       window.location.hostname === 'localhost' ||
       window.location.hostname.includes('lovableproject.com') ||
-      window.location.hostname.includes('lovable.app') ||
+      window.location.hostname.startsWith('id-preview--') ||
       window.location.pathname.includes('/.vite-cache');
 
     if (isDevelopmentHost && 'serviceWorker' in navigator) {

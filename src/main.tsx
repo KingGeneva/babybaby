@@ -16,7 +16,7 @@ const clearDevelopmentServiceWorkerCache = async () => {
   const isDevelopmentPreview =
     window.location.hostname === 'localhost' ||
     window.location.hostname.includes('lovableproject.com') ||
-    window.location.hostname.includes('lovable.app');
+    window.location.hostname.startsWith('id-preview--');
 
   if (!isDevelopmentPreview) return false;
 
