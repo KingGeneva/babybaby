@@ -69,7 +69,7 @@ const DashboardPage = () => {
   return (
     <div className="min-h-screen">
       <NavBar />
-      <P5Canvas className="fixed inset-0 -z-10" />
+      <P5Canvas className="fixed inset-0 -z-10 opacity-10" />
       <div className="pt-24">
         <Dashboard childId={childId || ''} showDevelopmentSection={true} />
       </div>
