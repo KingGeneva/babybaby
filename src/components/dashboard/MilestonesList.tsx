@@ -106,8 +106,16 @@ const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) =
   );
   
   return (
-    <div>
+    <div className="space-y-6">
       <BabyAgeDisplay babyAgeMonths={babyAgeMonths} birthDate={birthDate} />
+
+      <GamificationPanel
+        childId={childId}
+        milestones={milestones}
+        completedIds={completedMilestones}
+      />
+
+
       
       <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
         <MilestoneFilters categories={categories} activeTab={activeTab} />
