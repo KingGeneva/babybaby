@@ -61,6 +61,11 @@ const GrowthDashboard: React.FC<Props> = ({ childId, refreshSignal, onMutated })
 
   return (
     <div className="space-y-6">
+      {/* Ajout d'une mesure — mis en avant et toujours accessible */}
+      <div className="rounded-xl border-2 border-primary/30 bg-primary/5 p-1">
+        <GrowthMeasurementForm childId={childId} onSuccess={triggerRefresh} />
+      </div>
+
       <GrowthStats measurements={measurements} birthDate={child.birth_date} gender={child.gender} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -94,7 +99,6 @@ const GrowthDashboard: React.FC<Props> = ({ childId, refreshSignal, onMutated })
           sex={sex}
           color="hsl(340 75% 55%)"
         />
-        <GrowthMeasurementForm childId={childId} onSuccess={triggerRefresh} />
       </div>
 
       <GrowthHistoryTable measurements={measurements} onChange={triggerRefresh} />
