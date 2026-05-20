@@ -15,6 +15,8 @@ import ArticleContent from '@/components/articles/ArticleContent';
 import ArticleActions from '@/components/articles/ArticleActions';
 import ArticlePromotion from '@/components/articles/ArticlePromotion';
 import ArticleNotFound from '@/components/articles/ArticleNotFound';
+import ReadingProgressBar from '@/components/articles/ReadingProgressBar';
+import ArticleTOC from '@/components/articles/ArticleTOC';
 import { Article } from '@/types/article';
 import { useArticle } from '@/hooks/useArticle';
 import { ArticleDetailSkeleton } from '@/components/articles/ArticleSkeleton';
@@ -107,9 +109,11 @@ const ArticleDetailPage = () => {
         authorName="BabyBaby"
         url={`https://babybaby.org/articles/${article.id}`}
       />
-      
+
+      <ReadingProgressBar />
       <NavBar />
-      
+      <ArticleTOC content={article.content || ''} />
+
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           <motion.div
