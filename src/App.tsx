@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import LoadingFallback from "./components/layout/LoadingFallback";
 import ChatbotButton from "./components/chatbot/ChatbotButton";
 import CacheManager from "./components/common/CacheManager";
+import MobileBottomNav from "./components/nav/MobileBottomNav";
 import { appRoutes } from "./routes";
 
 const APP_VERSION = '1.2.3';
@@ -44,6 +45,7 @@ function App() {
               </Routes>
               
               <ChatbotButton />
+              <MobileBottomNav />
               <CacheManager version={APP_VERSION} />
             </Suspense>
             <Toaster position="top-center" richColors />

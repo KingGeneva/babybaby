@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
-import MobileBottomNav from "@/components/nav/MobileBottomNav";
 import { motion } from "framer-motion";
 
 interface MainLayoutProps {
@@ -35,7 +34,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         {children}
       </motion.main>
       <Footer />
-      <MobileBottomNav />
     </div>
   );
 };
