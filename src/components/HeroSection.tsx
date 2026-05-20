@@ -1,138 +1,78 @@
-
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronRight } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { ArrowRight, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-// Lazy load P5Canvas to improve Speed Index
-const P5Canvas = lazy(() => import('./P5Canvas'));
-
 const HeroSection: React.FC = () => {
-  const [typedText, setTypedText] = useState('');
-  const [isVisible, setIsVisible] = useState(false);
-  const [showCanvas, setShowCanvas] = useState(false);
-  const fullText = 'L\'application complète pour les parents modernes';
-  const isMobile = useIsMobile();
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    let i = 0;
-    const typingSpeed = isMobile ? 30 : 50; 
-    
-    setIsVisible(true);
-    
-    const typingInterval = setInterval(() => {
-      if (i <= fullText.length) {
-        setTypedText(fullText.slice(0, i));
-        i++;
-      } else {
-        clearInterval(typingInterval);
-      }
-    }, typingSpeed); 
-    
-    return () => clearInterval(typingInterval);
-  }, [isMobile]);
-
-  // Defer P5Canvas loading to improve initial paint
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowCanvas(true);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3
-      }
-    }
-  };
-
-  const item = {
-    hidden: { y: 20, opacity: 0 },
-    show: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }
-  };
 
   return (
-    <section 
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    <section
+      className="relative min-h-[88svh] flex items-center justify-center overflow-hidden bg-background"
       aria-labelledby="hero-heading"
-      role="banner"
     >
-      <div className="absolute inset-0 z-0 bg-gradient-to-br from-background to-muted">
-        {showCanvas && (
-          <Suspense fallback={null}>
-            <P5Canvas className={`w-full h-full ${isMobile ? 'opacity-20' : ''}`} />
-          </Suspense>
-        )}
+      {/* Decorative gradient blobs */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-32 -left-32 w-[28rem] h-[28rem] rounded-full bg-primary/15 blur-3xl" />
+        <div className="absolute top-1/2 -right-32 w-[24rem] h-[24rem] rounded-full bg-secondary/15 blur-3xl" />
       </div>
-      <div className="container mx-auto px-4 z-10">
-        <motion.div 
-          className="max-w-4xl mx-auto text-center"
-          variants={container}
-          initial="hidden"
-          animate="show"
-        >
-          <motion.div variants={item}>
-            <h1 
-              id="hero-heading"
-              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-babybaby-cosmic to-blue-500 bg-clip-text text-transparent"
-            >
-              BabyBaby
-            </h1>
-          </motion.div>
-          
-          <motion.div variants={item}>
-            <h2 className="text-xl md:text-2xl lg:text-3xl mb-6 text-gray-700 dark:text-gray-300 min-h-[2rem] md:min-h-[2.5rem] lg:min-h-[3rem] font-nunito">
-              <span className="inline">{typedText}</span>
-              <span className="animate-pulse-soft inline-block w-[6px]" aria-hidden="true">|</span>
-            </h2>
-          </motion.div>
 
-          <motion.div variants={item}>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl mx-auto">
-              Suivez la <strong>croissance</strong>, le <strong>développement</strong> et la <strong>santé</strong> de votre bébé 
-              avec des outils innovants, des courbes de croissance OMS et des conseils d'experts en parentalité.
-            </p>
-          </motion.div>
-          
-          <motion.div variants={item} className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size={isMobile ? "default" : "lg"}
-              className="cosmic-button px-6 py-3 sm:px-8 sm:py-5 text-base sm:text-lg hover-lift"
-              onClick={() => navigate('/auth')}
-              aria-label="Créer un compte gratuit sur BabyBaby"
-            >
-              Créer un compte gratuit
-              <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
-            </Button>
-            
-            <Button 
-              variant="outline"
-              size={isMobile ? "default" : "lg"}
-              className="border-2 border-babybaby-cosmic text-babybaby-cosmic hover:bg-babybaby-cosmic/10 font-bold px-6 py-3 sm:px-8 sm:py-5 text-base sm:text-lg rounded-full w-full sm:w-auto hover-lift"
-              onClick={() => navigate('/articles')}
-              aria-label="Découvrir nos guides et articles parentaux"
-            >
-              Nos guides parentaux
-              <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
-            </Button>
-          </motion.div>
-          
-          <motion.div 
-            variants={item} 
-            className="mt-8 text-center"
+      <div className="container mx-auto px-4 py-20 md:py-32">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-3xl mx-auto text-center"
+        >
+          {/* Social proof badge */}
+          <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-border bg-card shadow-sm">
+            <div className="flex -space-x-1">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <Star key={i} className="h-3.5 w-3.5 fill-secondary text-secondary" />
+              ))}
+            </div>
+            <span className="text-xs font-medium text-muted-foreground">
+              4.9 / 5 · plus de 15 000 parents
+            </span>
+          </div>
+
+          <h1
+            id="hero-heading"
+            className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[1.05] mb-6"
           >
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Plus de <strong className="font-semibold">15,000</strong> parents nous font déjà confiance
-            </p>
-          </motion.div>
+            Vos premiers <em className="text-primary not-italic">1000 jours</em>,
+            <br className="hidden md:block" /> sereinement.
+          </h1>
+
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
+            Suivez la croissance, le sommeil et le développement de votre bébé.
+            Conseils d'experts, outils OMS, communauté bienveillante — gratuit.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <Button
+              size="lg"
+              className="rounded-full px-8 h-12 text-base shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all"
+              onClick={() => navigate('/auth')}
+            >
+              Commencer gratuitement
+              <ArrowRight className="ml-1 h-4 w-4" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="lg"
+              className="rounded-full px-6 h-12 text-base text-foreground hover:bg-muted"
+              onClick={() => navigate('/articles')}
+            >
+              Lire nos guides
+            </Button>
+          </div>
+
+          <p className="mt-8 text-xs text-muted-foreground uppercase tracking-widest">
+            Sans publicité · Sans carte bancaire · Données chiffrées
+          </p>
         </motion.div>
       </div>
     </section>

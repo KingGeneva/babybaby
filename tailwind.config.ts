@@ -64,15 +64,17 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				babybaby: {
-					blue: '#33C3F0',
-					pink: '#FFDEE2',
-					cosmic: '#0EA5E9',
-					lightblue: '#D3E4FD',
+					blue: '#3b82f6',
+					pink: '#ff6b6b',
+					cosmic: '#3b82f6',
+					lightblue: '#dbeafe',
 				}
 			},
 			fontFamily: {
-				comfortaa: ['Comfortaa', 'sans-serif'],
-				nunito: ['Nunito', 'sans-serif'],
+				comfortaa: ['"DM Serif Display"', 'Georgia', 'serif'],
+				nunito: ['"Fira Sans"', 'system-ui', 'sans-serif'],
+				display: ['"DM Serif Display"', 'Georgia', 'serif'],
+				body: ['"Fira Sans"', 'system-ui', 'sans-serif'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -129,9 +131,9 @@ export default {
 				"bounce-soft": "bounce-soft 2s ease-in-out infinite"
 			},
 			backgroundImage: {
-				'cosmic-gradient': 'linear-gradient(135deg, #0EA5E9 0%, #6366F1 100%)',
+				'cosmic-gradient': 'linear-gradient(135deg, #3b82f6 0%, #6366F1 100%)',
 				'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
-				'pink-blue-gradient': 'linear-gradient(135deg, #FFDEE2 0%, #33C3F0 100%)',
+				'pink-blue-gradient': 'linear-gradient(135deg, #ff6b6b 0%, #3b82f6 100%)',
 			}
 		}
 	},
