@@ -26,30 +26,39 @@ export const calculateBabyAgeMonths = (birthDate: string): number => {
  */
 export const fetchMilestones = async (childId: string) => {
   try {
-    console.log('Fetching milestones for child:', childId);
-    
-    // Si c'est un mode démo, renvoyez des données de démonstration
     if (childId === 'demo') {
-      console.log('Using demo milestones');
       const demoMilestones = getDemoMilestones();
       return {
         milestones: demoMilestones,
         completedMilestones: ['milestone-1', 'milestone-3']
       };
     }
-    
-    // Récupérer tous les jalons disponibles
-    const { data: milestonesData, error: milestonesError } = await supabase
+
+    let { data: milestonesData, error: milestonesError } = await supabase
       .from('milestones')
       .select('*')
+      .eq('child_id', childId)
       .order('age_months', { ascending: true });
-      
-    if (milestonesError) {
-      console.error('Error fetching milestones:', milestonesError);
-      throw milestonesError;
+
+    if (milestonesError) throw milestonesError;
+
+    // Seed defaults the first time this child opens the page
+    if (!milestonesData || milestonesData.length === 0) {
+      const template = getDemoMilestones().map(m => ({
+        child_id: childId,
+        title: m.title || m.name,
+        description: m.description || null,
+        category: m.category || 'Général',
+        age_months: m.expected_age_months,
+      }));
+      const { data: inserted, error: insertError } = await supabase
+        .from('milestones')
+        .insert(template)
+        .select('*');
+      if (insertError) throw insertError;
+      milestonesData = inserted || [];
     }
-    
-    // Transform DB milestones to match app Milestone type
+
     const milestones: Milestone[] = (milestonesData || []).map(m => ({
       id: m.id,
       name: m.title,
@@ -59,30 +68,18 @@ export const fetchMilestones = async (childId: string) => {
       expected_age_months: m.age_months,
       category: m.category,
       achieved_date: m.achieved_date,
-      child_id: m.child_id
+      child_id: m.child_id,
     }));
-    
-    console.log('Fetched milestones:', milestones);
-    
-    // Pour les besoins de cette application, nous allons utiliser
-    // le champ achieved_date pour déterminer si un jalon est complété
-    // Si achieved_date est défini, le jalon est complété
+
     const completedMilestones = milestones
-      .filter(milestone => milestone.achieved_date !== null && milestone.child_id === childId)
-      .map(milestone => milestone.id);
-    
-    console.log('Completed milestones:', completedMilestones);
-    
-    return {
-      milestones,
-      completedMilestones
-    };
+      .filter(m => m.achieved_date !== null && m.achieved_date !== undefined)
+      .map(m => m.id);
+
+    return { milestones, completedMilestones };
   } catch (error) {
     console.error('Erreur lors du chargement des jalons:', error);
-    // En cas d'erreur, renvoyer des données de démonstration
-    const demoMilestones = getDemoMilestones();
     return {
-      milestones: demoMilestones,
+      milestones: getDemoMilestones(),
       completedMilestones: []
     };
   }
