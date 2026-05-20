@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   clearScreen: false,
-  cacheDir: ".vite-cache-v6",
+  cacheDir: ".vite-cache-v7",
   plugins: [
     react(),
     mode === 'development' && componentTagger(),

@@ -10,15 +10,51 @@ const APP_VERSION = '1.2.3'; // Incrémentation pour rafraîchir le cache
 console.log(`BabyBaby App v${APP_VERSION} loaded successfully`);
 console.log('React version:', React.version);
 
-// Create the root with React 18 API
-const rootElement = document.getElementById("root");
-if (!rootElement) throw new Error('Failed to find the root element');
+const clearDevelopmentServiceWorkerCache = async () => {
+  if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return false;
 
-const root = createRoot(rootElement);
+  const isDevelopmentPreview =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname.includes('lovableproject.com') ||
+    window.location.hostname.startsWith('id-preview--');
 
-// Render the app
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+  if (!isDevelopmentPreview) return false;
+
+  const cleanupKey = 'babybaby-dev-sw-cleaned-v2';
+  const registrations = await navigator.serviceWorker.getRegistrations();
+  const cacheNames = 'caches' in window ? await caches.keys() : [];
+  const hasStaleBrowserCache = registrations.length > 0 || cacheNames.length > 0 || Boolean(navigator.serviceWorker.controller);
+
+  if (!hasStaleBrowserCache || sessionStorage.getItem(cleanupKey) === 'true') return false;
+
+  await Promise.all([
+    ...registrations.map((registration) => registration.unregister()),
+    ...cacheNames.map((cacheName) => caches.delete(cacheName)),
+  ]);
+
+  localStorage.removeItem('swLastRegistration');
+  sessionStorage.setItem(cleanupKey, 'true');
+  window.location.reload();
+  return true;
+};
+
+const startApp = async () => {
+  if (await clearDevelopmentServiceWorkerCache()) return;
+
+  // Create the root with React 18 API
+  const rootElement = document.getElementById("root");
+  if (!rootElement) throw new Error('Failed to find the root element');
+
+  const root = createRoot(rootElement);
+
+  // Render the app
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+};
+
+startApp().catch((error) => {
+  console.error('Erreur au démarrage de BabyBaby:', error);
+});
