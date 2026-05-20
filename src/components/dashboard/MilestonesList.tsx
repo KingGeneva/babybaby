@@ -5,11 +5,10 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import MilestoneItem from './milestones/MilestoneItem';
 import MilestoneFilters from './milestones/MilestoneFilters';
 import BabyAgeDisplay from './milestones/BabyAgeDisplay';
-import GamificationPanel from './milestones/GamificationPanel';
-import {
-  calculateBabyAgeMonths,
-  fetchMilestones,
-  updateMilestoneCompletion
+import { 
+  calculateBabyAgeMonths, 
+  fetchMilestones, 
+  updateMilestoneCompletion 
 } from './milestones/milestoneUtils';
 
 interface MilestonesListProps {
@@ -106,16 +105,8 @@ const MilestonesList: React.FC<MilestonesListProps> = ({ childId, birthDate }) =
   );
   
   return (
-    <div className="space-y-6">
+    <div>
       <BabyAgeDisplay babyAgeMonths={babyAgeMonths} birthDate={birthDate} />
-
-      <GamificationPanel
-        childId={childId}
-        milestones={milestones}
-        completedIds={completedMilestones}
-      />
-
-
       
       <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
         <MilestoneFilters categories={categories} activeTab={activeTab} />
