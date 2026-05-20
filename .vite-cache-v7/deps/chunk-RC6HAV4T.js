@@ -1,6 +1,6 @@
 import {
   useCallbackRef
-} from "./chunk-YSYISR2F.js";
+} from "./chunk-TVCOGUU4.js";
 import {
   Primitive
 } from "./chunk-AS4TUE2O.js";
@@ -733,7 +733,6 @@ var RemoveScrollBar = function(_a) {
 
 export {
   FocusScope,
-  hideOthers,
   __assign,
   __rest,
   __spreadArray,
@@ -743,6 +742,7 @@ export {
   createSidecarMedium,
   exportSidecar,
   styleSingleton,
-  RemoveScrollBar
+  RemoveScrollBar,
+  hideOthers
 };
-//# sourceMappingURL=chunk-UCTFCVTP.js.map
+//# sourceMappingURL=chunk-RC6HAV4T.js.map
