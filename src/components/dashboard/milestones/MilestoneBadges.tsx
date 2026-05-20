@@ -71,7 +71,7 @@ const MilestoneBadges: React.FC<MilestoneBadgesProps> = ({
   useEffect(() => {
     if (!childId || childId === 'demo') return;
     let cancel = false;
-    (async () => {
+    const load = async () => {
       const { data } = await supabase
         .from('milestones')
         .select('id, title, category, achieved_date')
@@ -79,9 +79,16 @@ const MilestoneBadges: React.FC<MilestoneBadgesProps> = ({
         .not('achieved_date', 'is', null)
         .order('achieved_date', { ascending: false });
       if (!cancel && data) setBadges(data as any);
-    })();
+    };
+    load();
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (!detail || detail.childId === childId) load();
+    };
+    window.addEventListener('milestone-updated', handler);
     return () => {
       cancel = true;
+      window.removeEventListener('milestone-updated', handler);
     };
   }, [childId]);
 
