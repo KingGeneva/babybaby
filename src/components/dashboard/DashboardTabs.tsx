@@ -4,7 +4,8 @@ import ChildProfilesList from './ChildProfilesList';
 import ChildProfileForm from './ChildProfileForm';
 import GrowthDashboard from './growth/GrowthDashboard';
 import SelectedChildHeader from './SelectedChildHeader';
-import DevelopmentSection from './DevelopmentSection';
+import MilestonesPanel from './MilestonesPanel';
+import MedicalWidget from '@/components/medical/MedicalWidget';
 import { Baby, LineChart, Sparkles, Stethoscope } from 'lucide-react';
 
 interface DashboardTabsProps {
