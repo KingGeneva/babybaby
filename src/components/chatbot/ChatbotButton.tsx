@@ -69,9 +69,9 @@ const ChatbotButton: React.FC = () => {
           }}
         >
           {isOpen ? (
-            <X className="h-6 w-6" />
+            <X className="h-5 w-5" />
           ) : (
-            <MessageCircle className="h-6 w-6" />
+            <MessageCircle className="h-5 w-5" />
           )}
         </button>
       </div>
