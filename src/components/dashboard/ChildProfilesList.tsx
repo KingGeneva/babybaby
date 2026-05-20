@@ -9,6 +9,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@
 import { Baby, Calendar, Ruler, Weight } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { calculateAge } from '@/lib/date-utils';
+import MilestoneBadges from './milestones/MilestoneBadges';
 
 interface ChildProfile {
   id: string;
