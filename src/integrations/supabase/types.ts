@@ -38,6 +38,68 @@ export type Database = {
         }
         Relationships: []
       }
+      article_comments: {
+        Row: {
+          article_id: string
+          content: string
+          created_at: string
+          id: string
+          is_deleted: boolean
+          parent_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          article_id: string
+          content: string
+          created_at?: string
+          id?: string
+          is_deleted?: boolean
+          parent_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          article_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_deleted?: boolean
+          parent_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "article_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      article_favorites: {
+        Row: {
+          article_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          article_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          article_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       baby_events: {
         Row: {
           body: string | null
@@ -497,19 +559,28 @@ export type Database = {
       }
       newsletter_subscribers: {
         Row: {
+          age_segment: string | null
+          baby_birth_date: string | null
           email: string
+          expected_due_date: string | null
           id: string
           is_active: boolean | null
           subscribed_at: string | null
         }
         Insert: {
+          age_segment?: string | null
+          baby_birth_date?: string | null
           email: string
+          expected_due_date?: string | null
           id?: string
           is_active?: boolean | null
           subscribed_at?: string | null
         }
         Update: {
+          age_segment?: string | null
+          baby_birth_date?: string | null
           email?: string
+          expected_due_date?: string | null
           id?: string
           is_active?: boolean | null
           subscribed_at?: string | null
@@ -573,6 +644,36 @@ export type Database = {
           full_name?: string | null
           id?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      quiz_results: {
+        Row: {
+          answers: Json
+          created_at: string
+          email: string | null
+          id: string
+          quiz_slug: string
+          result_key: string
+          user_id: string | null
+        }
+        Insert: {
+          answers?: Json
+          created_at?: string
+          email?: string | null
+          id?: string
+          quiz_slug: string
+          result_key: string
+          user_id?: string | null
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          email?: string | null
+          id?: string
+          quiz_slug?: string
+          result_key?: string
+          user_id?: string | null
         }
         Relationships: []
       }
