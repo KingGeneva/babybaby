@@ -64,7 +64,7 @@ const ArticleListView: React.FC<ArticleListViewProps> = ({ articles }) => {
                 <h3 className="text-xl font-bold mb-2">{article.title}</h3>
                 <p className="text-gray-600 flex-grow mb-4">{article.excerpt}</p>
                 <Link 
-                  to={`/articles/${article.id}`}
+                  to={`${articleUrl(article)}`}
                   className="flex items-center text-babybaby-cosmic self-end hover:underline"
                 >
                   Lire l'article <ChevronRight className="ml-1 h-4 w-4" />
