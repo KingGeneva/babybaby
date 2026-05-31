@@ -214,8 +214,17 @@ Appelle la fonction save_article avec le markdown complet et les métadonnées.`
                   description: "Tags SEO incluant le mot-clé principal, variantes et entités liées",
                 },
                 reading_time: { type: "integer", minimum: 8, maximum: 25 },
+                slug: {
+                  type: "string",
+                  description: "URL slug SEO en kebab-case, 3-7 mots, contient le mot-clé principal, sans accents ni stop-words inutiles (ex: 'portage-physiologique-nouveau-ne')",
+                  pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                },
+                image_alt: {
+                  type: "string",
+                  description: "Texte alternatif descriptif de l'image de couverture, 80-120 caractères, contient le mot-clé principal naturellement, décrit la scène pour Google Images et l'accessibilité",
+                },
               },
-              required: ["title", "content", "summary", "excerpt", "category", "tags", "reading_time"],
+              required: ["title", "content", "summary", "excerpt", "category", "tags", "reading_time", "slug", "image_alt"],
               additionalProperties: false,
             },
           },
