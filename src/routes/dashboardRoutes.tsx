@@ -34,6 +34,10 @@ export const dashboardRoutes: RouteObject[] = [
     element: <ProtectedRoute><ParentalDashboard /></ProtectedRoute> 
   },
   { 
+    path: "/outils/rotation-parents", 
+    element: <ProtectedRoute><ParentRotationPage /></ProtectedRoute> 
+  },
+  { 
     path: "/medical/dashboard/:childId", 
     element: <ProtectedRoute><MedicalDashboardPage /></ProtectedRoute> 
   },
