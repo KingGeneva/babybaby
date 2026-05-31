@@ -8,6 +8,7 @@ const DashboardPage = lazy(() => import("../pages/DashboardPage"));
 const ToolsPage = lazy(() => import("../pages/ToolsPage"));
 const CommunityPage = lazy(() => import("../pages/CommunityPage"));
 const ParentalDashboard = lazy(() => import("../pages/ParentalDashboard"));
+const ParentRotationPage = lazy(() => import("../pages/ParentRotationPage"));
 const MedicalDashboardPage = lazy(() => import("../pages/MedicalDashboardPage"));
 const MedicalAppointmentPage = lazy(() => import("../pages/MedicalAppointmentPage"));
 
