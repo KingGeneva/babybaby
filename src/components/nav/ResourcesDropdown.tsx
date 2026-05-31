@@ -1,7 +1,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronDown, Gift } from "lucide-react";
+import { ChevronDown, Gift, Heart } from "lucide-react";
 import { NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 
@@ -47,6 +47,13 @@ const ResourcesDropdown = ({ isOpen, onToggle }: ResourcesDropdownProps) => {
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
             >
               E-books & Guides
+            </Link>
+            <Link
+              to="/favoris"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+            >
+              <Heart className="h-4 w-4 mr-2" />
+              Favoris
             </Link>
             <Link
               to="/free-offers"

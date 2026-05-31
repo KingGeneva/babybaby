@@ -1,12 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { BookOpen, Heart, MessageCircle, User, Home } from 'lucide-react';
+import { BookOpen, Wrench, MessageCircle, User, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const items = [
   { to: '/', label: 'Accueil', icon: Home, end: true },
   { to: '/articles', label: 'Articles', icon: BookOpen },
-  { to: '/favoris', label: 'Favoris', icon: Heart },
+  { to: '/tools', label: 'Outils', icon: Wrench },
   { to: '/forum', label: 'Forum', icon: MessageCircle },
   { to: '/parental-dashboard', label: 'Compte', icon: User },
 ];

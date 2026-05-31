@@ -3,15 +3,15 @@ import {
   clamp
 } from "./chunk-TCQMTAGU.js";
 import {
-  usePrevious
-} from "./chunk-XSAN5JCE.js";
+  createCollection,
+  useDirection
+} from "./chunk-DF7W5PGO.js";
 import {
   useSize
 } from "./chunk-EAZQIME6.js";
 import {
-  createCollection,
-  useDirection
-} from "./chunk-DF7W5PGO.js";
+  usePrevious
+} from "./chunk-XSAN5JCE.js";
 import {
   composeEventHandlers,
   useControllableState
