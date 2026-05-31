@@ -103,11 +103,16 @@ const ToolsPage = () => {
                 <TabsTrigger value="checklist">Liste</TabsTrigger>
                 <TabsTrigger value="gifts">Cadeaux</TabsTrigger>
                 <TabsTrigger value="health">Santé</TabsTrigger>
+                <TabsTrigger value="family">Famille</TabsTrigger>
               </TabsList>
             </div>
+
+            {/* Reusable card for the parent rotation AI tool */}
+            {(() => null)()}
             
             <TabsContent value="all" className="space-y-12">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <ParentRotationToolCard />
                 <SleepTracker />
                 <NameGenerator />
                 <CostCalculator />
