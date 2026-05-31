@@ -14,7 +14,7 @@ import type { Article } from '@/types/article';
 const FavoritesPage: React.FC = () => {
   const { user } = useAuth();
   const { favorites, loading } = useArticleFavorites();
-  const { articles, isLoading: articlesLoading } = useArticles();
+  const { articles, loading: articlesLoading } = useArticles();
   const [favArticles, setFavArticles] = useState<Article[]>([]);
 
   useEffect(() => {
