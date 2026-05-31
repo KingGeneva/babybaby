@@ -82,8 +82,8 @@ const ToolsPage = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl font-bold mb-4 text-babybaby-cosmic">Outils Gratuits pour Jeunes Parents</h1>
-            <p className="max-w-2xl mx-auto text-gray-700">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-babybaby-cosmic px-2">Outils Gratuits pour Jeunes Parents</h1>
+            <p className="max-w-2xl mx-auto text-gray-700 text-sm sm:text-base px-2">
               Générateur de prénoms, suivi du sommeil, bruit blanc et berceuses : tout pour accompagner votre quotidien de parent
             </p>
           </motion.div>
@@ -94,21 +94,19 @@ const ToolsPage = () => {
             value={activeTab}
             onValueChange={setActiveTab}
           >
-            <div className="flex justify-center mb-8 overflow-x-auto">
-              <TabsList className="flex-nowrap">
-                <TabsTrigger value="all">Tous les outils</TabsTrigger>
-                <TabsTrigger value="names">Prénoms</TabsTrigger>
-                <TabsTrigger value="finance">Finance</TabsTrigger>
-                <TabsTrigger value="sleep">Sommeil</TabsTrigger>
-                <TabsTrigger value="checklist">Liste</TabsTrigger>
-                <TabsTrigger value="gifts">Cadeaux</TabsTrigger>
-                <TabsTrigger value="health">Santé</TabsTrigger>
-                <TabsTrigger value="family">Famille</TabsTrigger>
+            <div className="mb-8 -mx-4 px-4 overflow-x-auto scrollbar-hide">
+              <TabsList className="inline-flex w-max flex-nowrap mx-auto">
+                <TabsTrigger value="all" className="whitespace-nowrap">Tous</TabsTrigger>
+                <TabsTrigger value="names" className="whitespace-nowrap">Prénoms</TabsTrigger>
+                <TabsTrigger value="finance" className="whitespace-nowrap">Finance</TabsTrigger>
+                <TabsTrigger value="sleep" className="whitespace-nowrap">Sommeil</TabsTrigger>
+                <TabsTrigger value="checklist" className="whitespace-nowrap">Liste</TabsTrigger>
+                <TabsTrigger value="gifts" className="whitespace-nowrap">Cadeaux</TabsTrigger>
+                <TabsTrigger value="health" className="whitespace-nowrap">Santé</TabsTrigger>
+                <TabsTrigger value="family" className="whitespace-nowrap">Famille</TabsTrigger>
               </TabsList>
             </div>
 
-            {/* Reusable card for the parent rotation AI tool */}
-            {(() => null)()}
             
             <TabsContent value="all" className="space-y-12">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
