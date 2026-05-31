@@ -7,9 +7,13 @@ interface ArticleStructuredDataProps {
   description: string;
   image: string;
   datePublished: string;
+  dateModified?: string;
   authorName: string;
   url: string;
-  category?: string;  // Added category as an optional property
+  category?: string;
+  keywords?: string[];
+  wordCount?: number;
+  inLanguage?: string;
 }
 
 const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
@@ -17,20 +21,26 @@ const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
   description,
   image,
   datePublished,
+  dateModified,
   authorName,
   url,
-  category
+  category,
+  keywords,
+  wordCount,
+  inLanguage = 'fr-FR',
 }) => {
-  const articleSchema = {
+  const articleSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": title,
     "description": description,
     "image": image,
     "datePublished": datePublished,
+    "dateModified": dateModified || datePublished,
+    "inLanguage": inLanguage,
     "author": {
       "@type": "Person",
-      "name": authorName
+      "name": authorName,
     },
     "publisher": {
       "@type": "Organization",
@@ -39,19 +49,18 @@ const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
         "@type": "ImageObject",
         "url": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
         "width": "192",
-        "height": "192"
-      }
+        "height": "192",
+      },
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": url
-    }
+      "@id": url,
+    },
   };
 
-  // Add category to schema if provided
-  if (category) {
-    articleSchema["articleSection"] = category;
-  }
+  if (category) articleSchema.articleSection = category;
+  if (keywords && keywords.length > 0) articleSchema.keywords = keywords.join(', ');
+  if (wordCount && wordCount > 0) articleSchema.wordCount = wordCount;
 
   return (
     <Helmet>

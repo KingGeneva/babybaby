@@ -5,9 +5,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 interface ArticleImageProps {
   image: string;
   title: string;
+  alt?: string;
 }
 
-const ArticleImage: React.FC<ArticleImageProps> = ({ image, title }) => {
+const ArticleImage: React.FC<ArticleImageProps> = ({ image, title, alt }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   if (!image || image === "/placeholder.svg") {
@@ -22,7 +23,7 @@ const ArticleImage: React.FC<ArticleImageProps> = ({ image, title }) => {
       {isLoading && <Skeleton className="absolute inset-0" />}
       <img
         src={image}
-        alt={title}
+        alt={alt || title}
         className="w-full h-full object-cover absolute inset-0"
         loading="eager"
         decoding="async"

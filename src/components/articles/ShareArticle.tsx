@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { articleUrl } from '@/lib/articleUrl';
 import { Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -10,6 +11,7 @@ interface ShareArticleProps {
     excerpt: string;
     image: string;
     id: number;
+    slug?: string;
   };
 }
 
@@ -20,7 +22,7 @@ const ShareArticle: React.FC<ShareArticleProps> = ({ article }) => {
     const shareData = {
       title: article.title,
       text: article.excerpt,
-      url: `${window.location.origin}/articles/${article.id}`,
+      url: `${window.location.origin}${articleUrl(article)}`,
       files: [],
     };
 
@@ -42,7 +44,7 @@ const ShareArticle: React.FC<ShareArticleProps> = ({ article }) => {
       } else {
         // Fallback for browsers that don't support the Web Share API
         await navigator.clipboard.writeText(
-          `${article.title}\n\n${article.excerpt}\n\n${window.location.origin}/articles/${article.id}`
+          `${article.title}\n\n${article.excerpt}\n\n${window.location.origin}${articleUrl(article)}`
         );
         toast({
           title: "Lien copié",

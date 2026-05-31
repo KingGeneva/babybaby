@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Calendar, ChevronRight, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ShareArticle from './ShareArticle';
+import { articleUrl } from '@/lib/articleUrl';
 
 type Article = {
   id: number;
@@ -15,6 +16,7 @@ type Article = {
   views?: number;
   featured?: boolean;
   content?: string;
+  slug?: string;
 };
 
 interface ArticleCardProps {

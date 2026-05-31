@@ -21,6 +21,7 @@ import ArticleComments from '@/components/articles/ArticleComments';
 import { Article } from '@/types/article';
 import { useArticle } from '@/hooks/useArticle';
 import { ArticleDetailSkeleton } from '@/components/articles/ArticleSkeleton';
+import { articleUrl, parseArticleIdFromParam } from '@/lib/articleUrl';
 
 const ArticleDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,11 +29,10 @@ const ArticleDetailPage = () => {
   const [article, setArticle] = useState<Article | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Old FreshStore-style slugs (e.g. "2025-baby-astrology-charts") are non-numeric.
-  // Treat them as Gone immediately so Google can drop them from the index
-  // instead of silently redirecting (which preserves the bad URL).
-  const isValidNumericId = /^\d+$/.test(id || '');
-  const articleId = isValidNumericId ? parseInt(id as string, 10) : 0;
+  // Accept both `/articles/123` and `/articles/my-slug-123`.
+  // Anything else (legacy FreshStore slugs without trailing id) is treated as Gone.
+  const articleId = parseArticleIdFromParam(id) ?? 0;
+  const isValidNumericId = articleId > 0;
   const { formatDateForStructuredData, getArticleData } = useArticle(articleId);
 
   useEffect(() => {
@@ -88,6 +88,10 @@ const ArticleDetailPage = () => {
     return <ArticleNotFound />;
   }
 
+  const canonical = `https://babybaby.org${articleUrl(article)}`;
+  const publishedIso = formatDateForStructuredData(article.date);
+  const modifiedIso = article.dateModified || publishedIso;
+
   return (
     <div className="min-h-[100svh]">
       <SEOHead
@@ -95,20 +99,24 @@ const ArticleDetailPage = () => {
         description={article.excerpt}
         ogImage={article.image || "/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"}
         ogType="article"
-        canonicalUrl={`https://babybaby.org/articles/${article.id}`}
+        canonicalUrl={canonical}
         articleData={{
-          publishedTime: formatDateForStructuredData(article.date),
-          tags: [article.category]
+          publishedTime: publishedIso,
+          tags: [article.category, ...(article.tags || [])],
         }}
       />
-      
+
       <ArticleStructuredData
         title={article.title}
         description={article.excerpt}
         image={article.image}
-        datePublished={formatDateForStructuredData(article.date)}
-        authorName="BabyBaby"
-        url={`https://babybaby.org/articles/${article.id}`}
+        datePublished={publishedIso}
+        dateModified={modifiedIso}
+        authorName={article.author || "BabyBaby"}
+        url={canonical}
+        category={article.category}
+        keywords={article.tags}
+        wordCount={article.word_count}
       />
 
       <ReadingProgressBar />
@@ -138,7 +146,7 @@ const ArticleDetailPage = () => {
                 title={article.title} 
               />
               
-              <ArticleImage image={article.image} title={article.title} />
+              <ArticleImage image={article.image} title={article.title} alt={article.image_alt} />
               
               <ArticleContent content={article.content} excerpt={article.excerpt} />
               

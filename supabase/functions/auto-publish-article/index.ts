@@ -180,7 +180,7 @@ EXIGENCES MAXIMALES:
 - Zéro condescendance, zéro injonction culpabilisante
 - Inclusif (parent 1 / parent 2, familles diverses)
 
-Appelle la fonction save_article avec le markdown complet et les métadonnées.`,
+Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-case, 3-7 mots, contient le mot-clé), un image_alt descriptif (80-120 chars, contient le mot-clé) et toutes les métadonnées.`,
         },
       ],
       tools: [
@@ -214,8 +214,17 @@ Appelle la fonction save_article avec le markdown complet et les métadonnées.`
                   description: "Tags SEO incluant le mot-clé principal, variantes et entités liées",
                 },
                 reading_time: { type: "integer", minimum: 8, maximum: 25 },
+                slug: {
+                  type: "string",
+                  description: "URL slug SEO en kebab-case, 3-7 mots, contient le mot-clé principal, sans accents ni stop-words inutiles (ex: 'portage-physiologique-nouveau-ne')",
+                  pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                },
+                image_alt: {
+                  type: "string",
+                  description: "Texte alternatif descriptif de l'image de couverture, 80-120 caractères, contient le mot-clé principal naturellement, décrit la scène pour Google Images et l'accessibilité",
+                },
               },
-              required: ["title", "content", "summary", "excerpt", "category", "tags", "reading_time"],
+              required: ["title", "content", "summary", "excerpt", "category", "tags", "reading_time", "slug", "image_alt"],
               additionalProperties: false,
             },
           },
@@ -244,7 +253,7 @@ Appelle la fonction save_article avec le markdown complet et les métadonnées.`
     // --- Step 3: generate cover image ---
     let imageUrl = "/lovable-uploads/gentle-parenting.jpg";
     try {
-      const imagePrompt = `Illustration éditoriale moderne, douce et chaleureuse pour un article sur la parentalité intitulé "${article.title}". ${article.excerpt.slice(0, 150)}. Couleurs pastel, lumière naturelle, style premium magazine, format 16:9, sans texte.`;
+      const imagePrompt = `Illustration éditoriale moderne, douce et chaleureuse pour un article sur la parentalité intitulé "${article.title}". ${article.image_alt || article.excerpt.slice(0, 150)}. Couleurs pastel, lumière naturelle, style premium magazine, format 16:9, sans texte ni mots.`;
       const imgRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
@@ -275,6 +284,17 @@ Appelle la fonction save_article avec le markdown complet et les métadonnées.`
     }
 
     // --- Step 4: publish article ---
+    // Defensive slug sanitization in case the model returns something off-spec.
+    const safeSlug = (article.slug || article.title)
+      .toString()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "")
+      .slice(0, 80);
+
+    const nowIso = new Date().toISOString();
     const articlePayload = {
       id: articleId,
       title: article.title,
@@ -283,7 +303,10 @@ Appelle la fonction save_article avec le markdown complet et les métadonnées.`
       excerpt: article.excerpt,
       category: article.category,
       image: imageUrl,
+      image_alt: article.image_alt,
+      slug: safeSlug,
       date: new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }),
+      dateModified: nowIso,
       readingTime: article.reading_time,
       tags: article.tags,
       author: "Assistant IA",
@@ -292,7 +315,7 @@ Appelle la fonction save_article avec le markdown complet et les métadonnées.`
       source_trend: trend,
       seo_keyword: keyword,
       word_count: wordCount,
-      created_at: new Date().toISOString(),
+      created_at: nowIso,
     };
 
     const blob = new Blob([JSON.stringify(articlePayload, null, 2)], { type: "application/json" });
@@ -306,6 +329,7 @@ Appelle la fonction save_article avec le markdown complet et les métadonnées.`
         success: true,
         articleId,
         title: article.title,
+        slug: safeSlug,
         keyword,
         word_count: wordCount,
         trend,

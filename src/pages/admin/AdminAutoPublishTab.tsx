@@ -8,7 +8,7 @@ import { invalidateAllArticleCaches } from "@/data/articles/index";
 
 export default function AdminAutoPublishTab() {
   const [generating, setGenerating] = useState(false);
-  const [lastResult, setLastResult] = useState<{ articleId: number; title: string; trend: string } | null>(null);
+  const [lastResult, setLastResult] = useState<{ articleId: number; title: string; trend: string; slug?: string } | null>(null);
   const { toast } = useToast();
 
   const triggerAutoPublish = async () => {
@@ -26,7 +26,7 @@ export default function AdminAutoPublishTab() {
       if (error) throw error;
       if (!data?.success) throw new Error(data?.error || "Échec inconnu");
 
-      setLastResult({ articleId: data.articleId, title: data.title, trend: data.trend });
+      setLastResult({ articleId: data.articleId, title: data.title, trend: data.trend, slug: data.slug });
       invalidateAllArticleCaches();
       toast({
         title: "Article publié",
@@ -77,7 +77,7 @@ export default function AdminAutoPublishTab() {
                 <span className="font-medium">Tendance :</span> {lastResult.trend}
               </p>
               <a
-                href={`/articles/${lastResult.articleId}`}
+                href={lastResult.slug ? `/articles/${lastResult.slug}-${lastResult.articleId}` : `/articles/${lastResult.articleId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center text-sm text-primary hover:underline"
