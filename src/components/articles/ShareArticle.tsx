@@ -11,6 +11,7 @@ interface ShareArticleProps {
     excerpt: string;
     image: string;
     id: number;
+    slug?: string;
   };
 }
 
