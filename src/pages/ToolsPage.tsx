@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Users } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -99,11 +103,16 @@ const ToolsPage = () => {
                 <TabsTrigger value="checklist">Liste</TabsTrigger>
                 <TabsTrigger value="gifts">Cadeaux</TabsTrigger>
                 <TabsTrigger value="health">Santé</TabsTrigger>
+                <TabsTrigger value="family">Famille</TabsTrigger>
               </TabsList>
             </div>
+
+            {/* Reusable card for the parent rotation AI tool */}
+            {(() => null)()}
             
             <TabsContent value="all" className="space-y-12">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <ParentRotationToolCard />
                 <SleepTracker />
                 <NameGenerator />
                 <CostCalculator />
@@ -152,6 +161,12 @@ const ToolsPage = () => {
                 <OvulationCalculator />
               </div>
             </TabsContent>
+
+            <TabsContent value="family">
+              <div className="max-w-2xl mx-auto">
+                <ParentRotationToolCard />
+              </div>
+            </TabsContent>
           </Tabs>
         </div>
       </div>
@@ -159,5 +174,31 @@ const ToolsPage = () => {
     </div>
   );
 };
+
+const ParentRotationToolCard = () => (
+  <Card className="h-full border-babybaby-cosmic/20 bg-gradient-to-br from-babybaby-cosmic/5 to-pink-50">
+    <CardHeader>
+      <div className="flex items-center gap-3">
+        <div className="p-2 rounded-lg bg-babybaby-cosmic/10">
+          <Users className="h-6 w-6 text-babybaby-cosmic" />
+        </div>
+        <div>
+          <CardTitle>À qui le tour ?</CardTitle>
+          <CardDescription>Répartissez équitablement les tâches entre parents grâce à l'IA</CardDescription>
+        </div>
+      </div>
+    </CardHeader>
+    <CardContent>
+      <p className="text-sm text-gray-600 mb-4">
+        Loggez les levers de nuit, biberons, changes et bains. L'IA analyse l'équité et suggère à qui revient le prochain tour.
+      </p>
+      <Link to="/outils/rotation-parents">
+        <Button className="w-full bg-babybaby-cosmic hover:bg-babybaby-cosmic/90">
+          Ouvrir l'outil
+        </Button>
+      </Link>
+    </CardContent>
+  </Card>
+);
 
 export default ToolsPage;
