@@ -124,6 +124,13 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
                       E-books & Guides
                     </Link>
                     <Link
+                      to="/favoris"
+                      className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                    >
+                      <Heart className="h-4 w-4 mr-2" />
+                      Favoris
+                    </Link>
+                    <Link
                       to="/free-offers"
                       className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
                     >
