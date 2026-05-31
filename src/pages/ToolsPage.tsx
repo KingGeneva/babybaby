@@ -74,7 +74,7 @@ const ToolsPage = () => {
         </script>
       </Helmet>
       <NavBar />
-      <div className="pt-24 pb-16">
+      <div className="pt-24 pb-24 md:pb-16">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
