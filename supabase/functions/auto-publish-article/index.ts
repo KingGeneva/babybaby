@@ -235,8 +235,8 @@ Appelle la fonction save_article avec le markdown complet et les métadonnées.`
 
     const fullContent: string = article.content;
     const wordCount = fullContent.split(/\s+/).length;
-    if (wordCount < 800) {
-      console.warn(`Article shorter than expected: ${wordCount} words`);
+    if (wordCount < 2000) {
+      console.warn(`Article shorter than target pillar length: ${wordCount} words`);
     }
 
     const articleId = Date.now();
