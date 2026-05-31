@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { articleUrl } from '@/lib/articleUrl';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
