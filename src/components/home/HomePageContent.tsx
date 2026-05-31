@@ -6,6 +6,7 @@ import NewsletterForm from '@/components/NewsletterForm';
 import KeyFeaturesSection from './KeyFeaturesSection';
 import CTASection from './CTASection';
 import ParentingQuiz from '@/components/quiz/ParentingQuiz';
+import HeritageSection from './HeritageSection';
 import { Helmet } from 'react-helmet-async';
 
 const HomePageContent: React.FC = () => {
@@ -44,6 +45,9 @@ const HomePageContent: React.FC = () => {
 
         {/* 4. Ressources gratuites */}
         <EbooksSection />
+
+        {/* 4bis. Héritage du domaine (depuis 1998 / MSLO 2000-2003) */}
+        <HeritageSection />
 
         {/* 5. CTA final + newsletter */}
         <CTASection />
