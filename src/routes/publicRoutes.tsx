@@ -20,6 +20,7 @@ const ContestsPage = lazy(() => import("../pages/ContestsPage"));
 const ShopPage = lazy(() => import("../pages/ShopPage"));
 const ProductDetailPage = lazy(() => import("../pages/ProductDetailPage"));
 const BabyProductsReportPage = lazy(() => import("../pages/BabyProductsReportPage"));
+const FavoritesPage = lazy(() => import("../pages/FavoritesPage"));
 
 // Wrap page components with transition effects and layout
 const wrapWithLayout = (Component: React.ComponentType, variant: 'fade' | 'slide' | 'scale' = 'fade') => {
@@ -47,5 +48,6 @@ export const publicRoutes: RouteObject[] = [
   { path: "/boutique", element: wrapWithLayout(ShopPage, 'slide') },
   { path: "/boutique/:handle", element: wrapWithLayout(ProductDetailPage, 'fade') },
   { path: "/meilleurs-produits-bebe-2026", element: wrapWithLayout(BabyProductsReportPage, 'fade') },
+  { path: "/favoris", element: <FavoritesPage /> },
   { path: "*", element: wrapWithLayout(NotFound, 'scale') }
 ];
