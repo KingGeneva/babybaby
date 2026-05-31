@@ -20,7 +20,7 @@ const HeritageSection: React.FC = () => {
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             BabyBaby.org est l'un des plus anciens domaines dédiés à la parentalité
-            sur le web — actif sans interruption depuis 1998.
+            sur le web — actif depuis 1998.
           </p>
         </div>
 
