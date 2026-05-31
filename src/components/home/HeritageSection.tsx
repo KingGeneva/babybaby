@@ -45,7 +45,7 @@ const HeritageSection: React.FC = () => {
 
           <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-sm">
             <Globe className="w-8 h-8 text-primary mb-3" />
-            <h3 className="font-semibold mb-2">Aujourd'hui</h3>
+            <h3 className="font-semibold mb-2">2023 — Refondation</h3>
             <p className="text-sm text-muted-foreground">
               Refondé en application moderne pour les parents francophones :
               suivi de croissance, conseils d'experts et communauté.
