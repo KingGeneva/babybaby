@@ -587,6 +587,39 @@ export type Database = {
         }
         Relationships: []
       }
+      parent_turns: {
+        Row: {
+          child_id: string
+          created_at: string
+          duration_minutes: number | null
+          id: string
+          notes: string | null
+          occurred_at: string
+          parent_id: string
+          task: Database["public"]["Enums"]["parent_turn_task"]
+        }
+        Insert: {
+          child_id: string
+          created_at?: string
+          duration_minutes?: number | null
+          id?: string
+          notes?: string | null
+          occurred_at?: string
+          parent_id: string
+          task: Database["public"]["Enums"]["parent_turn_task"]
+        }
+        Update: {
+          child_id?: string
+          created_at?: string
+          duration_minutes?: number | null
+          id?: string
+          notes?: string | null
+          occurred_at?: string
+          parent_id?: string
+          task?: Database["public"]["Enums"]["parent_turn_task"]
+        }
+        Relationships: []
+      }
       parent_wellness: {
         Row: {
           created_at: string
@@ -774,6 +807,13 @@ export type Database = {
         | "bottle_breastmilk"
         | "solid"
       parent_mood: "great" | "ok" | "tired" | "stressed" | "overwhelmed"
+      parent_turn_task:
+        | "night_wake"
+        | "feeding"
+        | "diaper"
+        | "bath"
+        | "bedtime"
+        | "other"
       sleep_quality: "great" | "ok" | "restless" | "bad"
     }
     CompositeTypes: {
@@ -922,6 +962,14 @@ export const Constants = {
         "solid",
       ],
       parent_mood: ["great", "ok", "tired", "stressed", "overwhelmed"],
+      parent_turn_task: [
+        "night_wake",
+        "feeding",
+        "diaper",
+        "bath",
+        "bedtime",
+        "other",
+      ],
       sleep_quality: ["great", "ok", "restless", "bad"],
     },
   },
