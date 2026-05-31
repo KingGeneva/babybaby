@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
+import { Resend } from "npm:resend@4.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -40,17 +41,36 @@ async function callAI(apiKey: string, body: Record<string, unknown>) {
   return await res.json();
 }
 
+async function notifyFailure(error: string, context: Record<string, unknown> = {}) {
+  const resendKey = Deno.env.get("RESEND_API_KEY");
+  if (!resendKey) return;
+  try {
+    const resend = new Resend(resendKey);
+    await resend.emails.send({
+      from: "BabyBaby <onboarding@resend.dev>",
+      to: ["contact@babybaby.org"],
+      subject: "⚠️ Auto-publish article — échec",
+      html: `<h2>Échec de la génération d'article</h2>
+        <p><strong>Erreur:</strong> ${error}</p>
+        <pre>${JSON.stringify(context, null, 2)}</pre>
+        <p>Vérifiez les crédits Lovable AI ou les logs de la fonction <code>auto-publish-article</code>.</p>`,
+    });
+  } catch (e) {
+    console.error("Failed to send alert email:", e);
+  }
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const CRON_SECRET = Deno.env.get("CRON_SECRET");
+  const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+  const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+  const CRON_SECRET = Deno.env.get("CRON_SECRET");
 
+  try {
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
@@ -87,112 +107,123 @@ serve(async (req) => {
       }
     }
 
-    // --- Step 1: identify a specific trend ---
+    // --- Step 1: identify a specific trend + SEO keyword (cheap model) ---
     const topic = TOPICS[Math.floor(Math.random() * TOPICS.length)];
     const seed = Date.now();
 
     const trendData = await callAI(LOVABLE_API_KEY, {
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-2.5-flash-lite",
       messages: [
         {
           role: "system",
           content:
-            "Tu es expert en parentalité. Identifie une tendance SPÉCIFIQUE et innovante (2024-2025), pas générique.",
+            "Tu es expert SEO et parentalité francophone. Tu identifies des tendances précises ET le mot-clé long-tail à fort potentiel de recherche associé.",
         },
         {
           role: "user",
-          content: `Identifie UNE tendance précise concernant: "${topic}". Une seule phrase claire. ID:${seed}`,
+          content: `Sur le thème "${topic}", identifie UNE tendance précise 2024-2025 ET le mot-clé long-tail français le plus recherché (3-6 mots, intention informationnelle parentale).
+Format strict:
+TENDANCE: <une phrase>
+MOT-CLE: <mot-clé long-tail>
+ID:${seed}`,
         },
       ],
     });
-    const trend = trendData.choices[0].message.content.trim();
+    const trendRaw = trendData.choices[0].message.content.trim();
+    const trend = (trendRaw.match(/TENDANCE\s*:\s*(.+)/i)?.[1] || trendRaw).trim();
+    const keyword = (trendRaw.match(/MOT-CLE\s*:\s*(.+)/i)?.[1] || topic).trim();
 
-    // --- Step 2: generate full article ---
+    // --- Step 2: generate RICH article + metadata in ONE call (tool calling) ---
     const articleData = await callAI(LOVABLE_API_KEY, {
       model: "google/gemini-2.5-flash",
       messages: [
         {
           role: "system",
           content:
-            "Tu es rédacteur expert en parentalité. Tu écris en français des articles bien structurés, en Markdown, avec des conseils pratiques et un ton bienveillant.",
+            "Tu es rédacteur SEO expert en parentalité francophone. Tu écris des articles longs, pratiques, optimisés pour Google Discover et la recherche organique. Tu intègres naturellement les mots-clés, structures sémantiques (H2/H3), exemples concrets, données chiffrées récentes (2024-2025) et FAQ. Tu cites des sources fiables (OMS, INSPQ, Santé publique France, études récentes) en fin d'article.",
         },
         {
           role: "user",
-          content: `Rédige un article complet sur: "${trend}".
+          content: `Rédige un article SEO complet et engageant.
 
-Exigences:
-- Titre accrocheur et SPÉCIFIQUE (pas commencer par "Parentalité")
-- Minimum 800 mots
-- Structuré avec ## et ###
-- Listes à puces pour les conseils
-- Conclusion encourageante
-- SEO-friendly (mots-clés naturels)
+SUJET: "${trend}"
+MOT-CLÉ PRINCIPAL: "${keyword}" (à intégrer naturellement dans le titre, intro, 2 H2, et conclusion)
 
-Réponds UNIQUEMENT avec le Markdown de l'article.`,
-        },
-      ],
-    });
-    const fullContent = articleData.choices[0].message.content.trim();
+EXIGENCES STRICTES:
+- Titre H1 accrocheur, contenant le mot-clé, max 65 caractères, ne PAS commencer par "Parentalité"
+- 1200-1600 mots minimum
+- Intro de 2-3 phrases qui répond à l'intention de recherche dès les 50 premiers mots (featured snippet)
+- 5 à 7 sections en ## avec sous-sections ### si pertinent
+- Au moins 2 listes à puces avec conseils pratiques actionnables
+- Au moins 1 tableau Markdown comparatif OU une encadré "À retenir"
+- Données chiffrées (statistiques, âges, durées) crédibles 2024-2025
+- Une section FAQ finale "## Questions fréquentes" avec 3-4 questions/réponses (boost SEO)
+- Conclusion encourageante + appel à l'action vers la communauté/app BabyBaby
+- Ton bienveillant, tutoiement parental, zéro jargon inutile
+- Variations sémantiques du mot-clé tout au long du texte
 
-    // --- Step 3: extract metadata via tool calling for reliability ---
-    const metaData = await callAI(LOVABLE_API_KEY, {
-      model: "google/gemini-2.5-flash",
-      messages: [
-        { role: "system", content: "Tu extrais des métadonnées d'articles de blog." },
-        {
-          role: "user",
-          content: `Extrais les métadonnées de cet article:\n\n${fullContent.slice(0, 4000)}`,
+Appelle la fonction save_article avec le markdown complet + métadonnées.`,
         },
       ],
       tools: [
         {
           type: "function",
           function: {
-            name: "save_metadata",
-            description: "Save the extracted metadata",
+            name: "save_article",
+            description: "Sauvegarde l'article rédigé et ses métadonnées SEO",
             parameters: {
               type: "object",
               properties: {
-                title: { type: "string", description: "Titre <= 100 chars" },
-                summary: { type: "string", description: "Résumé 2-3 phrases" },
-                excerpt: { type: "string", description: "Premier paragraphe court" },
+                title: { type: "string", description: "Titre H1, max 65 chars, contient le mot-clé" },
+                content: {
+                  type: "string",
+                  description: "Article complet en Markdown, 1200+ mots, avec H2/H3/listes/FAQ",
+                },
+                summary: { type: "string", description: "Résumé 2-3 phrases, contient le mot-clé" },
+                excerpt: { type: "string", description: "Accroche meta-description, 140-160 caractères" },
                 category: {
                   type: "string",
                   enum: ["Préparation", "Nutrition", "Développement", "Sommeil", "Croissance", "Aménagement"],
                 },
-                tags: { type: "array", items: { type: "string" }, minItems: 3, maxItems: 6 },
-                reading_time: { type: "integer", minimum: 2, maximum: 20 },
+                tags: {
+                  type: "array",
+                  items: { type: "string" },
+                  minItems: 4,
+                  maxItems: 8,
+                  description: "Tags SEO incluant le mot-clé principal et variantes",
+                },
+                reading_time: { type: "integer", minimum: 5, maximum: 20 },
               },
-              required: ["title", "summary", "excerpt", "category", "tags", "reading_time"],
+              required: ["title", "content", "summary", "excerpt", "category", "tags", "reading_time"],
               additionalProperties: false,
             },
           },
         },
       ],
-      tool_choice: { type: "function", function: { name: "save_metadata" } },
+      tool_choice: { type: "function", function: { name: "save_article" } },
     });
 
-    let metadata: any;
+    let article: any;
+    const argsRaw = articleData.choices[0].message.tool_calls?.[0]?.function?.arguments;
+    if (!argsRaw) throw new Error("AI did not return article tool call");
     try {
-      const args = metaData.choices[0].message.tool_calls?.[0]?.function?.arguments;
-      metadata = JSON.parse(args);
-    } catch {
-      metadata = {
-        title: trend.slice(0, 100),
-        summary: `Article sur ${trend}`,
-        excerpt: fullContent.slice(0, 200),
-        category: "Développement",
-        tags: ["parentalité", "conseil", "enfant"],
-        reading_time: Math.max(3, Math.ceil(fullContent.split(/\s+/).length / 200)),
-      };
+      article = JSON.parse(argsRaw);
+    } catch (e) {
+      throw new Error(`Failed to parse article JSON: ${e instanceof Error ? e.message : e}`);
+    }
+
+    const fullContent: string = article.content;
+    const wordCount = fullContent.split(/\s+/).length;
+    if (wordCount < 800) {
+      console.warn(`Article shorter than expected: ${wordCount} words`);
     }
 
     const articleId = Date.now();
 
-    // --- Step 4: generate cover image ---
+    // --- Step 3: generate cover image ---
     let imageUrl = "/lovable-uploads/gentle-parenting.jpg";
     try {
-      const imagePrompt = `Illustration moderne, douce et chaleureuse pour un article sur la parentalité intitulé "${metadata.title}". ${metadata.excerpt.slice(0, 150)}. Couleurs pastel, style éditorial premium, format 16:9.`;
+      const imagePrompt = `Illustration éditoriale moderne, douce et chaleureuse pour un article sur la parentalité intitulé "${article.title}". ${article.excerpt.slice(0, 150)}. Couleurs pastel, lumière naturelle, style premium magazine, format 16:9, sans texte.`;
       const imgRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
@@ -222,22 +253,24 @@ Réponds UNIQUEMENT avec le Markdown de l'article.`,
       console.error("Image generation failed, using fallback:", e);
     }
 
-    // --- Step 5: publish article (write JSON to storage – matches existing site contract) ---
+    // --- Step 4: publish article ---
     const articlePayload = {
       id: articleId,
-      title: metadata.title,
+      title: article.title,
       content: fullContent,
-      summary: metadata.summary,
-      excerpt: metadata.excerpt,
-      category: metadata.category,
+      summary: article.summary,
+      excerpt: article.excerpt,
+      category: article.category,
       image: imageUrl,
       date: new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }),
-      readingTime: metadata.reading_time,
-      tags: metadata.tags,
+      readingTime: article.reading_time,
+      tags: article.tags,
       author: "Assistant IA",
       featured: false,
       views: 0,
       source_trend: trend,
+      seo_keyword: keyword,
+      word_count: wordCount,
       created_at: new Date().toISOString(),
     };
 
@@ -251,16 +284,20 @@ Réponds UNIQUEMENT avec le Markdown de l'article.`,
       JSON.stringify({
         success: true,
         articleId,
-        title: metadata.title,
+        title: article.title,
+        keyword,
+        word_count: wordCount,
         trend,
         triggered_by: isCron ? "cron" : "admin",
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (error) {
-    console.error("auto-publish-article error:", error);
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("auto-publish-article error:", msg);
+    await notifyFailure(msg, { timestamp: new Date().toISOString() });
     return new Response(
-      JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) }),
+      JSON.stringify({ success: false, error: msg }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
