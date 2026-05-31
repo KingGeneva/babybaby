@@ -4,6 +4,26 @@ import { Article } from '@/types/article';
 import { articles as staticArticles } from '@/data/articles';
 import { supabase } from '@/integrations/supabase/client';
 
+type SortableArticle = Article & { __fileTimestamp?: number };
+
+const frenchMonths: Record<string, number> = {
+  janvier: 0, fevrier: 1, février: 1, mars: 2, avril: 3, mai: 4, juin: 5,
+  juillet: 6, aout: 7, août: 7, septembre: 8, octobre: 9, novembre: 10, decembre: 11, décembre: 11,
+};
+
+const getArticleDateTimestamp = (date: string) => {
+  const parsed = Date.parse(date);
+  if (!Number.isNaN(parsed)) return parsed;
+
+  const normalized = date.trim().toLowerCase();
+  const match = normalized.match(/^(\d{1,2})\s+([a-zéû]+)\s+(\d{4})$/i);
+  if (!match) return 0;
+
+  const [, day, month, year] = match;
+  const monthIndex = frenchMonths[month];
+  return monthIndex === undefined ? 0 : Date.UTC(Number(year), monthIndex, Number(day));
+};
+
 export const useArticles = (category: string = "Tous", searchTerm: string = "") => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -15,11 +35,8 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
       setError(null);
       
       try {
-        console.log('Fetching articles for category:', category);
-        console.log('Static articles before filter:', staticArticles.map(a => ({ id: a.id, title: a.title })));
-        
         // First get static articles
-        let result = [...staticArticles];
+        let result: SortableArticle[] = staticArticles.map(article => ({ ...article, __fileTimestamp: 0 }));
         
         // Filter by category if not "Tous"
         if (category !== "Tous") {
@@ -49,7 +66,13 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
                     
                   if (data) {
                     const text = await data.text();
-                    return JSON.parse(text) as Article;
+                    const article = JSON.parse(text) as Article;
+                    const metadata = file as { updated_at?: string; created_at?: string };
+                    const fileTimestamp = Date.parse(metadata.updated_at || metadata.created_at || '');
+                    return {
+                      ...article,
+                      __fileTimestamp: Number.isNaN(fileTimestamp) ? 0 : fileTimestamp,
+                    } as SortableArticle;
                   }
                 } catch (err) {
                   console.error(`Error loading article ${file.name}:`, err);
@@ -78,11 +101,16 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
           );
         }
 
-        // Sort articles by ID in descending order (most recent first)
-        result = result.sort((a, b) => b.id - a.id);
-        
-        // Debug log to verify article sorting and order
-        console.log('Articles after sorting:', result.map(a => ({ id: a.id, title: a.title })));
+        // Sort by article date first, then by storage update date for articles published the same day.
+        result = result.sort((a, b) => {
+          const dateDiff = getArticleDateTimestamp(b.date) - getArticleDateTimestamp(a.date);
+          if (dateDiff !== 0) return dateDiff;
+
+          const fileDiff = (b.__fileTimestamp || 0) - (a.__fileTimestamp || 0);
+          if (fileDiff !== 0) return fileDiff;
+
+          return b.id - a.id;
+        });
         
         setArticles(result);
       } catch (error) {
