@@ -180,7 +180,7 @@ EXIGENCES MAXIMALES:
 - Zéro condescendance, zéro injonction culpabilisante
 - Inclusif (parent 1 / parent 2, familles diverses)
 
-Appelle la fonction save_article avec le markdown complet et les métadonnées.`,
+Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-case, 3-7 mots, contient le mot-clé), un image_alt descriptif (80-120 chars, contient le mot-clé) et toutes les métadonnées.`,
         },
       ],
       tools: [
