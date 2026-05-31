@@ -1,7 +1,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronRight, BookOpen, Gift, LayoutDashboard, LogOut, Store, Shield } from "lucide-react";
+import { ChevronRight, BookOpen, Gift, LayoutDashboard, LogOut, Store, Shield, Heart } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
