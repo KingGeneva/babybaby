@@ -71,7 +71,7 @@ const HeroSection: React.FC = () => {
           </div>
 
           <p className="mt-8 text-xs text-muted-foreground uppercase tracking-widest">
-            Sans publicité · Sans carte bancaire · Données chiffrées
+            Simple · Sans carte bancaire · Données chiffrées
           </p>
         </motion.div>
       </div>
