@@ -57,7 +57,12 @@ const NewsletterForm: React.FC = () => {
         baby_date: babyDate || undefined,
       });
 
-      const payload: Record<string, unknown> = {
+      const payload: {
+        email: string;
+        age_segment: string;
+        baby_birth_date?: string;
+        expected_due_date?: string;
+      } = {
         email: validated.email,
         age_segment: validated.age_segment,
       };
