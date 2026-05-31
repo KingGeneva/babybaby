@@ -133,36 +133,54 @@ ID:${seed}`,
     const trend = (trendRaw.match(/TENDANCE\s*:\s*(.+)/i)?.[1] || trendRaw).trim();
     const keyword = (trendRaw.match(/MOT-CLE\s*:\s*(.+)/i)?.[1] || topic).trim();
 
-    // --- Step 2: generate RICH article + metadata in ONE call (tool calling) ---
+    // --- Step 2: generate MAXIMUM-DEPTH article + metadata in ONE call (tool calling) ---
     const articleData = await callAI(LOVABLE_API_KEY, {
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-2.5-pro",
+      max_tokens: 16000,
       messages: [
         {
           role: "system",
           content:
-            "Tu es rédacteur SEO expert en parentalité francophone. Tu écris des articles longs, pratiques, optimisés pour Google Discover et la recherche organique. Tu intègres naturellement les mots-clés, structures sémantiques (H2/H3), exemples concrets, données chiffrées récentes (2024-2025) et FAQ. Tu cites des sources fiables (OMS, INSPQ, Santé publique France, études récentes) en fin d'article.",
+            "Tu es rédacteur en chef SEO senior, spécialiste de la parentalité francophone. Tu produis des articles piliers (cornerstone content) de niveau magazine premium : 2500-3500 mots, exhaustifs, sourcés, structurés pour dominer la SERP et obtenir des featured snippets, People Also Ask, et Google Discover. Tu maîtrises l'EEAT (expérience, expertise, autorité, fiabilité), tu cites des institutions reconnues (OMS, UNICEF, Santé publique France, INSPQ, ANSES, HAS, études PubMed récentes 2023-2025), et tu intègres des données chiffrées vérifiables. Ton style : bienveillant, tutoiement parental, phrases courtes, zéro fluff, zéro jargon gratuit.",
         },
         {
           role: "user",
-          content: `Rédige un article SEO complet et engageant.
+          content: `Rédige un ARTICLE PILIER SEO ultra-complet, calibré pour ranker top 3 Google.
 
 SUJET: "${trend}"
-MOT-CLÉ PRINCIPAL: "${keyword}" (à intégrer naturellement dans le titre, intro, 2 H2, et conclusion)
+MOT-CLÉ PRINCIPAL: "${keyword}"
 
-EXIGENCES STRICTES:
-- Titre H1 accrocheur, contenant le mot-clé, max 65 caractères, ne PAS commencer par "Parentalité"
-- 1200-1600 mots minimum
-- Intro de 2-3 phrases qui répond à l'intention de recherche dès les 50 premiers mots (featured snippet)
-- 5 à 7 sections en ## avec sous-sections ### si pertinent
-- Au moins 2 listes à puces avec conseils pratiques actionnables
-- Au moins 1 tableau Markdown comparatif OU une encadré "À retenir"
-- Données chiffrées (statistiques, âges, durées) crédibles 2024-2025
-- Une section FAQ finale "## Questions fréquentes" avec 3-4 questions/réponses (boost SEO)
-- Conclusion encourageante + appel à l'action vers la communauté/app BabyBaby
-- Ton bienveillant, tutoiement parental, zéro jargon inutile
-- Variations sémantiques du mot-clé tout au long du texte
+EXIGENCES MAXIMALES:
 
-Appelle la fonction save_article avec le markdown complet + métadonnées.`,
+# Structure obligatoire
+1. **Titre H1** : accrocheur, contient le mot-clé, max 65 caractères, ne commence PAS par "Parentalité"
+2. **Intro (80-120 mots)** : réponse directe à l'intention de recherche dans les 50 premiers mots (featured snippet), promesse claire, hook émotionnel
+3. **Encadré "En bref / À retenir"** en blockquote Markdown (>) avec 4-5 points clés synthétiques
+4. **8 à 12 sections ##** structurées en pyramide inversée, avec sous-sections ### si pertinent
+5. **Au moins 1 tableau Markdown comparatif** (ex : par âge, par méthode, avantages/inconvénients)
+6. **Au moins 3 listes à puces** avec conseils actionnables et numérotés quand c'est une procédure
+7. **Au moins 1 section "Erreurs fréquentes à éviter"** avec contre-exemples
+8. **Au moins 1 section "Cas concrets" ou "Témoignages" reformulés** (sans inventer de citations réelles)
+9. **Section "## Questions fréquentes"** avec 6-8 Q/R (boost People Also Ask), questions formulées comme des requêtes Google
+10. **Section "## Sources et références"** finale avec 4-6 sources crédibles (OMS, HAS, études, livres d'experts) — format : "- *Titre*, Institution, année"
+11. **Conclusion (100-150 mots)** : récap, encouragement, CTA vers l'app BabyBaby (suivi de croissance, communauté, conseils experts)
+
+# Contraintes SEO
+- 2500-3500 mots minimum
+- Mot-clé principal dans : H1, premiers 100 mots, ≥2 H2, conclusion, meta description
+- Variations sémantiques et synonymes répartis (LSI keywords)
+- Densité naturelle, jamais forcée
+- Phrases ≤ 20 mots en moyenne, paragraphes ≤ 4 lignes
+- Données chiffrées concrètes (âges en mois, pourcentages, durées, recommandations officielles) datées 2023-2025
+- Liens internes suggérés en italique entre crochets : *[voir notre guide sur X]*
+
+# Ton
+- Tutoiement parental chaleureux
+- Empathie + autorité experte
+- Zéro condescendance, zéro injonction culpabilisante
+- Inclusif (parent 1 / parent 2, familles diverses)
+
+Appelle la fonction save_article avec le markdown complet et les métadonnées.`,
         },
       ],
       tools: [
@@ -170,17 +188,20 @@ Appelle la fonction save_article avec le markdown complet + métadonnées.`,
           type: "function",
           function: {
             name: "save_article",
-            description: "Sauvegarde l'article rédigé et ses métadonnées SEO",
+            description: "Sauvegarde l'article pilier rédigé et ses métadonnées SEO",
             parameters: {
               type: "object",
               properties: {
                 title: { type: "string", description: "Titre H1, max 65 chars, contient le mot-clé" },
                 content: {
                   type: "string",
-                  description: "Article complet en Markdown, 1200+ mots, avec H2/H3/listes/FAQ",
+                  description: "Article complet en Markdown, 2500-3500 mots, avec encadré, tableau, listes, FAQ, sources",
                 },
                 summary: { type: "string", description: "Résumé 2-3 phrases, contient le mot-clé" },
-                excerpt: { type: "string", description: "Accroche meta-description, 140-160 caractères" },
+                excerpt: {
+                  type: "string",
+                  description: "Meta description SEO, 140-160 caractères, contient le mot-clé et une promesse",
+                },
                 category: {
                   type: "string",
                   enum: ["Préparation", "Nutrition", "Développement", "Sommeil", "Croissance", "Aménagement"],
@@ -188,11 +209,11 @@ Appelle la fonction save_article avec le markdown complet + métadonnées.`,
                 tags: {
                   type: "array",
                   items: { type: "string" },
-                  minItems: 4,
-                  maxItems: 8,
-                  description: "Tags SEO incluant le mot-clé principal et variantes",
+                  minItems: 5,
+                  maxItems: 10,
+                  description: "Tags SEO incluant le mot-clé principal, variantes et entités liées",
                 },
-                reading_time: { type: "integer", minimum: 5, maximum: 20 },
+                reading_time: { type: "integer", minimum: 8, maximum: 25 },
               },
               required: ["title", "content", "summary", "excerpt", "category", "tags", "reading_time"],
               additionalProperties: false,
