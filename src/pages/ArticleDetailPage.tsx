@@ -17,6 +17,7 @@ import ArticlePromotion from '@/components/articles/ArticlePromotion';
 import ArticleNotFound from '@/components/articles/ArticleNotFound';
 import ReadingProgressBar from '@/components/articles/ReadingProgressBar';
 import ArticleTOC from '@/components/articles/ArticleTOC';
+import ArticleComments from '@/components/articles/ArticleComments';
 import { Article } from '@/types/article';
 import { useArticle } from '@/hooks/useArticle';
 import { ArticleDetailSkeleton } from '@/components/articles/ArticleSkeleton';
@@ -145,6 +146,8 @@ const ArticleDetailPage = () => {
               
               <ArticlePromotion />
             </div>
+
+            <ArticleComments articleId={article.id} />
           </motion.div>
         </div>
       </div>

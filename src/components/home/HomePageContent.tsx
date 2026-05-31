@@ -5,6 +5,7 @@ import EbooksSection from '@/components/ebooks/EbooksSection';
 import NewsletterForm from '@/components/NewsletterForm';
 import KeyFeaturesSection from './KeyFeaturesSection';
 import CTASection from './CTASection';
+import ParentingQuiz from '@/components/quiz/ParentingQuiz';
 import { Helmet } from 'react-helmet-async';
 
 const HomePageContent: React.FC = () => {
@@ -32,6 +33,14 @@ const HomePageContent: React.FC = () => {
 
         {/* 3. Preuve sociale */}
         <TestimonialsCarousel />
+
+        {/* 3bis. Quiz interactif */}
+        <section className="py-16 px-4" aria-labelledby="quiz-heading">
+          <div className="container mx-auto">
+            <h2 id="quiz-heading" className="sr-only">Quiz parental</h2>
+            <ParentingQuiz />
+          </div>
+        </section>
 
         {/* 4. Ressources gratuites */}
         <EbooksSection />
