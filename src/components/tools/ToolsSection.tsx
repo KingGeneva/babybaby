@@ -118,7 +118,7 @@ const ToolsSection = () => {
                 className="group"
               >
                 <Link 
-                  to={`/tools#${tool.title.toLowerCase().replace(/\s+/g, '-')}`}
+                  to={(tool as any).href ?? `/tools#${tool.title.toLowerCase().replace(/\s+/g, '-')}`}
                   className="block p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group-hover:scale-105 transform-gpu border border-gray-100 group-hover:border-babybaby-cosmic/20"
                 >
                   <div className="mb-4 relative">
