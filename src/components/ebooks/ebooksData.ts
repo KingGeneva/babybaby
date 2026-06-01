@@ -79,5 +79,18 @@ export const ebooksData: Ebook[] = [
     tags: ["écologie", "santé", "produits", "environnement"],
     author: "Sophie Verdier",
     publishDate: "2024-07-20"
+  },
+  {
+    id: "eb-007",
+    title: "Guide académique du développement de bébé 0-12 mois",
+    description: "Un guide complet et structuré sur le développement clinique, moteur, cognitif, langagier et affectif de bébé durant sa première année.",
+    coverImage: "/__l5e/assets-v1/87ebce12-6e1f-41e8-94c5-0d4524948bca/ebook-cover-developpement-bebe-0-12-mois.png",
+    fileUrl: "Guide_academique_developpement_bebe_0-12_mois.pdf",
+    fileType: "PDF",
+    fileSize: "625 Ko",
+    category: "Développement",
+    tags: ["développement", "0-12 mois", "guide académique", "clinique"],
+    author: "BabyBaby.org",
+    publishDate: "2026-06-01"
   }
 ];
