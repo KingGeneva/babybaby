@@ -79,30 +79,13 @@ const PdfJsViewer: React.FC<PdfJsViewerProps> = ({ pdfUrl, title, onRetry }) => 
   }, [currentUrl, retryCount, useFallbackUrl, isChecking]);
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setIsLoading(true);
-      try {
-        console.log("PdfJsViewer: Vérification de l'accès au PDF:", currentUrl);
-        const isAccessible = await checkUrlAccess(currentUrl);
-        if (cancelled) return;
-        if (!isAccessible) {
-          console.error("PdfJsViewer: PDF inaccessible");
-          setLoadError(true);
-        } else {
-          console.log("PdfJsViewer: PDF accessible");
-          setPdfLoaded(true);
-          setLoadError(false);
-        }
-      } catch (e) {
-        if (!cancelled) setLoadError(true);
-      } finally {
-        if (!cancelled) setIsLoading(false);
-      }
-    })();
-    return () => { cancelled = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUrl]);
+    checkPdfAccess();
+    
+    // Nettoyage au démontage
+    return () => {
+      // Si nécessaire, annulez toutes les requêtes en cours ici
+    };
+  }, [currentUrl, checkPdfAccess]);
 
   // Gérer un nouveau chargement
   const handleRetryLocal = useCallback(() => {
