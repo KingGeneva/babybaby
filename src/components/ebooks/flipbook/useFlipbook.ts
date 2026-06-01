@@ -107,18 +107,10 @@ export const useFlipbook = (pdfUrl: string) => {
   useEffect(() => {
     setIsScriptLoading(true);
     setLoadError(false);
-    // Utiliser l'URL fournie
     setCurrentUrl(pdfUrl);
-    
-    const initTimeout = setTimeout(() => {
-      // Vérifier l'accessibilité de l'URL
-      checkPdfAccess();
-    }, 500);
-
-    return () => {
-      clearTimeout(initTimeout);
-    };
-  }, [pdfUrl, checkPdfAccess]);
+    setPdfjsViewer(true);
+    setIsScriptLoading(false);
+  }, [pdfUrl]);
 
   return {
     isScriptLoading,
