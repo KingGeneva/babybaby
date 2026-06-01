@@ -7,11 +7,11 @@ import {
   useDirection
 } from "./chunk-DF7W5PGO.js";
 import {
-  useSize
-} from "./chunk-IYTRS3XW.js";
-import {
   usePrevious
 } from "./chunk-XSAN5JCE.js";
+import {
+  useSize
+} from "./chunk-IYTRS3XW.js";
 import {
   composeEventHandlers,
   useControllableState

@@ -3,15 +3,15 @@ import {
   clamp
 } from "./chunk-TCQMTAGU.js";
 import {
+  VisuallyHidden
+} from "./chunk-FWMB4JYE.js";
+import {
   Anchor,
   Arrow,
   Content,
   Root2,
   createPopperScope
 } from "./chunk-D7VZAXDT.js";
-import {
-  VisuallyHidden
-} from "./chunk-FWMB4JYE.js";
 import {
   createCollection,
   useDirection
@@ -36,10 +36,10 @@ import {
 import {
   useId
 } from "./chunk-5DK3BDYL.js";
-import "./chunk-IYTRS3XW.js";
 import {
   usePrevious
 } from "./chunk-XSAN5JCE.js";
+import "./chunk-IYTRS3XW.js";
 import {
   composeEventHandlers,
   useControllableState
