@@ -150,13 +150,72 @@ La guerre des tranchées numériques entre la parentalité "douce" et "stricte" 
 L'analyse des différentes approches et des critiques expertes révèle qu'il n'existe pas de solution miracle ni de script universel. Le véritable enjeu de l'éducation ne réside pas dans l'adhésion scrupuleuse à une idéologie, qu'elle soit nouvelle ou ancienne, mais dans la capacité à construire une relation parent-enfant sécurisante, aimante et respectueuse. Cette relation est le terreau sur lequel l'enfant pourra développer son autonomie, son empathie et sa confiance en lui.
 
 L'appel final est donc un appel à l'empowerment et à la déconnexion. Il s'agit d'encourager les parents à se libérer de la tyrannie du jugement en ligne, à faire preuve d'auto-compassion et à reconnaître la valeur de leurs propres efforts. En puisant de manière éclairée dans les différents courants de pensée, ils peuvent trouver un équilibre personnel entre la chaleur et les limites, entre l'écoute et la guidance. L'objectif ultime est de se détourner de la performance pour les écrans et de se recentrer sur l'essentiel : la relation unique, non filmée et magnifiquement imparfaite qu'ils tissent, jour après jour, avec leur enfant.
+
+---
+
+## Pour aller plus loin
+
+Découvrez aussi nos guides complémentaires :
+- [Sommeil de bébé au Québec : guide complet](/articles/sommeil-bebe-quebec-guide-complet-9) — pour comprendre comment un cadre bienveillant améliore les nuits.
+- [La diversification alimentaire du bébé au Québec](/articles/10) — appliquer la parentalité positive à table.
+- [Les indispensables pour l'arrivée de bébé](/articles/5) — préparer un environnement sécurisant dès la naissance.
+
+*Cet article est informatif et ne remplace pas l'avis d'un professionnel. Si vous vous sentez dépassé, appelez Info-Santé au 811 ou prenez rendez-vous avec votre CLSC.*
 `,
   // Updated image to use user-provided photo
   image: "/lovable-uploads/gentle-parenting.jpg",
+  image_alt: "Parent québécois pratiquant la parentalité positive avec son enfant — gentle parenting et discipline bienveillante",
+  slug: "gentle-parenting-parentalite-positive-quebec",
   category: "Développement",
   date: "31 octobre 2025",
+  dateModified: "2026-06-02",
   readingTime: 20,
-  tags: ["parentalité", "gentle parenting", "éducation"],
+  word_count: 4200,
+  seo_keyword: "gentle parenting parentalité positive",
+  tags: ["parentalité", "gentle parenting", "parentalité positive", "éducation bienveillante", "discipline positive", "Québec"],
   author: "Rédaction BabyBaby",
   featured: false,
+  faqs: [
+    {
+      question: "Qu'est-ce que le gentle parenting (parentalité positive) ?",
+      answer: "Le gentle parenting est une approche éducative basée sur l'empathie, le respect mutuel et la communication, tout en fixant des limites claires et cohérentes. Contrairement à une idée reçue, ce n'est pas l'absence de règles : le cadre est ferme, mais la manière de le poser est bienveillante."
+    },
+    {
+      question: "Le gentle parenting est-il du laxisme ?",
+      answer: "Non. La parentalité positive bien comprise repose sur des « limites bienveillantes » : les règles sont claires, expliquées et tenues. La confusion avec le laxisme vient surtout des versions caricaturales popularisées sur TikTok et Instagram, qui omettent la dimension du cadre."
+    },
+    {
+      question: "Comment poser des limites avec la parentalité positive ?",
+      answer: "Verbalisez la règle simplement, expliquez la raison à hauteur d'enfant, validez l'émotion de l'enfant (« je vois que tu es fâché ») sans céder sur le comportement, puis proposez une alternative acceptable. La fermeté porte sur la limite, la douceur sur la relation."
+    },
+    {
+      question: "Quelles sont les bases scientifiques du gentle parenting ?",
+      answer: "L'approche s'appuie sur les neurosciences affectives (Catherine Gueguen, Isabelle Filliozat) et la théorie de l'attachement de John Bowlby, qui montrent qu'un environnement empathique soutient la maturation cérébrale et la régulation émotionnelle de l'enfant."
+    },
+    {
+      question: "Pourquoi le débat est-il si polarisé sur les réseaux sociaux ?",
+      answer: "Les algorithmes de TikTok et Instagram favorisent les contenus courts, émotionnels et polarisants car ils génèrent plus d'engagement. La nuance disparaît au profit de mises en scène caricaturales, ce qui crée de fausses oppositions entre « douceur » et « fermeté »."
+    },
+    {
+      question: "La parentalité autoritaire est-elle plus efficace à long terme ?",
+      answer: "Les recherches en psychologie du développement montrent que le style autoritaire (fort en exigence, faible en chaleur) est associé à une estime de soi fragile, à de l'anxiété ou à des comportements d'opposition. Le style autoritatif — exigeant mais chaleureux — donne les meilleurs résultats."
+    },
+    {
+      question: "Comment gérer une crise sans crier ?",
+      answer: "Respirez d'abord pour réguler votre propre stress, descendez à hauteur d'enfant, nommez l'émotion (« tu es très en colère »), tenez la limite avec calme et offrez du réconfort une fois la crise apaisée. L'objectif n'est pas la perfection mais la réparation après une rupture."
+    },
+    {
+      question: "Le gentle parenting fonctionne-t-il avec un enfant TDAH ou anxieux ?",
+      answer: "Oui, et c'est même particulièrement adapté : la prévisibilité, la verbalisation des émotions et un cadre clair sécurisent les enfants neuroatypiques. Un suivi avec un psychologue ou votre pédiatre du CLSC peut aider à personnaliser l'approche."
+    },
+    {
+      question: "Comment éviter la culpabilité parentale liée aux réseaux sociaux ?",
+      answer: "Limitez votre exposition aux comptes qui vous font culpabiliser, rappelez-vous que les vidéos virales sont des mises en scène, cherchez du soutien hors ligne (groupes de parents, CLSC, ligne d'écoute LigneParents 1 800 361-5085) et pratiquez l'auto-compassion."
+    },
+    {
+      question: "Où trouver de l'aide en parentalité au Québec ?",
+      answer: "Plusieurs ressources gratuites : Info-Santé 811, votre CLSC, LigneParents (1 800 361-5085), les organismes communautaires Famille, et les programmes de soutien à la parentalité du gouvernement du Québec. Les psychologues couverts par certains régimes peuvent aussi accompagner les familles."
+    }
+  ]
 };
+
