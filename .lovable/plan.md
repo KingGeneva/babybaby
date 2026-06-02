@@ -1,44 +1,74 @@
-## Vidéo BabyBaby — Format 9:16 (Reels/TikTok/Stories)
+# Rendre le contenu visible aux crawlers — Plan
 
-**Objectif :** Générer une vidéo verticale 1080×1920 de ~25s, prête à publier sur Instagram Reels, TikTok et Stories.
+## Le problème en une ligne
 
-### Concept créatif
+Ton site est une SPA Vite/React : le HTML envoyé par le serveur est une **coquille vide** (`<div id="root"></div>`). Tout le contenu (articles, ebooks, FAQ) n'apparaît qu'après exécution du JavaScript dans le navigateur. Pour Google c'est un handicap majeur, pour les autres crawlers (Bing, LinkedIn, Facebook, ChatGPT, Perplexity) c'est invisible.
 
-**Direction visuelle :**
-- Palette : crème `#FAF7F2` (fond), navy `#1B2A4E` (texte principal), corail `#E76F51` (accents), or doux `#D4A574` (détails)
-- Typo : Fraunces (display serif, chaleureux) + Inter (body)
-- Style : éditorial doux, parental, premium — proche du carrousel Insta déjà produit
-- Motion : entrées spring douces, parallaxe subtile, transitions slide/fade
-- Pas d'IA cliché (pas de néon, pas de gradient violet)
+Il faut générer du **HTML statique pré-rendu** pour chaque route avant publication.
 
-**Storyboard (5 scènes, ~5s chacune) :**
+---
 
-1. **Hook (0–4s)** — Fond crème, gros titre "Et si UNE SEULE app remplaçait vos 7 onglets de jeune parent ?" avec "UNE SEULE" en corail. Léger sticker animé.
-2. **Problème (4–9s)** — Liste animée : "🍼 Dernière tétée ?" / "💉 Prochain vaccin ?" / "😴 Bruit blanc ?" / "🔄 À qui le tour ?". Apparition staggered.
-3. **Solution (9–15s)** — Mockup smartphone vertical (image générée) avec courbe OMS + widgets, "BabyBaby.org" en gros + sous-titre "Tout en 1, 100% gratuit".
-4. **Preuve (15–20s)** — Chiffres animés : **15 000 familles** • **4,9/5** • **Normes OMS** • **0€**. Stagger en compteurs.
-5. **CTA (20–25s)** — "Vos premiers **1000 jours**, sereinement." + "babybaby.org" + petit handle visuel.
+## Deux options — choisis-en une
 
-**Voiceover (optionnel) :** version 25s en français (voix féminine chaleureuse via ElevenLabs). Musique : aucune par défaut (ajoutable côté édition Insta/TikTok pour éviter copyright).
+### Option A — Pré-rendu statique avec Puppeteer (rapide à mettre en place)
 
-### Plan technique
+**Outil** : `vite-prerender-plugin` (basé sur Puppeteer)
 
-- Stack : **Remotion** (1080×1920, 30fps, 750 frames = 25s)
-- Sandbox : scaffold dans `remotion/`, render headless via `scripts/render-remotion.mjs` → `/mnt/documents/babybaby-reel-9x16.mp4`
-- Fonts : Google Fonts via `@remotion/google-fonts` (Fraunces + Inter)
-- Assets visuels :
-  - 1 image générée du mockup téléphone (scène 3) — réutilise palette du carrousel
-  - 1 image background subtil (texture papier crème)
-  - Pas de photos de bébé (évite questions de droits)
-- Voiceover : **désactivé par défaut** (vidéo muette type Reel) — je peux l'ajouter via ElevenLabs si tu veux (~+30s de génération)
-- Transitions : `@remotion/transitions` (slide + fade, springTiming)
+**Comment ça marche** : au moment du `vite build`, un Chrome headless lance ton app sur chaque route listée, attend que React ait fini de tout afficher, puis sauvegarde le HTML résultant dans `dist/<route>/index.html`. À la livraison, le visiteur (et le crawler) reçoit directement la page complète.
 
-### Livrable
-- `babybaby-reel-9x16.mp4` (1080×1920, ~25s, H.264, muet)
-- Tag `<presentation-artifact>` pour téléchargement direct
+**Routes couvertes** : homepage, `/articles`, chaque article (`/articles/:id`), `/ebooks`, `/faq`, `/about`, `/boutique`, `/meilleurs-produits-bebe-2026`, `/tools` — environ 25-30 pages.
 
-### Question rapide avant build
+**Avantages**
+- ~30 min de mise en place
+- Aucune réécriture de code applicatif
+- Le résultat est strictement identique à ce que voit un utilisateur
 
-**Voiceover en français inclus ou vidéo muette (texte uniquement) ?** Le muet est généralement préféré pour Reels/TikTok (les utilisateurs ajoutent leur musique), mais le voiceover augmente la rétention.
+**Risques / limites**
+- Puppeteer télécharge Chromium (~170 Mo) au build — peut ralentir ou échouer dans l'env de build Lovable
+- Le build prend +2 à 5 min
+- Les pages derrière auth (dashboard, admin) sont exclues — normal
+- Pour les articles ajoutés dynamiquement après build, il faut re-builder
 
-Confirme (ou réponds "muet" / "voix off") et je lance la production.
+### Option B — Migration progressive vers du SSR vrai (recommandé long terme)
+
+Migrer vers **Next.js** ou **Remix**, qui rendent le HTML côté serveur à chaque requête. C'est la solution propre, mais c'est une refonte structurelle (1-2 semaines de travail), pas une intervention de 30 min.
+
+Pas recommandé maintenant : on perd l'élan, et l'Option A apporte déjà 90% du bénéfice SEO.
+
+---
+
+## En parallèle de l'Option A — quick wins (15 min)
+
+Que tu choisisses A ou B, ces actions sont gratuites et immédiates :
+
+1. **Débloquer GPTBot, CCBot, Google-Extended** dans `public/robots.txt` (actuellement bloqués → invisible pour ChatGPT/Claude/Perplexity)
+2. **Raccourcir le `<title>`** de `index.html` (77 → ~58 caractères, sinon tronqué dans Google)
+3. **Raccourcir la meta description** (217 → ~155 caractères)
+4. **Créer `/llms.txt`** pour les LLM crawlers
+5. **Préparer le fichier `disavow.txt`** listant les 152 domaines Blogspot toxiques à soumettre dans Google Search Console (action manuelle de ta part)
+
+---
+
+## Ce que je propose de faire maintenant
+
+Si tu valides ce plan, je vais :
+
+1. Installer `vite-prerender-plugin` et le configurer pour les routes statiques + les articles
+2. Lister dynamiquement les IDs d'articles depuis `src/data/articles/index.ts`
+3. Lancer un build de test pour vérifier que Puppeteer fonctionne dans l'env Lovable
+4. Si le build Puppeteer échoue → bascule sur un plan B léger : générer manuellement le HTML enrichi pour la homepage + un template d'article (sans headless browser), c'est moins parfait mais ça fonctionne partout
+5. Appliquer les quick wins en parallèle (robots.txt, titres, llms.txt)
+
+## Détails techniques
+
+- `vite-prerender-plugin` s'ajoute dans `vite.config.ts` sans changer le code React
+- `react-helmet-async` continue de fonctionner — Puppeteer attend l'hydratation et capture le `<head>` final
+- Le sitemap.xml existant reste valide
+- Aucun impact sur le dev server (`vite dev` n'est pas affecté)
+
+## Hors scope de cette intervention
+
+- Création de nouveau contenu / nouveaux articles
+- Campagne de backlinks (action manuelle hors code)
+- Soumission du disavow dans Search Console (action manuelle dans l'interface Google)
+- Migration vers Next.js / Remix (Option B, projet séparé si tu le souhaites un jour)
