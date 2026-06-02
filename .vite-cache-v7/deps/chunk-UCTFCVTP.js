@@ -733,6 +733,7 @@ var RemoveScrollBar = function(_a) {
 
 export {
   FocusScope,
+  hideOthers,
   __assign,
   __rest,
   __spreadArray,
@@ -742,7 +743,6 @@ export {
   createSidecarMedium,
   exportSidecar,
   styleSingleton,
-  RemoveScrollBar,
-  hideOthers
+  RemoveScrollBar
 };
-//# sourceMappingURL=chunk-6VH7SGGS.js.map
+//# sourceMappingURL=chunk-UCTFCVTP.js.map
