@@ -18,6 +18,9 @@ import ArticleNotFound from '@/components/articles/ArticleNotFound';
 import ReadingProgressBar from '@/components/articles/ReadingProgressBar';
 import ArticleTOC from '@/components/articles/ArticleTOC';
 import ArticleComments from '@/components/articles/ArticleComments';
+import FAQPageSchema from '@/components/seo/FAQPageSchema';
+import HowToSchema from '@/components/seo/HowToSchema';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Article } from '@/types/article';
 import { useArticle } from '@/hooks/useArticle';
 import { ArticleDetailSkeleton } from '@/components/articles/ArticleSkeleton';
@@ -119,6 +122,20 @@ const ArticleDetailPage = () => {
         wordCount={article.word_count}
       />
 
+      {article.faqs && article.faqs.length > 0 && (
+        <FAQPageSchema faqs={article.faqs} />
+      )}
+
+      {article.howTo && (
+        <HowToSchema
+          name={article.howTo.name}
+          description={article.howTo.description}
+          steps={article.howTo.steps}
+          totalTime={article.howTo.totalTime}
+          image={article.image}
+        />
+      )}
+
       <ReadingProgressBar />
       <NavBar />
       <ArticleTOC content={article.content || ''} />
@@ -149,7 +166,27 @@ const ArticleDetailPage = () => {
               <ArticleImage image={article.image} title={article.title} alt={article.image_alt} />
               
               <ArticleContent content={article.content} excerpt={article.excerpt} />
-              
+
+              {article.faqs && article.faqs.length > 0 && (
+                <section className="mt-12 pt-8 border-t" aria-labelledby="article-faq-heading">
+                  <h2 id="article-faq-heading" className="text-2xl md:text-3xl font-bold mb-6">
+                    Foire aux questions
+                  </h2>
+                  <Accordion type="single" collapsible className="w-full">
+                    {article.faqs.map((faq, idx) => (
+                      <AccordionItem key={idx} value={`faq-${idx}`}>
+                        <AccordionTrigger className="text-left text-base font-medium">
+                          {faq.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-base text-muted-foreground leading-relaxed">
+                          {faq.answer}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </section>
+              )}
+
               <ArticleActions article={article} />
               
               <ArticlePromotion />
