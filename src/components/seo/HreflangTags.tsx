@@ -33,11 +33,11 @@ const HreflangTags: React.FC<HreflangTagsProps> = ({
         <link key={lang} rel="alternate" hrefLang={lang} href={url} />
       ))}
       
-      {/* Balise hreflang x-default pour la langue par défaut (généralement la page d'accueil) */}
+      {/* x-default pointe vers fr-CA (marché principal Québec) */}
       <link 
         rel="alternate" 
         hrefLang="x-default" 
-        href={safeAlternateLanguages.find(l => l.lang === 'fr')?.url || safeCurrentUrl} 
+        href={safeAlternateLanguages.find(l => l.lang === 'fr-CA')?.url || safeAlternateLanguages.find(l => l.lang === 'fr')?.url || safeCurrentUrl} 
       />
     </Helmet>
   );
