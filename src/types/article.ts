@@ -1,4 +1,21 @@
 
+export interface ArticleFAQ {
+  question: string;
+  answer: string;
+}
+
+export interface ArticleHowToStep {
+  name: string;
+  text: string;
+}
+
+export interface ArticleHowTo {
+  name: string;
+  description: string;
+  totalTime?: string; // ISO 8601 duration, e.g. "PT15M"
+  steps: ArticleHowToStep[];
+}
+
 export interface Article {
   id: number;
   title: string;
@@ -18,4 +35,6 @@ export interface Article {
   views?: number;
   word_count?: number;
   seo_keyword?: string;
+  faqs?: ArticleFAQ[];    // FAQ items rendered + emitted as FAQPage JSON-LD
+  howTo?: ArticleHowTo;   // Optional HowTo schema for step-by-step articles
 }
