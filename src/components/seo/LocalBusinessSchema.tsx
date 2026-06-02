@@ -9,15 +9,16 @@ const LocalBusinessSchema: React.FC = () => {
     "image": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
     "url": "https://babybaby.org",
     "telephone": "+1-581-333-3173",
-    "priceRange": "€€",
+    "priceRange": "$$",
     "address": {
       "@type": "PostalAddress",
-      "addressCountry": "FR"
+      "addressRegion": "QC",
+      "addressCountry": "CA"
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": 48.8566,
-      "longitude": 2.3522
+      "latitude": 45.5017,
+      "longitude": -73.5673
     },
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",

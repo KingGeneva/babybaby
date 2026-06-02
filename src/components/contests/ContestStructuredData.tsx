@@ -15,7 +15,7 @@ const ContestStructuredData: React.FC = () => {
     "url": "https://babybaby.org/contests",
     "spatialCoverage": {
       "@type": "Country",
-      "name": "France"
+      "name": "Canada"
     },
     "publisher": {
       "@type": "Organization",

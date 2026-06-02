@@ -12,7 +12,7 @@ const SoftwareApplicationSchema: React.FC = () => {
     "offers": {
       "@type": "Offer",
       "price": "0",
-      "priceCurrency": "EUR",
+      "priceCurrency": "CAD",
       "availability": "https://schema.org/InStock"
     },
     "aggregateRating": {
@@ -40,7 +40,7 @@ const SoftwareApplicationSchema: React.FC = () => {
     },
     "datePublished": "2024-01-01",
     "dateModified": "2024-12-27",
-    "inLanguage": "fr-FR",
+    "inLanguage": ["fr-CA", "fr-FR"],
     "isAccessibleForFree": true
   };
 

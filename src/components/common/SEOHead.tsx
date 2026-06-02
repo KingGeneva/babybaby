@@ -102,7 +102,7 @@ const SEOHead: React.FC<SEOProps> = ({
       <meta property="og:image:alt" content={title} />
       {absoluteCanonicalUrl && <meta property="og:url" content={absoluteCanonicalUrl} />}
       <meta property="og:site_name" content="BabyBaby" />
-      <meta property="og:locale" content={lang === "fr" ? "fr_FR" : "en_US"} />
+      <meta property="og:locale" content={lang === "fr" ? "fr_CA" : "en_CA"} />
       {alternateLanguages.map(alt => (
         <meta key={alt.lang} property="og:locale:alternate" content={alt.lang.includes('fr') ? `fr_${alt.lang.split('-')[1] || 'FR'}` : `en_${alt.lang.split('-')[1] || 'US'}`} />
       ))}

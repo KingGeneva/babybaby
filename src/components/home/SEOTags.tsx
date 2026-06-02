@@ -14,10 +14,11 @@ const SEOTags: React.FC = () => {
   const homeCanonicalUrl = "https://babybaby.org/";
   
   // Définition des langues alternatives pour la page d'accueil
+  // Définition des langues alternatives pour la page d'accueil (Québec prioritaire)
   const alternateLanguages = [
-    { lang: "fr", url: "https://babybaby.org/" },
-    { lang: "fr-FR", url: "https://babybaby.org/" },
     { lang: "fr-CA", url: "https://babybaby.org/" },
+    { lang: "fr-FR", url: "https://babybaby.org/" },
+    { lang: "fr", url: "https://babybaby.org/" },
   ];
 
   // FAQs principales pour le schema FAQ sur la page d'accueil
@@ -70,11 +71,13 @@ const SEOTags: React.FC = () => {
         <meta name="google-site-verification" content="VGG79QXzkgBxlbUZl_WkUKyFVvUueDd22O_l40gXj0A" />
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
-        <meta name="geo.region" content="FR" />
-        <meta name="geo.placename" content="France" />
-        <meta name="ICBM" content="48.8566, 2.3522" />
-        <meta property="og:locale:alternate" content="en_US" />
-        <meta property="og:locale:alternate" content="fr_CA" />
+        <meta name="geo.region" content="CA-QC" />
+        <meta name="geo.placename" content="Montréal, Québec" />
+        <meta name="ICBM" content="45.5017, -73.5673" />
+        <meta name="geo.position" content="45.5017;-73.5673" />
+        <meta property="og:locale" content="fr_CA" />
+        <meta property="og:locale:alternate" content="fr_FR" />
+        <meta property="og:locale:alternate" content="en_CA" />
         <meta name="twitter:creator" content="@babybaby_app" />
         <meta name="twitter:domain" content="babybaby.org" />
         <link rel="preconnect" href="https://babybaby.boutique" />
