@@ -1,10 +1,10 @@
 import {
-  clsx_default
-} from "./chunk-KDVGFZWC.js";
-import {
   require_prop_types,
   require_react_is
 } from "./chunk-3ANS3TC5.js";
+import {
+  clsx_default
+} from "./chunk-KDVGFZWC.js";
 import {
   require_react_dom
 } from "./chunk-KDUSVCWO.js";
