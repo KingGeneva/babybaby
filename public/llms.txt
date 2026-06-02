@@ -1,0 +1,35 @@
+# BabyBaby
+
+> Application web gratuite et francophone d'accompagnement des parents : suivi de la croissance du bébé (courbes OMS), calendrier vaccinal, outils sommeil, articles d'experts en parentalité, ebooks téléchargeables et communauté de parents. Site édité depuis 1998, héritier du domaine MSLO (2000-2003).
+
+BabyBaby couvre la grossesse, la naissance et les 0-36 mois. Le contenu est rédigé en français (France et Québec) et adossé à des références cliniques (OMS, Santé Canada, ANSES).
+
+## Pages principales
+
+- [Accueil](https://babybaby.org/): Présentation de l'app, fonctionnalités clés, derniers articles.
+- [Articles](https://babybaby.org/articles): Guides parentalité — sommeil, nutrition, développement, gentle parenting.
+- [Ebooks](https://babybaby.org/ebooks): Ebooks PDF gratuits (sommeil, coliques, développement 0-12 mois, etc.).
+- [FAQ](https://babybaby.org/faq): Questions fréquentes des parents.
+- [À propos](https://babybaby.org/about): Histoire du projet et de l'équipe.
+- [Boutique](https://babybaby.org/boutique): Produits sélectionnés pour bébé.
+- [Meilleurs produits bébé 2026](https://babybaby.org/meilleurs-produits-bebe-2026): Comparatif annuel.
+- [Offres gratuites](https://babybaby.org/free-offers): Ressources gratuites pour parents.
+- [Concours](https://babybaby.org/contests): Concours pour la communauté.
+
+## Articles vedettes
+
+- [Couches lavables zéro déchet — Guide 2025](https://babybaby.org/articles/1780387247788)
+- [Alimentation de bébé et parentalité moderne en 2026](https://babybaby.org/articles/201)
+- [Sommeil du bébé en 2026 : sécurité, routines et technologies](https://babybaby.org/articles/200)
+- [Puériculture minimaliste 2026 : trousseau de naissance écoresponsable](https://babybaby.org/articles/1780252000001)
+- [Gentle Parenting : retrouver son cap éducatif](https://babybaby.org/articles/101)
+- [Comprendre la courbe de croissance de votre bébé](https://babybaby.org/articles/11)
+- [Coliques du bébé : comprendre, identifier, soulager](https://babybaby.org/articles/10)
+- [Les bienfaits de l'allaitement maternel](https://babybaby.org/articles/2)
+- [La diversification alimentaire : quand et comment](https://babybaby.org/articles/3)
+- [5 astuces pour aider bébé à mieux dormir](https://babybaby.org/articles/9)
+
+## Optional
+
+- [Sitemap XML](https://babybaby.org/sitemap.xml)
+- [Contact](mailto:contact@babybaby.org)

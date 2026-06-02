@@ -97,11 +97,30 @@ Disallow: /
 User-agent: Bytespider
 Disallow: /
 
+# Crawlers IA — autorisés (indexation dans ChatGPT, Perplexity, Claude, Gemini, etc.)
 User-agent: GPTBot
-Disallow: /
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
 
 User-agent: CCBot
-Disallow: /
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
 
 # Emplacement du sitemap principal
 Sitemap: https://babybaby.org/sitemap.xml
