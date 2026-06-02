@@ -1,5 +1,6 @@
 
 import { Article } from '@/types/article';
+import diversificationCover from '@/assets/diversification-alimentaire-bebe-quebec.jpg';
 
 // Liste des articles sur la nutrition
 export const nutritionArticles: Article[] = [
