@@ -1,8 +1,5 @@
 "use client";
 import {
-  clamp
-} from "./chunk-TCQMTAGU.js";
-import {
   VisuallyHidden
 } from "./chunk-FWMB4JYE.js";
 import {
@@ -12,6 +9,9 @@ import {
   Root2,
   createPopperScope
 } from "./chunk-FMJ26NYH.js";
+import {
+  clamp
+} from "./chunk-TCQMTAGU.js";
 import {
   usePrevious
 } from "./chunk-XSAN5JCE.js";
