@@ -105,65 +105,165 @@ L'allaitement maternel est un choix personnel qui dépend de nombreux facteurs. 
   },
   {
     id: 3,
-    title: "La diversification alimentaire : quand et comment l'introduire",
-    excerpt: "Apprenez à quels moments introduire de nouveaux aliments dans l'alimentation de votre bébé et découvrez les meilleures pratiques pour une diversification réussie.",
-    summary: "Guide complet pour bien démarrer la diversification alimentaire de votre bébé.",
-    content: `# La diversification alimentaire : quand et comment l'introduire
+    title: "Diversification alimentaire du bébé au Québec : guide complet",
+    excerpt: "Quand commencer ? Par quels aliments ? Purées ou DME ? Le guide ultra-détaillé pour les parents au Québec, basé sur les recommandations de Santé Canada, de la Société canadienne de pédiatrie et de l'INSPQ.",
+    summary: "Guide complet de la diversification alimentaire pour les parents au Québec : signes de maturité, aliments riches en fer, allergènes, purées vs DME, FAQ.",
+    content: `# La diversification alimentaire du bébé : le guide complet pour les parents au Québec
 
-La diversification alimentaire est une étape importante dans le développement de votre bébé. Elle consiste à introduire progressivement des aliments solides dans son alimentation, en complément du lait maternel ou infantile. Voici un guide pour vous aider à aborder cette période avec sérénité.
+L'introduction des aliments solides est une étape charnière, remplie de découvertes, de sourires gribouillés de purée de carottes, mais aussi d'une bonne dose de questions pour les parents. Quand faut-il commencer ? Par quoi débuter pour s'assurer que bébé ne manque de rien ? Comment naviguer entre les purées classiques et la diversification menée par l'enfant (DME) ?
 
-## À quel âge commencer la diversification ?
+Au Québec, les lignes directrices ont grandement évolué au cours des dernières années, notamment avec les recommandations de **Santé Canada**, de la **Société canadienne de pédiatrie** et du guide *Mieux vivre avec notre enfant de la grossesse à deux ans* de l'**INSPQ**. Ce guide ultra-détaillé est conçu pour vous accompagner pas à pas, avec sérénité et confiance, dans cette merveilleuse aventure culinaire.
 
-L'Organisation Mondiale de la Santé (OMS) recommande de commencer la diversification alimentaire à partir de 6 mois révolus. Avant cet âge, le lait (maternel ou infantile) suffit à couvrir tous les besoins nutritionnels de votre bébé.
+## 1. À quel âge commencer la diversification ? Les signes que votre bébé est prêt
 
-Cependant, chaque enfant est unique et certains signes peuvent indiquer qu'il est prêt à découvrir de nouveaux aliments :
-- Il tient sa tête droite et est capable de rester assis avec un soutien
-- Il manifeste de l'intérêt pour votre nourriture
-- Il ouvre la bouche quand vous lui proposez une cuillère
-- Il a perdu le réflexe d'extrusion (qui consiste à pousser les aliments hors de sa bouche avec sa langue)
+L'Organisation mondiale de la santé (OMS) et la Société canadienne de pédiatrie recommandent d'attendre **l'âge de 6 mois révolus** avant d'introduire les aliments solides. Jusqu'à cet âge, le lait maternel ou la préparation commerciale pour nourrissons comble l'entièreté des besoins nutritionnels et hydriques de votre enfant.
 
-## Par quels aliments commencer ?
+Cependant, l'âge chronologique n'est pas le seul indicateur. Chaque bébé se développe à son propre rythme. Avant de sortir les cuillères, vous devez guetter les **signes de maturité développementale** de votre enfant.
 
-### Les légumes
-Commencez par des purées de légumes à la texture lisse et au goût doux : carotte, courgette, potiron... Proposez un légume à la fois pendant 2-3 jours pour détecter d'éventuelles intolérances.
+### Les principaux signes de maturité à observer
 
-### Les fruits
-Après les légumes, introduisez les fruits cuits et mixés : pomme, poire, banane... Évitez d'ajouter du sucre.
+- **La tenue de la tête et du tronc :** votre bébé tient sa tête droite de façon stable et peut demeurer assis dans sa chaise haute avec un minimum de soutien.
+- **La disparition du réflexe d'extrusion :** ce réflexe inné pousse le bébé à rejeter automatiquement tout aliment solide hors de sa bouche avec sa langue. S'il recrache systématiquement la purée, il n'est pas tout à fait prêt.
+- **L'intérêt pour la nourriture :** il vous regarde manger avec insistance, tente de grapiller les aliments dans votre assiette ou imite vos mouvements de mastication.
+- **La coordination œil-main-bouche :** votre bébé est capable de saisir un objet et de le porter précisément à sa bouche.
 
-### Les protéines
-Vers 7-8 mois, vous pouvez introduire des protéines animales en petites quantités : viande, poisson, œuf (d'abord le jaune, puis le blanc).
+> **Note importante :** il est fortement déconseillé de commencer la diversification avant l'âge de 4 mois, car le système digestif et les reins de bébé sont encore trop immatures. À l'inverse, attendre au-delà de 6 mois sans introduire de solides expose le nourrisson à des carences nutritionnelles, particulièrement en **fer**.
 
-### Les céréales et féculents
-Le pain, les pâtes, le riz, la semoule peuvent être introduits progressivement, de préférence des versions complètes riches en fibres.
+## 2. Par quels aliments commencer ? La priorité absolue au fer
 
-## Quelques conseils pratiques
+Si les anciennes générations commençaient traditionnellement par la purée de carottes ou de bananes, les directives nutritionnelles canadiennes actuelles ont renversé cette habitude. Au Québec, la consigne est claire : **les premiers aliments introduits doivent être riches en fer.**
 
-### Respectez le rythme de votre bébé
-N'forcez jamais votre enfant à manger. Respectez ses signaux de faim et de satiété.
+À la naissance, les bébés possèdent des réserves de fer naturelles, mais celles-ci s'épuisent progressivement pour atteindre leur niveau le plus bas vers l'âge de 6 mois. Le lait maternel ne contenant que de très petites quantités de fer, il est crucial de combler ce besoin par l'alimentation solide afin de prévenir l'anémie et de soutenir le développement cérébral de l'enfant.
 
-### Privilégiez le fait maison
-Les purées maison permettent de contrôler les ingrédients et d'habituer votre bébé à une variété de goûts et de textures.
+### Les meilleurs premiers aliments riches en fer
 
-### Évoluez progressivement vers des textures plus consistantes
-Commencez par des purées lisses, puis passez à des textures plus épaisses, des petits morceaux, et enfin des aliments à manger avec les doigts.
+| Catégorie d'aliments | Exemples pour débuter | Conseils de préparation |
+| --- | --- | --- |
+| **Céréales pour bébés** | Céréales simples (orge, avoine, riz) enrichies en fer | À mélanger avec du lait maternel ou une préparation pour nourrissons |
+| **Viandes et volailles** | Bœuf, veau, poulet, dinde | Cuites à point et mixées en purée lisse avec un peu de bouillon ou de lait |
+| **Poissons** | Saumon, truite, sole, aiglefin | Pochés ou cuits au four, sans aucune arête, puis réduits en purée |
+| **Substituts de viande** | Tofu, œufs entiers, légumineuses (lentilles, haricots noirs) | Tofu écrasé, œufs cuits durs et mixés, légumineuses bien cuites et réduites en purée lisse |
 
-### Soyez patient
-Il est normal qu'un bébé refuse un nouvel aliment plusieurs fois avant de l'accepter. Continuez à le lui proposer sans le forcer.
+### L'introduction des légumes et des fruits
 
-### Évitez certains aliments
-Avant un an, évitez le miel (risque de botulisme), le lait de vache non modifié (trop riche en protéines), les fruits à coque entiers (risque d'étouffement) et les aliments très salés ou sucrés.
+Une fois que les aliments riches en fer sont offerts au moins deux fois par jour, vous pouvez intégrer une grande variété de légumes et de fruits.
+
+- **Les légumes :** commencez par des saveurs douces et des textures faciles à lisser (courge musquée, carotte, patate douce, haricots verts, pois mange-tout). Proposez-les cuits à la vapeur pour préserver un maximum de nutriments.
+- **Les fruits :** optez pour des fruits bien mûrs, cuits et mixés (pomme, poire, pruneau) ou naturellement tendres et écrasés (banane, avocat). Il est inutile et déconseillé d'y ajouter du sucre.
+
+## 3. L'introduction des allergènes prioritaires : en finir avec les vieux mythes
+
+Pendant longtemps, la médecine recommandait de retarder l'introduction des aliments hautement allergènes (comme les arachides ou les œufs) après l'âge de 1 an, voire 3 ans. **Cette approche est aujourd'hui révolue.** Les données scientifiques démontrent qu'introduire les allergènes tôt, dès l'âge de 6 mois, réduit significativement le risque de développer des allergies alimentaires.
+
+### La liste des allergènes prioritaires au Canada
+
+- Les œufs (le blanc et le jaune ensemble)
+- Les produits à base d'arachides (beurre d'arachide allongé avec un peu d'eau chaude ou de purée)
+- Les noix (beurres d'amande, de cajou, de noisette)
+- Le poisson et les fruits de mer
+- Le soya (tofu, boisson de soya fortifiée)
+- Le blé (céréales de blé, petites pâtes)
+- Le sésame (tahin ou beurre de sésame)
+- La moutarde
+
+### Comment introduire un allergène de façon sécuritaire ?
+
+1. **Un seul à la fois :** n'introduisez jamais deux allergènes majeurs le même jour. Attendez entre **2 et 3 jours** avant d'en présenter un nouveau afin de pouvoir identifier clairement le coupable en cas de réaction.
+2. **Bébé en pleine forme :** choisissez un moment où votre enfant est en bonne santé, reposé, et idéalement en matinée ou au dîner (évitez le souper pour pouvoir surveiller ses réactions).
+3. **La régularité :** une fois qu'un allergène a été toléré, il est capital de **continuer à l'offrir régulièrement** (environ 1 à 2 fois par semaine) pour maintenir la tolérance immunitaire.
+
+## 4. Purées classiques vs DME (diversification menée par l'enfant)
+
+Au Québec, la popularité de la **DME** a littéralement explosé. Cette méthode consiste à sauter l'étape des purées et de la cuillère pour laisser le bébé se nourrir seul avec des aliments en morceaux adaptés à ses capacités. Il n'y a pas de mauvaise réponse : la meilleure méthode est celle qui convient à votre dynamique familiale.
+
+### L'approche traditionnelle par purées évolutives
+
+- **Étape 1 (6 mois) :** purées parfaitement lisses et fluides.
+- **Étape 2 (7-8 mois) :** purées épaisses, écrasées à la fourchette, introduction de petites textures.
+- **Étape 3 (9-12 mois) :** petits morceaux tendres (légumes bien cuits, fromage, pâtes bien cuites).
+
+### La DME
+
+Bébé est autonome. On lui propose des aliments de la taille d'un gros doigt d'adulte (pour qu'il puisse les saisir dans son poing et laisser dépasser ce qu'il va croquer). Les aliments doivent être assez tendres pour s'écraser facilement entre votre pouce et votre index.
+
+### Tableau comparatif : purées vs DME
+
+| Caractéristique | Approche des purées | DME |
+| --- | --- | --- |
+| **Autonomie** | Faible au début (le parent nourrit à la cuillère) | Maximale dès le départ (bébé explore seul) |
+| **Développement moteur** | Transition graduelle vers la préhension fine | Stimulation rapide de la coordination œil-main et de la mastication |
+| **Gestion des dégâts** | Repas généralement propres et rapides | Dégâts importants autour de la chaise haute |
+| **Risque d'étouffement** | Très faible si les textures progressent bien | Identique aux purées, si l'on respecte les règles de sécurité |
+
+> **Le réflexe de vomissement (gag reflex) :** que ce soit en DME ou lors du passage aux morceaux, votre bébé va inévitablement avoir des haut-le-cœur. C'est un mécanisme de sécurité normal où le bébé ramène l'aliment vers l'avant de la bouche. Il ne faut pas le confondre avec un étouffement (voies respiratoires bloquées, bébé silencieux et qui change de couleur — composez le **911**).
+
+## 5. Les aliments à éviter absolument avant l'âge de 1 an
+
+- **Le miel :** cru, pasteurisé ou cuit, le miel est formellement interdit avant 1 an en raison du risque de **botulisme infantile**.
+- **Le lait de vache entier en boisson :** il ne doit pas remplacer le lait maternel ou la préparation avant 9 à 12 mois. (Le yogourt entier nature et le fromage peuvent toutefois être introduits en petites quantités dès 6 mois.)
+- **Le sel ajouté :** les reins des nourrissons ne peuvent pas filtrer de grandes quantités de sodium. Attention aux bouillons du commerce et aux aliments transformés.
+- **Le sucre et les édulcorants :** sirop d'érable, sucre blanc, agave et jus de fruits n'ont aucune valeur nutritive pour un bébé et augmentent le risque de caries.
+- **Les aliments à risque élevé d'étouffement :** raisins entiers (les couper en quatre), tomates cerises entières, saucisses en rondelles (couper en juliennes), noix entières, popcorn et bonbons durs.
+
+## 6. FAQ : 10 questions incontournables sur la diversification au Québec
+
+### Quelle quantité de lait mon bébé doit-il boire une fois qu'il mange des solides ?
+
+Le lait reste la source principale d'énergie et de nutriments jusqu'à un an. Entre 6 et 9 mois, offrez toujours le lait *avant* le repas de solides. Vers 9 à 12 mois, vous pourrez inverser. Un bébé de 6 à 12 mois boit généralement entre **600 ml et 900 ml** de lait par jour.
+
+### Mon bébé refuse la cuillère et ferme la bouche, que faire ?
+
+Ne forcez jamais votre enfant. Respectez ses signaux de satiété. Retirez l'assiette sans commentaire et réessayez plus tard. Il faut parfois présenter un aliment **10 à 15 fois** avant qu'un enfant l'accepte.
+
+### À quel moment peut-on introduire l'eau ?
+
+Dès **6 mois**, vous pouvez offrir de petites gorgées d'eau durant les repas dans un gobelet ouvert ou une tasse à bec. L'eau ne doit pas remplacer le lait.
+
+### Quel type de yogourt acheter pour mon bébé de 7 mois ?
+
+Optez toujours pour un yogourt **nature fait de lait entier** (3,25 % ou 4 % de matières grasses). Évitez les yogourts aromatisés ou allégés en gras.
+
+### Comment savoir si mon bébé fait une réaction allergique ?
+
+Les signes apparaissent généralement dans les minutes ou les deux heures suivant l'ingestion : urticaire, vomissements répétés, gonflement des lèvres ou du visage, difficulté respiratoire. En cas de symptômes cutanés légers, consultez un médecin. En cas de difficulté à respirer ou de léthargie, **composez immédiatement le 911**.
+
+### Faut-il acheter biologique pour faire les purées ?
+
+Non. Privilégiez plutôt une alimentation variée et fraîche. Si le budget le permet, le biologique a du sens pour les fruits et légumes dont on consomme la peau (pommes, fraises, poivrons). Lavez toujours soigneusement les végétaux.
+
+### Puis-je ajouter des épices ou des herbes ?
+
+Absolument. Le sel est interdit, mais herbes de Provence, cannelle, cumin, paprika doux et coriandre éveillent le palais. Évitez les piments forts.
+
+### Quel est le calendrier idéal des repas entre 6 et 12 mois ?
+
+- **6 mois :** 1 repas par jour.
+- **7-8 mois :** 2 repas par jour.
+- **Dès 9 mois :** 3 repas par jour + 1 à 2 collations selon l'appétit.
+
+### Est-ce normal que les selles changent radicalement ?
+
+Oui. Dès l'introduction des solides, la flore intestinale se modifie. Les selles deviennent plus fermes, changent de couleur (betteraves, carottes !) et dégagent une odeur plus prononcée.
+
+### Peut-on mélanger purées et DME ?
+
+Oui — c'est l'**approche mixte**. Beaucoup de familles donnent des purées à la garderie ou les soirs pressés et pratiquent la DME la fin de semaine. L'important est d'écouter votre enfant et de développer ses habiletés de mastication en sécurité.
 
 ## Conclusion
 
-La diversification alimentaire est une période d'exploration et de découverte pour votre bébé. Prenez le temps d'observer ses réactions et adaptez-vous à son rythme. L'objectif n'est pas seulement nutritionnel, mais aussi de lui faire découvrir le plaisir de manger et de partager un repas en famille.
+La diversification alimentaire n'est pas une course de vitesse, mais une magnifique exploration sensorielle. En suivant le rythme unique de votre bébé et en mettant l'accent sur les **aliments riches en fer**, vous posez les bases d'une relation saine avec la nourriture. Installez-vous ensemble à table, armez-vous d'une bonne bavette à manches longues, et profitez de ces moments uniques de partage en famille.
 
-N'hésitez pas à consulter votre pédiatre ou un professionnel de santé si vous avez des questions ou des inquiétudes concernant l'alimentation de votre bébé.`,
+*Si vous avez des inquiétudes spécifiques concernant la croissance ou l'alimentation de votre enfant, consultez votre pédiatre, votre médecin de famille ou une nutritionniste pédiatrique, ou appelez **Info-Santé au 811**.*`,
     image: "/lovable-uploads/f5a21dc5-5eb0-4077-b04f-d7d3f4d44ccd.png",
+    image_alt: "Bébé québécois découvrant les aliments solides en diversification alimentaire",
     category: "Nutrition",
     date: "15 février 2025",
-    readingTime: 9,
-    author: "Emilie Rousseau",
+    dateModified: "2026-06-02T12:00:00.000Z",
+    readingTime: 14,
+    author: "Émilie Rousseau, Nutritionniste",
     views: 2104,
-    tags: ["diversification", "alimentation", "nutrition", "bébé"]
+    word_count: 1850,
+    seo_keyword: "diversification alimentaire bébé Québec",
+    tags: ["diversification alimentaire", "DME", "nutrition bébé", "Québec", "Santé Canada", "INSPQ", "allergènes", "fer", "6 mois"]
   }
 ];
