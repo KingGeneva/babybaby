@@ -354,7 +354,7 @@ for (const a of articles) {
           mainEntityOfPage: { "@type": "WebPage", "@id": `${BASE_URL}/articles/${a.id}` },
           articleSection: a.category,
           keywords: a.tags?.join(", "),
-          inLanguage: "fr-FR",
+          inLanguage: "fr-CA",
         },
       ],
     }),

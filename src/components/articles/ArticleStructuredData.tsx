@@ -27,7 +27,7 @@ const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({
   category,
   keywords,
   wordCount,
-  inLanguage = 'fr-FR',
+  inLanguage = 'fr-CA',
 }) => {
   const articleSchema: Record<string, unknown> = {
     "@context": "https://schema.org",

@@ -12,9 +12,9 @@ const BoutiquePage: React.FC = () => {
   
   // Configuration avancée des langues alternatives pour la boutique
   const alternateLanguages = [
-    { lang: "fr", url: "https://babybaby.org/boutique" },
-    { lang: "fr-FR", url: "https://babybaby.org/boutique" },
     { lang: "fr-CA", url: "https://babybaby.org/boutique" },
+    { lang: "fr-FR", url: "https://babybaby.org/boutique" },
+    { lang: "fr", url: "https://babybaby.org/boutique" },
     { lang: "fr-BE", url: "https://babybaby.org/boutique" },
     { lang: "fr-CH", url: "https://babybaby.org/boutique" }
   ];
@@ -233,7 +233,7 @@ const BoutiquePage: React.FC = () => {
             
             <div className="bg-white p-6 rounded-lg shadow-md" data-aos="fade-up" data-aos-delay="100">
               <h2 className="text-xl font-semibold mb-3">Livraison rapide offerte</h2>
-              <p className="text-gray-600">Profitez d'une livraison express gratuite pour recevoir vos articles en 24-48h partout en France métropolitaine.</p>
+              <p className="text-gray-600">Livraison rapide partout au Canada, expédition depuis le Québec.</p>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md" data-aos="fade-up" data-aos-delay="200">
