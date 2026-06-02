@@ -1,6 +1,5 @@
 
 import { Article } from '@/types/article';
-import diversificationCover from '@/assets/diversification-alimentaire-bebe-quebec.jpg';
 
 // Liste des articles sur la nutrition
 export const nutritionArticles: Article[] = [
@@ -255,7 +254,7 @@ Oui — c'est l'**approche mixte**. Beaucoup de familles donnent des purées à 
 La diversification alimentaire n'est pas une course de vitesse, mais une magnifique exploration sensorielle. En suivant le rythme unique de votre bébé et en mettant l'accent sur les **aliments riches en fer**, vous posez les bases d'une relation saine avec la nourriture. Installez-vous ensemble à table, armez-vous d'une bonne bavette à manches longues, et profitez de ces moments uniques de partage en famille.
 
 *Si vous avez des inquiétudes spécifiques concernant la croissance ou l'alimentation de votre enfant, consultez votre pédiatre, votre médecin de famille ou une nutritionniste pédiatrique, ou appelez **Info-Santé au 811**.*`,
-    image: diversificationCover,
+    image: "/lovable-uploads/diversification-alimentaire-bebe-quebec.jpg",
     image_alt: "Bébé québécois découvrant les aliments solides en diversification alimentaire",
     category: "Nutrition",
     date: "15 février 2025",
