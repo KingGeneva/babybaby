@@ -15,9 +15,18 @@ import {
   __toESM
 } from "./chunk-SNAQBZPT.js";
 
+// node_modules/@radix-ui/react-direction/dist/index.mjs
+var React = __toESM(require_react(), 1);
+var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
+var DirectionContext = React.createContext(void 0);
+function useDirection(localDir) {
+  const globalDir = React.useContext(DirectionContext);
+  return localDir || globalDir || "ltr";
+}
+
 // node_modules/@radix-ui/react-collection/dist/index.mjs
 var import_react = __toESM(require_react(), 1);
-var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
 function createCollection(name) {
   const PROVIDER_NAME = name + "CollectionProvider";
   const [createCollectionContext, createCollectionScope] = createContextScope(PROVIDER_NAME);
@@ -29,7 +38,7 @@ function createCollection(name) {
     const { scope, children } = props;
     const ref = import_react.default.useRef(null);
     const itemMap = import_react.default.useRef(/* @__PURE__ */ new Map()).current;
-    return (0, import_jsx_runtime.jsx)(CollectionProviderImpl, { scope, itemMap, collectionRef: ref, children });
+    return (0, import_jsx_runtime2.jsx)(CollectionProviderImpl, { scope, itemMap, collectionRef: ref, children });
   };
   CollectionProvider.displayName = PROVIDER_NAME;
   const COLLECTION_SLOT_NAME = name + "CollectionSlot";
@@ -38,7 +47,7 @@ function createCollection(name) {
       const { scope, children } = props;
       const context = useCollectionContext(COLLECTION_SLOT_NAME, scope);
       const composedRefs = useComposedRefs(forwardedRef, context.collectionRef);
-      return (0, import_jsx_runtime.jsx)(Slot, { ref: composedRefs, children });
+      return (0, import_jsx_runtime2.jsx)(Slot, { ref: composedRefs, children });
     }
   );
   CollectionSlot.displayName = COLLECTION_SLOT_NAME;
@@ -54,7 +63,7 @@ function createCollection(name) {
         context.itemMap.set(ref, { ref, ...itemData });
         return () => void context.itemMap.delete(ref);
       });
-      return (0, import_jsx_runtime.jsx)(Slot, { ...{ [ITEM_DATA_ATTR]: "" }, ref: composedRefs, children });
+      return (0, import_jsx_runtime2.jsx)(Slot, { ...{ [ITEM_DATA_ATTR]: "" }, ref: composedRefs, children });
     }
   );
   CollectionItemSlot.displayName = ITEM_SLOT_NAME;
@@ -79,17 +88,8 @@ function createCollection(name) {
   ];
 }
 
-// node_modules/@radix-ui/react-direction/dist/index.mjs
-var React2 = __toESM(require_react(), 1);
-var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-var DirectionContext = React2.createContext(void 0);
-function useDirection(localDir) {
-  const globalDir = React2.useContext(DirectionContext);
-  return localDir || globalDir || "ltr";
-}
-
 export {
-  createCollection,
-  useDirection
+  useDirection,
+  createCollection
 };
-//# sourceMappingURL=chunk-DF7W5PGO.js.map
+//# sourceMappingURL=chunk-OLXPCMYM.js.map
