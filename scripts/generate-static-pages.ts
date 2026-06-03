@@ -171,9 +171,10 @@ function writeRoute(routePath: string, html: string) {
 /* ---------------- Page generators ---------------- */
 
 function shellWrap(inner: string): string {
-  // Hidden-from-layout-style wrapper — visible to crawlers, replaced by React.
-  // Uses inline style instead of Tailwind classes (CSS not loaded yet for SSR-less pages).
-  return `<div style="max-width:760px;margin:0 auto;padding:24px;font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;line-height:1.6;">${inner}</div>`;
+  // Visible to crawlers (text still in DOM) but invisible to human visitors so
+  // there is no flash before React hydrates and replaces #root. Off-screen
+  // positioning avoids any layout shift.
+  return `<div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">${inner}</div>`;
 }
 
 function navLinks(): string {
