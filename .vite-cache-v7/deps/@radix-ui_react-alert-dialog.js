@@ -20,10 +20,6 @@ import {
   Presence
 } from "./chunk-BDPA3EYR.js";
 import {
-  createContext2,
-  createContextScope
-} from "./chunk-77EU5DFA.js";
-import {
   useId
 } from "./chunk-ZUFBO6NE.js";
 import {
@@ -34,6 +30,10 @@ import {
   useCallbackRef,
   useLayoutEffect2
 } from "./chunk-YSYISR2F.js";
+import {
+  createContext2,
+  createContextScope
+} from "./chunk-77EU5DFA.js";
 import {
   Primitive,
   dispatchDiscreteCustomEvent
