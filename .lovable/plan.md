@@ -1,74 +1,74 @@
-# Rendre le contenu visible aux crawlers — Plan
+# Plan d'acquisition de trafic — babybaby.org
 
-## Le problème en une ligne
+## Constat (données Semrush, marché FR)
 
-Ton site est une SPA Vite/React : le HTML envoyé par le serveur est une **coquille vide** (`<div id="root"></div>`). Tout le contenu (articles, ebooks, FAQ) n'apparaît qu'après exécution du JavaScript dans le navigateur. Pour Google c'est un handicap majeur, pour les autres crawlers (Bing, LinkedIn, Facebook, ChatGPT, Perplexity) c'est invisible.
+- **Autorité : 2/100** — site jeune aux yeux de Google.
+- **3 mots-clés** indexés, ~0 trafic organique estimé.
+- **152 domaines référents… mais 100% Blogspot toxiques** (spam). Ces liens ne t'apportent rien et peuvent nuire.
+- Côté technique : SPA pré-rendue, sitemap, schema OK. Le moteur est prêt, **il manque les utilisateurs et la confiance Google**.
 
-Il faut générer du **HTML statique pré-rendu** pour chaque route avant publication.
-
----
-
-## Deux options — choisis-en une
-
-### Option A — Pré-rendu statique avec Puppeteer (rapide à mettre en place)
-
-**Outil** : `vite-prerender-plugin` (basé sur Puppeteer)
-
-**Comment ça marche** : au moment du `vite build`, un Chrome headless lance ton app sur chaque route listée, attend que React ait fini de tout afficher, puis sauvegarde le HTML résultant dans `dist/<route>/index.html`. À la livraison, le visiteur (et le crawler) reçoit directement la page complète.
-
-**Routes couvertes** : homepage, `/articles`, chaque article (`/articles/:id`), `/ebooks`, `/faq`, `/about`, `/boutique`, `/meilleurs-produits-bebe-2026`, `/tools` — environ 25-30 pages.
-
-**Avantages**
-- ~30 min de mise en place
-- Aucune réécriture de code applicatif
-- Le résultat est strictement identique à ce que voit un utilisateur
-
-**Risques / limites**
-- Puppeteer télécharge Chromium (~170 Mo) au build — peut ralentir ou échouer dans l'env de build Lovable
-- Le build prend +2 à 5 min
-- Les pages derrière auth (dashboard, admin) sont exclues — normal
-- Pour les articles ajoutés dynamiquement après build, il faut re-builder
-
-### Option B — Migration progressive vers du SSR vrai (recommandé long terme)
-
-Migrer vers **Next.js** ou **Remix**, qui rendent le HTML côté serveur à chaque requête. C'est la solution propre, mais c'est une refonte structurelle (1-2 semaines de travail), pas une intervention de 30 min.
-
-Pas recommandé maintenant : on perd l'élan, et l'Option A apporte déjà 90% du bénéfice SEO.
+Il n'existe pas de plan « infaillible » en SEO, mais il existe une combinaison réaliste qui, sur 90 jours, donne des résultats mesurables. Le voici.
 
 ---
 
-## En parallèle de l'Option A — quick wins (15 min)
+## Pilier 1 — Nettoyer la maison (Semaine 1)
 
-Que tu choisisses A ou B, ces actions sont gratuites et immédiates :
+Objectif : arrêter de saboter le site avant de l'optimiser.
 
-1. **Débloquer GPTBot, CCBot, Google-Extended** dans `public/robots.txt` (actuellement bloqués → invisible pour ChatGPT/Claude/Perplexity)
-2. **Raccourcir le `<title>`** de `index.html` (77 → ~58 caractères, sinon tronqué dans Google)
-3. **Raccourcir la meta description** (217 → ~155 caractères)
-4. **Créer `/llms.txt`** pour les LLM crawlers
-5. **Préparer le fichier `disavow.txt`** listant les 152 domaines Blogspot toxiques à soumettre dans Google Search Console (action manuelle de ta part)
+1. **Disavow des 152 Blogspot toxiques** dans Google Search Console — je peux générer le fichier `disavow.txt` automatiquement à partir des données Semrush.
+2. **Vérifier la couverture GSC** : combien de pages réellement indexées vs combien dans le sitemap. Corriger les erreurs.
+3. **Soumettre le sitemap** à Bing Webmaster Tools (pour Bing + ChatGPT search).
+4. **Activer IndexNow** (push instantané des nouvelles URLs vers Bing/Yandex).
+
+## Pilier 2 — Capter le trafic « longue traîne » (Semaines 2-6)
+
+Les sites neufs ne battent pas Doctissimo sur « sommeil bébé ». Ils gagnent sur des **questions précises** que les grands sites traitent mal.
+
+1. **Cibler 20 mots-clés faciles** (KDI <30) issus de recherche de questions : « bébé pleure quand je le couche dans son lit », « combien de ml lait 3 mois OMS », « quand bébé tient assis seul »… Je peux lancer la recherche keyword par keyword.
+2. **Format obligatoire** : réponse claire en 2-3 lignes en haut (featured snippet), puis développement, puis FAQ schema. Tes articles auto-IA actuels sont trop longs et pas formatés pour les snippets.
+3. **Maillage interne agressif** : chaque nouvel article doit linker 3-5 autres articles avec ancres descriptives. Tu as ~100 articles, le potentiel est énorme et sous-exploité.
+4. **Rythme : 3 articles/semaine** ciblés (pas plus — la qualité prime), via le système auto-IA existant mais avec un brief plus strict.
+
+## Pilier 3 — Construire de l'autorité réelle (Semaines 3-12)
+
+Sans liens propres, le site restera à AS 2.
+
+1. **HARO / SourceBottle / Qwoted** : répondre 2x/semaine aux journalistes qui cherchent un expert parental → liens depuis vrais médias.
+2. **Guest posts ciblés** : 5 articles invités sur des blogs parents/maternité FR-CA réels (pas Blogspot). Liste à constituer.
+3. **Citations locales QC** : annuaires santé Québec, Mamanpourlavie partenariats, etc.
+4. **Reddit r/Parenting + groupes Facebook FR** : présence utile, pas spam — devient une source de trafic direct **et** un signal de marque pour Google.
+
+## Pilier 4 — Trafic non-SEO en parallèle (continu)
+
+Le SEO prend 3-6 mois. Pour avoir du trafic *maintenant* :
+
+1. **Pinterest** : énorme pour la niche maternité/bébé. Créer 5 épingles/semaine pointant vers les articles avec visuels verticaux. ROI rapide.
+2. **YouTube Shorts / TikTok / Reels** : 1 vidéo/semaine en réutilisant le contenu des articles (« 3 erreurs sommeil bébé »). Trafic + signaux de marque.
+3. **Newsletter** : tu as déjà le formulaire. Envoyer 1 email/semaine relance les visiteurs et crée du trafic récurrent (Google adore les visites directes).
+4. **Partenariats e-books** : offrir tes ebooks à 3-5 sites maternité en échange d'une mention. Lead magnet → liste email → trafic récurrent.
+
+## Pilier 5 — Mesurer et itérer (semaine 4 puis mensuel)
+
+- Tableau de bord GSC : impressions, clics, position moyenne, top pages.
+- Semrush : suivi mensuel de l'AS et du nombre de mots-clés.
+- KPIs à 90 jours réalistes : **AS 2 → 8-12**, **mots-clés 3 → 50-100**, **trafic 0 → 500-1500 visites/mois**.
 
 ---
 
-## Ce que je propose de faire maintenant
+## Ce que je peux faire maintenant si tu valides
 
-Si tu valides ce plan, je vais :
+1. Générer `disavow.txt` à partir des 152 Blogspot et te le livrer prêt à soumettre dans GSC.
+2. Lancer une recherche Semrush sur 10-15 mots-clés longue traîne à fort potentiel et te livrer la liste priorisée.
+3. Améliorer le prompt du système auto-IA pour produire des articles **snippet-ready** (résumé en intro, FAQ schema, maillage interne automatique vers 3-5 articles existants).
+4. Ajouter IndexNow + ping Bing automatique à chaque publication d'article.
+5. Créer un template Pinterest (visuels verticaux 1000x1500) générés automatiquement par image-gen pour chaque nouvel article.
 
-1. Installer `vite-prerender-plugin` et le configurer pour les routes statiques + les articles
-2. Lister dynamiquement les IDs d'articles depuis `src/data/articles/index.ts`
-3. Lancer un build de test pour vérifier que Puppeteer fonctionne dans l'env Lovable
-4. Si le build Puppeteer échoue → bascule sur un plan B léger : générer manuellement le HTML enrichi pour la homepage + un template d'article (sans headless browser), c'est moins parfait mais ça fonctionne partout
-5. Appliquer les quick wins en parallèle (robots.txt, titres, llms.txt)
+## Hors scope de ce que je peux faire (action manuelle de ta part)
 
-## Détails techniques
+- Soumettre le disavow dans GSC (interface Google, manuel).
+- Répondre aux journalistes HARO, envoyer les guest posts.
+- Animer Pinterest / TikTok / newsletter (ou m'aider à automatiser ces flux si tu le souhaites).
 
-- `vite-prerender-plugin` s'ajoute dans `vite.config.ts` sans changer le code React
-- `react-helmet-async` continue de fonctionner — Puppeteer attend l'hydratation et capture le `<head>` final
-- Le sitemap.xml existant reste valide
-- Aucun impact sur le dev server (`vite dev` n'est pas affecté)
+---
 
-## Hors scope de cette intervention
-
-- Création de nouveau contenu / nouveaux articles
-- Campagne de backlinks (action manuelle hors code)
-- Soumission du disavow dans Search Console (action manuelle dans l'interface Google)
-- Migration vers Next.js / Remix (Option B, projet séparé si tu le souhaites un jour)
+**Quelle partie tu veux que j'attaque en premier ?** Mon conseil : commencer par #1 (disavow) + #3 (améliorer le prompt auto-IA) + #5 (Pinterest auto) cette semaine. C'est ce qui a le meilleur ratio impact/effort.
