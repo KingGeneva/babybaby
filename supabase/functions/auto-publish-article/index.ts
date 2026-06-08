@@ -60,6 +60,11 @@ async function notifyFailure(error: string, context: Record<string, unknown> = {
   }
 }
 
+function sanitizeEditorialYears(text: unknown, currentYear: number) {
+  if (typeof text !== "string") return text;
+  return text.replace(/\b(2024|2025)\b/g, String(currentYear));
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -244,7 +249,13 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
       throw new Error(`Failed to parse article JSON: ${e instanceof Error ? e.message : e}`);
     }
 
-    const fullContent: string = article.content;
+    article.title = sanitizeEditorialYears(article.title, currentYear);
+    article.summary = sanitizeEditorialYears(article.summary, currentYear);
+    article.excerpt = sanitizeEditorialYears(article.excerpt, currentYear);
+    article.slug = sanitizeEditorialYears(article.slug, currentYear);
+    article.image_alt = sanitizeEditorialYears(article.image_alt, currentYear);
+    let fullContent: string = article.content;
+    fullContent = fullContent.replace(/^#\s+.*$/m, `# ${article.title}`);
     const wordCount = fullContent.split(/\s+/).length;
     if (wordCount < 2000) {
       console.warn(`Article shorter than target pillar length: ${wordCount} words`);
