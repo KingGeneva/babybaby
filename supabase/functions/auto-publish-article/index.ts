@@ -110,6 +110,7 @@ serve(async (req) => {
     // --- Step 1: identify a specific trend + SEO keyword (cheap model) ---
     const topic = TOPICS[Math.floor(Math.random() * TOPICS.length)];
     const seed = Date.now();
+    const currentYear = new Date().getFullYear();
 
     const trendData = await callAI(LOVABLE_API_KEY, {
       model: "google/gemini-2.5-flash-lite",
@@ -121,7 +122,7 @@ serve(async (req) => {
         },
         {
           role: "user",
-          content: `Sur le thème "${topic}", identifie UNE tendance précise 2024-2025 ET le mot-clé long-tail français le plus recherché (3-6 mots, intention informationnelle parentale).
+          content: `Sur le thème "${topic}", identifie UNE tendance précise ${currentYear} ET le mot-clé long-tail français le plus recherché (3-6 mots, intention informationnelle parentale).
 Format strict:
 TENDANCE: <une phrase>
 MOT-CLE: <mot-clé long-tail>
@@ -141,7 +142,7 @@ ID:${seed}`,
         {
           role: "system",
           content:
-            "Tu es rédacteur en chef SEO senior, spécialiste de la parentalité francophone. Tu produis des articles piliers (cornerstone content) de niveau magazine premium : 2500-3500 mots, exhaustifs, sourcés, structurés pour dominer la SERP et obtenir des featured snippets, People Also Ask, et Google Discover. Tu maîtrises l'EEAT (expérience, expertise, autorité, fiabilité), tu cites des institutions reconnues (OMS, UNICEF, Santé publique France, INSPQ, ANSES, HAS, études PubMed récentes 2023-2025), et tu intègres des données chiffrées vérifiables. Ton style : bienveillant, tutoiement parental, phrases courtes, zéro fluff, zéro jargon gratuit.",
+            `Tu es rédacteur en chef SEO senior, spécialiste de la parentalité francophone. Tu produis des articles piliers (cornerstone content) de niveau magazine premium : 2500-3500 mots, exhaustifs, sourcés, structurés pour dominer la SERP et obtenir des featured snippets, People Also Ask, et Google Discover. Tu maîtrises l'EEAT (expérience, expertise, autorité, fiabilité), tu cites des institutions reconnues (OMS, UNICEF, Santé publique France, INSPQ, ANSES, HAS, études PubMed récentes 2024-${currentYear}), et tu intègres des données chiffrées vérifiables. Ton style : bienveillant, tutoiement parental, phrases courtes, zéro fluff, zéro jargon gratuit. Année éditoriale obligatoire : ${currentYear}. N'utilise jamais 2024 ou 2025 dans le titre, le H1, le slug, le résumé, la meta description ou l'alt image ; ces années ne sont acceptées que dans les sources et références.`,
         },
         {
           role: "user",
@@ -166,12 +167,13 @@ EXIGENCES MAXIMALES:
 11. **Conclusion (100-150 mots)** : récap, encouragement, CTA vers l'app BabyBaby (suivi de croissance, communauté, conseils experts)
 
 # Contraintes SEO
+- Année éditoriale obligatoire : ${currentYear}. Le titre H1, le slug, le résumé, la meta description et l'alt image doivent utiliser ${currentYear} si une année est mentionnée. Interdiction d'y mettre 2024 ou 2025.
 - 2500-3500 mots minimum
 - Mot-clé principal dans : H1, premiers 100 mots, ≥2 H2, conclusion, meta description
 - Variations sémantiques et synonymes répartis (LSI keywords)
 - Densité naturelle, jamais forcée
 - Phrases ≤ 20 mots en moyenne, paragraphes ≤ 4 lignes
-- Données chiffrées concrètes (âges en mois, pourcentages, durées, recommandations officielles) datées 2023-2025
+- Données chiffrées concrètes (âges en mois, pourcentages, durées, recommandations officielles) datées 2024-${currentYear}
 - Liens internes suggérés en italique entre crochets : *[voir notre guide sur X]*
 
 # Ton
