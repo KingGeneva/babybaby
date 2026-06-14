@@ -6,16 +6,23 @@ import {
   clamp
 } from "./chunk-TCQMTAGU.js";
 import {
-  createCollection,
-  useDirection
-} from "./chunk-DF7W5PGO.js";
-import {
   Anchor,
   Arrow,
   Content,
   Root2,
   createPopperScope
-} from "./chunk-D7VZAXDT.js";
+} from "./chunk-W6TQM2K5.js";
+import {
+  usePrevious
+} from "./chunk-XSAN5JCE.js";
+import {
+  createCollection,
+  useDirection
+} from "./chunk-DF7W5PGO.js";
+import "./chunk-IYTRS3XW.js";
+import {
+  createContextScope
+} from "./chunk-77EU5DFA.js";
 import {
   FocusScope,
   RemoveScrollBar,
@@ -37,10 +44,6 @@ import {
   useId
 } from "./chunk-5DK3BDYL.js";
 import {
-  usePrevious
-} from "./chunk-XSAN5JCE.js";
-import "./chunk-IYTRS3XW.js";
-import {
   composeEventHandlers,
   useControllableState
 } from "./chunk-ZRGYVYS6.js";
@@ -48,9 +51,6 @@ import {
   useCallbackRef,
   useLayoutEffect2
 } from "./chunk-TVCOGUU4.js";
-import {
-  createContextScope
-} from "./chunk-77EU5DFA.js";
 import {
   Primitive,
   dispatchDiscreteCustomEvent
