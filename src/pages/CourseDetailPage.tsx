@@ -106,19 +106,23 @@ const CourseDetailPage = () => {
                   </div>
                 </div>
                 
-                <div className="relative h-80 rounded-lg overflow-hidden">
-                  <img 
-                    src={course.image} 
-                    alt={course.title} 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                    <Button size="lg" variant="outline" className="bg-white/20 backdrop-blur-sm hover:bg-white/30">
-                      <Play className="mr-2" size={20} />
-                      Regarder l'introduction
-                    </Button>
+                {course.modules[0]?.videoUrl ? (
+                  <div className="relative rounded-lg overflow-hidden bg-black aspect-video">
+                    <video
+                      src={course.modules[0].videoUrl}
+                      poster={course.image}
+                      controls
+                      preload="metadata"
+                      className="w-full h-full object-cover"
+                    >
+                      Votre navigateur ne supporte pas la lecture vidéo.
+                    </video>
                   </div>
-                </div>
+                ) : (
+                  <div className="relative h-80 rounded-lg overflow-hidden">
+                    <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+                  </div>
+                )}
                 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="mb-4 w-full sm:w-auto">
@@ -127,10 +131,48 @@ const CourseDetailPage = () => {
                     <TabsTrigger value="instructor">Instructeur</TabsTrigger>
                   </TabsList>
                   
-                  <TabsContent value="contenu" className="space-y-4">
-                    <div className="prose max-w-none">
-                      <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(course.modules[0].content) }} />
-                    </div>
+                  <TabsContent value="contenu" className="space-y-8">
+                    {course.modules.map((module, idx) => (
+                      <article key={module.id} id={module.id} className="border-b pb-8 last:border-b-0">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="h-8 w-8 rounded-full bg-babybaby-cosmic text-white flex items-center justify-center text-sm font-bold">
+                            {idx + 1}
+                          </div>
+                          <div>
+                            <h2 className="text-2xl font-bold text-babybaby-cosmic m-0">{module.title}</h2>
+                            <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                              <Clock size={14} /> {module.duration}
+                            </p>
+                          </div>
+                        </div>
+                        {module.videoUrl && (
+                          <div className="rounded-lg overflow-hidden bg-black aspect-video mb-4">
+                            <video src={module.videoUrl} poster={course.image} controls preload="metadata" className="w-full h-full object-cover" />
+                          </div>
+                        )}
+                        <div
+                          className="prose max-w-none prose-headings:text-babybaby-cosmic prose-table:my-4 prose-th:bg-muted prose-th:px-3 prose-th:py-2 prose-td:px-3 prose-td:py-2 prose-th:border prose-td:border"
+                          dangerouslySetInnerHTML={{ __html: sanitizeHtml(module.content) }}
+                        />
+                        {module.resources && module.resources.length > 0 && (
+                          <div className="mt-4 bg-gray-50 rounded-md p-4">
+                            <h4 className="text-sm font-semibold mb-2">Ressources de ce module</h4>
+                            <ul className="space-y-1">
+                              {module.resources.map(r => (
+                                <li key={r.id} className="flex items-center gap-2 text-sm">
+                                  {r.type === 'pdf' && <FileText className="text-red-500" size={14} />}
+                                  {r.type === 'video' && <Play className="text-blue-500" size={14} />}
+                                  {r.type === 'link' && <LinkIcon className="text-green-500" size={14} />}
+                                  <a href={r.url} target="_blank" rel="noopener noreferrer" className="text-babybaby-cosmic hover:underline">
+                                    {r.title}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </article>
+                    ))}
                   </TabsContent>
                   
                   <TabsContent value="resources" className="space-y-4">
@@ -145,14 +187,15 @@ const CourseDetailPage = () => {
                             <span>{resource.title}</span>
                           </div>
                           <Button variant="ghost" size="sm" asChild>
-                            <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                              Télécharger
+                            <a href={resource.url} target="_blank" rel="noopener noreferrer" download={resource.type === 'pdf' ? true : undefined}>
+                              {resource.type === 'pdf' ? 'Télécharger' : 'Ouvrir'}
                             </a>
                           </Button>
                         </div>
                       ))}
                     </div>
                   </TabsContent>
+
                   
                   <TabsContent value="instructor" className="space-y-4">
                     <div className="flex items-center gap-4">
