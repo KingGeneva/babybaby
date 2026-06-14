@@ -1,7 +1,7 @@
 import { Course } from "@/types/course";
-import introSoins from "@/assets/courses/intro-soins.mp4.asset.json";
-import introDev from "@/assets/courses/intro-developpement.mp4.asset.json";
-import introNutrition from "@/assets/courses/intro-nutrition.mp4.asset.json";
+import introSoins from "@/assets/courses/intro-soins-v2.mp4.asset.json";
+import introDev from "@/assets/courses/intro-developpement-v2.mp4.asset.json";
+import introNutrition from "@/assets/courses/intro-nutrition-v2.mp4.asset.json";
 
 const PDF_SOINS = "/resources/guide-soins-nouveau-ne.pdf";
 const PDF_DEV = "/resources/guide-developpement-bebe.pdf";
