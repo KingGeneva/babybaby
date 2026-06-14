@@ -1,10 +1,10 @@
 "use client";
 import {
-  VisuallyHidden
-} from "./chunk-FWMB4JYE.js";
-import {
   clamp
 } from "./chunk-TCQMTAGU.js";
+import {
+  VisuallyHidden
+} from "./chunk-FWMB4JYE.js";
 import {
   Anchor,
   Arrow,
@@ -15,11 +15,11 @@ import {
 import {
   usePrevious
 } from "./chunk-XSAN5JCE.js";
+import "./chunk-IYTRS3XW.js";
 import {
   createCollection,
   useDirection
 } from "./chunk-DF7W5PGO.js";
-import "./chunk-IYTRS3XW.js";
 import {
   createContextScope
 } from "./chunk-77EU5DFA.js";
