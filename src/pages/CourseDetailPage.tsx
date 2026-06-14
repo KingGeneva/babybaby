@@ -259,10 +259,15 @@ interface ModuleItemProps {
 }
 
 const ModuleItem = ({ module, index, isActive, onClick }: ModuleItemProps) => {
+  const scrollTo = () => {
+    const el = document.getElementById(module.id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
   return (
     <AccordionItem value={module.id}>
-      <AccordionTrigger className="hover:no-underline">
+      <AccordionTrigger className="hover:no-underline" onClick={scrollTo}>
         <div className="flex items-start gap-3 text-left">
+
           <div className="mt-0.5 h-6 w-6 rounded-full bg-babybaby-cosmic/10 text-babybaby-cosmic flex items-center justify-center text-sm">
             {index + 1}
           </div>
