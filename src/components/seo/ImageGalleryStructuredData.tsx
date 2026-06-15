@@ -29,7 +29,7 @@ const ImageGalleryStructuredData: React.FC<ImageGalleryStructuredDataProps> = ({
   dateModified = datePublished,
   authorName = "BabyBaby",
   publisherName = "BabyBaby",
-  publisherLogo = "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+  publisherLogo = "https://babybaby.org/__l5e/assets-v1/7f28394d-9670-4734-b87e-6cc9cc307285/logo-babybaby.png",
   pageUrl,
 }) => {
   // ImageGallery structured data pour les pages contenant des collections d'images
