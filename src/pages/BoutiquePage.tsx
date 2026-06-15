@@ -45,7 +45,7 @@ const BoutiquePage: React.FC = () => {
     "@type": "Organization",
     "name": "BabyBaby Boutique",
     "url": "https://babybaby.boutique",
-    "logo": "https://babybaby.org/__l5e/assets-v1/7f28394d-9670-4734-b87e-6cc9cc307285/logo-babybaby.png",
+    "logo": "https://babybaby.org/__l5e/assets-v1/645c44c5-bb3e-464d-bff9-39ccadd9b854/logo-babybaby.png",
     "description": "Boutique en ligne de produits premium pour bébés et parents.",
     "sameAs": [
       "https://facebook.com/babybaby",
@@ -80,7 +80,7 @@ const BoutiquePage: React.FC = () => {
     "name": "BabyBaby Boutique",
     "description": "Boutique en ligne de produits premium pour bébés et parents",
     "url": "https://babybaby.boutique",
-    "logo": "https://babybaby.org/__l5e/assets-v1/7f28394d-9670-4734-b87e-6cc9cc307285/logo-babybaby.png",
+    "logo": "https://babybaby.org/__l5e/assets-v1/645c44c5-bb3e-464d-bff9-39ccadd9b854/logo-babybaby.png",
     "image": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png",
     "telephone": "+1-581-333-3173",
     "priceRange": "€€",

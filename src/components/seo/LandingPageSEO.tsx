@@ -23,7 +23,7 @@ const LandingPageSEO: React.FC<LandingPageSEOProps> = ({
   description,
   canonicalUrl,
   keywords,
-  image = "https://babybaby.org/__l5e/assets-v1/7f28394d-9670-4734-b87e-6cc9cc307285/logo-babybaby.png",
+  image = "https://babybaby.org/__l5e/assets-v1/645c44c5-bb3e-464d-bff9-39ccadd9b854/logo-babybaby.png",
   publishedDate = new Date().toISOString(),
   modifiedDate = new Date().toISOString(),
   authorName = "BabyBaby"
@@ -130,7 +130,7 @@ function buildArticleSchema(
       'name': 'BabyBaby',
       'logo': {
         '@type': 'ImageObject',
-        'url': 'https://babybaby.org/__l5e/assets-v1/7f28394d-9670-4734-b87e-6cc9cc307285/logo-babybaby.png',
+        'url': 'https://babybaby.org/__l5e/assets-v1/645c44c5-bb3e-464d-bff9-39ccadd9b854/logo-babybaby.png',
         'width': '192',
         'height': '192'
       }
