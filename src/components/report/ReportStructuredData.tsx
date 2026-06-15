@@ -21,7 +21,7 @@ const ReportStructuredData: React.FC = () => {
       "name": "BabyBaby",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://babybaby.org/__l5e/assets-v1/645c44c5-bb3e-464d-bff9-39ccadd9b854/logo-babybaby.png"
+        "url": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
       }
     },
     "mainEntityOfPage": {

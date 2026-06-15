@@ -57,7 +57,7 @@ const CoursesSection = () => {
         <ArticleStructuredData
           title="Cours pour parents - BabyBaby"
           description="Développez vos connaissances parentales avec nos cours spécialement conçus"
-          image="https://babybaby.org/__l5e/assets-v1/645c44c5-bb3e-464d-bff9-39ccadd9b854/logo-babybaby.png"
+          image="https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png"
           datePublished="2025-05-01"
           authorName="BabyBaby"
           url="https://babybaby.org/courses"
