@@ -6,7 +6,7 @@ const LocalBusinessSchema: React.FC = () => {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "name": "BabyBaby",
-    "image": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
+    "image": "https://babybaby.org/__l5e/assets-v1/7f28394d-9670-4734-b87e-6cc9cc307285/logo-babybaby.png",
     "url": "https://babybaby.org",
     "telephone": "+1-581-333-3173",
     "priceRange": "$$",
