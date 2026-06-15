@@ -9,7 +9,7 @@ const OrganizationSchema: React.FC = () => {
     "name": "BabyBaby",
     "alternateName": "BabyBaby App",
     "url": "https://babybaby.org",
-    "logo": "https://babybaby.org/__l5e/assets-v1/7f28394d-9670-4734-b87e-6cc9cc307285/logo-babybaby.png",
+    "logo": "https://babybaby.org/__l5e/assets-v1/645c44c5-bb3e-464d-bff9-39ccadd9b854/logo-babybaby.png",
     "description": "Plateforme leader pour le suivi de développement et santé infantile. Domaine historique actif depuis 1998.",
     "foundingDate": "1998",
     "knowsAbout": [
