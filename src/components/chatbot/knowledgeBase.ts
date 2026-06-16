@@ -216,7 +216,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   // ============================================
   {
     keywords: ['fatigue', 'épuisement', 'burn out', 'maman fatiguée', 'papa fatigué'],
-    response: "La fatigue parentale est réelle et normale :\n\n**Reconnaître les signes :**\n• Irritabilité, sautes d'humeur\n• Troubles du sommeil malgré la fatigue\n• Sentiment de débordement\n• Difficultés de concentration\n• Isolation sociale\n\n**Prendre soin de vous :**\n• Acceptez l'aide proposée\n• Dormez quand bébé dort\n• Sortez quotidiennement, même brièvement\n• Maintenez des moments pour vous\n• Parlez de vos difficultés\n\n**Ressources :**\n• PMI, sage-femme\n• Associations de soutien parental\n• Consultations psy si besoin\n\n🤝 Demander de l'aide n'est pas un échec, c'est un acte de force.",
+    response: "La fatigue parentale est réelle et normale :\n\n**Reconnaître les signes :**\n• Irritabilité, sautes d'humeur\n• Troubles du sommeil malgré la fatigue\n• Sentiment de débordement\n• Difficultés de concentration\n• Isolation sociale\n\n**Prendre soin de vous :**\n• Acceptez l'aide proposée\n• Dormez quand bébé dort\n• Sortez quotidiennement, même brièvement\n• Maintenez des moments pour vous\n• Parlez de vos difficultés\n\n**Ressources (Québec) :**\n• CLSC, Info-Santé 811, Info-Social 811 option 2\n• LigneParents (1 800 361-5085) — soutien 24/7\n• Maisons de la famille, Relevailles du Québec\n• Médecin de famille ou psychologue (couverture RAMQ partielle)\n\n🤝 Demander de l'aide n'est pas un échec, c'est un acte de force.",
     category: 'bienetre'
   },
   {
