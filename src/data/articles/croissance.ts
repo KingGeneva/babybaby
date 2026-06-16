@@ -75,10 +75,10 @@ Même si des variations ponctuelles sont normales, certains signes doivent vous 
 
 ## Sources officielles des courbes de croissance
 
-Dans plusieurs pays, dont le Canada et la France, les courbes de croissance officielles proviennent généralement de l'Organisation Mondiale de la Santé (OMS), pour les enfants âgés de 0 à 5 ans :
+Au Québec et ailleurs au Canada, les courbes de croissance officielles utilisées par les pédiatres et les CLSC sont celles de l'Organisation mondiale de la Santé (OMS), adoptées par la Société canadienne de pédiatrie et les Diététistes du Canada pour les enfants de 0 à 5 ans :
 
-- Carnet de santé officiel remis dès la naissance.
-- Sites web des autorités sanitaires nationales et de l'OMS.
+- Carnet de santé du Québec remis à la naissance par le CLSC.
+- Sites web de l'INSPQ, de Santé Canada et de l'OMS.
 
 ## Le rôle clé des professionnels de santé
 
