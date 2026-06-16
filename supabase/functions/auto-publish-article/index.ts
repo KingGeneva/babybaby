@@ -123,7 +123,7 @@ serve(async (req) => {
         {
           role: "system",
           content:
-            "Tu es expert SEO et parentalité francophone. Tu identifies des tendances précises ET le mot-clé long-tail à fort potentiel de recherche associé.",
+            "Tu es expert SEO et parentalité québécoise. Tu identifies des tendances précises ET le mot-clé long-tail à fort potentiel de recherche associé pour le marché du Québec.",
         },
         {
           role: "user",
