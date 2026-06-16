@@ -159,7 +159,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   },
   {
     keywords: ['fièvre', 'température', 'malade', 'thermomètre'],
-    response: "La fièvre chez bébé :\n\n**Définition :**\n• Température > 38°C (rectale ou frontale)\n\n**Quand s'inquiéter :**\n🚨 **Urgence si :**\n• Bébé < 3 mois avec fièvre\n• Fièvre > 40°C\n• Convulsions\n• Difficultés respiratoires\n• Taches rouges/violettes sur la peau\n• Comportement anormal\n\n**Comment agir :**\n• Découvrir légèrement bébé\n• Hydrater fréquemment\n• Paracétamol selon le poids (avis médical)\n• Surveiller l'évolution\n\n**Ne pas faire :**\n• Bain froid\n• Trop couvrir\n• Aspirine (jamais chez l'enfant)",
+    response: "La fièvre chez bébé :\n\n**Définition :**\n• Température > 38°C (rectale ou frontale)\n\n**Quand s'inquiéter :**\n🚨 **Urgence si :**\n• Bébé < 3 mois avec fièvre\n• Fièvre > 40°C\n• Convulsions\n• Difficultés respiratoires\n• Taches rouges/violettes sur la peau\n• Comportement anormal\n\n**Comment agir :**\n• Découvrir légèrement bébé\n• Hydrater fréquemment\n• Acétaminophène (Tempra, Tylenol) selon le poids — avis Info-Santé 811 ou pédiatre\n• Surveiller l'évolution\n\n**Ne pas faire :**\n• Bain froid\n• Trop couvrir\n• AAS / Aspirine (jamais chez l'enfant — risque de syndrome de Reye)",
     category: 'sante'
   },
   {
