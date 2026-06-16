@@ -133,7 +133,7 @@ export const courses: Course[] = [
         `,
         resources: [
           { id: "r2-1", title: "Tableau des quantités (PDF)", type: "pdf", url: PDF_SOINS },
-          { id: "r2-2", title: "La Leche League France", type: "link", url: "https://www.lllfrance.org/" },
+          { id: "r2-2", title: "Nourri-Source (Québec) — soutien à l'allaitement", type: "link", url: "https://nourri-source.org/" },
         ],
       },
       {
@@ -174,7 +174,7 @@ export const courses: Course[] = [
         `,
         resources: [
           { id: "r3-1", title: "Calendrier de suivi du sommeil (PDF)", type: "pdf", url: PDF_SOINS },
-          { id: "r3-2", title: "Recommandations HAS — Mort inattendue du nourrisson", type: "link", url: "https://www.has-sante.fr/" },
+          { id: "r3-2", title: "INSPQ — Mortalité infantile et sommeil sécuritaire", type: "link", url: "https://www.inspq.qc.ca/" },
         ],
       },
       {
@@ -189,7 +189,7 @@ export const courses: Course[] = [
             <li>Thermomètre digital rectal</li>
             <li>Sérum physiologique en unidoses</li>
             <li>Mouche-bébé</li>
-            <li>Paracétamol nourrisson (suspension buvable)</li>
+            <li>Acétaminophène nourrisson (Tempra, Tylenol gouttes)</li>
             <li>Compresses stériles, antiseptique sans alcool (chlorhexidine aqueuse)</li>
             <li>Crème pour le change (oxyde de zinc)</li>
             <li>Solution de réhydratation orale (SRO)</li>
@@ -345,7 +345,7 @@ export const courses: Course[] = [
         `,
         resources: [
           { id: "rd2-1", title: "Guide activités sensorielles (PDF)", type: "pdf", url: PDF_DEV },
-          { id: "rd2-2", title: "Société Française de Pédiatrie — Écrans", type: "link", url: "https://www.sfpediatrie.com/" },
+          { id: "rd2-2", title: "Société canadienne de pédiatrie — Temps d'écran", type: "link", url: "https://cps.ca/fr/" },
         ],
       },
       {
@@ -440,9 +440,9 @@ export const courses: Course[] = [
           <h3>5. Vers qui se tourner ?</h3>
           <ul>
             <li><strong>Pédiatre / médecin traitant</strong> : premier interlocuteur</li>
-            <li><strong>PMI</strong> : bilans gratuits jusqu'à 6 ans</li>
-            <li><strong>CAMSP</strong> (Centre d'Action Médico-Sociale Précoce) : prise en charge pluridisciplinaire 0–6 ans</li>
-            <li><strong>Psychomotricien, orthophoniste</strong> : sur prescription</li>
+            <li><strong>CLSC</strong> : suivi infirmier et bilans gratuits pour 0–5 ans</li>
+            <li><strong>CRDP / CRDI-TED</strong> : centres de réadaptation pour prise en charge pluridisciplinaire 0–6 ans</li>
+            <li><strong>Psychoéducateur, orthophoniste</strong> : sur recommandation (OPHQ, RAMQ)</li>
           </ul>
 
           <h3>6. Le dépistage précoce sauve</h3>
@@ -450,7 +450,7 @@ export const courses: Course[] = [
         `,
         resources: [
           { id: "rd4-1", title: "Test M-CHAT à imprimer", type: "link", url: "https://mchatscreen.com/" },
-          { id: "rd4-2", title: "Trouver une PMI près de chez vous", type: "link", url: "https://www.1000-premiers-jours.fr/" },
+          { id: "rd4-2", title: "Naître et grandir — Trouver son CLSC", type: "link", url: "https://naitreetgrandir.com/" },
         ],
       },
     ],

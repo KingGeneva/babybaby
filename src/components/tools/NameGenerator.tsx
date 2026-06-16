@@ -16,7 +16,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
 
-// Liste de prénoms français populaires
+// Liste de prénoms populaires au Québec (Retraite Québec / Registre de l'état civil)
 const girlNames = [
   'Emma', 'Jade', 'Louise', 'Alice', 'Chloé', 'Lina', 'Léa', 'Rose',
   'Anna', 'Mila', 'Inès', 'Ambre', 'Julia', 'Léna', 'Manon', 'Zoé',

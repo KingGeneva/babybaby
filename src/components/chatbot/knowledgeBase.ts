@@ -149,7 +149,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   // ============================================
   {
     keywords: ['vaccin', 'vaccination', 'calendrier vaccinal', 'immunisation'],
-    response: "Le calendrier vaccinal protège bébé des maladies graves :\n\n**Vaccins obligatoires (France) :**\n• 2 mois : DTP + Coqueluche + Hib + Hépatite B + Pneumocoque\n• 4 mois : Rappels\n• 5 mois : Méningocoque C\n• 11 mois : Rappels DTP, Pneumocoque\n• 12 mois : ROR (Rougeole-Oreillons-Rubéole)\n• 16-18 mois : Rappel ROR, Méningocoque C\n\n**Au Canada :**\nCalendrier similaire avec quelques variations provinciales.\n\n**Conseils :**\n• Carnet de vaccination à jour\n• Prévoir paracétamol si fièvre légère\n• Signaler toute réaction inhabituelle\n\n📅 L'application BabyBaby envoie des rappels automatiques !",
+    response: "Le calendrier vaccinal protège bébé des maladies graves :\n\n**Calendrier vaccinal du Québec (PIQ) :**\n• 2 mois : DCaT-HB-VPI-Hib + Pneumocoque + Rotavirus\n• 4 mois : Rappels DCaT-HB-VPI-Hib + Pneumocoque + Rotavirus\n• 6 mois : Influenza (saisonnier)\n• 12 mois : RRO-Var (Rougeole-Rubéole-Oreillons-Varicelle) + Méningocoque C + Pneumocoque\n• 18 mois : Rappel DCaT-VPI-Hib\n• 4-6 ans : RRO-Var + DCaT-VPI\n\n**Au Canada :**\nChaque province a son propre calendrier — au Québec, c'est le Protocole d'immunisation du Québec (PIQ), administré gratuitement au CLSC.\n\n**Conseils :**\n• Carnet de vaccination du Québec à jour\n• Acétaminophène (Tempra, Tylenol) si fièvre légère\n• Signaler toute réaction inhabituelle à Info-Santé 811\n\n📅 L'application BabyBaby envoie des rappels automatiques !",
     category: 'sante'
   },
   {
@@ -159,7 +159,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   },
   {
     keywords: ['fièvre', 'température', 'malade', 'thermomètre'],
-    response: "La fièvre chez bébé :\n\n**Définition :**\n• Température > 38°C (rectale ou frontale)\n\n**Quand s'inquiéter :**\n🚨 **Urgence si :**\n• Bébé < 3 mois avec fièvre\n• Fièvre > 40°C\n• Convulsions\n• Difficultés respiratoires\n• Taches rouges/violettes sur la peau\n• Comportement anormal\n\n**Comment agir :**\n• Découvrir légèrement bébé\n• Hydrater fréquemment\n• Paracétamol selon le poids (avis médical)\n• Surveiller l'évolution\n\n**Ne pas faire :**\n• Bain froid\n• Trop couvrir\n• Aspirine (jamais chez l'enfant)",
+    response: "La fièvre chez bébé :\n\n**Définition :**\n• Température > 38°C (rectale ou frontale)\n\n**Quand s'inquiéter :**\n🚨 **Urgence si :**\n• Bébé < 3 mois avec fièvre\n• Fièvre > 40°C\n• Convulsions\n• Difficultés respiratoires\n• Taches rouges/violettes sur la peau\n• Comportement anormal\n\n**Comment agir :**\n• Découvrir légèrement bébé\n• Hydrater fréquemment\n• Acétaminophène (Tempra, Tylenol) selon le poids — avis Info-Santé 811 ou pédiatre\n• Surveiller l'évolution\n\n**Ne pas faire :**\n• Bain froid\n• Trop couvrir\n• AAS / Aspirine (jamais chez l'enfant — risque de syndrome de Reye)",
     category: 'sante'
   },
   {
@@ -188,12 +188,12 @@ export const knowledgeBase: KnowledgeEntry[] = [
   },
   {
     keywords: ['étouffement', 'fausse route', 'heimlich', 'urgence'],
-    response: "Premiers secours en cas d'étouffement :\n\n**Signes d'étouffement :**\n• Ne tousse pas, ne pleure pas\n• Lèvres bleues\n• Mains au cou\n\n**Bébé < 1 an :**\n1. 5 claques dans le dos (bébé sur l'avant-bras, tête en bas)\n2. Si inefficace : 5 compressions thoraciques (sur le sternum)\n3. Alterner jusqu'à libération ou perte de connaissance\n\n**Enfant > 1 an :**\n• 5 claques dans le dos\n• Si inefficace : compressions abdominales (Heimlich)\n\n🚨 **Appeler le 15 (SAMU) ou 112 immédiatement**\n\n⚠️ Formation aux premiers secours vivement recommandée pour tous les parents !",
+    response: "Premiers secours en cas d'étouffement :\n\n**Signes d'étouffement :**\n• Ne tousse pas, ne pleure pas\n• Lèvres bleues\n• Mains au cou\n\n**Bébé < 1 an :**\n1. 5 claques dans le dos (bébé sur l'avant-bras, tête en bas)\n2. Si inefficace : 5 compressions thoraciques (sur le sternum)\n3. Alterner jusqu'à libération ou perte de connaissance\n\n**Enfant > 1 an :**\n• 5 claques dans le dos\n• Si inefficace : compressions abdominales (Heimlich)\n\n🚨 **Appelez le 911 immédiatement** (ou Info-Santé 811 pour les questions non urgentes)\n\n⚠️ Formation aux premiers secours (Croix-Rouge canadienne, Ambulance Saint-Jean) vivement recommandée pour tous les parents !",
     category: 'securite'
   },
   {
     keywords: ['siège auto', 'voiture', 'voyage', 'transport'],
-    response: "La sécurité en voiture :\n\n**Choix du siège auto :**\n• **Groupe 0+ (0-13 kg)** : Coque, dos à la route obligatoire\n• **Groupe 1 (9-18 kg)** : Siège dos route recommandé le plus longtemps possible\n• **Groupe 2/3 (15-36 kg)** : Rehausseur\n\n**Règles essentielles :**\n• Dos à la route jusqu'à au moins 15 mois (mieux : 4 ans)\n• Installation correcte selon notice\n• Harnais bien ajusté (1 doigt max)\n• Jamais de siège sur un siège avec airbag actif\n• Retirer les manteaux épais\n\n**Autres conseils :**\n• Vérifier les normes (i-Size/R129)\n• Faire vérifier l'installation en PMI\n• Jamais de bébé seul dans la voiture",
+    response: "La sécurité en voiture (Québec / Canada) :\n\n**Choix du siège auto (normes Transports Canada / CMVSS 213) :**\n• **Nouveau-né — environ 10 kg** : Coquille dos à la route, obligatoire\n• **Jusqu'à 18 kg minimum** : Siège convertible — dos à la route le plus longtemps possible (recommandation SAAQ : minimum 2 ans)\n• **Jusqu'à 36 kg ou 145 cm** : Siège d'appoint (booster) — obligatoire au Québec\n\n**Règles essentielles (Code de la sécurité routière du Québec) :**\n• Dos à la route jusqu'à au moins 2 ans (idéalement plus longtemps)\n• Installation selon le manuel du siège ET du véhicule\n• Harnais bien ajusté (1 doigt max entre la sangle et la clavicule)\n• Jamais de siège dos à la route devant un coussin gonflable actif\n• Retirer les manteaux épais avant d'installer bébé\n\n**Autres conseils :**\n• Privilégier un siège certifié CMVSS 213 (étiquette canadienne)\n• Faire vérifier l'installation par un technicien CAA-Québec ou un poste de pompiers participant\n• Jamais de bébé seul dans la voiture",
     category: 'securite'
   },
 
@@ -216,7 +216,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   // ============================================
   {
     keywords: ['fatigue', 'épuisement', 'burn out', 'maman fatiguée', 'papa fatigué'],
-    response: "La fatigue parentale est réelle et normale :\n\n**Reconnaître les signes :**\n• Irritabilité, sautes d'humeur\n• Troubles du sommeil malgré la fatigue\n• Sentiment de débordement\n• Difficultés de concentration\n• Isolation sociale\n\n**Prendre soin de vous :**\n• Acceptez l'aide proposée\n• Dormez quand bébé dort\n• Sortez quotidiennement, même brièvement\n• Maintenez des moments pour vous\n• Parlez de vos difficultés\n\n**Ressources :**\n• PMI, sage-femme\n• Associations de soutien parental\n• Consultations psy si besoin\n\n🤝 Demander de l'aide n'est pas un échec, c'est un acte de force.",
+    response: "La fatigue parentale est réelle et normale :\n\n**Reconnaître les signes :**\n• Irritabilité, sautes d'humeur\n• Troubles du sommeil malgré la fatigue\n• Sentiment de débordement\n• Difficultés de concentration\n• Isolation sociale\n\n**Prendre soin de vous :**\n• Acceptez l'aide proposée\n• Dormez quand bébé dort\n• Sortez quotidiennement, même brièvement\n• Maintenez des moments pour vous\n• Parlez de vos difficultés\n\n**Ressources (Québec) :**\n• CLSC, Info-Santé 811, Info-Social 811 option 2\n• LigneParents (1 800 361-5085) — soutien 24/7\n• Maisons de la famille, Relevailles du Québec\n• Médecin de famille ou psychologue (couverture RAMQ partielle)\n\n🤝 Demander de l'aide n'est pas un échec, c'est un acte de force.",
     category: 'bienetre'
   },
   {
@@ -240,7 +240,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   // ============================================
   {
     keywords: ['offres gratuites', 'coupons', 'échantillons', 'gratuit', 'promo'],
-    response: "Offres gratuites pour les jeunes parents :\n\n**Au Canada/Québec :**\n• 🍼 **Enfamil** : Trousse de bienvenue + coupons\n• 🧷 **Huggies** : Échantillons de couches\n• 🎀 **Pampers** : Programme de récompenses\n• 🍎 **Nestlé Bébé** : Coffret découverte\n• 🧸 **Similac** : Trousse gratuite\n\n**Comment en profiter :**\n• Inscription sur les sites des marques\n• Registres de naissance (Amazon, Babies R Us)\n• PMI et maternités\n\n📦 Consultez notre page \"Offres Gratuites\" pour les liens directs et les dernières promotions disponibles !",
+    response: "Offres gratuites pour les jeunes parents :\n\n**Au Québec / Canada :**\n• 🍼 **Enfamil A+** : Trousse de bienvenue + coupons\n• 🧷 **Huggies** : Échantillons de couches via Club Huggies\n• 🎀 **Pampers Club** : Programme de récompenses\n• 🍎 **Nestlé Bébé & Moi** : Coffret découverte\n• 🧸 **Similac StrongMoms** : Trousse gratuite\n• 🎁 **Welcome Baby Box** (Québec) — trousse régionale\n\n**Comment en profiter :**\n• Inscription sur les sites des marques\n• Registres de naissance (Amazon.ca, Walmart, Toys R Us Canada)\n• CLSC et cliniques de périnatalité\n\n📦 Consultez notre page \"Offres Gratuites\" pour les liens directs et les dernières promotions disponibles !",
     category: 'ressources'
   },
   {

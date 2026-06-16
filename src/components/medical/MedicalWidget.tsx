@@ -31,7 +31,7 @@ export default function MedicalWidget({ childId }: MedicalWidgetProps) {
             time: '14:30',
             doctor: 'Dr. Martin',
             location: 'Cabinet médical',
-            notes: 'Apporter le carnet de santé',
+            notes: 'Apporter le carnet de santé du Québec et la carte RAMQ',
             completed: false,
             type: 'checkup',
             childId: childId

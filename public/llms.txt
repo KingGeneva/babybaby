@@ -1,8 +1,8 @@
 # BabyBaby
 
-> Application web gratuite et francophone d'accompagnement des parents : suivi de la croissance du bébé (courbes OMS), calendrier vaccinal, outils sommeil, articles d'experts en parentalité, ebooks téléchargeables et communauté de parents. Site édité depuis 1998, héritier du domaine MSLO (2000-2003).
+ > Application web gratuite et francophone d'accompagnement des parents : suivi de la croissance du bébé (courbes OMS), calendrier vaccinal du Québec (PIQ), outils sommeil, articles d'experts en parentalité, ebooks téléchargeables et communauté de parents. Site édité depuis 1998, héritier du domaine MSLO (2000-2003).
 
-BabyBaby couvre la grossesse, la naissance et les 0-36 mois. Le contenu est rédigé en français (France et Québec) et adossé à des références cliniques (OMS, Santé Canada, ANSES).
+BabyBaby couvre la grossesse, la naissance et les 0-36 mois. Le contenu est rédigé en français québécois et adossé à des références cliniques (OMS, Santé Canada, INSPQ, Société canadienne de pédiatrie, INESSS, Naître et grandir).
 
 ## Pages principales
 
