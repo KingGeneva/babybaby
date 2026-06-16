@@ -188,7 +188,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   },
   {
     keywords: ['étouffement', 'fausse route', 'heimlich', 'urgence'],
-    response: "Premiers secours en cas d'étouffement :\n\n**Signes d'étouffement :**\n• Ne tousse pas, ne pleure pas\n• Lèvres bleues\n• Mains au cou\n\n**Bébé < 1 an :**\n1. 5 claques dans le dos (bébé sur l'avant-bras, tête en bas)\n2. Si inefficace : 5 compressions thoraciques (sur le sternum)\n3. Alterner jusqu'à libération ou perte de connaissance\n\n**Enfant > 1 an :**\n• 5 claques dans le dos\n• Si inefficace : compressions abdominales (Heimlich)\n\n🚨 **Appeler le 15 (SAMU) ou 112 immédiatement**\n\n⚠️ Formation aux premiers secours vivement recommandée pour tous les parents !",
+    response: "Premiers secours en cas d'étouffement :\n\n**Signes d'étouffement :**\n• Ne tousse pas, ne pleure pas\n• Lèvres bleues\n• Mains au cou\n\n**Bébé < 1 an :**\n1. 5 claques dans le dos (bébé sur l'avant-bras, tête en bas)\n2. Si inefficace : 5 compressions thoraciques (sur le sternum)\n3. Alterner jusqu'à libération ou perte de connaissance\n\n**Enfant > 1 an :**\n• 5 claques dans le dos\n• Si inefficace : compressions abdominales (Heimlich)\n\n🚨 **Appelez le 911 immédiatement** (ou Info-Santé 811 pour les questions non urgentes)\n\n⚠️ Formation aux premiers secours (Croix-Rouge canadienne, Ambulance Saint-Jean) vivement recommandée pour tous les parents !",
     category: 'securite'
   },
   {
