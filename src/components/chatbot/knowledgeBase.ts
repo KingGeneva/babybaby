@@ -149,7 +149,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   // ============================================
   {
     keywords: ['vaccin', 'vaccination', 'calendrier vaccinal', 'immunisation'],
-    response: "Le calendrier vaccinal protège bébé des maladies graves :\n\n**Vaccins obligatoires (France) :**\n• 2 mois : DTP + Coqueluche + Hib + Hépatite B + Pneumocoque\n• 4 mois : Rappels\n• 5 mois : Méningocoque C\n• 11 mois : Rappels DTP, Pneumocoque\n• 12 mois : ROR (Rougeole-Oreillons-Rubéole)\n• 16-18 mois : Rappel ROR, Méningocoque C\n\n**Au Canada :**\nCalendrier similaire avec quelques variations provinciales.\n\n**Conseils :**\n• Carnet de vaccination à jour\n• Prévoir paracétamol si fièvre légère\n• Signaler toute réaction inhabituelle\n\n📅 L'application BabyBaby envoie des rappels automatiques !",
+    response: "Le calendrier vaccinal protège bébé des maladies graves :\n\n**Calendrier vaccinal du Québec (PIQ) :**\n• 2 mois : DCaT-HB-VPI-Hib + Pneumocoque + Rotavirus\n• 4 mois : Rappels DCaT-HB-VPI-Hib + Pneumocoque + Rotavirus\n• 6 mois : Influenza (saisonnier)\n• 12 mois : RRO-Var (Rougeole-Rubéole-Oreillons-Varicelle) + Méningocoque C + Pneumocoque\n• 18 mois : Rappel DCaT-VPI-Hib\n• 4-6 ans : RRO-Var + DCaT-VPI\n\n**Au Canada :**\nChaque province a son propre calendrier — au Québec, c'est le Protocole d'immunisation du Québec (PIQ), administré gratuitement au CLSC.\n\n**Conseils :**\n• Carnet de vaccination du Québec à jour\n• Acétaminophène (Tempra, Tylenol) si fièvre légère\n• Signaler toute réaction inhabituelle à Info-Santé 811\n\n📅 L'application BabyBaby envoie des rappels automatiques !",
     category: 'sante'
   },
   {
