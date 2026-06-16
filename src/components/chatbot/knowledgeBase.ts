@@ -240,7 +240,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   // ============================================
   {
     keywords: ['offres gratuites', 'coupons', 'échantillons', 'gratuit', 'promo'],
-    response: "Offres gratuites pour les jeunes parents :\n\n**Au Canada/Québec :**\n• 🍼 **Enfamil** : Trousse de bienvenue + coupons\n• 🧷 **Huggies** : Échantillons de couches\n• 🎀 **Pampers** : Programme de récompenses\n• 🍎 **Nestlé Bébé** : Coffret découverte\n• 🧸 **Similac** : Trousse gratuite\n\n**Comment en profiter :**\n• Inscription sur les sites des marques\n• Registres de naissance (Amazon, Babies R Us)\n• PMI et maternités\n\n📦 Consultez notre page \"Offres Gratuites\" pour les liens directs et les dernières promotions disponibles !",
+    response: "Offres gratuites pour les jeunes parents :\n\n**Au Québec / Canada :**\n• 🍼 **Enfamil A+** : Trousse de bienvenue + coupons\n• 🧷 **Huggies** : Échantillons de couches via Club Huggies\n• 🎀 **Pampers Club** : Programme de récompenses\n• 🍎 **Nestlé Bébé & Moi** : Coffret découverte\n• 🧸 **Similac StrongMoms** : Trousse gratuite\n• 🎁 **Welcome Baby Box** (Québec) — trousse régionale\n\n**Comment en profiter :**\n• Inscription sur les sites des marques\n• Registres de naissance (Amazon.ca, Walmart, Toys R Us Canada)\n• CLSC et cliniques de périnatalité\n\n📦 Consultez notre page \"Offres Gratuites\" pour les liens directs et les dernières promotions disponibles !",
     category: 'ressources'
   },
   {
