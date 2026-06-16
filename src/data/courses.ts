@@ -345,7 +345,7 @@ export const courses: Course[] = [
         `,
         resources: [
           { id: "rd2-1", title: "Guide activités sensorielles (PDF)", type: "pdf", url: PDF_DEV },
-          { id: "rd2-2", title: "Société Française de Pédiatrie — Écrans", type: "link", url: "https://www.sfpediatrie.com/" },
+          { id: "rd2-2", title: "Société canadienne de pédiatrie — Temps d'écran", type: "link", url: "https://cps.ca/fr/" },
         ],
       },
       {
