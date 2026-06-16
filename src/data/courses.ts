@@ -440,9 +440,9 @@ export const courses: Course[] = [
           <h3>5. Vers qui se tourner ?</h3>
           <ul>
             <li><strong>Pédiatre / médecin traitant</strong> : premier interlocuteur</li>
-            <li><strong>PMI</strong> : bilans gratuits jusqu'à 6 ans</li>
-            <li><strong>CAMSP</strong> (Centre d'Action Médico-Sociale Précoce) : prise en charge pluridisciplinaire 0–6 ans</li>
-            <li><strong>Psychomotricien, orthophoniste</strong> : sur prescription</li>
+            <li><strong>CLSC</strong> : suivi infirmier et bilans gratuits pour 0–5 ans</li>
+            <li><strong>CRDP / CRDI-TED</strong> : centres de réadaptation pour prise en charge pluridisciplinaire 0–6 ans</li>
+            <li><strong>Psychoéducateur, orthophoniste</strong> : sur recommandation (OPHQ, RAMQ)</li>
           </ul>
 
           <h3>6. Le dépistage précoce sauve</h3>
