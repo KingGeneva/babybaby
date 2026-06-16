@@ -450,7 +450,7 @@ export const courses: Course[] = [
         `,
         resources: [
           { id: "rd4-1", title: "Test M-CHAT à imprimer", type: "link", url: "https://mchatscreen.com/" },
-          { id: "rd4-2", title: "Trouver une PMI près de chez vous", type: "link", url: "https://www.1000-premiers-jours.fr/" },
+          { id: "rd4-2", title: "Naître et grandir — Trouver son CLSC", type: "link", url: "https://naitreetgrandir.com/" },
         ],
       },
     ],
