@@ -127,7 +127,7 @@ serve(async (req) => {
         },
         {
           role: "user",
-          content: `Sur le thème "${topic}", identifie UNE tendance précise ${currentYear} ET le mot-clé long-tail français le plus recherché (3-6 mots, intention informationnelle parentale).
+          content: `Sur le thème "${topic}", identifie UNE tendance précise ${currentYear} ET le mot-clé long-tail québécois le plus recherché (3-6 mots, intention informationnelle parentale, marché Québec/Canada francophone).
 Format strict:
 TENDANCE: <une phrase>
 MOT-CLE: <mot-clé long-tail>
