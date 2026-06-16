@@ -189,7 +189,7 @@ export const courses: Course[] = [
             <li>Thermomètre digital rectal</li>
             <li>Sérum physiologique en unidoses</li>
             <li>Mouche-bébé</li>
-            <li>Paracétamol nourrisson (suspension buvable)</li>
+            <li>Acétaminophène nourrisson (Tempra, Tylenol gouttes)</li>
             <li>Compresses stériles, antiseptique sans alcool (chlorhexidine aqueuse)</li>
             <li>Crème pour le change (oxyde de zinc)</li>
             <li>Solution de réhydratation orale (SRO)</li>
