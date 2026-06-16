@@ -133,7 +133,7 @@ export const courses: Course[] = [
         `,
         resources: [
           { id: "r2-1", title: "Tableau des quantités (PDF)", type: "pdf", url: PDF_SOINS },
-          { id: "r2-2", title: "La Leche League France", type: "link", url: "https://www.lllfrance.org/" },
+          { id: "r2-2", title: "Nourri-Source (Québec) — soutien à l'allaitement", type: "link", url: "https://nourri-source.org/" },
         ],
       },
       {
