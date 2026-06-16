@@ -174,7 +174,7 @@ export const courses: Course[] = [
         `,
         resources: [
           { id: "r3-1", title: "Calendrier de suivi du sommeil (PDF)", type: "pdf", url: PDF_SOINS },
-          { id: "r3-2", title: "Recommandations HAS — Mort inattendue du nourrisson", type: "link", url: "https://www.has-sante.fr/" },
+          { id: "r3-2", title: "INSPQ — Mortalité infantile et sommeil sécuritaire", type: "link", url: "https://www.inspq.qc.ca/" },
         ],
       },
       {
