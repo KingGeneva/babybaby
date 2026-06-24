@@ -16,6 +16,7 @@ const FreeOffersPage = lazy(() => import("../pages/FreeOffersPage"));
 const EbooksPage = lazy(() => import("../pages/EbooksPage"));
 const EbookViewerPage = lazy(() => import("../pages/EbookViewerPage"));
 const ContestsPage = lazy(() => import("../pages/ContestsPage"));
+const ContactPage = lazy(() => import("../pages/ContactPage"));
 
 const ShopPage = lazy(() => import("../pages/ShopPage"));
 const ProductDetailPage = lazy(() => import("../pages/ProductDetailPage"));
