@@ -1,7 +1,7 @@
-
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare, Mail } from 'lucide-react';
 
 const FAQContactSection: React.FC = () => {
   return (
@@ -12,8 +12,11 @@ const FAQContactSection: React.FC = () => {
           <MessageSquare className="h-4 w-4" />
           Discuter avec notre chatbot
         </Button>
-        <Button variant="outline">
-          Contacter notre équipe
+        <Button asChild variant="outline" className="flex items-center gap-2">
+          <Link to="/contact">
+            <Mail className="h-4 w-4" />
+            Contacter notre équipe
+          </Link>
         </Button>
       </div>
     </div>
