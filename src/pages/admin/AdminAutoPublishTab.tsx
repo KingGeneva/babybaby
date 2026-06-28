@@ -83,6 +83,37 @@ export default function AdminAutoPublishTab() {
       setPingingAll(false);
     }
   };
+  const rebuildCatalogIndex = async () => {
+    setRebuildingIndex(true);
+    try {
+      const all = await getArticlesByCategory("Tous");
+      const entries = all.map((a) => ({
+        id: a.id,
+        title: a.title,
+        category: a.category,
+        path: articleUrl(a),
+        keyword: (a as { seo_keyword?: string }).seo_keyword,
+      }));
+      const blob = new Blob([JSON.stringify(entries, null, 2)], { type: "application/json" });
+      const { error } = await supabase.storage
+        .from("articles")
+        .upload("articles/_index.json", blob, { upsert: true, cacheControl: "3600" });
+      if (error) throw error;
+      toast({
+        title: "Index reconstruit",
+        description: `${entries.length} article(s) indexé(s) pour le maillage interne.`,
+      });
+    } catch (e) {
+      toast({
+        title: "Erreur",
+        description: e instanceof Error ? e.message : "Reconstruction impossible",
+        variant: "destructive",
+      });
+    } finally {
+      setRebuildingIndex(false);
+    }
+  };
+
 
   return (
     <div className="space-y-6">
