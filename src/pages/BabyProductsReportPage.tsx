@@ -136,6 +136,11 @@ const BabyProductsReportPage: React.FC = () => {
                 />
               ))}
 
+              {/* Divulgation d'affiliation (avant conclusion) */}
+              <div className="mb-8">
+                <AffiliateDisclosure />
+              </div>
+
               {/* Conclusion */}
               <section id="conclusion" className="scroll-mt-24">
                 <motion.div
