@@ -40,19 +40,20 @@ const AffiliateRedirectPage: React.FC = () => {
     };
 
     // Fire-and-forget logging — never block the redirect.
-    const logPromise = supabase
-      .from("affiliate_clicks")
-      .insert({
+    const logPromise = Promise.resolve(
+      supabase.from("affiliate_clicks").insert({
         product_id: product.id,
         product_name: `${product.brand} ${product.name}`.trim(),
         destination_url: url,
         referrer: typeof document !== "undefined" ? document.referrer || null : null,
-      })
-      .then(() => undefined)
-      .catch(() => undefined);
+      }),
+    ).then(
+      () => undefined,
+      () => undefined,
+    );
 
     const timeoutId = window.setTimeout(go, 800);
-    logPromise.finally(() => {
+    logPromise.then(() => {
       window.clearTimeout(timeoutId);
       go();
     });
