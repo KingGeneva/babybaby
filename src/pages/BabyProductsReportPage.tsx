@@ -77,8 +77,9 @@ const BabyProductsReportPage: React.FC = () => {
               Sauvegarder
             </Button>
           </div>
-          </div>
         </div>
+
+
 
 
 
