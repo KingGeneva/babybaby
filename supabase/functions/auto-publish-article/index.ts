@@ -139,6 +139,62 @@ ID:${seed}`,
     const trend = (trendRaw.match(/TENDANCE\s*:\s*(.+)/i)?.[1] || trendRaw).trim();
     const keyword = (trendRaw.match(/MOT-CLE\s*:\s*(.+)/i)?.[1] || topic).trim();
 
+    // --- Step 1.5: load (or bootstrap) the article catalog index for internal linking ---
+    type CatalogEntry = { id: number; title: string; category: string; path: string; keyword?: string };
+    let catalog: CatalogEntry[] = [];
+    try {
+      const { data: idxBlob, error: idxErr } = await supabase.storage
+        .from("articles")
+        .download("articles/_index.json");
+      if (!idxErr && idxBlob) {
+        const txt = await idxBlob.text();
+        const parsed = JSON.parse(txt);
+        if (Array.isArray(parsed)) catalog = parsed;
+      }
+    } catch (_) { /* ignore, will bootstrap */ }
+
+    if (catalog.length === 0) {
+      try {
+        const { data: files } = await supabase.storage.from("articles").list("articles", {
+          limit: 200,
+          sortBy: { column: "name", order: "desc" },
+        });
+        if (files && files.length) {
+          const jsonFiles = files.filter((f) => f.name.endsWith(".json") && f.name !== "_index.json").slice(0, 100);
+          const entries: CatalogEntry[] = [];
+          for (const f of jsonFiles) {
+            try {
+              const { data: blob } = await supabase.storage.from("articles").download(`articles/${f.name}`);
+              if (!blob) continue;
+              const a = JSON.parse(await blob.text());
+              if (!a?.id || !a?.title) continue;
+              entries.push({
+                id: a.id,
+                title: a.title,
+                category: a.category || "",
+                path: a.slug ? `/articles/${a.slug}-${a.id}` : `/articles/${a.id}`,
+                keyword: a.seo_keyword,
+              });
+            } catch (_) { /* skip */ }
+          }
+          catalog = entries;
+          try {
+            const idxBlob2 = new Blob([JSON.stringify(catalog, null, 2)], { type: "application/json" });
+            await supabase.storage.from("articles").upload("articles/_index.json", idxBlob2, {
+              upsert: true, cacheControl: "3600",
+            });
+          } catch (_) { /* non-fatal */ }
+        }
+      } catch (e) {
+        console.warn("Catalog bootstrap failed:", e instanceof Error ? e.message : e);
+      }
+    }
+
+    const catalogText = catalog
+      .slice(0, 40)
+      .map((e) => `- "${e.title}" (${e.category}) → ${e.path}`)
+      .join("\n");
+
     // --- Step 2: generate MAXIMUM-DEPTH article + metadata in ONE call (tool calling) ---
     const articleData = await callAI(LOVABLE_API_KEY, {
       model: "google/gemini-2.5-pro",
