@@ -288,8 +288,47 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
                   type: "string",
                   description: "Texte alternatif descriptif de l'image de couverture, 80-120 caractères, contient le mot-clé principal naturellement, décrit la scène pour Google Images et l'accessibilité",
                 },
+                faqs: {
+                  type: "array",
+                  minItems: 6,
+                  maxItems: 8,
+                  description: "6 à 8 paires question/réponse formulées comme de vraies requêtes Google. Réponses concises 40-60 mots. Affiché en accordéon + JSON-LD FAQPage.",
+                  items: {
+                    type: "object",
+                    properties: {
+                      question: { type: "string" },
+                      answer: { type: "string" },
+                    },
+                    required: ["question", "answer"],
+                    additionalProperties: false,
+                  },
+                },
+                howTo: {
+                  type: "object",
+                  description: "OPTIONNEL — uniquement si l'article est un guide étape-par-étape. Génère un schema HowTo.",
+                  properties: {
+                    name: { type: "string" },
+                    description: { type: "string" },
+                    totalTime: { type: "string", description: "Durée totale ISO 8601, ex 'PT15M'" },
+                    steps: {
+                      type: "array",
+                      minItems: 2,
+                      items: {
+                        type: "object",
+                        properties: {
+                          name: { type: "string" },
+                          text: { type: "string" },
+                        },
+                        required: ["name", "text"],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ["name", "description", "steps"],
+                  additionalProperties: false,
+                },
               },
-              required: ["title", "content", "summary", "excerpt", "category", "tags", "reading_time", "slug", "image_alt"],
+              required: ["title", "content", "summary", "excerpt", "category", "tags", "reading_time", "slug", "image_alt", "faqs"],
               additionalProperties: false,
             },
           },
