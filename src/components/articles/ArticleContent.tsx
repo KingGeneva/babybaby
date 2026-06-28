@@ -2,6 +2,7 @@
 import React from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Link } from 'react-router-dom';
 import ArticleMarkdownImage from '@/components/articles/ArticleMarkdownImage';
 
 interface ArticleContentProps {
@@ -24,6 +25,26 @@ const ArticleContent: React.FC<ArticleContentProps> = ({ content, excerpt }) => 
                 <table className="w-full border-collapse">{children}</table>
               </div>
             ),
+            a: ({ href, children }) => {
+              const url = href ?? '';
+              if (url.startsWith('/')) {
+                return (
+                  <Link to={url} className="text-primary underline-offset-4 hover:underline">
+                    {children}
+                  </Link>
+                );
+              }
+              return (
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline-offset-4 hover:underline"
+                >
+                  {children}
+                </a>
+              );
+            },
           }}
         >
           {content}

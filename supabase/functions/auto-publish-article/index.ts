@@ -139,6 +139,62 @@ ID:${seed}`,
     const trend = (trendRaw.match(/TENDANCE\s*:\s*(.+)/i)?.[1] || trendRaw).trim();
     const keyword = (trendRaw.match(/MOT-CLE\s*:\s*(.+)/i)?.[1] || topic).trim();
 
+    // --- Step 1.5: load (or bootstrap) the article catalog index for internal linking ---
+    type CatalogEntry = { id: number; title: string; category: string; path: string; keyword?: string };
+    let catalog: CatalogEntry[] = [];
+    try {
+      const { data: idxBlob, error: idxErr } = await supabase.storage
+        .from("articles")
+        .download("articles/_index.json");
+      if (!idxErr && idxBlob) {
+        const txt = await idxBlob.text();
+        const parsed = JSON.parse(txt);
+        if (Array.isArray(parsed)) catalog = parsed;
+      }
+    } catch (_) { /* ignore, will bootstrap */ }
+
+    if (catalog.length === 0) {
+      try {
+        const { data: files } = await supabase.storage.from("articles").list("articles", {
+          limit: 200,
+          sortBy: { column: "name", order: "desc" },
+        });
+        if (files && files.length) {
+          const jsonFiles = files.filter((f) => f.name.endsWith(".json") && f.name !== "_index.json").slice(0, 100);
+          const entries: CatalogEntry[] = [];
+          for (const f of jsonFiles) {
+            try {
+              const { data: blob } = await supabase.storage.from("articles").download(`articles/${f.name}`);
+              if (!blob) continue;
+              const a = JSON.parse(await blob.text());
+              if (!a?.id || !a?.title) continue;
+              entries.push({
+                id: a.id,
+                title: a.title,
+                category: a.category || "",
+                path: a.slug ? `/articles/${a.slug}-${a.id}` : `/articles/${a.id}`,
+                keyword: a.seo_keyword,
+              });
+            } catch (_) { /* skip */ }
+          }
+          catalog = entries;
+          try {
+            const idxBlob2 = new Blob([JSON.stringify(catalog, null, 2)], { type: "application/json" });
+            await supabase.storage.from("articles").upload("articles/_index.json", idxBlob2, {
+              upsert: true, cacheControl: "3600",
+            });
+          } catch (_) { /* non-fatal */ }
+        }
+      } catch (e) {
+        console.warn("Catalog bootstrap failed:", e instanceof Error ? e.message : e);
+      }
+    }
+
+    const catalogText = catalog
+      .slice(0, 40)
+      .map((e) => `- "${e.title}" (${e.category}) → ${e.path}`)
+      .join("\n");
+
     // --- Step 2: generate MAXIMUM-DEPTH article + metadata in ONE call (tool calling) ---
     const articleData = await callAI(LOVABLE_API_KEY, {
       model: "google/gemini-2.5-pro",
@@ -167,9 +223,10 @@ EXIGENCES MAXIMALES:
 6. **Au moins 3 listes à puces** avec conseils actionnables et numérotés quand c'est une procédure
 7. **Au moins 1 section "Erreurs fréquentes à éviter"** avec contre-exemples
 8. **Au moins 1 section "Cas concrets" ou "Témoignages" reformulés** (sans inventer de citations réelles)
-9. **Section "## Questions fréquentes"** avec 6-8 Q/R (boost People Also Ask), questions formulées comme des requêtes Google
-10. **Section "## Sources et références"** finale avec 4-6 sources crédibles (OMS, HAS, études, livres d'experts) — format : "- *Titre*, Institution, année"
-11. **Conclusion (100-150 mots)** : récap, encouragement, CTA vers l'app BabyBaby (suivi de croissance, communauté, conseils experts)
+9. **Section "## Sources et références"** finale avec 4-6 sources crédibles québécoises/canadiennes (INSPQ, Société canadienne de pédiatrie, Naître et grandir, études PubMed) — format : "- *Titre*, Institution, année"
+10. **Conclusion (100-150 mots)** : récap, encouragement, CTA vers l'app BabyBaby (suivi de croissance, communauté, conseils experts)
+
+IMPORTANT — la FAQ n'apparaît PAS dans le markdown \`content\`. Elle passe UNIQUEMENT par le champ structuré \`faqs\` de l'appel d'outil (6-8 paires question/réponse, 40-60 mots par réponse). Le frontend l'affiche en accordéon et génère le JSON-LD FAQPage automatiquement.
 
 # Contraintes SEO
 - Année éditoriale obligatoire : ${currentYear}. Le titre H1, le slug, le résumé, la meta description et l'alt image doivent utiliser ${currentYear} si une année est mentionnée. Interdiction d'y mettre 2024 ou 2025.
@@ -179,7 +236,8 @@ EXIGENCES MAXIMALES:
 - Densité naturelle, jamais forcée
 - Phrases ≤ 20 mots en moyenne, paragraphes ≤ 4 lignes
 - Données chiffrées concrètes (âges en mois, pourcentages, durées, recommandations officielles) datées 2024-${currentYear}
-- Liens internes suggérés en italique entre crochets : *[voir notre guide sur X]*
+- MAILLAGE INTERNE OBLIGATOIRE : insère 4 à 6 liens internes vers des articles EXISTANTS de la liste ci-dessous, en syntaxe Markdown \`[ancre descriptive riche en mots-clés](PATH)\` en utilisant EXACTEMENT le PATH fourni. N'invente JAMAIS d'URL ni de slug. Choisis les articles les plus pertinents thématiquement. Ancres descriptives (jamais "cliquez ici"). Répartis les liens dans le corps du texte, pas en bloc.
+${catalogText ? `ARTICLES DISPONIBLES POUR LE MAILLAGE :\n${catalogText}` : "(Aucun article disponible dans le catalogue — n'invente AUCUN lien interne.)"}
 
 # Ton
 - Tutoiement parental chaleureux
@@ -187,7 +245,7 @@ EXIGENCES MAXIMALES:
 - Zéro condescendance, zéro injonction culpabilisante
 - Inclusif (parent 1 / parent 2, familles diverses)
 
-Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-case, 3-7 mots, contient le mot-clé), un image_alt descriptif (80-120 chars, contient le mot-clé) et toutes les métadonnées.`,
+Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-case, 3-7 mots, contient le mot-clé), un image_alt descriptif (80-120 chars, contient le mot-clé), la liste structurée \`faqs\` (6-8 paires), un \`howTo\` si l'article est un guide étape-par-étape, et toutes les métadonnées.`,
         },
       ],
       tools: [
@@ -230,8 +288,47 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
                   type: "string",
                   description: "Texte alternatif descriptif de l'image de couverture, 80-120 caractères, contient le mot-clé principal naturellement, décrit la scène pour Google Images et l'accessibilité",
                 },
+                faqs: {
+                  type: "array",
+                  minItems: 6,
+                  maxItems: 8,
+                  description: "6 à 8 paires question/réponse formulées comme de vraies requêtes Google. Réponses concises 40-60 mots. Affiché en accordéon + JSON-LD FAQPage.",
+                  items: {
+                    type: "object",
+                    properties: {
+                      question: { type: "string" },
+                      answer: { type: "string" },
+                    },
+                    required: ["question", "answer"],
+                    additionalProperties: false,
+                  },
+                },
+                howTo: {
+                  type: "object",
+                  description: "OPTIONNEL — uniquement si l'article est un guide étape-par-étape. Génère un schema HowTo.",
+                  properties: {
+                    name: { type: "string" },
+                    description: { type: "string" },
+                    totalTime: { type: "string", description: "Durée totale ISO 8601, ex 'PT15M'" },
+                    steps: {
+                      type: "array",
+                      minItems: 2,
+                      items: {
+                        type: "object",
+                        properties: {
+                          name: { type: "string" },
+                          text: { type: "string" },
+                        },
+                        required: ["name", "text"],
+                        additionalProperties: false,
+                      },
+                    },
+                  },
+                  required: ["name", "description", "steps"],
+                  additionalProperties: false,
+                },
               },
-              required: ["title", "content", "summary", "excerpt", "category", "tags", "reading_time", "slug", "image_alt"],
+              required: ["title", "content", "summary", "excerpt", "category", "tags", "reading_time", "slug", "image_alt", "faqs"],
               additionalProperties: false,
             },
           },
@@ -256,6 +353,8 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
     article.image_alt = sanitizeEditorialYears(article.image_alt, currentYear);
     let fullContent: string = article.content;
     fullContent = fullContent.replace(/^#\s+.*$/m, `# ${article.title}`);
+    // Strip residual fake-link placeholders like *[voir notre guide]* (italic brackets NOT followed by a link parenthesis).
+    fullContent = fullContent.replace(/\*\[([^\]]+)\]\*(?!\()/g, "$1");
     const wordCount = fullContent.split(/\s+/).length;
     if (wordCount < 2000) {
       console.warn(`Article shorter than target pillar length: ${wordCount} words`);
@@ -328,6 +427,8 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
       source_trend: trend,
       seo_keyword: keyword,
       word_count: wordCount,
+      faqs: article.faqs,
+      howTo: article.howTo,
       created_at: nowIso,
     };
 
@@ -336,6 +437,25 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
       .from("articles")
       .upload(`articles/${articleId}.json`, blob, { upsert: true, cacheControl: "3600" });
     if (jsonErr) throw jsonErr;
+
+    // --- Step 4.5: update article catalog index (non-fatal) ---
+    try {
+      const newEntry: CatalogEntry = {
+        id: articleId,
+        title: article.title,
+        category: article.category,
+        path: `/articles/${safeSlug}-${articleId}`,
+        keyword,
+      };
+      const updated = [newEntry, ...catalog.filter((e) => e.id !== articleId)];
+      const idxOut = new Blob([JSON.stringify(updated, null, 2)], { type: "application/json" });
+      await supabase.storage.from("articles").upload("articles/_index.json", idxOut, {
+        upsert: true, cacheControl: "3600",
+      });
+    } catch (e) {
+      console.warn("Catalog index update failed (ignored):", e instanceof Error ? e.message : e);
+    }
+
 
     // --- Step 5: IndexNow ping (fire-and-forget, never throws) ---
     try {

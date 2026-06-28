@@ -2,14 +2,16 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Sparkles, ExternalLink, Send } from "lucide-react";
+import { Loader2, Sparkles, ExternalLink, Send, Link2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { invalidateAllArticleCaches } from "@/data/articles/index";
+import { invalidateAllArticleCaches, getArticlesByCategory } from "@/data/articles/index";
 import { pingIndexNow, articleUrlForIndexNow, SITE_ORIGIN } from "@/lib/indexnow";
+import { articleUrl } from "@/lib/articleUrl";
 
 export default function AdminAutoPublishTab() {
   const [generating, setGenerating] = useState(false);
   const [pingingAll, setPingingAll] = useState(false);
+  const [rebuildingIndex, setRebuildingIndex] = useState(false);
   const [lastResult, setLastResult] = useState<{ articleId: number; title: string; trend: string; slug?: string } | null>(null);
   const { toast } = useToast();
 
@@ -81,6 +83,37 @@ export default function AdminAutoPublishTab() {
       setPingingAll(false);
     }
   };
+  const rebuildCatalogIndex = async () => {
+    setRebuildingIndex(true);
+    try {
+      const all = await getArticlesByCategory("Tous");
+      const entries = all.map((a) => ({
+        id: a.id,
+        title: a.title,
+        category: a.category,
+        path: articleUrl(a),
+        keyword: (a as { seo_keyword?: string }).seo_keyword,
+      }));
+      const blob = new Blob([JSON.stringify(entries, null, 2)], { type: "application/json" });
+      const { error } = await supabase.storage
+        .from("articles")
+        .upload("articles/_index.json", blob, { upsert: true, cacheControl: "3600" });
+      if (error) throw error;
+      toast({
+        title: "Index reconstruit",
+        description: `${entries.length} article(s) indexé(s) pour le maillage interne.`,
+      });
+    } catch (e) {
+      toast({
+        title: "Erreur",
+        description: e instanceof Error ? e.message : "Reconstruction impossible",
+        variant: "destructive",
+      });
+    } finally {
+      setRebuildingIndex(false);
+    }
+  };
+
 
   return (
     <div className="space-y-6">
@@ -148,6 +181,32 @@ export default function AdminAutoPublishTab() {
               <>
                 <Send className="mr-2 h-4 w-4" />
                 Soumettre toutes les URLs à IndexNow
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Maillage interne — index d'articles</CardTitle>
+          <CardDescription>
+            Reconstruit <code>articles/_index.json</code> à partir de TOUS les articles
+            existants (statiques + dynamiques). Cet index est utilisé par la génération
+            automatique pour insérer de vrais liens internes vers des articles existants.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button onClick={rebuildCatalogIndex} disabled={rebuildingIndex} variant="outline">
+            {rebuildingIndex ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Reconstruction en cours…
+              </>
+            ) : (
+              <>
+                <Link2 className="mr-2 h-4 w-4" />
+                Reconstruire l'index d'articles (maillage)
               </>
             )}
           </Button>
