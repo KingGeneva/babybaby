@@ -337,6 +337,24 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
       .upload(`articles/${articleId}.json`, blob, { upsert: true, cacheControl: "3600" });
     if (jsonErr) throw jsonErr;
 
+    // --- Step 5: IndexNow ping (fire-and-forget, never throws) ---
+    try {
+      const articleUrl = `https://babybaby.org/articles/${safeSlug}-${articleId}`;
+      const inRes = await fetch("https://api.indexnow.org/indexnow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({
+          host: "babybaby.org",
+          key: "8f2a9c4e7b1d6038f5a2c9e84b7d1602",
+          keyLocation: "https://babybaby.org/8f2a9c4e7b1d6038f5a2c9e84b7d1602.txt",
+          urlList: [articleUrl],
+        }),
+      });
+      console.log("IndexNow ping status:", inRes.status);
+    } catch (e) {
+      console.warn("IndexNow ping failed (ignored):", e instanceof Error ? e.message : e);
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
