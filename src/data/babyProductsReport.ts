@@ -103,7 +103,7 @@ export const productCategories: ProductCategory[] = [
         tagline: "Le Meilleur Choix Global",
         description: "Le Spectra S1 Plus conserve sa couronne en 2026. Il représente le meilleur équilibre entre puissance \"clinique\" et autonomie. Sa batterie rechargeable intégrée offre environ 3 heures de pompage, libérant les mères de la prise murale sans sacrifier la puissance d'aspiration (jusqu'à 270 mmHg).",
         price: "250$ - 300$",
-        imageUrl: "/lovable-uploads/spectra-s1-plus.jpg",
+        imageUrl: "https://www.spectrababyusa.com/cdn/shop/files/S1PlusMainImage.png?v=1737986354&width=2048",
         affiliateLink: "https://a.co/d/7IXOTs7",
         pros: ["Batterie rechargeable intégrée", "Mode massage efficace", "Puissance grade hospitalier", "Réglages personnalisables"],
         cons: ["Volumineux", "Disponibilité variable au Canada"]
@@ -169,7 +169,7 @@ export const productCategories: ProductCategory[] = [
         description: "Le choix rationnel par excellence. Il offre les limites de poids dos à la route les plus élevées du marché (50 lbs), surpassant des sièges trois fois plus chers. Son panneau d'extension de jambes résout la plainte numéro un des parents.",
         pros: ["50 lbs dos à la route", "Panneau d'extension jambes", "Installation simple", "Compact"],
         cons: ["Moins premium que Clek"],
-        imageUrl: "/lovable-uploads/graco-extend2fit.jpg",
+        imageUrl: "https://newellbrands.imgix.net/0e49f4a9-e51b-39dc-a0c3-3d40358a9f45/0e49f4a9-e51b-39dc-a0c3-3d40358a9f45.jpg?auto=format,compress&sort=1&w=1000&h=1000",
         affiliateLink: "https://www.amazon.ca/dp/B09SSYYNC2/ref=cm_sw_r_cso_cp_apan_dp_49J8PCD6EMM09J24MT51?th=1"
       },
       {
@@ -225,7 +225,8 @@ export const productCategories: ProductCategory[] = [
         tagline: "La Référence Technique",
         description: "Conçu et fabriqué au Canada, le Liing offre une base équipée d'une jambe de force métallique et d'un système d'ajustement de l'inclinaison (jusqu'à 7 positions).",
         pros: ["Jambe de force métallique", "7 positions d'inclinaison", "Fabriqué au Canada", "Compatible poussettes haut de gamme"],
-        cons: ["Prix premium"]
+        cons: ["Prix premium"],
+        imageUrl: "https://clekinc.com/cdn/shop/files/clek-liing-railroad-ziip.jpg?crop=center&height=1200&v=1708873087&width=1200"
       },
       {
         id: "nuna-pipa-rx",
@@ -280,7 +281,8 @@ export const productCategories: ProductCategory[] = [
         tagline: "Le Meilleur Global",
         description: "Ce biberon a révolutionné le marché avec sa tétine \"Natural Response\" qui ne laisse couler le lait que lorsque le bébé exerce une compression active, réduisant le risque de confusion sein-tétine.",
         pros: ["Tétine Natural Response", "Verre durable", "Disponibilité excellente", "Ergonomique"],
-        cons: ["Fragile si mal manipulé"]
+        cons: ["Fragile si mal manipulé"],
+        imageUrl: "https://images.philips.com/is/image/philipsconsumer/70c36ab467e64c758d44aca70136fdef?$pnglarge$"
       },
       {
         id: "dr-browns-options",
@@ -392,7 +394,8 @@ export const productCategories: ProductCategory[] = [
         tagline: "L'Investissement Familial",
         description: "La poussette \"à tout faire\". Elle vient avec un berceau approuvé pour le sommeil de nuit. Se convertit en poussette double. Panier gigantesque (30 lbs). Service client légendaire.",
         pros: ["Berceau approuvé sommeil", "Convertible en double", "Panier 30 lbs", "Service client excellent", "Valeur de revente"],
-        cons: ["Prix élevé", "Roues moyennes pour neige profonde"]
+        cons: ["Prix élevé", "Roues moyennes pour neige profonde"],
+        imageUrl: "https://littlefolksnyc.com/cdn/shop/products/uppababy-vista-v2-stroller-anthony-white-and-grey-chenille-carbon-chestnut-leather-7_600x.jpg?v=1667322700"
       },
       {
         id: "bumbleride-indie",
@@ -448,7 +451,8 @@ export const productCategories: ProductCategory[] = [
         tagline: "L'Éco-Responsable Québécoise",
         description: "Pour les parents qui veulent du jetable sans culpabilité environnementale. Douces, hypoallergéniques et produites par une entreprise locale certifiée carboneutre.",
         pros: ["Biodégradable 50%+", "Entreprise québécoise carboneutre", "Sans chlore ni parfums", "Hypoallergéniques"],
-        cons: ["Prix plus élevé"]
+        cons: ["Prix plus élevé"],
+        imageUrl: "https://www.yeswellness.com/cdn/shop/files/Attitude-Eco-Conscious-Baby-Diapers-VariousSizes-Size-11-16kg.jpg?v=1729635857"
       },
       {
         id: "kirkland-signature",
@@ -503,7 +507,8 @@ export const productCategories: ProductCategory[] = [
         tagline: "Le Plus Polyvalent",
         description: "Le couteau suisse du portage. Permet toutes les positions. Tissu SoftFlex Mesh le plus respirant du marché. S'ajuste du nouveau-né au bambin sans insert.",
         pros: ["Toutes positions", "Ultra-respirant", "Nouveau-né au bambin sans insert", "Ergonomique certifié"],
-        cons: ["Look technique"]
+        cons: ["Look technique"],
+        imageUrl: "https://lullabybaby.com/cdn/shop/products/baby_carrier_omni_breeze_pearl_grey__4_1_1200x1200.jpg?v=1626740556"
       },
       {
         id: "beluga-baby-wrap",
@@ -613,7 +618,8 @@ export const productCategories: ProductCategory[] = [
         tagline: "La Référence Absolue",
         description: "La chaise qui grandit vraiment avec l'enfant (de 6 mois à l'âge adulte). Permet une posture assise active idéale pour la DME. Design intemporel, héritage familial.",
         pros: ["6 mois à adulte", "Ergonomie parfaite", "Design intemporel", "Valeur de revente 70-80%"],
-        cons: ["Prix élevé", "Accessoires coûteux"]
+        cons: ["Prix élevé", "Accessoires coûteux"],
+        imageUrl: "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dwa087577f/images/inriverimages/mainview/TrippTrapp_Natural_2-8_SP.jpg"
       },
       {
         id: "abiie-beyond",
