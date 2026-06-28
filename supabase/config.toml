@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.suggest-next-turn]
 verify_jwt = true
+
+[functions.indexnow-ping]
+verify_jwt = false

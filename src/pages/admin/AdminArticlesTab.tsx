@@ -33,6 +33,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { AlertCircle, CalendarIcon, Loader2, Plus, Save, Trash } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { pingIndexNow, articleUrlForIndexNow } from '@/lib/indexnow';
 
 const formSchema = z.object({
   title: z.string().min(5, { message: 'Le titre doit contenir au moins 5 caractères' }),
@@ -105,9 +106,12 @@ const AdminArticlesTab = () => {
 
       if (error) throw error;
 
+      // Notify IndexNow (fire-and-forget)
+      void pingIndexNow([articleUrlForIndexNow(articleData.id)]);
+
       toast({
         title: 'Article enregistré',
-        description: 'Votre article a été enregistré avec succès',
+        description: 'Votre article a été enregistré avec succès. IndexNow notifié.',
       });
 
       // Réinitialiser le formulaire

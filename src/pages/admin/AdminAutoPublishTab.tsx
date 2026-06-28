@@ -2,12 +2,14 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Sparkles, ExternalLink } from "lucide-react";
+import { Loader2, Sparkles, ExternalLink, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { invalidateAllArticleCaches } from "@/data/articles/index";
+import { pingIndexNow, articleUrlForIndexNow, SITE_ORIGIN } from "@/lib/indexnow";
 
 export default function AdminAutoPublishTab() {
   const [generating, setGenerating] = useState(false);
+  const [pingingAll, setPingingAll] = useState(false);
   const [lastResult, setLastResult] = useState<{ articleId: number; title: string; trend: string; slug?: string } | null>(null);
   const { toast } = useToast();
 
@@ -28,9 +30,13 @@ export default function AdminAutoPublishTab() {
 
       setLastResult({ articleId: data.articleId, title: data.title, trend: data.trend, slug: data.slug });
       invalidateAllArticleCaches();
+
+      // Notify IndexNow (fire-and-forget)
+      void pingIndexNow([articleUrlForIndexNow(data.articleId, data.slug)]);
+
       toast({
         title: "Article publié",
-        description: `"${data.title}" est en ligne.`,
+        description: `"${data.title}" est en ligne. IndexNow notifié.`,
       });
     } catch (e) {
       toast({
@@ -43,6 +49,39 @@ export default function AdminAutoPublishTab() {
     }
   };
 
+  const submitAllToIndexNow = async () => {
+    setPingingAll(true);
+    try {
+      const res = await fetch("/sitemap.xml", { cache: "no-store" });
+      if (!res.ok) throw new Error(`sitemap.xml inaccessible (${res.status})`);
+      const xml = await res.text();
+      const urls = Array.from(xml.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/gi))
+        .map((m) => m[1].trim())
+        .filter((u) => u.length > 0);
+
+      if (urls.length === 0) {
+        toast({ title: "Aucune URL trouvée", description: "Le sitemap est vide.", variant: "destructive" });
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke("indexnow-ping", { body: { urls } });
+      if (error) throw error;
+
+      toast({
+        title: "Soumission IndexNow",
+        description: `${data?.submitted ?? urls.length} URL(s) soumises (statut ${data?.upstreamStatus ?? "—"}).`,
+      });
+    } catch (e) {
+      toast({
+        title: "Erreur IndexNow",
+        description: e instanceof Error ? e.message : "Soumission impossible",
+        variant: "destructive",
+      });
+    } finally {
+      setPingingAll(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -52,7 +91,8 @@ export default function AdminAutoPublishTab() {
             Le système identifie une tendance parentalité, rédige l'article complet, génère
             l'image de couverture et le publie immédiatement sur le site. Un cron quotidien
             publie un article par jour automatiquement — utilise le bouton ci-dessous pour
-            déclencher manuellement.
+            déclencher manuellement. Chaque publication notifie automatiquement Bing/Yandex
+            via IndexNow.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -86,6 +126,31 @@ export default function AdminAutoPublishTab() {
               </a>
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>IndexNow — soumission groupée</CardTitle>
+          <CardDescription>
+            Lit toutes les URLs de <code>{SITE_ORIGIN}/sitemap.xml</code> et les soumet à
+            IndexNow (Bing, Yandex, etc.) pour forcer leur ré-exploration immédiate.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button onClick={submitAllToIndexNow} disabled={pingingAll} variant="outline">
+            {pingingAll ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Soumission en cours…
+              </>
+            ) : (
+              <>
+                <Send className="mr-2 h-4 w-4" />
+                Soumettre toutes les URLs à IndexNow
+              </>
+            )}
+          </Button>
         </CardContent>
       </Card>
     </div>
