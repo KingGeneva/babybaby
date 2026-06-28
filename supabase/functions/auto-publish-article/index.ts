@@ -223,9 +223,10 @@ EXIGENCES MAXIMALES:
 6. **Au moins 3 listes à puces** avec conseils actionnables et numérotés quand c'est une procédure
 7. **Au moins 1 section "Erreurs fréquentes à éviter"** avec contre-exemples
 8. **Au moins 1 section "Cas concrets" ou "Témoignages" reformulés** (sans inventer de citations réelles)
-9. **Section "## Questions fréquentes"** avec 6-8 Q/R (boost People Also Ask), questions formulées comme des requêtes Google
-10. **Section "## Sources et références"** finale avec 4-6 sources crédibles (OMS, HAS, études, livres d'experts) — format : "- *Titre*, Institution, année"
-11. **Conclusion (100-150 mots)** : récap, encouragement, CTA vers l'app BabyBaby (suivi de croissance, communauté, conseils experts)
+9. **Section "## Sources et références"** finale avec 4-6 sources crédibles québécoises/canadiennes (INSPQ, Société canadienne de pédiatrie, Naître et grandir, études PubMed) — format : "- *Titre*, Institution, année"
+10. **Conclusion (100-150 mots)** : récap, encouragement, CTA vers l'app BabyBaby (suivi de croissance, communauté, conseils experts)
+
+IMPORTANT — la FAQ n'apparaît PAS dans le markdown \`content\`. Elle passe UNIQUEMENT par le champ structuré \`faqs\` de l'appel d'outil (6-8 paires question/réponse, 40-60 mots par réponse). Le frontend l'affiche en accordéon et génère le JSON-LD FAQPage automatiquement.
 
 # Contraintes SEO
 - Année éditoriale obligatoire : ${currentYear}. Le titre H1, le slug, le résumé, la meta description et l'alt image doivent utiliser ${currentYear} si une année est mentionnée. Interdiction d'y mettre 2024 ou 2025.
@@ -235,7 +236,8 @@ EXIGENCES MAXIMALES:
 - Densité naturelle, jamais forcée
 - Phrases ≤ 20 mots en moyenne, paragraphes ≤ 4 lignes
 - Données chiffrées concrètes (âges en mois, pourcentages, durées, recommandations officielles) datées 2024-${currentYear}
-- Liens internes suggérés en italique entre crochets : *[voir notre guide sur X]*
+- MAILLAGE INTERNE OBLIGATOIRE : insère 4 à 6 liens internes vers des articles EXISTANTS de la liste ci-dessous, en syntaxe Markdown \`[ancre descriptive riche en mots-clés](PATH)\` en utilisant EXACTEMENT le PATH fourni. N'invente JAMAIS d'URL ni de slug. Choisis les articles les plus pertinents thématiquement. Ancres descriptives (jamais "cliquez ici"). Répartis les liens dans le corps du texte, pas en bloc.
+${catalogText ? `ARTICLES DISPONIBLES POUR LE MAILLAGE :\n${catalogText}` : "(Aucun article disponible dans le catalogue — n'invente AUCUN lien interne.)"}
 
 # Ton
 - Tutoiement parental chaleureux
@@ -243,7 +245,7 @@ EXIGENCES MAXIMALES:
 - Zéro condescendance, zéro injonction culpabilisante
 - Inclusif (parent 1 / parent 2, familles diverses)
 
-Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-case, 3-7 mots, contient le mot-clé), un image_alt descriptif (80-120 chars, contient le mot-clé) et toutes les métadonnées.`,
+Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-case, 3-7 mots, contient le mot-clé), un image_alt descriptif (80-120 chars, contient le mot-clé), la liste structurée \`faqs\` (6-8 paires), un \`howTo\` si l'article est un guide étape-par-étape, et toutes les métadonnées.`,
         },
       ],
       tools: [
