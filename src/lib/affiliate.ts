@@ -7,11 +7,11 @@
 import type { Product } from "@/data/babyProductsReport";
 
 const ENV_TAG = (import.meta.env.VITE_AMAZON_ASSOCIATE_TAG as string | undefined)?.trim();
-const FALLBACK_TAG = "REMPLACER-TAG-20";
+const FALLBACK_TAG = "babybaby047-20";
 
 export const AMAZON_ASSOCIATE_TAG: string = ENV_TAG && ENV_TAG.length > 0 ? ENV_TAG : FALLBACK_TAG;
 
-if (!ENV_TAG || ENV_TAG.length === 0) {
+if (AMAZON_ASSOCIATE_TAG.includes("REMPLACER") || AMAZON_ASSOCIATE_TAG.includes("PLACEHOLDER")) {
   // eslint-disable-next-line no-console
   console.warn(
     `[affiliate] VITE_AMAZON_ASSOCIATE_TAG est manquant — utilisation du fallback "${FALLBACK_TAG}". ` +
