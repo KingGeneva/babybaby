@@ -17,6 +17,7 @@ const EbooksPage = lazy(() => import("../pages/EbooksPage"));
 const EbookViewerPage = lazy(() => import("../pages/EbookViewerPage"));
 const ContestsPage = lazy(() => import("../pages/ContestsPage"));
 const ContactPage = lazy(() => import("../pages/ContactPage"));
+const AffiliateRedirectPage = lazy(() => import("../pages/AffiliateRedirectPage"));
 
 const ShopPage = lazy(() => import("../pages/ShopPage"));
 const ProductDetailPage = lazy(() => import("../pages/ProductDetailPage"));
@@ -51,5 +52,7 @@ export const publicRoutes: RouteObject[] = [
   { path: "/boutique/:handle", element: wrapWithLayout(ProductDetailPage, 'fade') },
   { path: "/meilleurs-produits-bebe-2026", element: wrapWithLayout(BabyProductsReportPage, 'fade') },
   { path: "/favoris", element: <FavoritesPage /> },
+  // Couche d'affiliation : hors MainLayout, jamais indexée (cf. robots.txt + meta noindex).
+  { path: "/go/:productId", element: <AffiliateRedirectPage /> },
   { path: "*", element: wrapWithLayout(NotFound, 'scale') }
 ];

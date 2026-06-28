@@ -7,6 +7,7 @@ import ReportStructuredData from '@/components/report/ReportStructuredData';
 import ReportHero from '@/components/report/ReportHero';
 import ReportTableOfContents from '@/components/report/ReportTableOfContents';
 import ReportCategorySection from '@/components/report/ReportCategorySection';
+import AffiliateDisclosure from '@/components/common/AffiliateDisclosure';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -59,7 +60,7 @@ const BabyProductsReportPage: React.FC = () => {
         <ReportHero />
 
         {/* Action Buttons */}
-        <div className="container mx-auto px-4 -mt-6 mb-8 relative z-10">
+        <div className="container mx-auto px-4 -mt-6 mb-4 relative z-10">
           <div className="flex flex-wrap justify-center gap-3">
             <Button variant="outline" size="sm" onClick={handleShare}>
               <Share2 className="w-4 h-4 mr-2" />
@@ -76,6 +77,15 @@ const BabyProductsReportPage: React.FC = () => {
               Sauvegarder
             </Button>
           </div>
+        </div>
+
+
+
+
+
+        {/* Divulgation d'affiliation (haut de page) */}
+        <div className="container mx-auto px-4 mb-8 max-w-5xl">
+          <AffiliateDisclosure />
         </div>
 
         {/* Main Content */}
@@ -125,6 +135,11 @@ const BabyProductsReportPage: React.FC = () => {
                   index={index} 
                 />
               ))}
+
+              {/* Divulgation d'affiliation (avant conclusion) */}
+              <div className="mb-8">
+                <AffiliateDisclosure />
+              </div>
 
               {/* Conclusion */}
               <section id="conclusion" className="scroll-mt-24">
