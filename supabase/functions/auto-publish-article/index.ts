@@ -438,6 +438,25 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
       .upload(`articles/${articleId}.json`, blob, { upsert: true, cacheControl: "3600" });
     if (jsonErr) throw jsonErr;
 
+    // --- Step 4.5: update article catalog index (non-fatal) ---
+    try {
+      const newEntry: CatalogEntry = {
+        id: articleId,
+        title: article.title,
+        category: article.category,
+        path: `/articles/${safeSlug}-${articleId}`,
+        keyword,
+      };
+      const updated = [newEntry, ...catalog.filter((e) => e.id !== articleId)];
+      const idxOut = new Blob([JSON.stringify(updated, null, 2)], { type: "application/json" });
+      await supabase.storage.from("articles").upload("articles/_index.json", idxOut, {
+        upsert: true, cacheControl: "3600",
+      });
+    } catch (e) {
+      console.warn("Catalog index update failed (ignored):", e instanceof Error ? e.message : e);
+    }
+
+
     // --- Step 5: IndexNow ping (fire-and-forget, never throws) ---
     try {
       const articleUrl = `https://babybaby.org/articles/${safeSlug}-${articleId}`;
