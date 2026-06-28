@@ -77,9 +77,10 @@ const BabyProductsReportPage: React.FC = () => {
               Sauvegarder
             </Button>
           </div>
+          </div>
         </div>
 
-        </div>
+
 
         {/* Divulgation d'affiliation (haut de page) */}
         <div className="container mx-auto px-4 mb-8 max-w-5xl">
