@@ -427,6 +427,8 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
       source_trend: trend,
       seo_keyword: keyword,
       word_count: wordCount,
+      faqs: article.faqs,
+      howTo: article.howTo,
       created_at: nowIso,
     };
 
