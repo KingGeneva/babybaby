@@ -117,20 +117,21 @@ const ReportProductCard: React.FC<ReportProductCardProps> = ({ product, index })
             </div>
           )}
 
-          {/* Affiliate Link Button */}
-          {product.affiliateLink ? (
-            <Button asChild className="w-full mt-4" size="sm">
-              <a href={product.affiliateLink} target="_blank" rel="noopener noreferrer nofollow">
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Voir le produit
-              </a>
-            </Button>
-          ) : (
-            <Button variant="outline" className="w-full mt-4" size="sm" disabled>
+          {/* Affiliate CTA — toujours présent, passe par /go/:productId */}
+          <Button asChild className="w-full mt-4" size="sm">
+            <a
+              href={`/go/${product.id}`}
+              target="_blank"
+              rel="sponsored nofollow noopener"
+              aria-label={`Voir le prix de ${product.brand} ${product.name} sur Amazon.ca`}
+            >
               <ExternalLink className="w-4 h-4 mr-2" />
-              Lien à ajouter
-            </Button>
-          )}
+              Voir le prix sur Amazon.ca
+            </a>
+          </Button>
+          <p className="text-[11px] text-muted-foreground text-center mt-2">
+            Lien affilié — sans surcoût pour vous
+          </p>
         </CardContent>
       </Card>
     </motion.div>
