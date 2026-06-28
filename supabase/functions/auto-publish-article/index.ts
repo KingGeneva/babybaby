@@ -353,6 +353,8 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
     article.image_alt = sanitizeEditorialYears(article.image_alt, currentYear);
     let fullContent: string = article.content;
     fullContent = fullContent.replace(/^#\s+.*$/m, `# ${article.title}`);
+    // Strip residual fake-link placeholders like *[voir notre guide]* (italic brackets NOT followed by a link parenthesis).
+    fullContent = fullContent.replace(/\*\[([^\]]+)\]\*(?!\()/g, "$1");
     const wordCount = fullContent.split(/\s+/).length;
     if (wordCount < 2000) {
       console.warn(`Article shorter than target pillar length: ${wordCount} words`);
