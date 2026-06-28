@@ -2,14 +2,16 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Sparkles, ExternalLink, Send } from "lucide-react";
+import { Loader2, Sparkles, ExternalLink, Send, Link2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { invalidateAllArticleCaches } from "@/data/articles/index";
+import { invalidateAllArticleCaches, getArticlesByCategory } from "@/data/articles/index";
 import { pingIndexNow, articleUrlForIndexNow, SITE_ORIGIN } from "@/lib/indexnow";
+import { articleUrl } from "@/lib/articleUrl";
 
 export default function AdminAutoPublishTab() {
   const [generating, setGenerating] = useState(false);
   const [pingingAll, setPingingAll] = useState(false);
+  const [rebuildingIndex, setRebuildingIndex] = useState(false);
   const [lastResult, setLastResult] = useState<{ articleId: number; title: string; trend: string; slug?: string } | null>(null);
   const { toast } = useToast();
 
