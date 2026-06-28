@@ -28,6 +28,8 @@ Disallow: /medical/
 Disallow: /parental-dashboard/
 Disallow: /*.json$
 Disallow: /*?*
+Disallow: /go
+Disallow: /go/
 
 # Anciennes URLs FreshStore (slugs textuels) — supprimées, ne plus crawler
 # Les nouveaux articles utilisent /articles/<id-numerique>
@@ -43,6 +45,8 @@ Allow: /
 Allow: /lovable-uploads/
 Disallow: /admin/
 Disallow: /dashboard/
+Disallow: /go
+Disallow: /go/
 Crawl-delay: 1
 
 # Instructions pour Googlebot-Image
