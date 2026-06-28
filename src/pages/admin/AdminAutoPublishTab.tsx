@@ -186,6 +186,32 @@ export default function AdminAutoPublishTab() {
           </Button>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Maillage interne — index d'articles</CardTitle>
+          <CardDescription>
+            Reconstruit <code>articles/_index.json</code> à partir de TOUS les articles
+            existants (statiques + dynamiques). Cet index est utilisé par la génération
+            automatique pour insérer de vrais liens internes vers des articles existants.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button onClick={rebuildCatalogIndex} disabled={rebuildingIndex} variant="outline">
+            {rebuildingIndex ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Reconstruction en cours…
+              </>
+            ) : (
+              <>
+                <Link2 className="mr-2 h-4 w-4" />
+                Reconstruire l'index d'articles (maillage)
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }
