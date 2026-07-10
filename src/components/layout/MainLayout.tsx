@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import ContestBanner from "@/components/ContestBanner";
 import { motion } from "framer-motion";
 
 interface MainLayoutProps {
@@ -22,6 +23,7 @@ const pageTransition = {
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen">
+      <ContestBanner />
       <NavBar />
       <motion.main
         initial="initial"
