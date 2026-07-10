@@ -280,6 +280,36 @@ export type Database = {
         }
         Relationships: []
       }
+      contest_entries: {
+        Row: {
+          contest_slug: string
+          created_at: string
+          email: string
+          entries_count: number
+          id: string
+          referral_code: string
+          referred_by: string | null
+        }
+        Insert: {
+          contest_slug?: string
+          created_at?: string
+          email: string
+          entries_count?: number
+          id?: string
+          referral_code: string
+          referred_by?: string | null
+        }
+        Update: {
+          contest_slug?: string
+          created_at?: string
+          email?: string
+          entries_count?: number
+          id?: string
+          referral_code?: string
+          referred_by?: string | null
+        }
+        Relationships: []
+      }
       diapers: {
         Row: {
           child_id: string
