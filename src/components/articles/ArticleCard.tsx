@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Calendar, ChevronRight, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ShareArticle from './ShareArticle';
+import PinItButton from '@/components/common/PinItButton';
 import { articleUrl } from '@/lib/articleUrl';
 
 type Article = {
@@ -61,7 +62,15 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             {badge.label}
           </span>
         </div>
+        <div className="absolute top-3 right-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+          <PinItButton
+            url={`https://babybaby.org/articles/${article.id}`}
+            media={article.image}
+            description={`${article.title} — babybaby.org`}
+          />
+        </div>
       </Link>
+
 
       <CardHeader className="pb-2">
         <Link to={`/articles/${article.id}`}>
