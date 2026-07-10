@@ -86,6 +86,11 @@ const ToolsPage = () => {
             <p className="max-w-2xl mx-auto text-gray-700 text-sm sm:text-base px-2">
               Générateur de prénoms, suivi du sommeil, bruit blanc et berceuses : tout pour accompagner votre quotidien de parent
             </p>
+            <div className="mt-6">
+              <Link to="/calculateur-cout-bebe-quebec" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow hover:opacity-90 transition-opacity">
+                Nouveau : Calculateur du coût d'un bébé au Québec 2026 →
+              </Link>
+            </div>
           </motion.div>
           
           <Tabs
