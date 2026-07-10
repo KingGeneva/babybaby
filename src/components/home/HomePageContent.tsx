@@ -8,6 +8,8 @@ import CTASection from './CTASection';
 import ParentingQuiz from '@/components/quiz/ParentingQuiz';
 import HeritageSection from './HeritageSection';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
+import { Calculator, ArrowRight } from 'lucide-react';
 
 const HomePageContent: React.FC = () => {
   const lastMod = new Date().toISOString();
@@ -28,6 +30,32 @@ const HomePageContent: React.FC = () => {
       <div className="animate-fade-in">
         {/* 1. Promesse & features */}
         <KeyFeaturesSection />
+
+        {/* 1bis. Calculateur coût bébé Québec (asset partageable) */}
+        <section className="py-12 px-4" aria-labelledby="calc-promo-heading">
+          <div className="container mx-auto max-w-3xl">
+            <Link
+              to="/calculateur-cout-bebe-quebec"
+              className="group block rounded-3xl bg-gradient-to-br from-primary/10 via-background to-secondary/10 border border-primary/20 p-8 md:p-10 hover:shadow-xl transition-shadow"
+            >
+              <div className="flex flex-col md:flex-row md:items-center gap-6">
+                <div className="h-14 w-14 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shrink-0">
+                  <Calculator className="h-7 w-7" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-primary mb-1">Nouveau · Outil gratuit</p>
+                  <h2 id="calc-promo-heading" className="font-display text-2xl md:text-3xl font-bold mb-2">
+                    Combien coûte un bébé au Québec en 2026 ?
+                  </h2>
+                  <p className="text-muted-foreground text-sm md:text-base">
+                    Calculateur interactif avec RQAP et Allocation famille. Résultat personnalisé en 30 secondes.
+                  </p>
+                </div>
+                <ArrowRight className="h-6 w-6 text-primary transition-transform group-hover:translate-x-1 hidden md:block" />
+              </div>
+            </Link>
+          </div>
+        </section>
 
         {/* 2. Contenu frais (articles) */}
         <ArticleSection />

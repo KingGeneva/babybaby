@@ -23,6 +23,8 @@ const ShopPage = lazy(() => import("../pages/ShopPage"));
 const ProductDetailPage = lazy(() => import("../pages/ProductDetailPage"));
 const BabyProductsReportPage = lazy(() => import("../pages/BabyProductsReportPage"));
 const FavoritesPage = lazy(() => import("../pages/FavoritesPage"));
+const ContestReglementPage = lazy(() => import("../pages/ContestReglementPage"));
+const CostCalculatorQuebecPage = lazy(() => import("../pages/CostCalculatorQuebecPage"));
 
 // Wrap page components with transition effects and layout
 const wrapWithLayout = (Component: React.ComponentType, variant: 'fade' | 'slide' | 'scale' = 'fade') => {
@@ -47,6 +49,10 @@ export const publicRoutes: RouteObject[] = [
   { path: "/ebooks", element: wrapWithLayout(EbooksPage, 'slide') },
   { path: "/ebooks/:id", element: wrapWithLayout(EbookViewerPage, 'fade') },
   { path: "/contests", element: wrapWithLayout(ContestsPage, 'slide') },
+  { path: "/contests/reglement", element: wrapWithLayout(ContestReglementPage, 'fade') },
+  { path: "/concours", element: wrapWithLayout(ContestsPage, 'slide') },
+  { path: "/concours/reglement", element: wrapWithLayout(ContestReglementPage, 'fade') },
+  { path: "/calculateur-cout-bebe-quebec", element: wrapWithLayout(CostCalculatorQuebecPage, 'fade') },
   { path: "/contact", element: wrapWithLayout(ContactPage, 'fade') },
   { path: "/boutique", element: wrapWithLayout(ShopPage, 'slide') },
   { path: "/boutique/:handle", element: wrapWithLayout(ProductDetailPage, 'fade') },
