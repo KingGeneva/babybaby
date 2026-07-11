@@ -365,7 +365,10 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
     // --- Step 3: generate cover image ---
     let imageUrl = "/lovable-uploads/gentle-parenting.jpg";
     try {
-      const imagePrompt = `Illustration éditoriale moderne, douce et chaleureuse pour un article sur la parentalité intitulé "${article.title}". ${article.image_alt || article.excerpt.slice(0, 150)}. Couleurs pastel, lumière naturelle, style premium magazine, format 16:9, sans texte ni mots.`;
+      const sceneBrief = article.image_alt || article.excerpt?.slice(0, 200) || article.title;
+      const imagePrompt = `Photographie éditoriale réaliste haut de gamme, style magazine parentalité premium, pour illustrer un article intitulé "${article.title}". Scène spécifique au sujet : ${sceneBrief}. Cadrage cinématographique 16:9, lumière naturelle douce (fenêtre, golden hour ou éclairage d'intérieur chaleureux), profondeur de champ marquée (bokeh subtil), textures authentiques (bois, textile, peau), palette douce et lumineuse cohérente avec une marque bébé bienveillante, composition soignée façon reportage lifestyle. Personnages (parents, bébés) réalistes, anatomiquement corrects, expressions naturelles et sincères, mains et visages nets. Intérieur québécois contemporain chaleureux si scène domestique.
+
+INTERDICTIONS ABSOLUES : aucun texte, lettre, chiffre, filigrane ou logo dans l'image ; pas d'illustration cartoon, dessin animé, 3D stylisé, vectoriel, flat design, aquarelle ni style pastel enfantin ; pas de rendu "IA générique" ni de collage ; pas de mains déformées, doigts en trop, visages fondus ou yeux asymétriques ; pas de saturation criarde ni d'éclairage néon.`;
       const imgRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
