@@ -23,8 +23,9 @@ const pageTransition = {
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen">
-      <ContestBanner />
       <NavBar />
+      <div className="h-16 md:h-20" aria-hidden="true" />
+      <ContestBanner />
       <motion.main
         initial="initial"
         animate="in"
