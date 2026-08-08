@@ -9,10 +9,10 @@ import {
   Root2,
   createPopperScope
 } from "./chunk-KK2RQ2SG.js";
+import "./chunk-EAZQIME6.js";
 import {
   VisuallyHidden
 } from "./chunk-FWMB4JYE.js";
-import "./chunk-EAZQIME6.js";
 import {
   usePrevious
 } from "./chunk-XSAN5JCE.js";
