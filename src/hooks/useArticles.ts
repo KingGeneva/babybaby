@@ -11,7 +11,8 @@ const frenchMonths: Record<string, number> = {
   juillet: 6, aout: 7, août: 7, septembre: 8, octobre: 9, novembre: 10, decembre: 11, décembre: 11,
 };
 
-const getArticleDateTimestamp = (date: string) => {
+const getArticleDateTimestamp = (date?: string | null) => {
+  if (!date || typeof date !== 'string') return 0;
   const parsed = Date.parse(date);
   if (!Number.isNaN(parsed)) return parsed;
 
@@ -83,7 +84,7 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
             
             // Add valid storage articles that match the category
             const validStorageArticles = storageArticles.filter((a): a is Article => 
-              a !== null && (category === "Tous" || a.category === category)
+              a !== null && !!a.title && (category === "Tous" || a.category === category)
             );
             
             result = [...result, ...validStorageArticles];
@@ -96,8 +97,8 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
         if (searchTerm) {
           const lowerSearchTerm = searchTerm.toLowerCase();
           result = result.filter(article => 
-            article.title.toLowerCase().includes(lowerSearchTerm) || 
-            article.excerpt.toLowerCase().includes(lowerSearchTerm)
+            (article.title || '').toLowerCase().includes(lowerSearchTerm) || 
+            (article.excerpt || '').toLowerCase().includes(lowerSearchTerm)
           );
         }
 
@@ -109,7 +110,7 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
           const fileDiff = (b.__fileTimestamp || 0) - (a.__fileTimestamp || 0);
           if (fileDiff !== 0) return fileDiff;
 
-          return b.id - a.id;
+          return (Number(b.id) || 0) - (Number(a.id) || 0);
         });
         
         setArticles(result);
