@@ -84,7 +84,7 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
             
             // Add valid storage articles that match the category
             const validStorageArticles = storageArticles.filter((a): a is Article => 
-              a !== null && (category === "Tous" || a.category === category)
+              a !== null && !!a.title && (category === "Tous" || a.category === category)
             );
             
             result = [...result, ...validStorageArticles];
@@ -110,7 +110,7 @@ export const useArticles = (category: string = "Tous", searchTerm: string = "") 
           const fileDiff = (b.__fileTimestamp || 0) - (a.__fileTimestamp || 0);
           if (fileDiff !== 0) return fileDiff;
 
-          return b.id - a.id;
+          return (Number(b.id) || 0) - (Number(a.id) || 0);
         });
         
         setArticles(result);
