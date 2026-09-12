@@ -62,8 +62,9 @@ const SEOHead: React.FC<SEOProps> = ({
   // Create a clean object of HTML attributes to avoid null values
   const htmlAttributes = { lang };
   
-  // Date de dernière modification pour les moteurs de recherche
-  const lastModDate = articleData?.modifiedTime || new Date().toISOString();
+  // Date de dernière modification : uniquement si elle est réellement connue.
+  // Ne jamais utiliser « maintenant », qui changerait à chaque visite.
+  const lastModDate = articleData?.modifiedTime || articleData?.publishedTime;
   
   return (
     <Helmet htmlAttributes={htmlAttributes}>
@@ -79,7 +80,7 @@ const SEOHead: React.FC<SEOProps> = ({
       <meta name="rating" content="general" />
       
       {/* Date de dernière modification pour les bots */}
-      <meta name="lastmod" content={lastModDate} />
+      {lastModDate && <meta name="lastmod" content={lastModDate} />}
       
       {/* Performance & mobile optimization */}
       <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />

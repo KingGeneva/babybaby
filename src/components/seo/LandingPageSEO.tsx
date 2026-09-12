@@ -24,8 +24,8 @@ const LandingPageSEO: React.FC<LandingPageSEOProps> = ({
   canonicalUrl,
   keywords,
   image = "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
-  publishedDate = new Date().toISOString(),
-  modifiedDate = new Date().toISOString(),
+  publishedDate,
+  modifiedDate,
   authorName = "BabyBaby"
 }) => {
   // Construction du breadcrumb pour cette page

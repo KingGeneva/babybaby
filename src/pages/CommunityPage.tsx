@@ -44,7 +44,7 @@ const CommunityPage = () => {
               <div className="w-full md:w-1/2">
                 <h2 className="text-2xl font-bold mb-4">Bienvenue dans la Communauté</h2>
                 <p className="text-gray-700 mb-4">
-                  Rejoignez des milliers de parents pour partager vos expériences, poser vos questions et obtenir du soutien dans votre parcours parental.
+                  Partagez vos expériences, posez vos questions et trouvez du soutien auprès d'autres parents.
                 </p>
                 <p className="text-gray-700">
                   Notre communauté bienveillante est là pour vous accompagner dans tous les aspects de la parentalité, des premiers jours à la petite enfance.

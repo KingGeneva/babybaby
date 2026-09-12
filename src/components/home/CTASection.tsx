@@ -16,7 +16,7 @@ const CTASection: React.FC = () => {
             Commencez à suivre le développement de votre bébé dès aujourd'hui
           </h2>
           <p className="text-lg text-gray-700 mb-8">
-            Rejoignez des milliers de parents qui font confiance à BabyBaby pour suivre le développement de leur enfant.
+            Créez un compte gratuit pour suivre le développement de votre enfant et retrouver vos guides favoris.
           </p>
           <Link to="/auth">
             <Button 
