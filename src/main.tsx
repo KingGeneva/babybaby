@@ -94,6 +94,8 @@ const startApp = async () => {
       <App />
     </React.StrictMode>
   );
+
+  scheduleHeadDedupe();
 };
 
 startApp().catch((error) => {
