@@ -44,8 +44,8 @@ const ShopPage = () => {
   return (
     <MainLayout>
       <SEOHead
-        title="Boutique Bébé - Produits Premium pour Nourrissons | BabyBaby"
-        description="Découvrez notre sélection exclusive de produits pour bébés : vêtements, accessoires, jouets et équipements de qualité premium. Livraison rapide et garantie satisfait."
+        title="Boutique bébé — sélection BabyBaby pour nourrissons"
+        description="Notre sélection de produits pour bébés : vêtements, accessoires, jouets et équipements, choisis par la rédaction BabyBaby."
         canonicalUrl="https://babybaby.org/boutique"
       />
       
@@ -57,7 +57,7 @@ const ShopPage = () => {
             "@context": "https://schema.org",
             "@type": "Store",
             "name": "BabyBaby Boutique",
-            "description": "Boutique en ligne de produits pour bébés - Qualité premium et livraison rapide",
+            "description": "Boutique en ligne de produits pour bébés, sélectionnés par la rédaction BabyBaby.",
             "url": "https://babybaby.org/boutique",
             "image": "https://babybaby.org/og-image.png",
             "priceRange": "€€",

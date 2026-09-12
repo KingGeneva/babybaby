@@ -264,7 +264,7 @@ export const knowledgeBase: KnowledgeEntry[] = [
   },
   {
     keywords: ['paiement', 'abonnement', 'premium', 'prix', 'tarif'],
-    response: "Les offres BabyBaby :\n\n**Version gratuite :**\n• Tableau de bord basique\n• Suivi de croissance\n• Articles et ressources\n• Outils essentiels\n• Forum communautaire\n\n**Version Premium :**\n• Toutes les fonctionnalités gratuites\n• Accès à tous les cours vidéo\n• E-books exclusifs\n• Stockage illimité\n• Exports de données\n• Absence de publicités\n• Support prioritaire\n\n💳 Consultez la section \"Abonnement\" dans votre compte pour les tarifs actuels et les offres promotionnelles.",
+    response: "BabyBaby est gratuit.\n\n**Inclus sans frais :**\n• Tableau de bord et suivi de croissance\n• Articles, guides et comparatifs\n• E-books et cours publiés sur le site\n• Outils (bruit blanc, berceuses, calculateurs)\n• Forum communautaire\n\nAucun abonnement payant n'est offert pour le moment. Certains liens vers des marchands sont affiliés, ce qui est indiqué sur les pages concernées.",
     category: 'application'
   },
   {

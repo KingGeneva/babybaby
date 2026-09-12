@@ -46,7 +46,7 @@ const BoutiquePage: React.FC = () => {
     "name": "BabyBaby Boutique",
     "url": "https://babybaby.boutique",
     "logo": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
-    "description": "Boutique en ligne de produits premium pour bébés et parents.",
+    "description": "Boutique en ligne de produits pour bébés et parents, sélectionnés par la rédaction.",
     "sameAs": [
       "https://facebook.com/babybaby",
       "https://instagram.com/babybaby_app",
@@ -78,7 +78,7 @@ const BoutiquePage: React.FC = () => {
     "@context": "https://schema.org",
     "@type": "Store",
     "name": "BabyBaby Boutique",
-    "description": "Boutique en ligne de produits premium pour bébés et parents",
+    "description": "Boutique en ligne de produits pour bébés et parents, sélectionnés par la rédaction",
     "url": "https://babybaby.boutique",
     "logo": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
     "image": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png",
@@ -100,11 +100,11 @@ const BoutiquePage: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <SEOHead 
-        title="Boutique BabyBaby | Produits Premium pour bébés et parents"
+        title="Boutique BabyBaby — produits sélectionnés pour bébés et parents"
         description="Découvrez notre sélection exclusive de produits de haute qualité pour bébés et parents. Accessoires, vêtements bio, jouets éducatifs et plus encore pour un quotidien plus serein."
         canonicalUrl="https://babybaby.org/boutique"
         alternateLanguages={alternateLanguages}
-        keywords={["boutique bébé", "produits parentalité bio", "accessoires bébé premium", "vêtements enfant bio", "jouets éducatifs montessori", "produits puériculture"]}
+        keywords={["boutique bébé", "produits parentalité bio", "accessoires bébé", "vêtements enfant bio", "jouets éducatifs montessori", "produits puériculture"]}
         ogImage="https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
       />
       
@@ -132,7 +132,7 @@ const BoutiquePage: React.FC = () => {
             "@context": "https://schema.org",
             "@type": "WebPage",
             "name": "Boutique BabyBaby",
-            "description": "Boutique en ligne de produits premium pour bébés et parents",
+            "description": "Boutique en ligne de produits pour bébés et parents, sélectionnés par la rédaction",
             "url": "https://babybaby.org/boutique",
             "mainEntity": {
               "@type": "ItemList",
@@ -140,7 +140,7 @@ const BoutiquePage: React.FC = () => {
                 {
                   "@type": "ListItem",
                   "position": 1,
-                  "name": "Accessoires bébé premium",
+                  "name": "Accessoires bébé",
                   "url": "https://babybaby.boutique/categories/accessoires",
                   "image": "https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"
                 },
@@ -227,7 +227,7 @@ const BoutiquePage: React.FC = () => {
           
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md" data-aos="fade-up">
-              <h2 className="text-xl font-semibold mb-3">Produits de qualité premium</h2>
+              <h2 className="text-xl font-semibold mb-3">Une sélection éditoriale</h2>
               <p className="text-gray-600">Tous nos produits sont soigneusement sélectionnés pour leur qualité exceptionnelle et leur sécurité optimale.</p>
             </div>
             
@@ -237,7 +237,7 @@ const BoutiquePage: React.FC = () => {
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md" data-aos="fade-up" data-aos-delay="200">
-              <h2 className="text-xl font-semibold mb-3">Service client premium</h2>
+              <h2 className="text-xl font-semibold mb-3">Service client</h2>
               <p className="text-gray-600">Notre équipe d'experts est disponible 7j/7 pour répondre à toutes vos questions et vous accompagner.</p>
             </div>
           </div>
