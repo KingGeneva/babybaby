@@ -357,6 +357,15 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
     fullContent = fullContent.replace(/^#\s+.*$/m, `# ${article.title}`);
     // Strip residual fake-link placeholders like *[voir notre guide]* (italic brackets NOT followed by a link parenthesis).
     fullContent = fullContent.replace(/\*\[([^\]]+)\]\*(?!\()/g, "$1");
+    // Filet de sécurité : aucun lien vers l'ancien domaine ne doit être publié.
+    {
+      const fixed = rewriteLegacyLinksInText(fullContent);
+      if (fixed.count) {
+        console.warn(`Rewrote ${fixed.count} legacy babybaby.app link(s) in generated content`);
+        fullContent = fixed.text;
+      }
+    }
+
     const wordCount = fullContent.split(/\s+/).length;
     if (wordCount < 2000) {
       console.warn(`Article shorter than target pillar length: ${wordCount} words`);
