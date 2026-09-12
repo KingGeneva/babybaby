@@ -4,6 +4,8 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Link } from 'react-router-dom';
 import ArticleMarkdownImage from '@/components/articles/ArticleMarkdownImage';
+import { toInternalHref } from '@/lib/internalLinks';
+
 
 interface ArticleContentProps {
   content: string;
@@ -27,9 +29,12 @@ const ArticleContent: React.FC<ArticleContentProps> = ({ content, excerpt }) => 
             ),
             a: ({ href, children }) => {
               const url = href ?? '';
-              if (url.startsWith('/')) {
+              // Les anciens articles contiennent des liens absolus vers
+              // babybaby.app : on les ramène vers la route interne réelle.
+              const internal = toInternalHref(url);
+              if (internal) {
                 return (
-                  <Link to={url} className="text-primary underline-offset-4 hover:underline">
+                  <Link to={internal} className="text-primary underline-offset-4 hover:underline">
                     {children}
                   </Link>
                 );
@@ -45,6 +50,7 @@ const ArticleContent: React.FC<ArticleContentProps> = ({ content, excerpt }) => 
                 </a>
               );
             },
+
           }}
         >
           {content}

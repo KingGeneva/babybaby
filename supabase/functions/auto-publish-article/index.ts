@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 import { Resend } from "npm:resend@4.0.0";
+import { rewriteLegacyLinksInText } from "../_shared/internal-links.ts";
+
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -355,6 +357,15 @@ Appelle la fonction save_article avec le markdown complet, le slug SEO (kebab-ca
     fullContent = fullContent.replace(/^#\s+.*$/m, `# ${article.title}`);
     // Strip residual fake-link placeholders like *[voir notre guide]* (italic brackets NOT followed by a link parenthesis).
     fullContent = fullContent.replace(/\*\[([^\]]+)\]\*(?!\()/g, "$1");
+    // Filet de sécurité : aucun lien vers l'ancien domaine ne doit être publié.
+    {
+      const fixed = rewriteLegacyLinksInText(fullContent);
+      if (fixed.count) {
+        console.warn(`Rewrote ${fixed.count} legacy babybaby.app link(s) in generated content`);
+        fullContent = fixed.text;
+      }
+    }
+
     const wordCount = fullContent.split(/\s+/).length;
     if (wordCount < 2000) {
       console.warn(`Article shorter than target pillar length: ${wordCount} words`);
@@ -478,6 +489,29 @@ INTERDICTIONS ABSOLUES : aucun texte, lettre, chiffre, filigrane ou logo dans l'
       console.warn("IndexNow ping failed (ignored):", e instanceof Error ? e.message : e);
     }
 
+    // --- Step 6: demande de reconstruction + mise en ligne du site ---
+    // IndexNow ne reconstruit PAS le site : sans nouveau build, la page
+    // prérendue de l'article n'existe pas. Appel non bloquant : un échec ici
+    // ne régénère pas l'article et n'est jamais présenté comme un succès.
+    let rebuild: Record<string, unknown> = { triggered: false, error: "not_attempted" };
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/trigger-site-rebuild`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+          "x-cron-secret": Deno.env.get("CRON_SECRET") ?? "",
+        },
+        body: JSON.stringify({ reason: "article_published", articleId }),
+      });
+      rebuild = await res.json().catch(() => ({ triggered: false, error: `HTTP ${res.status}` }));
+      console.log("Site rebuild request:", JSON.stringify(rebuild));
+    } catch (e) {
+
+      rebuild = { triggered: false, error: e instanceof Error ? e.message : String(e) };
+      console.warn("Site rebuild request failed (ignored):", rebuild.error);
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -487,6 +521,8 @@ INTERDICTIONS ABSOLUES : aucun texte, lettre, chiffre, filigrane ou logo dans l'
         keyword,
         word_count: wordCount,
         trend,
+        rebuild,
+
         triggered_by: isCron ? "cron" : "admin",
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
