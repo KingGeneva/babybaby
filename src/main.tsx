@@ -38,8 +38,23 @@ const clearDevelopmentServiceWorkerCache = async () => {
   return true;
 };
 
+/**
+ * Le HTML statique (prérendu) contient déjà un canonical et des hreflang par
+ * route. react-helmet-async dédoublonne les <meta> par name/property, mais PAS
+ * les <link> : sans nettoyage, la page afficherait deux canonical après le
+ * montage. On retire donc les balises initiales non gérées par Helmet.
+ */
+const removeStaticHeadDuplicates = () => {
+  if (typeof document === 'undefined') return;
+  document
+    .querySelectorAll('link[rel="canonical"]:not([data-rh]), link[rel="alternate"][hreflang]:not([data-rh])')
+    .forEach((el) => el.parentNode?.removeChild(el));
+};
+
 const startApp = async () => {
   if (await clearDevelopmentServiceWorkerCache()) return;
+
+  removeStaticHeadDuplicates();
 
   // Create the root with React 18 API
   const rootElement = document.getElementById("root");
