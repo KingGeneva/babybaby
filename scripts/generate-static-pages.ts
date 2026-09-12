@@ -47,6 +47,8 @@ import {
   articleUrlPath,
   safeRouteDir,
 } from "./prerender-utils";
+import { rewriteLegacyLinksInText } from "../src/lib/internalLinks";
+
 
 import { nutritionArticles } from "../src/data/articles/nutrition";
 import { amenagementArticles } from "../src/data/articles/amenagement";
