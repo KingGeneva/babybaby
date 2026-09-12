@@ -24,18 +24,11 @@ const HeroSection: React.FC = () => {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-3xl mx-auto text-center"
         >
-          <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-border bg-card shadow-sm">
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">
-              Contenu indépendant · Sans commandites
-            </span>
-          </div>
-
           <h1
             id="hero-heading"
             className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[1.05] mb-6"
           >
-            Le guide indépendant <br className="hidden md:block" />
-            des <em className="text-primary not-italic">1000 premiers jours</em>.
+            La ressource pour les 1000 premiers jours de <em className="text-primary not-italic">bébé</em>.
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
