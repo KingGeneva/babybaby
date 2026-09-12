@@ -37,6 +37,16 @@
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from "fs";
 import { resolve } from "path";
 import { marked } from "marked";
+import {
+  escapeHtml,
+  escapeAttr,
+  escapeXml,
+  sanitizeArticleHtml,
+  safeUrl,
+  toArticleId,
+  articleUrlPath,
+  safeRouteDir,
+} from "./prerender-utils";
 
 import { nutritionArticles } from "../src/data/articles/nutrition";
 import { amenagementArticles } from "../src/data/articles/amenagement";
@@ -64,43 +74,10 @@ marked.setOptions({ gfm: true, breaks: false });
 
 /* ---------------- Utils ---------------- */
 
-function escapeHtml(s: string): string {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-const escapeAttr = escapeHtml;
-
 function truncate(s: string, n: number): string {
   const v = String(s ?? "");
   if (v.length <= n) return v;
   return v.slice(0, n - 1).trimEnd() + "…";
-}
-
-/**
- * Assainit du HTML issu d'une source distante (contenu Storage) :
- * suppression des balises exécutables/embarquées, des gestionnaires
- * d'évènements inline et des URL javascript:.
- */
-function sanitizeHtml(html: string): string {
-  return String(html ?? "")
-    .replace(/<\s*(script|style|iframe|object|embed|form|link|meta|base)\b[\s\S]*?<\s*\/\s*\1\s*>/gi, "")
-    .replace(/<\s*(script|style|iframe|object|embed|form|link|meta|base)\b[^>]*\/?\s*>/gi, "")
-    .replace(/\son[a-z]+\s*=\s*"[^"]*"/gi, "")
-    .replace(/\son[a-z]+\s*=\s*'[^']*'/gi, "")
-    .replace(/\son[a-z]+\s*=\s*[^\s>]+/gi, "")
-    .replace(/(href|src)\s*=\s*"\s*javascript:[^"]*"/gi, '$1="#"')
-    .replace(/(href|src)\s*=\s*'\s*javascript:[^']*'/gi, "$1='#'");
-}
-
-/** Même résolution d'URL que src/lib/articleUrl.ts (source de vérité frontend). */
-function articleUrlPath(a: Pick<Article, "id" | "slug">): string {
-  if (a.slug && a.slug.length > 0) return `/articles/${a.slug}-${a.id}`;
-  return `/articles/${a.id}`;
 }
 
 const FRENCH_MONTHS: Record<string, number> = {
@@ -296,11 +273,15 @@ function renderPage(meta: PageMeta): string {
   return html;
 }
 
-function writeRoute(routePath: string, html: string) {
-  const isRoot = routePath === "/";
-  const outDir = isRoot ? DIST : resolve(DIST, routePath.replace(/^\//, ""));
+function writeRoute(routePath: string, html: string): boolean {
+  const outDir = safeRouteDir(DIST, routePath);
+  if (!outDir) {
+    console.warn(`[prerender] Route ignorée (hors de dist/ ou invalide) : ${routePath}`);
+    return false;
+  }
   mkdirSync(outDir, { recursive: true });
   writeFileSync(resolve(outDir, "index.html"), html);
+  return true;
 }
 
 /* ---------------- Gabarits de contenu (visibles) ---------------- */
@@ -332,7 +313,7 @@ function homepageBody(all: Article[]): string {
     .map(
       (a) => `
       <li style="margin-bottom:16px;">
-        <a href="${escapeAttr(articleUrlPath(a))}" style="font-weight:600;color:#0a4b8c;">${escapeHtml(a.title)}</a>
+        <a href="${escapeAttr(articleUrlPath(a) || "/articles")}" style="font-weight:600;color:#0a4b8c;">${escapeHtml(a.title)}</a>
         <p style="margin:4px 0 0;color:#444;">${escapeHtml(truncate(a.excerpt || a.summary || "", 180))}</p>
       </li>`,
     )
@@ -365,7 +346,7 @@ function articlesIndexBody(all: Article[]): string {
       (a) => `
       <li style="margin-bottom:20px;border-bottom:1px solid #eee;padding-bottom:16px;">
         <h2 style="margin:0 0 4px;font-size:18px;">
-          <a href="${escapeAttr(articleUrlPath(a))}" style="color:#0a4b8c;text-decoration:none;">${escapeHtml(a.title)}</a>
+          <a href="${escapeAttr(articleUrlPath(a) || "/articles")}" style="color:#0a4b8c;text-decoration:none;">${escapeHtml(a.title)}</a>
         </h2>
         <p style="margin:0 0 4px;color:#666;font-size:13px;">${escapeHtml(a.category || "")} · ${escapeHtml(a.author || "BabyBaby")} · ${escapeHtml(String(a.readingTime ?? ""))} min de lecture</p>
         <p style="margin:0;color:#333;">${escapeHtml(truncate(a.excerpt || a.summary || "", 240))}</p>
@@ -381,11 +362,11 @@ function articlesIndexBody(all: Article[]): string {
 }
 
 function articleBody(a: Article, remote: boolean): string {
-  const parsed = marked.parse(a.content || "") as string;
-  const contentHtml = remote ? sanitizeHtml(parsed) : parsed;
+  const contentHtml = marked.parse(a.content || "") as string;
   const tags = Array.isArray(a.tags) ? a.tags : [];
-  return shellWrap(`
-    ${navLinks()}
+  const imageUrl = safeUrl(a.image);
+
+  const article = `
     <article>
       <p style="color:#666;font-size:13px;margin:0;">
         <a href="/articles" style="color:#0a4b8c;">← Tous les articles</a> · ${escapeHtml(a.category || "")}
@@ -394,7 +375,7 @@ function articleBody(a: Article, remote: boolean): string {
       <p style="color:#666;font-size:14px;">
         Par <strong>${escapeHtml(a.author || "BabyBaby")}</strong> · ${escapeHtml(a.date || "")}${a.readingTime ? ` · ${escapeHtml(String(a.readingTime))} min de lecture` : ""}
       </p>
-      ${a.image ? `<img src="${escapeAttr(a.image)}" alt="${escapeAttr(a.image_alt || a.title)}" style="max-width:100%;height:auto;border-radius:8px;margin:16px 0;" />` : ""}
+      ${imageUrl ? `<img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(a.image_alt || a.title)}" style="max-width:100%;height:auto;border-radius:8px;margin:16px 0;" />` : ""}
       <p style="font-size:18px;color:#222;">${escapeHtml(a.excerpt || a.summary || "")}</p>
       <div>${contentHtml}</div>
       ${
@@ -415,6 +396,13 @@ function articleBody(a: Article, remote: boolean): string {
           : ""
       }
     </article>
+  `;
+
+  // Contenu distant : TOUT le corps assemblé (titre, image, extrait, contenu,
+  // FAQ, tags) repasse par l'allowlist, pas seulement le markdown converti.
+  return shellWrap(`
+    ${navLinks()}
+    ${remote ? sanitizeArticleHtml(article) : article}
   `);
 }
 
@@ -458,8 +446,16 @@ async function run() {
 
   // Déduplication par id : l'article local (source de vérité versionnée) gagne.
   const byId = new Map<number, { article: Article; remote: boolean }>();
-  for (const a of remote) byId.set(Number(a.id), { article: a, remote: true });
-  for (const a of localArticles) byId.set(Number(a.id), { article: a, remote: false });
+  const register = (a: Article, isRemote: boolean) => {
+    const id = toArticleId(a.id);
+    if (id === undefined) {
+      console.warn(`[prerender] Article ignoré : id invalide (${String(a.id)}).`);
+      return;
+    }
+    byId.set(id, { article: { ...a, id }, remote: isRemote });
+  };
+  for (const a of remote) register(a, true);
+  for (const a of localArticles) register(a, false);
 
   const entries = [...byId.values()].sort((x, y) => Number(y.article.id) - Number(x.article.id));
   const all = entries.map((e) => e.article);
@@ -501,6 +497,7 @@ async function run() {
   // 3. Chaque article (URL canonique = même résolution que le frontend)
   for (const { article: a, remote: isRemote } of entries) {
     const canonicalPath = articleUrlPath(a);
+    if (!canonicalPath) continue;
     const canonical = `${BASE_URL}${canonicalPath}`;
     const published = toIsoDate(a.date);
     const modified = toIsoDate(a.dateModified) || published;
@@ -511,11 +508,11 @@ async function run() {
         "@type": "Article",
         headline: a.title,
         description: a.excerpt || a.summary,
-        image: a.image
-          ? a.image.startsWith("http")
-            ? a.image
-            : `${BASE_URL}${a.image.startsWith("/") ? "" : "/"}${a.image}`
-          : undefined,
+        image: (() => {
+          const img = safeUrl(a.image);
+          if (!img) return undefined;
+          return img.startsWith("http") ? img : `${BASE_URL}${img}`;
+        })(),
         ...(published ? { datePublished: published } : {}),
         ...(modified ? { dateModified: modified } : {}),
         author: { "@type": "Person", name: a.author || "BabyBaby" },
@@ -551,18 +548,17 @@ async function run() {
       description: truncate(a.excerpt || a.summary || a.title, 158),
       path: canonicalPath,
       canonical,
-      ogImage: a.image,
+      ogImage: safeUrl(a.image),
       bodyHtml: articleBody(a, isRemote),
       jsonLd,
     });
 
-    writeRoute(canonicalPath, page);
+    if (!writeRoute(canonicalPath, page)) continue;
     count++;
 
     // Variante /articles/<id> (route legacy toujours servie par le frontend) :
     // même contenu, canonical pointant vers l'URL avec slug.
-    if (canonicalPath !== `/articles/${a.id}`) {
-      writeRoute(`/articles/${a.id}`, page);
+    if (canonicalPath !== `/articles/${a.id}` && writeRoute(`/articles/${a.id}`, page)) {
       count++;
     }
 
@@ -677,14 +673,14 @@ async function run() {
   }
 
   // 6. Sitemap aligné sur les routes réellement générées
-  const buildDay = new Date().toISOString().slice(0, 10);
   const xml =
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     sitemap
-      .map(
-        (u) =>
-          `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${u.lastmod || buildDay}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority.toFixed(1)}</priority>\n  </url>`,
-      )
+      .map((u) => {
+        // Pas de lastmod inventé : on l'omet quand la vraie date est inconnue.
+        const lastmod = u.lastmod ? `\n    <lastmod>${escapeXml(u.lastmod)}</lastmod>` : "";
+        return `  <url>\n    <loc>${escapeXml(u.loc)}</loc>${lastmod}\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority.toFixed(1)}</priority>\n  </url>`;
+      })
       .join("\n") +
     `\n</urlset>\n`;
   writeFileSync(resolve(DIST, "sitemap.xml"), xml);
