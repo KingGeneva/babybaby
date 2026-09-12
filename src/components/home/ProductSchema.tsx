@@ -13,12 +13,7 @@ const ProductSchema: React.FC = () => {
     "offers": {
       "@type": "Offer",
       "price": "0",
-      "priceCurrency": "EUR"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "1250"
+      "priceCurrency": "CAD"
     }
   };
 

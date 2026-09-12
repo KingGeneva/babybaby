@@ -62,7 +62,7 @@ export const ShopHero = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 border border-secondary/30 text-secondary-foreground"
           >
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium">Sélection Premium pour Bébé</span>
+            <span className="text-sm font-medium">Sélection BabyBaby pour bébé</span>
           </motion.div>
 
           {/* Main title with icon */}
@@ -106,7 +106,7 @@ export const ShopHero = () => {
             className="flex flex-wrap justify-center gap-6 pt-4"
           >
             {[
-              { icon: Heart, text: "Qualité Premium" },
+              { icon: Heart, text: "Sélection éditoriale" },
               { icon: Star, text: "Livraison Rapide" },
               { icon: Sparkles, text: "Garantie Satisfait" },
             ].map((feature, index) => (

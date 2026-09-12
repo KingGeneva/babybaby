@@ -74,7 +74,7 @@ const HomePageContent: React.FC = () => {
         {/* 4. Ressources gratuites */}
         <EbooksSection />
 
-        {/* 4bis. Héritage du domaine (depuis 1998 / MSLO 2000-2003) */}
+        {/* 4bis. Histoire du nom de domaine (1998 / MSLO 2000-2003), distincte du projet actuel */}
         <HeritageSection />
 
         {/* 5. CTA final + newsletter */}

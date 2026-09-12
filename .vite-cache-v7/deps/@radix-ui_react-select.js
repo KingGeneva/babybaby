@@ -1,5 +1,11 @@
 "use client";
 import {
+  clamp
+} from "./chunk-TCQMTAGU.js";
+import {
+  VisuallyHidden
+} from "./chunk-FWMB4JYE.js";
+import {
   Anchor,
   Arrow,
   Content,
@@ -7,19 +13,16 @@ import {
   createPopperScope
 } from "./chunk-KK2RQ2SG.js";
 import {
-  VisuallyHidden
-} from "./chunk-FWMB4JYE.js";
-import {
-  clamp
-} from "./chunk-TCQMTAGU.js";
-import "./chunk-EAZQIME6.js";
-import {
   usePrevious
 } from "./chunk-XSAN5JCE.js";
+import "./chunk-EAZQIME6.js";
 import {
   createCollection,
   useDirection
 } from "./chunk-DF7W5PGO.js";
+import {
+  createContextScope
+} from "./chunk-77EU5DFA.js";
 import {
   FocusScope,
   RemoveScrollBar,
@@ -40,9 +43,6 @@ import {
 import {
   useId
 } from "./chunk-ZUFBO6NE.js";
-import {
-  createContextScope
-} from "./chunk-77EU5DFA.js";
 import {
   composeEventHandlers,
   useControllableState

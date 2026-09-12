@@ -123,11 +123,11 @@ serve(async (req) => {
         {
           role: "system",
           content:
-            "Tu es expert SEO et parentalité québécoise. Tu identifies des tendances précises ET le mot-clé long-tail à fort potentiel de recherche associé pour le marché du Québec.",
+            "Tu es expert SEO et parentalité québécoise. Tu proposes des tendances précises ET une hypothèse éditoriale de mot-clé long-tail pertinent pour le marché du Québec. Tu ne disposes d'aucune donnée de volume de recherche : ta proposition est un pari éditorial, jamais une mesure.",
         },
         {
           role: "user",
-          content: `Sur le thème "${topic}", identifie UNE tendance précise ${currentYear} ET le mot-clé long-tail québécois le plus recherché (3-6 mots, intention informationnelle parentale, marché Québec/Canada francophone).
+          content: `Sur le thème "${topic}", propose UNE tendance précise ${currentYear} ET UNE hypothèse de mot-clé long-tail québécois pertinent (3-6 mots, intention informationnelle parentale, marché Québec/Canada francophone). Aucune donnée de volume de recherche n'est disponible : il s'agit d'un choix éditorial, ne prétends pas qu'il est mesuré ou "le plus recherché".
 Format strict:
 TENDANCE: <une phrase>
 MOT-CLE: <mot-clé long-tail>

@@ -24,8 +24,8 @@ const LandingPageSEO: React.FC<LandingPageSEOProps> = ({
   canonicalUrl,
   keywords,
   image = "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
-  publishedDate = new Date().toISOString(),
-  modifiedDate = new Date().toISOString(),
+  publishedDate,
+  modifiedDate,
   authorName = "BabyBaby"
 }) => {
   // Construction du breadcrumb pour cette page
@@ -79,9 +79,9 @@ const LandingPageSEO: React.FC<LandingPageSEOProps> = ({
       <meta name="google" content="nositelinkssearchbox" />
       <meta name="google" content="notranslate" />
 
-      {/* Gestion des dates pour le SEO */}
-      <meta property="article:published_time" content={publishedDate} />
-      <meta property="article:modified_time" content={modifiedDate} />
+      {/* Dates réelles uniquement (jamais générées à la volée) */}
+      {publishedDate && <meta property="article:published_time" content={publishedDate} />}
+      {modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
 
       {/* Schema.org JSON-LD pour les breadcrumbs et l'article */}
       <SchemaOrg schemas={[breadcrumbSchema, articleSchema, websiteSchema]} />
@@ -109,8 +109,8 @@ function buildArticleSchema(
   description: string,
   url: string,
   imageUrl: string,
-  datePublished: string,
-  dateModified: string,
+  datePublished: string | undefined,
+  dateModified: string | undefined,
   authorName: string
 ) {
   return {
@@ -119,8 +119,8 @@ function buildArticleSchema(
     'headline': title,
     'description': description,
     'image': imageUrl,
-    'datePublished': datePublished,
-    'dateModified': dateModified,
+    ...(datePublished ? { 'datePublished': datePublished } : {}),
+    ...(dateModified ? { 'dateModified': dateModified } : {}),
     'author': {
       '@type': 'Person',
       'name': authorName

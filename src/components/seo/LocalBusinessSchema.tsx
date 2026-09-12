@@ -30,14 +30,7 @@ const LocalBusinessSchema: React.FC = () => {
       "https://facebook.com/babybaby",
       "https://instagram.com/babybaby_app",
       "https://twitter.com/babybaby_app"
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "1250",
-      "bestRating": "5",
-      "worstRating": "1"
-    }
+    ]
   };
 
   return (

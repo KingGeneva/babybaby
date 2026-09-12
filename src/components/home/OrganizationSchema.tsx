@@ -10,8 +10,7 @@ const OrganizationSchema: React.FC = () => {
     "alternateName": "BabyBaby App",
     "url": "https://babybaby.org",
     "logo": "https://babybaby.org/lovable-uploads/ad26c446-0eb9-48e1-9de8-b0d5e1f6fa9f.png",
-    "description": "Plateforme leader pour le suivi de développement et santé infantile. Domaine historique actif depuis 1998.",
-    "foundingDate": "1998",
+    "description": "Plateforme québécoise de contenus et d'outils gratuits pour les parents : suivi de croissance, guides, comparatifs de produits.",
     "knowsAbout": [
       "Parentalité",
       "Développement infantile",
@@ -23,7 +22,7 @@ const OrganizationSchema: React.FC = () => {
     "subjectOf": {
       "@type": "CreativeWork",
       "name": "Historique du domaine babybaby.org",
-      "description": "Domaine enregistré en 1998. Détenu et exploité par Martha Stewart Living Omnimedia (MSLO) entre 2000 et 2003 pour la section Baby de marthastewart.com. Refondé aujourd'hui en plateforme moderne pour parents francophones.",
+      "description": "Historique du nom de domaine babybaby.org : enregistré en 1998, puis détenu par Martha Stewart Living Omnimedia entre 2000 et 2003 pour la section Baby de marthastewart.com. La plateforme actuelle est un projet distinct et récent.",
       "url": "https://web.archive.org/web/2000*/babybaby.org"
     },
     "sameAs": [
@@ -49,7 +48,8 @@ const OrganizationSchema: React.FC = () => {
     ],
     "address": {
       "@type": "PostalAddress",
-      "addressCountry": "FR"
+      "addressRegion": "QC",
+      "addressCountry": "CA"
     }
   };
 

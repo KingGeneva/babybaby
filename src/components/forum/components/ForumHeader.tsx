@@ -19,7 +19,7 @@ const ForumHeader = () => {
         Notre Communauté
       </h2>
       <p className="text-gray-600 max-w-2xl mx-auto">
-        Rejoignez des milliers de parents qui s'entraident et partagent leurs expériences
+        Un espace pour s'entraider et partager ses expériences entre parents
       </p>
     </motion.div>
   );
