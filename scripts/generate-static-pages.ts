@@ -362,7 +362,12 @@ function articlesIndexBody(all: Article[]): string {
 }
 
 function articleBody(a: Article, remote: boolean): string {
-  const contentHtml = marked.parse(a.content || "") as string;
+  // Normalisation des liens hérités (ancien domaine babybaby.app) avant
+  // conversion Markdown : même règle que le rendu React.
+  const contentHtml = marked.parse(
+    rewriteLegacyLinksInText(a.content || "").text,
+  ) as string;
+
   const tags = Array.isArray(a.tags) ? a.tags : [];
   const imageUrl = safeUrl(a.image);
 
