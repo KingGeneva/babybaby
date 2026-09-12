@@ -767,6 +767,45 @@ export type Database = {
         }
         Relationships: []
       }
+      rebuild_requests: {
+        Row: {
+          article_id: number | null
+          attempts: number
+          completed_at: string | null
+          created_at: string
+          error: string | null
+          http_status: number | null
+          id: string
+          reason: string
+          source: string
+          status: string
+        }
+        Insert: {
+          article_id?: number | null
+          attempts?: number
+          completed_at?: string | null
+          created_at?: string
+          error?: string | null
+          http_status?: number | null
+          id?: string
+          reason?: string
+          source?: string
+          status?: string
+        }
+        Update: {
+          article_id?: number | null
+          attempts?: number
+          completed_at?: string | null
+          created_at?: string
+          error?: string | null
+          http_status?: number | null
+          id?: string
+          reason?: string
+          source?: string
+          status?: string
+        }
+        Relationships: []
+      }
       sleeps: {
         Row: {
           child_id: string
