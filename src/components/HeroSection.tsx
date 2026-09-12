@@ -26,7 +26,7 @@ const HeroSection: React.FC = () => {
         >
           <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-border bg-card shadow-sm">
             <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">
-              Ressources indépendantes · Fait au Québec
+              Contenu indépendant · Sans commandites
             </span>
           </div>
 
@@ -34,7 +34,7 @@ const HeroSection: React.FC = () => {
             id="hero-heading"
             className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[1.05] mb-6"
           >
-            Le guide québécois <br className="hidden md:block" />
+            Le guide indépendant <br className="hidden md:block" />
             des <em className="text-primary not-italic">1000 premiers jours</em>.
           </h1>
 
