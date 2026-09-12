@@ -495,12 +495,19 @@ INTERDICTIONS ABSOLUES : aucun texte, lettre, chiffre, filigrane ou logo dans l'
     // ne régénère pas l'article et n'est jamais présenté comme un succès.
     let rebuild: Record<string, unknown> = { triggered: false, error: "not_attempted" };
     try {
-      const { data, error } = await supabase.functions.invoke("trigger-site-rebuild", {
-        body: { reason: "article_published", articleId },
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/trigger-site-rebuild`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+          "x-cron-secret": Deno.env.get("CRON_SECRET") ?? "",
+        },
+        body: JSON.stringify({ reason: "article_published", articleId }),
       });
-      rebuild = error ? { triggered: false, error: error.message } : (data ?? { triggered: false });
+      rebuild = await res.json().catch(() => ({ triggered: false, error: `HTTP ${res.status}` }));
       console.log("Site rebuild request:", JSON.stringify(rebuild));
     } catch (e) {
+
       rebuild = { triggered: false, error: e instanceof Error ? e.message : String(e) };
       console.warn("Site rebuild request failed (ignored):", rebuild.error);
     }
