@@ -489,6 +489,22 @@ INTERDICTIONS ABSOLUES : aucun texte, lettre, chiffre, filigrane ou logo dans l'
       console.warn("IndexNow ping failed (ignored):", e instanceof Error ? e.message : e);
     }
 
+    // --- Step 6: demande de reconstruction + mise en ligne du site ---
+    // IndexNow ne reconstruit PAS le site : sans nouveau build, la page
+    // prérendue de l'article n'existe pas. Appel non bloquant : un échec ici
+    // ne régénère pas l'article et n'est jamais présenté comme un succès.
+    let rebuild: Record<string, unknown> = { triggered: false, error: "not_attempted" };
+    try {
+      const { data, error } = await supabase.functions.invoke("trigger-site-rebuild", {
+        body: { reason: "article_published", articleId },
+      });
+      rebuild = error ? { triggered: false, error: error.message } : (data ?? { triggered: false });
+      console.log("Site rebuild request:", JSON.stringify(rebuild));
+    } catch (e) {
+      rebuild = { triggered: false, error: e instanceof Error ? e.message : String(e) };
+      console.warn("Site rebuild request failed (ignored):", rebuild.error);
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -498,6 +514,8 @@ INTERDICTIONS ABSOLUES : aucun texte, lettre, chiffre, filigrane ou logo dans l'
         keyword,
         word_count: wordCount,
         trend,
+        rebuild,
+
         triggered_by: isCron ? "cron" : "admin",
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
