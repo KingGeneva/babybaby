@@ -69,7 +69,7 @@ export const faqs: FAQ[] = [
   },
   {
     question: "Est-ce que l'application est gratuite ?",
-    answer: "BabyBaby propose une version gratuite avec des fonctionnalités de base et une version premium avec des fonctionnalités avancées. Vous pouvez découvrir la différence entre les deux versions dans la section 'Abonnements' de l'application.",
+    answer: "BabyBaby est gratuit : les guides, comparatifs, outils et ressources publiés sur le site sont accessibles sans abonnement.",
     category: "Général"
   },
   {

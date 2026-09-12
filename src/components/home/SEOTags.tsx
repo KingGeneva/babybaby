@@ -29,7 +29,7 @@ const SEOTags: React.FC = () => {
     },
     {
       question: "L'application BabyBaby est-elle gratuite ?",
-      answer: "Oui, BabyBaby propose une version gratuite avec toutes les fonctionnalités essentielles : suivi de croissance, calendrier de vaccination, articles et forum communautaire. Une version premium offre des fonctionnalités avancées."
+      answer: "Oui, BabyBaby propose une version gratuite avec toutes les fonctionnalités essentielles : suivi de croissance, calendrier de vaccination, articles et forum communautaire. Tous les guides, comparatifs et outils publiés sur le site sont accessibles gratuitement."
     },
     {
       question: "Comment suivre la croissance de mon bébé ?",

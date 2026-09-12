@@ -39,7 +39,7 @@ const HeroSection: React.FC = () => {
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            Comparatifs de produits testés, calculateurs pratiques et guides gratuits pour t'accompagner de la
+            Comparatifs de produits documentés, calculateurs pratiques et guides gratuits pour t'accompagner de la
             grossesse aux deux ans de bébé — sans jargon, sans commandites déguisées.
           </p>
 

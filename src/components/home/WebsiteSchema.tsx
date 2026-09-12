@@ -10,7 +10,7 @@ const WebsiteSchema: React.FC = () => {
     "name": "BabyBaby",
     "url": "https://babybaby.org/",
     "description": "Application complète pour le suivi de santé et développement de bébé. Outils, conseils et communauté pour parents.",
-    "inLanguage": ["fr-CA", "fr-FR"],
+    "inLanguage": ["fr-CA"],
     "publisher": {
       "@type": "Organization",
       "name": "BabyBaby",
