@@ -313,7 +313,7 @@ function homepageBody(all: Article[]): string {
     .map(
       (a) => `
       <li style="margin-bottom:16px;">
-        <a href="${escapeAttr(articleUrlPath(a))}" style="font-weight:600;color:#0a4b8c;">${escapeHtml(a.title)}</a>
+        <a href="${escapeAttr(articleUrlPath(a) || "/articles")}" style="font-weight:600;color:#0a4b8c;">${escapeHtml(a.title)}</a>
         <p style="margin:4px 0 0;color:#444;">${escapeHtml(truncate(a.excerpt || a.summary || "", 180))}</p>
       </li>`,
     )
@@ -346,7 +346,7 @@ function articlesIndexBody(all: Article[]): string {
       (a) => `
       <li style="margin-bottom:20px;border-bottom:1px solid #eee;padding-bottom:16px;">
         <h2 style="margin:0 0 4px;font-size:18px;">
-          <a href="${escapeAttr(articleUrlPath(a))}" style="color:#0a4b8c;text-decoration:none;">${escapeHtml(a.title)}</a>
+          <a href="${escapeAttr(articleUrlPath(a) || "/articles")}" style="color:#0a4b8c;text-decoration:none;">${escapeHtml(a.title)}</a>
         </h2>
         <p style="margin:0 0 4px;color:#666;font-size:13px;">${escapeHtml(a.category || "")} · ${escapeHtml(a.author || "BabyBaby")} · ${escapeHtml(String(a.readingTime ?? ""))} min de lecture</p>
         <p style="margin:0;color:#333;">${escapeHtml(truncate(a.excerpt || a.summary || "", 240))}</p>
@@ -446,8 +446,16 @@ async function run() {
 
   // Déduplication par id : l'article local (source de vérité versionnée) gagne.
   const byId = new Map<number, { article: Article; remote: boolean }>();
-  for (const a of remote) byId.set(Number(a.id), { article: a, remote: true });
-  for (const a of localArticles) byId.set(Number(a.id), { article: a, remote: false });
+  const register = (a: Article, isRemote: boolean) => {
+    const id = toArticleId(a.id);
+    if (id === undefined) {
+      console.warn(`[prerender] Article ignoré : id invalide (${String(a.id)}).`);
+      return;
+    }
+    byId.set(id, { article: { ...a, id }, remote: isRemote });
+  };
+  for (const a of remote) register(a, true);
+  for (const a of localArticles) register(a, false);
 
   const entries = [...byId.values()].sort((x, y) => Number(y.article.id) - Number(x.article.id));
   const all = entries.map((e) => e.article);
@@ -489,6 +497,7 @@ async function run() {
   // 3. Chaque article (URL canonique = même résolution que le frontend)
   for (const { article: a, remote: isRemote } of entries) {
     const canonicalPath = articleUrlPath(a);
+    if (!canonicalPath) continue;
     const canonical = `${BASE_URL}${canonicalPath}`;
     const published = toIsoDate(a.date);
     const modified = toIsoDate(a.dateModified) || published;
@@ -499,11 +508,11 @@ async function run() {
         "@type": "Article",
         headline: a.title,
         description: a.excerpt || a.summary,
-        image: a.image
-          ? a.image.startsWith("http")
-            ? a.image
-            : `${BASE_URL}${a.image.startsWith("/") ? "" : "/"}${a.image}`
-          : undefined,
+        image: (() => {
+          const img = safeUrl(a.image);
+          if (!img) return undefined;
+          return img.startsWith("http") ? img : `${BASE_URL}${img}`;
+        })(),
         ...(published ? { datePublished: published } : {}),
         ...(modified ? { dateModified: modified } : {}),
         author: { "@type": "Person", name: a.author || "BabyBaby" },
@@ -539,18 +548,17 @@ async function run() {
       description: truncate(a.excerpt || a.summary || a.title, 158),
       path: canonicalPath,
       canonical,
-      ogImage: a.image,
+      ogImage: safeUrl(a.image),
       bodyHtml: articleBody(a, isRemote),
       jsonLd,
     });
 
-    writeRoute(canonicalPath, page);
+    if (!writeRoute(canonicalPath, page)) continue;
     count++;
 
     // Variante /articles/<id> (route legacy toujours servie par le frontend) :
     // même contenu, canonical pointant vers l'URL avec slug.
-    if (canonicalPath !== `/articles/${a.id}`) {
-      writeRoute(`/articles/${a.id}`, page);
+    if (canonicalPath !== `/articles/${a.id}` && writeRoute(`/articles/${a.id}`, page)) {
       count++;
     }
 
@@ -665,14 +673,14 @@ async function run() {
   }
 
   // 6. Sitemap aligné sur les routes réellement générées
-  const buildDay = new Date().toISOString().slice(0, 10);
   const xml =
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     sitemap
-      .map(
-        (u) =>
-          `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${u.lastmod || buildDay}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority.toFixed(1)}</priority>\n  </url>`,
-      )
+      .map((u) => {
+        // Pas de lastmod inventé : on l'omet quand la vraie date est inconnue.
+        const lastmod = u.lastmod ? `\n    <lastmod>${escapeXml(u.lastmod)}</lastmod>` : "";
+        return `  <url>\n    <loc>${escapeXml(u.loc)}</loc>${lastmod}\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority.toFixed(1)}</priority>\n  </url>`;
+      })
       .join("\n") +
     `\n</urlset>\n`;
   writeFileSync(resolve(DIST, "sitemap.xml"), xml);
