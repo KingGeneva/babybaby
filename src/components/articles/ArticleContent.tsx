@@ -4,6 +4,8 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Link } from 'react-router-dom';
 import ArticleMarkdownImage from '@/components/articles/ArticleMarkdownImage';
+import { toInternalHref } from '@/lib/internalLinks';
+
 
 interface ArticleContentProps {
   content: string;
