@@ -37,6 +37,16 @@
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from "fs";
 import { resolve } from "path";
 import { marked } from "marked";
+import {
+  escapeHtml,
+  escapeAttr,
+  escapeXml,
+  sanitizeArticleHtml,
+  safeUrl,
+  toArticleId,
+  articleUrlPath,
+  safeRouteDir,
+} from "./prerender-utils";
 
 import { nutritionArticles } from "../src/data/articles/nutrition";
 import { amenagementArticles } from "../src/data/articles/amenagement";
@@ -64,43 +74,10 @@ marked.setOptions({ gfm: true, breaks: false });
 
 /* ---------------- Utils ---------------- */
 
-function escapeHtml(s: string): string {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-const escapeAttr = escapeHtml;
-
 function truncate(s: string, n: number): string {
   const v = String(s ?? "");
   if (v.length <= n) return v;
   return v.slice(0, n - 1).trimEnd() + "…";
-}
-
-/**
- * Assainit du HTML issu d'une source distante (contenu Storage) :
- * suppression des balises exécutables/embarquées, des gestionnaires
- * d'évènements inline et des URL javascript:.
- */
-function sanitizeHtml(html: string): string {
-  return String(html ?? "")
-    .replace(/<\s*(script|style|iframe|object|embed|form|link|meta|base)\b[\s\S]*?<\s*\/\s*\1\s*>/gi, "")
-    .replace(/<\s*(script|style|iframe|object|embed|form|link|meta|base)\b[^>]*\/?\s*>/gi, "")
-    .replace(/\son[a-z]+\s*=\s*"[^"]*"/gi, "")
-    .replace(/\son[a-z]+\s*=\s*'[^']*'/gi, "")
-    .replace(/\son[a-z]+\s*=\s*[^\s>]+/gi, "")
-    .replace(/(href|src)\s*=\s*"\s*javascript:[^"]*"/gi, '$1="#"')
-    .replace(/(href|src)\s*=\s*'\s*javascript:[^']*'/gi, "$1='#'");
-}
-
-/** Même résolution d'URL que src/lib/articleUrl.ts (source de vérité frontend). */
-function articleUrlPath(a: Pick<Article, "id" | "slug">): string {
-  if (a.slug && a.slug.length > 0) return `/articles/${a.slug}-${a.id}`;
-  return `/articles/${a.id}`;
 }
 
 const FRENCH_MONTHS: Record<string, number> = {
@@ -296,11 +273,15 @@ function renderPage(meta: PageMeta): string {
   return html;
 }
 
-function writeRoute(routePath: string, html: string) {
-  const isRoot = routePath === "/";
-  const outDir = isRoot ? DIST : resolve(DIST, routePath.replace(/^\//, ""));
+function writeRoute(routePath: string, html: string): boolean {
+  const outDir = safeRouteDir(DIST, routePath);
+  if (!outDir) {
+    console.warn(`[prerender] Route ignorée (hors de dist/ ou invalide) : ${routePath}`);
+    return false;
+  }
   mkdirSync(outDir, { recursive: true });
   writeFileSync(resolve(outDir, "index.html"), html);
+  return true;
 }
 
 /* ---------------- Gabarits de contenu (visibles) ---------------- */
@@ -381,11 +362,11 @@ function articlesIndexBody(all: Article[]): string {
 }
 
 function articleBody(a: Article, remote: boolean): string {
-  const parsed = marked.parse(a.content || "") as string;
-  const contentHtml = remote ? sanitizeHtml(parsed) : parsed;
+  const contentHtml = marked.parse(a.content || "") as string;
   const tags = Array.isArray(a.tags) ? a.tags : [];
-  return shellWrap(`
-    ${navLinks()}
+  const imageUrl = safeUrl(a.image);
+
+  const article = `
     <article>
       <p style="color:#666;font-size:13px;margin:0;">
         <a href="/articles" style="color:#0a4b8c;">← Tous les articles</a> · ${escapeHtml(a.category || "")}
@@ -394,7 +375,7 @@ function articleBody(a: Article, remote: boolean): string {
       <p style="color:#666;font-size:14px;">
         Par <strong>${escapeHtml(a.author || "BabyBaby")}</strong> · ${escapeHtml(a.date || "")}${a.readingTime ? ` · ${escapeHtml(String(a.readingTime))} min de lecture` : ""}
       </p>
-      ${a.image ? `<img src="${escapeAttr(a.image)}" alt="${escapeAttr(a.image_alt || a.title)}" style="max-width:100%;height:auto;border-radius:8px;margin:16px 0;" />` : ""}
+      ${imageUrl ? `<img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(a.image_alt || a.title)}" style="max-width:100%;height:auto;border-radius:8px;margin:16px 0;" />` : ""}
       <p style="font-size:18px;color:#222;">${escapeHtml(a.excerpt || a.summary || "")}</p>
       <div>${contentHtml}</div>
       ${
@@ -415,6 +396,13 @@ function articleBody(a: Article, remote: boolean): string {
           : ""
       }
     </article>
+  `;
+
+  // Contenu distant : TOUT le corps assemblé (titre, image, extrait, contenu,
+  // FAQ, tags) repasse par l'allowlist, pas seulement le markdown converti.
+  return shellWrap(`
+    ${navLinks()}
+    ${remote ? sanitizeArticleHtml(article) : article}
   `);
 }
 
