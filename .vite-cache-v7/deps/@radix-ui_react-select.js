@@ -3,22 +3,18 @@ import {
   VisuallyHidden
 } from "./chunk-FWMB4JYE.js";
 import {
-  Anchor,
-  Arrow,
-  Content,
-  Root2,
-  createPopperScope
-} from "./chunk-D7VZAXDT.js";
-import {
   clamp
 } from "./chunk-TCQMTAGU.js";
 import {
   usePrevious
 } from "./chunk-XSAN5JCE.js";
 import {
-  createCollection,
-  useDirection
-} from "./chunk-DF7W5PGO.js";
+  Anchor,
+  Arrow,
+  Content,
+  Root2,
+  createPopperScope
+} from "./chunk-W6TQM2K5.js";
 import "./chunk-IYTRS3XW.js";
 import {
   FocusScope,
@@ -38,8 +34,15 @@ import {
   useEscapeKeydown
 } from "./chunk-RHSD74HD.js";
 import {
+  createCollection,
+  useDirection
+} from "./chunk-DF7W5PGO.js";
+import {
   useId
 } from "./chunk-5DK3BDYL.js";
+import {
+  createContextScope
+} from "./chunk-77EU5DFA.js";
 import {
   composeEventHandlers,
   useControllableState
@@ -48,9 +51,6 @@ import {
   useCallbackRef,
   useLayoutEffect2
 } from "./chunk-TVCOGUU4.js";
-import {
-  createContextScope
-} from "./chunk-77EU5DFA.js";
 import {
   Primitive,
   dispatchDiscreteCustomEvent

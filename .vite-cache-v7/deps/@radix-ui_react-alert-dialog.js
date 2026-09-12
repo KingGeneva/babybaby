@@ -23,6 +23,10 @@ import {
   useId
 } from "./chunk-5DK3BDYL.js";
 import {
+  createContext2,
+  createContextScope
+} from "./chunk-77EU5DFA.js";
+import {
   composeEventHandlers,
   useControllableState
 } from "./chunk-ZRGYVYS6.js";
@@ -30,10 +34,6 @@ import {
   useCallbackRef,
   useLayoutEffect2
 } from "./chunk-TVCOGUU4.js";
-import {
-  createContext2,
-  createContextScope
-} from "./chunk-77EU5DFA.js";
 import {
   Primitive,
   dispatchDiscreteCustomEvent

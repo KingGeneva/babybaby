@@ -5,7 +5,7 @@ import {
   Content,
   Root2,
   createPopperScope
-} from "./chunk-D7VZAXDT.js";
+} from "./chunk-W6TQM2K5.js";
 import "./chunk-IYTRS3XW.js";
 import {
   FocusScope,
@@ -31,6 +31,9 @@ import {
   useId
 } from "./chunk-5DK3BDYL.js";
 import {
+  createContextScope
+} from "./chunk-77EU5DFA.js";
+import {
   composeEventHandlers,
   useControllableState
 } from "./chunk-ZRGYVYS6.js";
@@ -38,9 +41,6 @@ import {
   useCallbackRef,
   useLayoutEffect2
 } from "./chunk-TVCOGUU4.js";
-import {
-  createContextScope
-} from "./chunk-77EU5DFA.js";
 import {
   Primitive,
   dispatchDiscreteCustomEvent
