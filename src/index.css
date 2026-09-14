@@ -1,8 +1,7 @@
+@import './styles/neumorphic.css';
+
 @tailwind base;
 @tailwind components;
-
-/* Must be imported after `@tailwind components` so `@layer components` is registered */
-@import './styles/neumorphic.css';
 
 @tailwind utilities;
 

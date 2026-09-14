@@ -8,7 +8,6 @@ import Logo from "./Logo";
 import DesktopNav from "./nav/DesktopNav";
 import MobileMenu from "./nav/MobileMenu";
 import { cn } from "@/lib/utils";
-import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 const NavBar = () => {
   const { user } = useAuth();
@@ -17,7 +16,6 @@ const NavBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  const reducedMotion = usePrefersReducedMotion();
 
   const toggleResources = (e: React.MouseEvent) => {
     e.preventDefault();
