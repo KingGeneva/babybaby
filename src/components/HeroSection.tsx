@@ -53,7 +53,7 @@ const HeroSection: React.FC = () => {
       aria-labelledby="hero-heading"
     >
       <div className="hero-rule" aria-hidden />
-      <div className="container mx-auto px-5 md:px-8 py-12 md:py-16 lg:py-20">
+      <div className="container mx-auto px-5 md:px-8 py-8 md:py-16 lg:py-20">
         <div className="hero-layout">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -63,12 +63,12 @@ const HeroSection: React.FC = () => {
         >
           <h1
             id="hero-heading"
-            className="font-display text-[clamp(3rem,7vw,6.8rem)] text-foreground leading-[0.94] mb-7"
+            className="font-display text-[clamp(2.65rem,7vw,6.8rem)] text-foreground leading-[0.94] mb-5 md:mb-7"
           >
             La ressource pour les 1000 premiers jours de <em className="text-primary not-italic">bébé</em>.
           </h1>
 
-          <p className="text-base md:text-xl text-muted-foreground max-w-xl mb-9 leading-relaxed">
+          <p className="text-base md:text-xl text-muted-foreground max-w-xl mb-6 md:mb-9 leading-relaxed">
             Comparatifs de produits documentés, calculateurs pratiques et guides gratuits pour t'accompagner de la
             grossesse aux deux ans de bébé — sans jargon, sans commandites déguisées.
           </p>

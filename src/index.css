@@ -346,7 +346,7 @@
 @media (max-width: 767px) {
   .home-hero { min-height: auto; }
   .hero-layout { min-height: auto; }
-  .hero-scene-shell { min-height: 400px; }
+  .hero-scene-shell { min-height: 330px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, RoundedBox } from "@react-three/drei";
-import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import * as THREE from "three";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 
 interface SceneProps {
   quality: "low" | "high";
@@ -187,6 +189,24 @@ function MobileSculpture({ quality }: { quality: "low" | "high" }) {
   );
 }
 
+function SubtleBloom() {
+  const { gl, scene, camera, size } = useThree();
+  const composer = useMemo(() => {
+    const nextComposer = new EffectComposer(gl);
+    nextComposer.addPass(new RenderPass(scene, camera));
+    nextComposer.addPass(new UnrealBloomPass(new THREE.Vector2(size.width, size.height), 0.24, 0.42, 1.05));
+    return nextComposer;
+  }, [camera, gl, scene, size.height, size.width]);
+
+  useEffect(() => {
+    composer.setSize(size.width, size.height);
+    return () => composer.dispose();
+  }, [composer, size.height, size.width]);
+
+  useFrame((_, delta) => composer.render(Math.min(delta, 0.05)), 1);
+  return null;
+}
+
 function Scene({ quality }: SceneProps) {
   return (
     <>
@@ -199,7 +219,7 @@ function Scene({ quality }: SceneProps) {
         <Lightformer intensity={1.6} position={[-5, 1, 0]} rotation-y={Math.PI / 2} scale={[5, 2, 1]} color={palette.peach} />
       </Environment>
       <MobileSculpture quality={quality} />
-      {quality === "high" && <EffectComposer multisampling={0}><Bloom luminanceThreshold={1.05} mipmapBlur intensity={0.32} radius={0.62} /></EffectComposer>}
+      {quality === "high" && <SubtleBloom />}
     </>
   );
 }
