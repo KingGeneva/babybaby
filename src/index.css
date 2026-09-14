@@ -264,7 +264,8 @@
   .hero-copy { @apply py-6; }
   .hero-rule { @apply absolute left-5 top-8 bottom-8 border-l border-accent/50 md:left-8; }
   .hero-scene-shell { @apply relative min-h-[390px] md:min-h-[540px] lg:min-h-[640px] overflow-hidden; }
-  .hero-scene-shell canvas { @apply absolute inset-0 size-full; }
+  .hero-scene-shell > div:not(.hero-scene-caption) { @apply absolute inset-0 size-full; }
+  .hero-scene-shell canvas { @apply size-full; }
   .hero-scene-caption { @apply absolute z-10 right-3 top-8 flex flex-col text-right text-[10px] font-semibold uppercase text-muted-foreground; letter-spacing: .14em; }
   .hero-contest-link { @apply mt-7 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring; }
 

@@ -47,66 +47,42 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
       <NavigationMenu>
         <NavigationMenuList className="gap-1">
           <NavigationMenuItem>
-            <Link to="/tools">
-              <NavigationMenuLink className={cn(
+            <NavigationMenuLink asChild className={cn(
                 navigationMenuTriggerStyle(),
                  isActive("/tools") && "bg-muted text-primary font-medium"
-              )}>
-                Outils
-              </NavigationMenuLink>
-            </Link>
+              )}><Link to="/tools">Outils</Link></NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link to="/articles">
-              <NavigationMenuLink className={cn(
+            <NavigationMenuLink asChild className={cn(
                 navigationMenuTriggerStyle(),
                  isActive("/articles") && "bg-muted text-primary font-medium"
-              )}>
-                Articles
-              </NavigationMenuLink>
-            </Link>
+              )}><Link to="/articles">Articles</Link></NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link to="/meilleurs-produits-bebe-2026">
-              <NavigationMenuLink className={cn(
+            <NavigationMenuLink asChild className={cn(
                 navigationMenuTriggerStyle(),
                  isActive("/meilleurs-produits-bebe-2026") && "bg-muted text-primary font-medium"
-              )}>
-                Meilleurs Produits 2026
-              </NavigationMenuLink>
-            </Link>
+              )}><Link to="/meilleurs-produits-bebe-2026">Meilleurs Produits 2026</Link></NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link to="/contests">
-              <NavigationMenuLink className={cn(
+            <NavigationMenuLink asChild className={cn(
                 navigationMenuTriggerStyle(),
                  isActive("/contests") && "bg-muted text-primary font-medium"
-              )}>
-                Concours
-              </NavigationMenuLink>
-            </Link>
+              )}><Link to="/contests">Concours</Link></NavigationMenuLink>
           </NavigationMenuItem>
           {user && (
             <>
               <NavigationMenuItem>
-                <Link to="/courses">
-                  <NavigationMenuLink className={cn(
+                <NavigationMenuLink asChild className={cn(
                     navigationMenuTriggerStyle(),
                      isActive("/courses") && "bg-muted text-primary font-medium"
-                  )}>
-                    Cours
-                  </NavigationMenuLink>
-                </Link>
+                  )}><Link to="/courses">Cours</Link></NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/parental-dashboard">
-                  <NavigationMenuLink className={cn(
+                <NavigationMenuLink asChild className={cn(
                     navigationMenuTriggerStyle(),
                      isActive("/parental-dashboard") && "bg-muted text-primary font-medium"
-                  )}>
-                    Tableau de bord
-                  </NavigationMenuLink>
-                </Link>
+                  )}><Link to="/parental-dashboard">Tableau de bord</Link></NavigationMenuLink>
               </NavigationMenuItem>
             </>
           )}
