@@ -4,7 +4,7 @@ const HeroSceneFallback = () => (
     <div className="fallback-mobile-bar" />
     <div className="fallback-string fallback-string-one"><span className="fallback-moon" /></div>
     <div className="fallback-string fallback-string-two"><span className="fallback-cloud" /></div>
-    <div className="fallback-string fallback-string-three"><span className="fallback-star">✦</span></div>
+    <div className="fallback-string fallback-string-three"><span className="fallback-star" /></div>
     <div className="fallback-orbit fallback-orbit-one" />
     <div className="fallback-orbit fallback-orbit-two" />
   </div>

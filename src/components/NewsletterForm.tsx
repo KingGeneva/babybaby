@@ -9,7 +9,6 @@ import { Check, Gift } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import SubscriptionBenefits from './subscription/SubscriptionBenefits';
-import SocialProof from './subscription/SocialProof';
 import { z } from 'zod';
 
 const newsletterSchema = z.object({
@@ -121,9 +120,6 @@ const NewsletterForm: React.FC = () => {
         <div>
           <h4 className="font-semibold mb-4 text-primary">Pourquoi s'abonner ?</h4>
           <SubscriptionBenefits />
-          <div className="mt-4">
-            <SocialProof compact className="mt-4" />
-          </div>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -191,10 +187,7 @@ const NewsletterForm: React.FC = () => {
             />
             <Label htmlFor="consent" className="text-xs text-muted-foreground">
               J'accepte de recevoir des emails de BabyBaby et la{' '}
-              <a href="/privacy-policy" className="text-primary underline">
-                politique de confidentialité
-              </a>
-              .
+              la politique de confidentialité liée à cette inscription.
             </Label>
           </div>
 
