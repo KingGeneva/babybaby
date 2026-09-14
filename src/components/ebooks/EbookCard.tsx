@@ -29,11 +29,11 @@ const EbookCard: React.FC<EbookCardProps> = ({ ebook, onDownload, isLoading }) =
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="h-full"
+      className="h-full library-card-wrap"
     >
-      <Card className="h-full flex flex-col hover:shadow-lg transition-shadow duration-300">
+      <Card className="library-card h-full flex flex-col transition-all duration-300 rounded-lg">
         <CardHeader className="pb-4">
-          <div className="aspect-[3/4] rounded-md overflow-hidden mb-4 group">
+          <div className="aspect-[3/4] rounded-sm overflow-hidden mb-4 group bg-muted">
             <img 
               src={ebook.coverImage} 
               alt={ebook.title} 
@@ -43,12 +43,12 @@ const EbookCard: React.FC<EbookCardProps> = ({ ebook, onDownload, isLoading }) =
           <CardTitle className="text-lg font-semibold leading-tight">{ebook.title}</CardTitle>
         </CardHeader>
         <CardContent className="flex-grow">
-          <CardDescription className="text-gray-600">
+          <CardDescription className="text-muted-foreground">
             {ebook.description}
           </CardDescription>
         </CardContent>
         <CardFooter className="flex flex-col space-y-3 pt-4">
-          <div className="text-sm text-gray-500 w-full flex justify-between">
+          <div className="text-sm text-muted-foreground w-full flex justify-between">
             <span>{ebook.fileType}</span>
             <span>{ebook.fileSize}</span>
           </div>
@@ -56,27 +56,25 @@ const EbookCard: React.FC<EbookCardProps> = ({ ebook, onDownload, isLoading }) =
             <div className="flex gap-2 w-full">
               <Button 
                 variant="outline" 
-                className="flex-1 flex items-center justify-center gap-2 border-babybaby-cosmic text-babybaby-cosmic hover:bg-babybaby-cosmic hover:text-white"
+                className="flex-1 flex items-center justify-center gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                 onClick={() => onDownload(ebook)}
                 disabled={isLoading}
               >
                 <Download className="h-4 w-4" />
                 {isLoading ? 'Préparation...' : 'Télécharger'}
               </Button>
-              <Button 
-                variant="default" 
-                className="flex-1 flex items-center justify-center gap-2 bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
-              >
-                <Link to={`/ebooks/${ebook.id}`} className="flex items-center justify-center gap-2 w-full">
+              <Button variant="default" className="flex-1" asChild>
+                <Link to={`/ebooks/${ebook.id}`}>
                   <BookOpen className="h-4 w-4" />
                   Lire
+                </Link>
                 </Link>
               </Button>
             </div>
           ) : (
             <Button 
               variant="default" 
-              className="w-full flex items-center justify-center gap-2 bg-babybaby-cosmic hover:bg-babybaby-cosmic/90"
+              className="w-full"
               asChild
             >
               <Link to="/auth">

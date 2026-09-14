@@ -10,9 +10,14 @@ import HeritageSection from './HeritageSection';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Calculator, ArrowRight } from 'lucide-react';
+import { useRef } from 'react';
+import HomeJourneyNav from './HomeJourneyNav';
+import { useHomeScrollOrchestration } from '@/hooks/useHomeScrollOrchestration';
 
 const HomePageContent: React.FC = () => {
   const lastMod = new Date().toISOString();
+  const rootRef = useRef<HTMLDivElement>(null);
+  useHomeScrollOrchestration(rootRef);
 
   return (
     <>
@@ -27,45 +32,53 @@ const HomePageContent: React.FC = () => {
         <link rel="prefetch" href="/tools" />
       </Helmet>
 
-      <div className="animate-fade-in">
+      <div ref={rootRef} className="home-editorial" data-active-scene="arrival">
+        <HomeJourneyNav />
         {/* 1. Promesse & features */}
         <KeyFeaturesSection />
 
         {/* 1bis. Calculateur coût bébé Québec (asset partageable) */}
-        <section className="py-12 px-4" aria-labelledby="calc-promo-heading">
-          <div className="container mx-auto max-w-3xl">
+        <section className="calculator-feature" aria-labelledby="calc-promo-heading" data-scene="discover">
+          <div className="container mx-auto px-5 md:px-8">
             <Link
               to="/calculateur-cout-bebe-quebec"
-              className="group block rounded-3xl bg-gradient-to-br from-primary/10 via-background to-secondary/10 border border-primary/20 p-8 md:p-10 hover:shadow-xl transition-shadow"
+              className="calculator-feature-link group"
+              data-reveal
             >
-              <div className="flex flex-col md:flex-row md:items-center gap-6">
-                <div className="h-14 w-14 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shrink-0">
+              <div className="calculator-copy">
+                <div className="feature-icon">
                   <Calculator className="h-7 w-7" />
                 </div>
-                <div className="flex-1">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-primary mb-1">Nouveau · Outil gratuit</p>
-                  <h2 id="calc-promo-heading" className="font-display text-2xl md:text-3xl font-bold mb-2">
+                <div>
+                  <p className="section-kicker">Outil gratuit</p>
+                  <h2 id="calc-promo-heading" className="section-title">
                     Combien coûte un bébé au Québec en 2026 ?
                   </h2>
-                  <p className="text-muted-foreground text-sm md:text-base">
+                  <p className="section-intro">
                     Calculateur interactif avec RQAP et Allocation famille. Résultat personnalisé en 30 secondes.
                   </p>
                 </div>
-                <ArrowRight className="h-6 w-6 text-primary transition-transform group-hover:translate-x-1 hidden md:block" />
+              </div>
+              <div className="calculator-preview" aria-hidden>
+                <span>Budget mensuel</span>
+                <strong>Personnalisé</strong>
+                <div className="calculator-bars"><i /><i /><i /><i /></div>
+                <small>Alimentation · Couches · Garde · Équipement</small>
+                <ArrowRight className="calculator-arrow" />
               </div>
             </Link>
           </div>
         </section>
 
         {/* 2. Contenu frais (articles) */}
-        <ArticleSection />
+        <div data-scene="learn"><ArticleSection /></div>
 
         {/* 3. Preuve sociale */}
         <TestimonialsCarousel />
 
         {/* 3bis. Quiz interactif */}
-        <section className="py-16 px-4" aria-labelledby="quiz-heading">
-          <div className="container mx-auto">
+        <section className="quiz-band" aria-labelledby="quiz-heading" data-scene="grow">
+          <div className="container mx-auto px-5 md:px-8">
             <h2 id="quiz-heading" className="sr-only">Quiz parental</h2>
             <ParentingQuiz />
           </div>
@@ -78,10 +91,10 @@ const HomePageContent: React.FC = () => {
         <HeritageSection />
 
         {/* 5. CTA final + newsletter */}
-        <CTASection />
+        <div data-scene="connect"><CTASection /></div>
 
-        <section className="py-16 px-4 bg-muted/30" aria-labelledby="newsletter-heading">
-          <div className="container mx-auto max-w-2xl">
+        <section className="newsletter-band" aria-labelledby="newsletter-heading">
+          <div className="container mx-auto px-5 md:px-8 max-w-5xl">
             <h2 id="newsletter-heading" className="sr-only">Inscription à la newsletter</h2>
             <NewsletterForm />
           </div>
