@@ -1,6 +1,6 @@
 import {
   isWebGL2Available
-} from "./chunk-L7M3THIQ.js";
+} from "./chunk-NM6IJCNW.js";
 import {
   applyProps,
   createPortal,
@@ -8,7 +8,7 @@ import {
   useFrame,
   useLoader,
   useThree
-} from "./chunk-NM7OILKR.js";
+} from "./chunk-KFHXR4D2.js";
 import {
   AlwaysDepth,
   BackSide,
@@ -84,7 +84,7 @@ import {
   VideoTexture,
   WebGLCubeRenderTarget,
   WebGLRenderTarget
-} from "./chunk-DDVW3QMX.js";
+} from "./chunk-NLCTYGUK.js";
 import {
   require_jsx_runtime
 } from "./chunk-B2HMOCGO.js";

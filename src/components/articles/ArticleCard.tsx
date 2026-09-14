@@ -45,7 +45,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
   return (
     <Card className="article-card group overflow-hidden h-full flex flex-col bg-card border-border transition-all duration-500 rounded-lg">
-      <Link to={`/articles/${article.id}`} className="block relative aspect-[4/3] overflow-hidden bg-muted">
+      <div className="block relative aspect-[4/3] overflow-hidden bg-muted">
+        <Link to={articleUrl(article)} className="absolute inset-0" aria-label={`Lire ${article.title}`}>
         {!imageError && (
           <motion.img
             src={article.image}
@@ -57,7 +58,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             loading="lazy"
           />
         )}
-        <div className="absolute top-3 left-3">
+        </Link>
+        <div className="pointer-events-none absolute top-3 left-3">
           <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${badge.className}`}>
             {badge.label}
           </span>
@@ -69,7 +71,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             description={`${article.title} — babybaby.org`}
           />
         </div>
-      </Link>
+      </div>
 
 
       <CardHeader className="pb-2">

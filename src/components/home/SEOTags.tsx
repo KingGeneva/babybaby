@@ -44,8 +44,8 @@ const SEOTags: React.FC = () => {
   return (
     <>
       <SEOHead 
-        title="BabyBaby - Application de suivi de bébé | Santé, Croissance et Développement" 
-        description="BabyBaby : L'application complète pour les parents modernes. Suivez la croissance, la santé et le développement de votre bébé avec des outils innovants. Conseils d'experts et communauté bienveillante."
+        title="Le guide des 1000 premiers jours de bébé"
+        description="Comparatifs documentés, calculateurs pratiques et guides gratuits pour accompagner les parents de la grossesse aux deux ans de bébé."
         canonicalUrl={homeCanonicalUrl}
         ogType="website"
         ogImage="https://babybaby.org/lovable-uploads/d76e5129-3f95-434d-87a3-66c35ce002dd.png"

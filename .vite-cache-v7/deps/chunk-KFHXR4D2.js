@@ -18,7 +18,7 @@ import {
   Vector3,
   WebGLRenderer,
   three_module_exports
-} from "./chunk-DDVW3QMX.js";
+} from "./chunk-NLCTYGUK.js";
 import {
   require_jsx_runtime
 } from "./chunk-B2HMOCGO.js";
@@ -17973,4 +17973,4 @@ react-reconciler/cjs/react-reconciler.development.js:
    * LICENSE file in the root directory of this source tree.
    *)
 */
-//# sourceMappingURL=chunk-NM7OILKR.js.map
+//# sourceMappingURL=chunk-KFHXR4D2.js.map
