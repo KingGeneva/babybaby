@@ -8,11 +8,11 @@ import {
   subscribeWithSelector
 } from "./chunk-ZMV4XNHN.js";
 import {
-  require_client
-} from "./chunk-BNJV5JGC.js";
-import {
   require_prop_types
 } from "./chunk-3ANS3TC5.js";
+import {
+  require_client
+} from "./chunk-BNJV5JGC.js";
 import {
   ArcballControls,
   AsciiEffect,
