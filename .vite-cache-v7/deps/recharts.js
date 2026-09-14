@@ -7,7 +7,7 @@ import {
 } from "./chunk-KDVGFZWC.js";
 import {
   require_react_dom
-} from "./chunk-KDUSVCWO.js";
+} from "./chunk-67T7GQ6D.js";
 import {
   require_react
 } from "./chunk-OC5S6P4L.js";

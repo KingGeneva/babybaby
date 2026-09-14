@@ -3,7 +3,7 @@ import {
 } from "./chunk-74ALETPU.js";
 import {
   require_react_dom
-} from "./chunk-KDUSVCWO.js";
+} from "./chunk-67T7GQ6D.js";
 import {
   require_jsx_runtime
 } from "./chunk-B2HMOCGO.js";
@@ -56,4 +56,4 @@ export {
   Primitive,
   dispatchDiscreteCustomEvent
 };
-//# sourceMappingURL=chunk-AS4TUE2O.js.map
+//# sourceMappingURL=chunk-4XWVWRRO.js.map
