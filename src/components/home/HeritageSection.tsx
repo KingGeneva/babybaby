@@ -4,29 +4,27 @@ import { Calendar, Award, Globe } from 'lucide-react';
 const HeritageSection: React.FC = () => {
   return (
     <section
-      className="py-16 px-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5"
+       className="editorial-section border-y border-border bg-card"
       aria-labelledby="heritage-heading"
     >
-      <div className="container mx-auto max-w-4xl">
-        <div className="text-center mb-10">
-          <span className="inline-block px-4 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            Histoire du domaine
-          </span>
+      <div className="container mx-auto px-5 md:px-8 max-w-6xl">
+        <div className="editorial-heading" data-reveal>
+          <p className="section-kicker">Histoire du domaine</p>
           <h2
             id="heritage-heading"
-            className="text-3xl md:text-4xl font-bold mb-4"
+            className="section-title"
           >
             Un nom de domaine avec une longue histoire
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="section-intro max-w-2xl">
             Le domaine babybaby.org est enregistré depuis 1998 et a servi à
             d'autres projets avant nous. La plateforme actuelle, elle, est un
             projet récent et distinct.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-10">
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-sm">
+        <div className="grid md:grid-cols-3 gap-px bg-border border border-border mb-10">
+          <div className="p-7 bg-background" data-reveal>
             <Calendar className="w-8 h-8 text-primary mb-3" />
             <h3 className="font-semibold mb-2">1998 — Enregistrement du domaine</h3>
             <p className="text-sm text-muted-foreground">
@@ -35,7 +33,7 @@ const HeritageSection: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-sm">
+          <div className="p-7 bg-background" data-reveal>
             <Award className="w-8 h-8 text-primary mb-3" />
             <h3 className="font-semibold mb-2">2000–2003 — Martha Stewart</h3>
             <p className="text-sm text-muted-foreground">
@@ -44,7 +42,7 @@ const HeritageSection: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-sm">
+          <div className="p-7 bg-background" data-reveal>
             <Globe className="w-8 h-8 text-primary mb-3" />
             <h3 className="font-semibold mb-2">Aujourd'hui — Plateforme actuelle</h3>
             <p className="text-sm text-muted-foreground">

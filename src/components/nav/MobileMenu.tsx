@@ -23,15 +23,18 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="md:hidden bg-background border border-border rounded-xl shadow-lg mx-4 mt-2 overflow-hidden z-50"
+          id="mobile-navigation"
+          role="navigation"
+          aria-label="Menu principal"
+          className="md:hidden bg-background border-y border-border shadow-premium overflow-hidden z-50"
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {user && (
-              <div className="border-b border-gray-100 mb-2 pb-2">
-                <h3 className="px-3 py-2 text-sm font-medium text-gray-500">Mon compte</h3>
+              <div className="border-b border-border mb-2 pb-2">
+                <h3 className="px-3 py-2 text-sm font-medium text-muted-foreground">Mon compte</h3>
                 <Link
                   to="/parental-dashboard"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                  className="flex min-h-11 items-center px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-muted"
                 >
                   <LayoutDashboard className="h-4 w-4 mr-2" />
                   Tableau de bord
@@ -39,7 +42,7 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
                 {isAdmin && (
                   <Link
                     to="/admin"
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                    className="flex min-h-11 items-center px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-muted"
                   >
                     <Shield className="h-4 w-4 mr-2" />
                     Administration
@@ -47,7 +50,7 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
                 )}
                 <button
                   onClick={signOut}
-                  className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                  className="w-full min-h-11 text-left px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-muted flex items-center"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Se déconnecter
@@ -57,25 +60,25 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
             
             <Link
               to="/tools"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
+              className="block min-h-11 px-3 py-3 rounded-md text-base font-medium text-foreground hover:bg-muted"
             >
               Outils
             </Link>
             <Link
               to="/articles"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
+              className="block min-h-11 px-3 py-3 rounded-md text-base font-medium text-foreground hover:bg-muted"
             >
               Articles
             </Link>
             <Link
               to="/meilleurs-produits-bebe-2026"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
+              className="block min-h-11 px-3 py-3 rounded-md text-base font-medium text-foreground hover:bg-muted"
             >
               Meilleurs Produits 2026
             </Link>
             <Link
               to="/contests"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
+              className="block min-h-11 px-3 py-3 rounded-md text-base font-medium text-foreground hover:bg-muted"
             >
               Concours
             </Link>
@@ -84,7 +87,7 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
             {user && (
               <Link
                 to="/courses"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                className="flex min-h-11 items-center px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-muted"
               >
                 <BookOpen className="h-4 w-4 mr-2" />
                 Cours
@@ -92,13 +95,11 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
             )}
 
             <div>
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleDropdown();
-                }}
-                className="flex justify-between items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
+              <button
+                type="button"
+                onClick={toggleDropdown}
+                aria-expanded={isDropdownOpen}
+                className="flex w-full min-h-11 justify-between items-center px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-muted"
               >
                 <span>Ressources</span>
                 <motion.div
@@ -107,7 +108,7 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
                 >
                   <ChevronRight size={16} />
                 </motion.div>
-              </a>
+              </button>
 
               <AnimatePresence>
                 {isDropdownOpen && (
@@ -119,39 +120,39 @@ const MobileMenu = ({ isOpen, isDropdownOpen, toggleDropdown }: MobileMenuProps)
                   >
                     <Link
                       to="/ebooks"
-                      className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
+                      className="block min-h-11 px-3 py-3 rounded-md text-sm font-medium text-foreground hover:bg-muted"
                     >
                       E-books & Guides
                     </Link>
                     <Link
                       to="/favoris"
-                      className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                      className="flex min-h-11 items-center px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-muted"
                     >
                       <Heart className="h-4 w-4 mr-2" />
                       Favoris
                     </Link>
                     <Link
                       to="/free-offers"
-                      className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic flex items-center"
+                      className="flex min-h-11 items-center px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-muted"
                     >
                       <Gift className="h-4 w-4 mr-2" />
                       Offres Gratuites
                     </Link>
                     <Link
                       to="/community"
-                      className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
+                      className="block min-h-11 px-3 py-3 rounded-md text-sm font-medium text-foreground hover:bg-muted"
                     >
                       Communauté
                     </Link>
                     <Link
                       to="/faq"
-                      className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
+                      className="block min-h-11 px-3 py-3 rounded-md text-sm font-medium text-foreground hover:bg-muted"
                     >
                       FAQ
                     </Link>
                     <Link
                       to="/about"
-                      className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-babybaby-cosmic/10 hover:text-babybaby-cosmic"
+                      className="block min-h-11 px-3 py-3 rounded-md text-sm font-medium text-foreground hover:bg-muted"
                     >
                       À propos
                     </Link>
