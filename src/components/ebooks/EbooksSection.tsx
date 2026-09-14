@@ -48,14 +48,16 @@ const EbooksSection: React.FC = () => {
   };
   
   return (
-    <section className="editorial-section library-section">
-      <div className="container mx-auto px-5 md:px-8">
+    <section className="py-16 bg-gradient-to-b from-white to-sky-50">
+      <div className="container mx-auto px-4">
         <div
-          className="editorial-heading editorial-heading-row"
-          data-reveal
+          className="text-center mb-10 animate-fade-in"
         >
-          <div><p className="section-kicker"><Book className="inline h-4 w-4 mr-2" />La petite bibliothèque</p><h2 className="section-title">Des guides à garder près de soi.</h2></div>
-          <p className="section-intro">Des ressources gratuites à consulter à votre rythme, de la grossesse aux premières années.</p>
+          <Book className="mx-auto h-10 w-10 text-babybaby-cosmic mb-4" />
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-babybaby-cosmic">Nos E-books Gratuits</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Des ressources expertisées pour vous accompagner dans votre parcours parental
+          </p>
         </div>
 
         <div className="relative">
@@ -68,7 +70,7 @@ const EbooksSection: React.FC = () => {
           />
 
           <div
-            className="library-grid"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in"
           >
             {visibleEbooks.map((ebook) => (
               <EbookCard 
@@ -82,12 +84,11 @@ const EbooksSection: React.FC = () => {
         </div>
         
         <div 
-          className="mt-10"
-          data-reveal
+          className="text-center mt-10 animate-fade-in"
         >
           <Button 
             variant="link" 
-            className="text-primary"
+            className="text-babybaby-cosmic"
             asChild
           >
             <Link to="/ebooks">

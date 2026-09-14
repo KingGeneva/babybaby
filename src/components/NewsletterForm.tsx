@@ -9,6 +9,7 @@ import { Check, Gift } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import SubscriptionBenefits from './subscription/SubscriptionBenefits';
+import SocialProof from './subscription/SocialProof';
 import { z } from 'zod';
 
 const newsletterSchema = z.object({
@@ -21,13 +22,13 @@ const newsletterSchema = z.object({
 type Segment = z.infer<typeof newsletterSchema>['age_segment'];
 
 const SEGMENTS: { value: Segment; label: string }[] = [
-  { value: 'pregnancy', label: 'Grossesse' },
-  { value: '0-3m', label: '0-3 mois' },
-  { value: '4-6m', label: '4-6 mois' },
-  { value: '7-12m', label: '7-12 mois' },
-  { value: '1-2y', label: '1-2 ans' },
-  { value: '2y+', label: '2 ans +' },
-  { value: 'unknown', label: 'Préfère ne pas dire' },
+  { value: 'pregnancy', label: '🤰 Grossesse' },
+  { value: '0-3m', label: '👶 0-3 mois' },
+  { value: '4-6m', label: '🍼 4-6 mois' },
+  { value: '7-12m', label: '🧸 7-12 mois' },
+  { value: '1-2y', label: '🚼 1-2 ans' },
+  { value: '2y+', label: '🎈 2 ans +' },
+  { value: 'unknown', label: '🤔 Préfère ne pas dire' },
 ];
 
 const NewsletterForm: React.FC = () => {
@@ -84,7 +85,7 @@ const NewsletterForm: React.FC = () => {
       }
 
       setSubmitted(true);
-      toast.success('Merci ! Vos conseils adaptés sont en route.');
+      toast.success('Merci ! Contenu adapté à votre étape bébé en route 💌');
 
       setTimeout(() => {
         setEmail('');
@@ -105,13 +106,13 @@ const NewsletterForm: React.FC = () => {
 
   return (
     <motion.div
-      className="border-y md:border border-border bg-background p-6 md:p-10 max-w-4xl mx-auto"
+      className="glass-card p-6 md:p-8 max-w-xl mx-auto"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       lang="fr"
     >
-      <h3 className="font-display text-3xl md:text-5xl mb-3 text-center">Du contenu adapté à votre bébé</h3>
+      <h3 className="text-2xl font-bold mb-2 text-center">Du contenu adapté à votre bébé</h3>
       <p className="text-muted-foreground mb-6 text-center text-sm">
         Indiquez l'étape pour recevoir uniquement les conseils qui vous concernent.
       </p>
@@ -120,6 +121,9 @@ const NewsletterForm: React.FC = () => {
         <div>
           <h4 className="font-semibold mb-4 text-primary">Pourquoi s'abonner ?</h4>
           <SubscriptionBenefits />
+          <div className="mt-4">
+            <SocialProof compact className="mt-4" />
+          </div>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -187,7 +191,10 @@ const NewsletterForm: React.FC = () => {
             />
             <Label htmlFor="consent" className="text-xs text-muted-foreground">
               J'accepte de recevoir des emails de BabyBaby et la{' '}
-              la politique de confidentialité liée à cette inscription.
+              <a href="/privacy-policy" className="text-primary underline">
+                politique de confidentialité
+              </a>
+              .
             </Label>
           </div>
 

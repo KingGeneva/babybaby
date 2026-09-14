@@ -37,18 +37,18 @@ const SubscriptionBenefits: React.FC<SubscriptionBenefitsProps> = ({
   const benefits = [
     {
       icon: <Check className="h-4 w-4 text-babybaby-cosmic" />,
-      title: "Guides pratiques",
-      description: "Recevez une sélection de ressources adaptée à votre étape"
+      title: "Contenus exclusifs",
+      description: "Accédez à des articles et guides réservés aux utilisateurs inscrits"
     },
     {
       icon: <Star className="h-4 w-4 text-babybaby-cosmic" />,
-      title: "Outils utiles",
-      description: "Retrouvez les outils publiés pour préparer votre quotidien"
+      title: "Outils avancés",
+      description: "Profitez d'outils pour suivre le développement de votre bébé"
     },
     {
       icon: <Gift className="h-4 w-4 text-babybaby-cosmic" />,
-      title: "Ressources gratuites",
-      description: "Accédez aux guides et aux e-books disponibles sur BabyBaby"
+      title: "Ebook gratuit",
+      description: "Recevez notre guide '60 jours avec bébé' dès votre inscription"
     }
   ];
 

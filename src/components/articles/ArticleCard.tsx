@@ -44,9 +44,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
     : { label: article.category, className: 'bg-card text-foreground border border-border' };
 
   return (
-    <Card className="article-card group overflow-hidden h-full flex flex-col bg-card border-border transition-all duration-500 rounded-lg">
-      <div className="block relative aspect-[4/3] overflow-hidden bg-muted">
-        <Link to={articleUrl(article)} className="absolute inset-0" aria-label={`Lire ${article.title}`}>
+    <Card className="group overflow-hidden h-full flex flex-col bg-card border-border hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 rounded-2xl">
+      <Link to={`/articles/${article.id}`} className="block relative aspect-[4/3] overflow-hidden bg-muted">
         {!imageError && (
           <motion.img
             src={article.image}
@@ -58,9 +57,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             loading="lazy"
           />
         )}
-        </Link>
-        <div className="pointer-events-none absolute top-3 left-3">
-          <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${badge.className}`}>
+        <div className="absolute top-3 left-3">
+          <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium shadow-sm backdrop-blur ${badge.className}`}>
             {badge.label}
           </span>
         </div>
@@ -71,11 +69,11 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             description={`${article.title} — babybaby.org`}
           />
         </div>
-      </div>
+      </Link>
 
 
       <CardHeader className="pb-2">
-        <Link to={articleUrl(article)}>
+        <Link to={`/articles/${article.id}`}>
           <CardTitle className="font-display text-2xl leading-tight line-clamp-2 group-hover:text-primary transition-colors">
             {article.title}
           </CardTitle>
@@ -98,7 +96,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
       <CardFooter className="pt-0 flex justify-between items-center border-t border-border/50 mt-2 pt-4">
         <ShareArticle article={article} />
-        <Link to={articleUrl(article)}>
+        <Link to={`/articles/${article.id}`}>
           <motion.div
             className="text-primary flex items-center text-sm font-medium group/link"
             whileHover={{ x: 4 }}

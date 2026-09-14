@@ -3,8 +3,9 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, LogOut, Shield } from "lucide-react";
+import { LayoutDashboard, LogOut, Store, Shield } from "lucide-react";
 import ResourcesDropdown from "./ResourcesDropdown";
+import { motion } from "framer-motion";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -47,42 +48,66 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
       <NavigationMenu>
         <NavigationMenuList className="gap-1">
           <NavigationMenuItem>
-            <NavigationMenuLink asChild className={cn(
+            <Link to="/tools">
+              <NavigationMenuLink className={cn(
                 navigationMenuTriggerStyle(),
-                 isActive("/tools") && "bg-muted text-primary font-medium"
-              )}><Link to="/tools">Outils</Link></NavigationMenuLink>
+                isActive("/tools") && "bg-babybaby-cosmic/10 text-babybaby-cosmic font-medium"
+              )}>
+                Outils
+              </NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink asChild className={cn(
+            <Link to="/articles">
+              <NavigationMenuLink className={cn(
                 navigationMenuTriggerStyle(),
-                 isActive("/articles") && "bg-muted text-primary font-medium"
-              )}><Link to="/articles">Articles</Link></NavigationMenuLink>
+                isActive("/articles") && "bg-babybaby-cosmic/10 text-babybaby-cosmic font-medium"
+              )}>
+                Articles
+              </NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink asChild className={cn(
+            <Link to="/meilleurs-produits-bebe-2026">
+              <NavigationMenuLink className={cn(
                 navigationMenuTriggerStyle(),
-                 isActive("/meilleurs-produits-bebe-2026") && "bg-muted text-primary font-medium"
-              )}><Link to="/meilleurs-produits-bebe-2026">Meilleurs Produits 2026</Link></NavigationMenuLink>
+                isActive("/meilleurs-produits-bebe-2026") && "bg-babybaby-cosmic/10 text-babybaby-cosmic font-medium"
+              )}>
+                Meilleurs Produits 2026
+              </NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink asChild className={cn(
+            <Link to="/contests">
+              <NavigationMenuLink className={cn(
                 navigationMenuTriggerStyle(),
-                 isActive("/contests") && "bg-muted text-primary font-medium"
-              )}><Link to="/contests">Concours</Link></NavigationMenuLink>
+                isActive("/contests") && "bg-babybaby-cosmic/10 text-babybaby-cosmic font-medium"
+              )}>
+                Concours
+              </NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
           {user && (
             <>
               <NavigationMenuItem>
-                <NavigationMenuLink asChild className={cn(
+                <Link to="/courses">
+                  <NavigationMenuLink className={cn(
                     navigationMenuTriggerStyle(),
-                     isActive("/courses") && "bg-muted text-primary font-medium"
-                  )}><Link to="/courses">Cours</Link></NavigationMenuLink>
+                    isActive("/courses") && "bg-babybaby-cosmic/10 text-babybaby-cosmic font-medium"
+                  )}>
+                    Cours
+                  </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuLink asChild className={cn(
+                <Link to="/parental-dashboard">
+                  <NavigationMenuLink className={cn(
                     navigationMenuTriggerStyle(),
-                     isActive("/parental-dashboard") && "bg-muted text-primary font-medium"
-                  )}><Link to="/parental-dashboard">Tableau de bord</Link></NavigationMenuLink>
+                    isActive("/parental-dashboard") && "bg-babybaby-cosmic/10 text-babybaby-cosmic font-medium"
+                  )}>
+                    Tableau de bord
+                  </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
             </>
           )}
@@ -96,15 +121,15 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
       {user && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full min-h-11 min-w-11" aria-label="Ouvrir le menu du compte">
+            <Button variant="ghost" size="icon" className="rounded-full hover-lift">
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-primary text-primary-foreground">
+                <AvatarFallback className="bg-gradient-to-br from-babybaby-cosmic to-blue-400 text-white">
                   {getUserInitials()}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 bg-popover">
+          <DropdownMenuContent align="end" className="w-56 glass-card">
             <div className="px-2 py-1.5 text-sm font-medium">
               {user.email}
             </div>
@@ -129,7 +154,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={signOut}
-              className="text-destructive cursor-pointer"
+              className="text-red-500 cursor-pointer"
             >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Se déconnecter</span>
