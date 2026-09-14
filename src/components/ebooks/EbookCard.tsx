@@ -68,7 +68,6 @@ const EbookCard: React.FC<EbookCardProps> = ({ ebook, onDownload, isLoading }) =
                   <BookOpen className="h-4 w-4" />
                   Lire
                 </Link>
-                </Link>
               </Button>
             </div>
           ) : (
