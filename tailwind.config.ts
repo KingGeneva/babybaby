@@ -19,6 +19,9 @@ export default {
 			}
 		},
 		extend: {
+			boxShadow: {
+				premium: 'var(--shadow-premium)',
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -53,6 +56,11 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				sage: 'hsl(var(--sage))',
+				peach: 'hsl(var(--peach))',
+				champagne: 'hsl(var(--champagne))',
+				deep: 'hsl(var(--deep))',
+				'surface-warm': 'hsl(var(--surface-warm))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -64,10 +72,10 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				babybaby: {
-					blue: '#3b82f6',
-					pink: '#ff6b6b',
-					cosmic: '#3b82f6',
-					lightblue: '#dbeafe',
+					blue: 'hsl(var(--sage))',
+					pink: 'hsl(var(--peach))',
+					cosmic: 'hsl(var(--primary))',
+					lightblue: 'hsl(var(--muted))',
 				}
 			},
 			fontFamily: {
@@ -131,9 +139,9 @@ export default {
 				"bounce-soft": "bounce-soft 2s ease-in-out infinite"
 			},
 			backgroundImage: {
-				'cosmic-gradient': 'linear-gradient(135deg, #3b82f6 0%, #6366F1 100%)',
-				'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
-				'pink-blue-gradient': 'linear-gradient(135deg, #ff6b6b 0%, #3b82f6 100%)',
+				'cosmic-gradient': 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--sage)))',
+				'glass-gradient': 'linear-gradient(135deg, hsl(var(--card) / .75), hsl(var(--background) / .45))',
+				'pink-blue-gradient': 'linear-gradient(135deg, hsl(var(--peach)), hsl(var(--sage)))',
 			}
 		}
 	},

@@ -7,7 +7,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import Logo from "./Logo";
 import DesktopNav from "./nav/DesktopNav";
 import MobileMenu from "./nav/MobileMenu";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const NavBar = () => {
@@ -47,6 +46,15 @@ const NavBar = () => {
   }, [location]);
 
   useEffect(() => {
+    if (!isMenuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMenuOpen(false);
+    };
+    document.addEventListener('keydown', closeOnEscape);
+    return () => document.removeEventListener('keydown', closeOnEscape);
+  }, [isMenuOpen]);
+
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -56,15 +64,12 @@ const NavBar = () => {
   }, []);
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+    <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-50 border-b transition-colors duration-300",
         isScrolled 
-          ? "bg-white/80 dark:bg-gray-900/80 shadow-md backdrop-blur-md"
-          : "bg-transparent"
+          ? "bg-background/95 border-border backdrop-blur-md"
+          : "bg-background border-transparent"
       )}
     >
       <div className="container mx-auto px-4">
@@ -80,37 +85,43 @@ const NavBar = () => {
 
           <div className="flex items-center gap-2">
             {!user && (
-              <Link to="/auth">
+              <Link to="/auth" className="hidden sm:block">
                 <Button
                   size="sm"
                   variant="outline"
-                  className="border-babybaby-cosmic text-babybaby-cosmic hover:bg-babybaby-cosmic/10 hover-lift"
+                  className="rounded-full border-primary/30 text-primary min-h-11"
                 >
                   Se connecter
                 </Button>
               </Link>
             )}
 
-            <button
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-full bg-white/80 shadow-sm text-gray-600 hover:text-babybaby-cosmic md:hidden hover-lift"
+              className="min-h-11 min-w-11 rounded-full text-foreground md:hidden"
+              aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {isMenuOpen ? (
                 <X className="h-6 w-6" />
               ) : (
                 <Menu className="h-6 w-6" />
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
 
-      <MobileMenu 
+      <MobileMenu
         isOpen={isMenuOpen}
         isDropdownOpen={isDropdownOpen}
         toggleDropdown={() => setIsDropdownOpen(!isDropdownOpen)}
       />
-    </motion.header>
+    </header>
   );
 };
 

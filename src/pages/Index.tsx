@@ -9,7 +9,7 @@ const Index = () => {
   return (
     <MainLayout>
       <SEOTags />
-      <div className="overflow-hidden">
+      <div className="overflow-x-clip">
         <HeroSection />
         <HomePageContent />
       </div>

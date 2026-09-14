@@ -9,19 +9,21 @@ const CTASection: React.FC = () => {
   const isMobile = useIsMobile();
 
   return (
-    <section className="py-16 bg-gradient-to-r from-babybaby-cosmic/10 to-babybaby-cosmic/5">
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-babybaby-cosmic">
+    <section className="py-20 md:py-28 bg-primary text-primary-foreground">
+      <div className="container mx-auto px-5 md:px-8">
+        <div className="max-w-4xl" data-reveal>
+          <p className="section-kicker text-accent">Votre espace BabyBaby</p>
+          <h2 className="font-display text-4xl md:text-7xl leading-[1.02] mb-6">
             Commencez à suivre le développement de votre bébé dès aujourd'hui
           </h2>
-          <p className="text-lg text-gray-700 mb-8">
+          <p className="text-lg text-primary-foreground/75 mb-8 max-w-2xl">
             Créez un compte gratuit pour suivre le développement de votre enfant et retrouver vos guides favoris.
           </p>
           <Link to="/auth">
             <Button 
               size={isMobile ? "default" : "lg"}
-              className="bg-babybaby-cosmic hover:bg-babybaby-cosmic/90 button-glow text-white font-bold px-8 py-5 text-lg rounded-full"
+              variant="secondary"
+              className="font-semibold px-8 py-5 text-lg rounded-full min-h-12"
             >
               Créer un compte gratuit
               <ChevronRight className="ml-2 h-5 w-5" />
