@@ -10,6 +10,7 @@
 ## Corrections préparées
 - Catalogue paginé (100 fichiers par appel), six téléchargements concurrents au maximum, exclusion de `_index.json`, validation des identifiants/titres et exclusion des statuts explicitement non publiés.
 - Cache React Query commun à l’accueil, à la liste et aux détails ; filtres/recherche locaux sans requêtes supplémentaires.
+- Les guides locaux sont visibles immédiatement pendant le chargement. Un JSON distant en erreur ne fait plus disparaître les autres articles récupérés : un avertissement de catalogue incomplet reste affiché.
 - Résolution des détails par id JSON indépendamment du nom de fichier ; erreur réseau distincte d’une absence réelle, bouton Réessayer.
 - Pagination visuelle de 12 articles ; suppression du double layout sur la page Articles ; liens des cartes alignés sur les canonical slug/id.
 - Bulles conservées : import p5 différé, DPR 1, 30 images/seconde, pause hors écran/onglet masqué et réduction des mouvements.
