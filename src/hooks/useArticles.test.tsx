@@ -19,7 +19,7 @@ function setup() {
 }
 
 describe('shared public article loading', () => {
-  beforeEach(() => mocks.fetch.mockReset());
+  beforeEach(() => { mocks.fetch.mockReset(); });
   it('shows local articles immediately while the remote request is pending', () => {
     mocks.fetch.mockReturnValue(new Promise(() => {}));
     const { wrapper, client } = setup();
