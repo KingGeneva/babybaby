@@ -46,4 +46,26 @@ describe('public article catalog', () => {
     const result = await loadCatalog({ list: async () => [{ name: '200.json' }], read: async () => { throw new Error('offline'); } });
     expect(result.failures).toEqual(['200.json']);
   });
+  it('keeps healthy records when another download fails', async () => {
+    const result = await loadCatalog({
+      list: async () => [{ name: '200.json' }, { name: '201.json' }],
+      read: async name => { if (name === '201.json') throw new Error('offline'); return article(200); },
+    });
+    expect(result.articles.map(a => a.id)).toEqual([200]);
+    expect(result.failures).toEqual(['201.json']);
+  });
+  it('sorts French publication dates before numeric ids', () => {
+    const merged = mergeArticles([], [article(900, { date: '1 juin 2026' }) as Article,
+      article(200, { date: '24 octobre 2026' }) as Article]);
+    expect(merged.map(a => a.id)).toEqual([200, 900]);
+  });
+  it('breaks equal-date ties by actual file update date, then id', async () => {
+    const result = await loadCatalog({
+      list: async () => [{ name: '200.json', updated_at: '2026-10-24T12:00:00Z' },
+        { name: '900.json', updated_at: '2026-10-24T10:00:00Z' }],
+      read: async name => article(Number(name.slice(0, -5)), { date: '24 octobre 2026' }),
+    });
+    expect(mergeArticles([], result.articles).map(a => a.id)).toEqual([200, 900]);
+    expect(mergeArticles([], [article(200) as Article, article(900) as Article]).map(a => a.id)).toEqual([900, 200]);
+  });
 });
