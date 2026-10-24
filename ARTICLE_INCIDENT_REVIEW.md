@@ -18,11 +18,11 @@
 - Prérendu : même validation du statut publié que le catalogue public. Aucune mutation des articles, RLS ou fonctions serveur.
 
 ## Vérifications exécutées
-- `bun run test -- src/lib/articleCatalog.test.ts scripts/internal-links.test.ts scripts/prerender-utils.test.ts` : **29/29 réussis**.
+- `bun run test -- src/hooks/useArticles.test.tsx src/lib/articleCatalog.test.ts scripts/internal-links.test.ts scripts/prerender-utils.test.ts` : **32/32 réussis**, y compris mutualisation des requêtes, visibilité immédiate et échec partiel.
 - Playwright local, visiteur anonyme : 10 locaux toujours visibles en panne ; un seul header/footer ; erreur temporaire correcte pour id 200.
 - Transport Storage simulé (aucune écriture réelle) : 152 JSON, dont un brouillon ; **151 distants publiés + 10 locaux = 161**, 12 cartes par page, deuxième page accessible, recherche sans appel réseau supplémentaire, filtres combinés corrects.
 - Article simulé id 200 avec fichier timestamp : accès slug/id et rechargement réussis, un H1. Ancienne URL réelle locale `/articles/5` et rechargement réussis.
-- Mobile 390 px : largeur du document 390 px, aucun débordement horizontal. Captures desktop/mobile inspectées ; bulles présentes. Aucun `pageerror` dans le parcours testé.
+- Mobile 390 px et 360 px : largeur du document égale à celle du viewport, aucun débordement horizontal. Captures desktop/mobile inspectées ; bulles présentes. Aucun `pageerror` dans le parcours testé.
 - Journal automatique de compilation : dernier état **build OK**. Aucun build manuel ni contrôle TypeScript autonome exécuté (la plateforme les gère automatiquement).
 
 ## Limites avant validation du diff
