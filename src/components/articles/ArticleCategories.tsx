@@ -23,8 +23,8 @@ const ArticleCategories: React.FC<ArticleCategoriesProps> = ({
           className={cn(
             "cursor-pointer px-4 min-h-11 whitespace-nowrap rounded-full",
             selectedCategory === category 
-              ? "bg-babybaby-cosmic text-white hover:bg-babybaby-cosmic/90" 
-              : "hover:bg-gray-100"
+              ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+              : "text-foreground hover:bg-muted hover:text-foreground"
           )}
           onClick={() => setSelectedCategory(category)}
           aria-pressed={selectedCategory === category}

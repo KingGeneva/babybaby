@@ -10,7 +10,8 @@ export const useArticles = (category = 'Tous', searchTerm = '') => {
     staleTime: 60_000,
     retry: 1,
   });
-  const articles = useMemo(() => filterArticles(query.data || localArticles, category, searchTerm),
+  const articles = useMemo(() => filterArticles(query.data?.articles || localArticles, category, searchTerm),
     [query.data, category, searchTerm]);
-  return { articles, loading: query.isPending, error: query.error?.message || null, retry: query.refetch };
+  return { articles, loading: query.isPending && articles.length === 0,
+    error: query.error?.message || query.data?.warning || null, retry: query.refetch };
 };
