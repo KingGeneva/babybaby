@@ -6,6 +6,23 @@ export interface CatalogTransport {
   read: (name: string) => Promise<unknown>;
 }
 export const ARTICLE_PAGE_SIZE = 100;
+export type CatalogArticle = Article & { __fileTimestamp?: number };
+
+const frenchMonths: Record<string, number> = {
+  janvier: 0, fevrier: 1, février: 1, mars: 2, avril: 3, mai: 4, juin: 5,
+  juillet: 6, aout: 7, août: 7, septembre: 8, octobre: 9, novembre: 10, decembre: 11, décembre: 11,
+};
+
+export function articleDateTimestamp(date?: string | null): number {
+  if (!date || typeof date !== 'string') return 0;
+  const match = date.trim().toLowerCase().match(/^(\d{1,2})\s+([a-zéû]+)\s+(\d{4})$/i);
+  if (match) {
+    const month = frenchMonths[match[2]];
+    return month === undefined ? 0 : Date.UTC(Number(match[3]), month, Number(match[1]));
+  }
+  const parsed = Date.parse(date);
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
 
 // Existing Storage articles predate the status field. Explicit drafts stay private.
 export function publicArticle(value: unknown): Article | undefined {
@@ -18,15 +35,17 @@ export function publicArticle(value: unknown): Article | undefined {
   return { ...a, id } as unknown as Article;
 }
 
-export async function loadCatalog(transport: CatalogTransport): Promise<{ articles: Article[]; failures: string[] }> {
+export async function loadCatalog(transport: CatalogTransport): Promise<{ articles: CatalogArticle[]; failures: string[] }> {
   const files: ArticleFile[] = [];
+  const failures: string[] = [];
   for (let offset = 0; ; offset += ARTICLE_PAGE_SIZE) {
-    const page = await transport.list(offset, ARTICLE_PAGE_SIZE);
+    let page: ArticleFile[];
+    try { page = await transport.list(offset, ARTICLE_PAGE_SIZE); }
+    catch { failures.push(`catalogue:${offset}`); break; }
     files.push(...page.filter(f => f.name.endsWith('.json') && f.name !== '_index.json'));
     if (page.length < ARTICLE_PAGE_SIZE) break;
   }
-  const articles: Article[] = [];
-  const failures: string[] = [];
+  const articles: CatalogArticle[] = [];
   // Bound concurrent JSON downloads rather than launching hundreds at once.
   let cursor = 0;
   await Promise.all(Array.from({ length: Math.min(6, files.length) }, async () => {
@@ -34,18 +53,23 @@ export async function loadCatalog(transport: CatalogTransport): Promise<{ articl
       const file = files[cursor++];
       try {
         const a = publicArticle(await transport.read(file.name));
-        if (a) articles.push(a);
+        if (a) {
+          const timestamp = Date.parse(file.updated_at || file.created_at || '');
+          articles.push({ ...a, __fileTimestamp: Number.isNaN(timestamp) ? 0 : timestamp });
+        }
       } catch { failures.push(file.name); }
     }
   }));
   return { articles, failures };
 }
 
-export function mergeArticles(local: Article[], remote: Article[]): Article[] {
-  const unique = new Map<number, Article>();
+export function mergeArticles(local: Article[], remote: CatalogArticle[]): Article[] {
+  const unique = new Map<number, CatalogArticle>();
   remote.forEach(a => unique.set(a.id, a));
   local.forEach(a => unique.set(a.id, a)); // Same local precedence as direct detail pages.
-  return [...unique.values()].sort((a, b) => b.id - a.id);
+  return [...unique.values()].sort((a, b) =>
+    articleDateTimestamp(b.date) - articleDateTimestamp(a.date) ||
+    (b.__fileTimestamp || 0) - (a.__fileTimestamp || 0) || b.id - a.id);
 }
 
 export function filterArticles(articles: Article[], category: string, search: string): Article[] {

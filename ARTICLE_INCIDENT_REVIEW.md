@@ -26,6 +26,24 @@
 - Journal automatique de compilation : dernier état **build OK**. Aucun build manuel ni contrôle TypeScript autonome exécuté (la plateforme les gère automatiquement).
 
 ## Limites avant validation du diff
-La réactivation Cloud exige l’autorisation explicite du propriétaire. Aucun total Storage/CMS réel après correction, inspection RLS, accès aux articles distants réels ou prérendu distant complet ne peut être certifié tant que Cloud reste en pause. Les résultats de 161 articles sont **simulés**, pas un décompte de production. Le sitemap public et le site publié sont inchangés. Aucune publication, changement de visibilité, email ou génération.
+Cloud a été réactivé à la demande explicite du propriétaire, sans achat ni changement de forfait. Après plusieurs contrôles pendant le démarrage, auth et base répondent normalement. Les résultats de 161 articles ci-dessus restent **simulés** ; les décomptes réels sont ci-dessous. Aucune publication, changement de visibilité, email ou génération.
+
+## Revue finale après remise en service
+- Décompte SQL réel : **104 objets** dans le bucket articles, **43 JSON d’articles** (hors `_index.json`). Catalogue lu anonymement : **43 distants + 10 locaux = 53 articles**, complet, sans avertissement. Avant remise en service : 10 locaux et catalogue incomplet.
+- `cms_articles` : 2 entrées, toutes deux publiées. Leurs titres correspondent aux articles Storage id 200 et 201 ; le frontend public utilise Storage, pas cette table. Aucune nouvelle source ni publication de brouillon ajoutée.
+- Politiques inspectées sans modification : lecture publique du bucket articles ; lecture CMS limitée aux publiés, mutations administrateur. Aucun assouplissement RLS.
+- `loadCatalog` conserve désormais aussi les résultats des pages précédentes si une page de listing échoue. Les téléchargements individuels échoués n’annulent pas les articles sains. `fetchPublicArticles` retourne les résultats partiels avec `complete: false` et avertissement explicite ; la page affiche cet avertissement réel.
+- Un article absent d’un catalogue incomplet déclenche une erreur temporaire, jamais un vrai introuvable. Le bouton Réessayer d’un détail force une nouvelle lecture si le cache était incomplet.
+- Tri restauré : date de publication française/ISO décroissante, puis date réelle du fichier Storage, puis id ; les téléchargements conservent cette date de fichier.
+- Le détail vide article et erreur à chaque changement d’identifiant ; un paramètre invalide affiche immédiatement introuvable. Tests couvrant les transitions depuis un article réussi et depuis une erreur.
+- `bun run test src/services/publicArticles.test.ts src/pages/ArticleDetailPage.test.tsx src/lib/articleCatalog.test.ts src/hooks/useArticle.test.tsx src/hooks/useArticles.test.tsx scripts/internal-links.test.ts scripts/prerender-utils.test.ts` : **42 tests réussis**, 7 fichiers.
+- Playwright réel anonyme sur localhost : les cinq pages affichent 12/12/12/12/5 articles ; recherche/catégorie sans requête Storage supplémentaire ; accès et rechargement de l’ancien `/articles/5` et du plus récent id 1788940844689 réussis ; id distant 200 accessible ; transition URL invalide vérifiée. Aucun `pageerror`. Captures desktop/mobile inspectées, aucun débordement horizontal à 390/360 px.
+- Sitemap publié HTTP 200 : **64 URLs, dont 53 articles, zéro doublon**. Comparaison des URLs exactes avec `articleUrl` sur le catalogue réel : aucune URL manquante ou supplémentaire. Le sitemap n’a pas été modifié ni soumis.
+- Journal automatique de compilation : dernier état **build OK**. Aucun build/typecheck manuel lancé conformément aux règles de la plateforme. Le journal disponible ne certifie pas un nouveau postbuild/prérendu distant après réactivation ; aucune sortie `dist` n’est disponible dans ce sandbox. La validation du prérendu sur catalogue réel reste à effectuer par le processus de compilation de la plateforme, sans publication.
+- Cache Vite : **307 fichiers déjà suivis**, aucun fichier cache modifié dans cette revue ni dans le commit be1e9e33 inspecté. `.gitignore` est protégé en lecture seule : ajout d’une exclusion refusé, aucun contournement ni nettoyage destructif effectué.
+- Anomalie préexistante observée sur le dernier article : un H1 dans son contenu Markdown s’ajoute au titre de page (2 H1, 1 canonical). Signalée, contenu laissé intact pour respecter la réparation ciblée.
+
+### Fichiers de cette revue
+`src/lib/articleCatalog.ts`, `src/services/publicArticles.ts`, `src/hooks/useArticle.ts`, `src/pages/ArticleDetailPage.tsx`, `src/pages/ArticlesPage.tsx`, `src/lib/articleCatalog.test.ts`, `src/services/publicArticles.test.ts`, `src/hooks/useArticle.test.tsx`, `src/pages/ArticleDetailPage.test.tsx`, `AGENTS.md`, `roadmap.md`, ce bilan. Aucune fonction serveur ni migration modifiée.
 
 La refonte visuelle précédemment validée est différée pour respecter la dernière demande de préserver le design pendant l’incident.

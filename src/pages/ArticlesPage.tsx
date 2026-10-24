@@ -118,7 +118,7 @@ const ArticlesPage = () => {
 
               <div className="mt-8">
                 {error && <div role="alert" className="mb-6 border border-border rounded-lg p-4">
-                  <p>Les articles en ligne sont temporairement indisponibles. Les guides locaux restent accessibles.</p>
+                  <p>{error}</p>
                   <Button variant="outline" className="mt-3" onClick={() => retry()}>Réessayer</Button>
                 </div>}
                 {loading ? (

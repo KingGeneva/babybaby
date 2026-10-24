@@ -41,6 +41,8 @@ const ArticleDetailPage = () => {
   const { formatDateForStructuredData, getArticleData } = useArticle(articleId);
 
   useEffect(() => {
+    setArticle(undefined);
+    setLoadError(false);
     if (!isValidNumericId) {
       setLoading(false);
       return;
@@ -63,6 +65,8 @@ const ArticleDetailPage = () => {
     loadArticle();
     return () => { active = false; };
   }, [articleId, isValidNumericId, getArticleData, attempt]);
+
+  if (!isValidNumericId) return <ArticleNotFound />;
 
   if (loading) {
     return (
