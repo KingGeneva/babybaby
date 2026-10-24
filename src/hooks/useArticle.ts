@@ -2,7 +2,7 @@
 import { useCallback } from 'react';
 import { Article } from '@/types/article';
 import { useQueryClient } from '@tanstack/react-query';
-import { fetchPublicArticle, fetchPublicArticles, publicArticlesKey, localArticles } from '@/services/publicArticles';
+import { fetchPublicArticle, fetchPublicArticles, publicArticlesKey, localArticles, type PublicCatalogResult } from '@/services/publicArticles';
 
 export const useArticle = (articleId: number) => {
   const queryClient = useQueryClient();
@@ -43,7 +43,9 @@ export const useArticle = (articleId: number) => {
   const getArticleData = useCallback(async (id: number): Promise<Article | undefined> => {
     const local = localArticles.find(a => a.id === id);
     if (local) return local;
-    const catalog = await queryClient.fetchQuery({ queryKey: publicArticlesKey, queryFn: fetchPublicArticles, staleTime: 60_000 });
+    const cached = queryClient.getQueryData<PublicCatalogResult>(publicArticlesKey);
+    const catalog = await queryClient.fetchQuery({ queryKey: publicArticlesKey, queryFn: fetchPublicArticles,
+      staleTime: cached?.complete === false ? 0 : 60_000 });
     return fetchPublicArticle(id, catalog);
   }, [queryClient]);
 

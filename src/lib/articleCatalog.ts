@@ -37,13 +37,15 @@ export function publicArticle(value: unknown): Article | undefined {
 
 export async function loadCatalog(transport: CatalogTransport): Promise<{ articles: CatalogArticle[]; failures: string[] }> {
   const files: ArticleFile[] = [];
+  const failures: string[] = [];
   for (let offset = 0; ; offset += ARTICLE_PAGE_SIZE) {
-    const page = await transport.list(offset, ARTICLE_PAGE_SIZE);
+    let page: ArticleFile[];
+    try { page = await transport.list(offset, ARTICLE_PAGE_SIZE); }
+    catch { failures.push(`catalogue:${offset}`); break; }
     files.push(...page.filter(f => f.name.endsWith('.json') && f.name !== '_index.json'));
     if (page.length < ARTICLE_PAGE_SIZE) break;
   }
   const articles: CatalogArticle[] = [];
-  const failures: string[] = [];
   // Bound concurrent JSON downloads rather than launching hundreds at once.
   let cursor = 0;
   await Promise.all(Array.from({ length: Math.min(6, files.length) }, async () => {

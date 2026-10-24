@@ -29,7 +29,7 @@ export async function fetchPublicArticles(): Promise<PublicCatalogResult> {
   });
   return {
     articles: mergeArticles(localArticles, result.articles),
-    warning: result.failures.length ? `${result.failures.length} articles n’ont pas pu être chargés. Réessaie.` : null,
+    warning: result.failures.length ? 'Le catalogue est incomplet : certains articles n’ont pas pu être chargés. Réessaie.' : null,
     complete: result.failures.length === 0,
   };
 }
