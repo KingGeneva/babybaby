@@ -31,7 +31,7 @@ export async function fetchPublicArticle(id: number, catalog?: Article[]): Promi
   if (known) return known;
   // Legacy auto-publications can use a timestamp filename with a different JSON id.
   // The complete catalog resolves by the JSON id, not by an assumed filename.
-  return (await fetchPublicArticles()).find(a => a.id === id);
+  return catalog ? undefined : (await fetchPublicArticles()).find(a => a.id === id);
 }
 
 export { localArticles, publicArticle };

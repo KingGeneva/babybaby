@@ -61,7 +61,7 @@ const ArticlesPage = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-20 md:pb-0">
       <SEOHead 
         title="Articles sur la Parentalité et le Développement de Bébé | BabyBaby"
         description="Découvrez nos articles experts sur l'alimentation, le sommeil, le développement et la santé de bébé. Conseils pratiques pour les jeunes parents."

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface ArticleCategoriesProps {
@@ -17,19 +17,20 @@ const ArticleCategories: React.FC<ArticleCategoriesProps> = ({
   return (
     <div className="flex overflow-x-auto pb-2 md:pb-0 gap-2 md:max-w-[70%]">
       {categories.map((category) => (
-        <Badge 
+        <Button
           key={category}
           variant="outline"
           className={cn(
-            "cursor-pointer px-4 py-2 whitespace-nowrap",
+            "cursor-pointer px-4 min-h-11 whitespace-nowrap rounded-full",
             selectedCategory === category 
               ? "bg-babybaby-cosmic text-white hover:bg-babybaby-cosmic/90" 
               : "hover:bg-gray-100"
           )}
           onClick={() => setSelectedCategory(category)}
+          aria-pressed={selectedCategory === category}
         >
           {category}
-        </Badge>
+        </Button>
       ))}
     </div>
   );
