@@ -58,6 +58,7 @@ import { preparationArticles } from "../src/data/articles/preparation";
 import { croissanceArticles } from "../src/data/articles/croissance";
 import { ebooksData } from "../src/components/ebooks/ebooksData";
 import type { Article } from "../src/types/article";
+import { publicArticle } from "../src/lib/articleCatalog";
 
 const BASE_URL = "https://babybaby.org";
 const DIST = resolve(process.cwd(), "dist");
@@ -185,12 +186,12 @@ async function fetchStorageArticles(): Promise<Article[]> {
         { headers: { apikey: anonKey } },
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const a = (await res.json()) as Article;
-      if (!a || typeof a !== "object" || !a.title || !Number.isFinite(Number(a.id))) {
+      const a = publicArticle(await res.json());
+      if (!a) {
         failures++;
         continue;
       }
-      out.push({ ...a, id: Number(a.id) });
+      out.push(a);
     } catch (err) {
       failures++;
       console.warn(`[prerender] Article distant ignoré (${name}) : ${(err as Error).message}`);

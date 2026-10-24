@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect } from 'react';
-import p5 from 'p5';
+import type p5 from 'p5';
 
 interface BubbleType {
   x: number;
@@ -115,25 +115,45 @@ const P5Canvas: React.FC<P5CanvasProps> = ({ className }) => {
   const sketchRef = useRef<p5 | null>(null);
   
   useEffect(() => {
+    const host = canvasRef.current;
+    if (!host) return;
+    let disposed = false;
+    let observer: IntersectionObserver | undefined;
+    let resizeTimeout: ReturnType<typeof setTimeout> | undefined;
+    let visible = true;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updateLoop = () => {
+      const sketch = sketchRef.current;
+      if (!sketch) return;
+      if (!visible || document.hidden || reduced.matches) sketch.noLoop();
+      else sketch.loop();
+    };
+    document.addEventListener('visibilitychange', updateLoop);
+    reduced.addEventListener('change', updateLoop);
     // Détruire l'instance p5 précédente si elle existe
     if (sketchRef.current) {
       sketchRef.current.remove();
     }
     
     // Créer une nouvelle instance p5
-    const sketch = new p5((p: p5) => {
+    import('p5').then(({ default: P5 }) => {
+    if (disposed) return;
+    const sketch = new P5((p: p5) => {
       const bubbles: BubbleType[] = [];
       const bubbleCount = 30; // Réduit de 40 à 30 bulles pour améliorer les performances
       let mouseIsPressed = false;
       
       p.setup = () => {
+        p.pixelDensity(1);
+        p.frameRate(30);
         const canvas = p.createCanvas(p.windowWidth, p.windowHeight);
-        canvas.parent(canvasRef.current!);
+        canvas.parent(host);
         
         // Création des bulles
         for (let i = 0; i < bubbleCount; i++) {
           bubbles.push(new Bubble(p));
         }
+        if (document.hidden || reduced.matches || !visible) p.noLoop();
       };
 
       p.draw = () => {
@@ -161,13 +181,12 @@ const P5Canvas: React.FC<P5CanvasProps> = ({ className }) => {
       };
 
       // Optimisation de la fonction de redimensionnement
-      let resizeTimeout: number;
       p.windowResized = () => {
         // Limiter les appels de redimensionnement avec un debounce
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
           p.resizeCanvas(p.windowWidth, p.windowHeight);
-        }, 250) as unknown as number;
+        }, 250);
       };
       
       p.mousePressed = () => {
@@ -180,11 +199,23 @@ const P5Canvas: React.FC<P5CanvasProps> = ({ className }) => {
     });
     
     sketchRef.current = sketch;
+    observer = new IntersectionObserver(entries => {
+      visible = entries[0]?.isIntersecting ?? false;
+      updateLoop();
+    });
+    observer.observe(host);
+    }).catch(error => console.error('Impossible de charger les bulles:', error));
     
     // Cleanup
     return () => {
+      disposed = true;
+      observer?.disconnect();
+      clearTimeout(resizeTimeout);
+      document.removeEventListener('visibilitychange', updateLoop);
+      reduced.removeEventListener('change', updateLoop);
       if (sketchRef.current) {
         sketchRef.current.remove();
+        sketchRef.current = null;
       }
     };
   }, []);

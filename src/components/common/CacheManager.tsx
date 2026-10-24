@@ -62,8 +62,7 @@ const CacheManager = ({ version }: CacheManagerProps) => {
         
         if (existingRegistration) {
           console.log('Service Worker déjà enregistré');
-          // Ne pas mettre à jour à chaque chargement de page pour éviter les notifications inutiles
-          // await existingRegistration.update();
+          await existingRegistration.update();
         } else {
           console.log('Enregistrement du Service Worker...');
           existingRegistration = await navigator.serviceWorker.register(swUrl);

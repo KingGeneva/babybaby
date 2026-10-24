@@ -45,7 +45,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
   return (
     <Card className="group overflow-hidden h-full flex flex-col bg-card border-border hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 rounded-2xl">
-      <Link to={`/articles/${article.id}`} className="block relative aspect-[4/3] overflow-hidden bg-muted">
+      <Link to={articleUrl(article)} className="block relative aspect-[4/3] overflow-hidden bg-muted">
         {!imageError && (
           <motion.img
             src={article.image}
@@ -64,7 +64,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         </div>
         <div className="absolute top-3 right-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
           <PinItButton
-            url={`https://babybaby.org/articles/${article.id}`}
+            url={`https://babybaby.org${articleUrl(article)}`}
             media={article.image}
             description={`${article.title} — babybaby.org`}
           />
@@ -73,7 +73,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
 
       <CardHeader className="pb-2">
-        <Link to={`/articles/${article.id}`}>
+        <Link to={articleUrl(article)}>
           <CardTitle className="font-display text-2xl leading-tight line-clamp-2 group-hover:text-primary transition-colors">
             {article.title}
           </CardTitle>
@@ -96,7 +96,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
       <CardFooter className="pt-0 flex justify-between items-center border-t border-border/50 mt-2 pt-4">
         <ShareArticle article={article} />
-        <Link to={`/articles/${article.id}`}>
+        <Link to={articleUrl(article)}>
           <motion.div
             className="text-primary flex items-center text-sm font-medium group/link"
             whileHover={{ x: 4 }}
