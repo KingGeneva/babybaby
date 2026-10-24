@@ -1,12 +1,10 @@
 
 // Service Worker optimisé pour BabyBaby App
-const CACHE_NAME = 'babybaby-cache-v8'; // Incrémentation de la version
+const CACHE_NAME = 'babybaby-cache-v9';
 const RESOURCES_TO_CACHE = [
   '/',
   '/index.html',
   '/favicon.ico',
-  '/assets/index-*.js',
-  '/assets/index-*.css',
   '/flowpaper/js/jquery.min.js',
   '/flowpaper/js/flowpaper.js'
 ];
@@ -81,6 +79,13 @@ self.addEventListener('fetch', event => {
 
   try {
     const requestUrl = new URL(event.request.url);
+    // Never serve a stale article JSON, API response or protected remote file.
+    if (requestUrl.origin !== self.location.origin) return;
+    if (!requestUrl.pathname.startsWith('/assets/') &&
+        !requestUrl.pathname.startsWith('/flowpaper/') &&
+        !requestUrl.pathname.startsWith('/resources/') &&
+        !requestUrl.pathname.startsWith('/lovable-uploads/') &&
+        event.request.mode !== 'navigate' && requestUrl.pathname !== '/favicon.ico') return;
     
     // Cache-first pour les PDF et les ressources FlowPaper
     if (event.request.url.endsWith('.pdf') || 
@@ -154,7 +159,7 @@ self.addEventListener('fetch', event => {
     
     // Stratégie network-first pour les pages HTML (pour toujours avoir le contenu le plus récent)
     if (requestUrl.pathname === '/' || 
-        event.request.headers.get('Accept').includes('text/html') ||
+        (event.request.headers.get('Accept') || '').includes('text/html') ||
         event.request.url.endsWith('.html')) {
       event.respondWith(
         fetch(event.request)
@@ -205,7 +210,7 @@ self.addEventListener('fetch', event => {
             if (event.request.mode === 'navigate') {
               return caches.match('/index.html');
             }
-            return null;
+            return Response.error();
           });
       })
     );
@@ -279,7 +284,7 @@ self.addEventListener('message', event => {
       if (event.source) {
         event.source.postMessage({
           type: 'PONG',
-          version: 'v8' // Mise à jour de la version
+          version: 'v9'
         });
       }
       break;
