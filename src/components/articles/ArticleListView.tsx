@@ -49,6 +49,8 @@ const ArticleListView: React.FC<ArticleListViewProps> = ({ articles }) => {
                     src={article.image}
                     alt={article.title}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                   {article.featured && (
                     <Badge className="absolute top-2 right-2 bg-babybaby-cosmic">

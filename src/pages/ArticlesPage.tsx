@@ -14,6 +14,7 @@ import { useArticles } from '@/hooks/useArticles';
 import { ArticleCardSkeleton, ArticleListItemSkeleton } from '@/components/articles/ArticleSkeleton';
 import SEOHead from '@/components/common/SEOHead';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
+import { Button } from '@/components/ui/button';
 
 const categories = [
   "Tous",
@@ -30,7 +31,12 @@ const ArticlesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("Tous");
   const [searchTerm, setSearchTerm] = useState("");
   
-  const { articles, loading, error } = useArticles(selectedCategory, searchTerm);
+  const { articles, loading, error, retry } = useArticles(selectedCategory, searchTerm);
+  const [page, setPage] = useState(0);
+  const pageSize = 12;
+  const pageCount = Math.ceil(articles.length / pageSize);
+  const currentPage = Math.min(page, Math.max(0, pageCount - 1));
+  const visibleArticles = articles.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
 
   // Display skeletons while loading
   const renderSkeletons = (viewType: 'grid' | 'list') => {
@@ -90,7 +96,7 @@ const ArticlesPage = () => {
                 Conseils d'experts validés pour accompagner chaque étape du développement de votre enfant
               </p>
 
-              <ArticleSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+              <ArticleSearch searchTerm={searchTerm} setSearchTerm={value => { setSearchTerm(value); setPage(0); }} />
             </div>
           </div>
         </section>
@@ -102,7 +108,7 @@ const ArticlesPage = () => {
                 <ArticleCategories 
                   categories={categories}
                   selectedCategory={selectedCategory}
-                  setSelectedCategory={setSelectedCategory}
+                  setSelectedCategory={value => { setSelectedCategory(value); setPage(0); }}
                 />
 
                 <div className="flex items-center justify-end space-x-2">
@@ -111,6 +117,10 @@ const ArticlesPage = () => {
               </div>
 
               <div className="mt-8">
+                {error && <div role="alert" className="mb-6 border border-border rounded-lg p-4">
+                  <p>Les articles en ligne sont temporairement indisponibles. Les guides locaux restent accessibles.</p>
+                  <Button variant="outline" className="mt-3" onClick={() => retry()}>Réessayer</Button>
+                </div>}
                 {loading ? (
                   <>
                     <TabsContent value="grid">
@@ -124,11 +134,11 @@ const ArticlesPage = () => {
                 ) : articles.length > 0 ? (
                   <>
                     <TabsContent value="grid">
-                      <ArticleGridView articles={articles} />
+                      <ArticleGridView articles={visibleArticles} />
                     </TabsContent>
                     
                     <TabsContent value="list">
-                      <ArticleListView articles={articles} />
+                      <ArticleListView articles={visibleArticles} />
                     </TabsContent>
                   </>
                 ) : (
@@ -136,7 +146,8 @@ const ArticlesPage = () => {
                 )}
               </div>
 
-              <ArticlePagination onPrevious={() => {}} onNext={() => {}} />
+              <p className="text-center mt-6 text-sm text-muted-foreground" aria-live="polite">{articles.length} articles{pageCount > 0 && ` · Page ${currentPage + 1} sur ${pageCount}`}</p>
+              <ArticlePagination onPrevious={() => setPage(currentPage - 1)} onNext={() => setPage(currentPage + 1)} hasPrevious={currentPage > 0} hasNext={currentPage + 1 < pageCount} />
             </Tabs>
           </div>
         </section>

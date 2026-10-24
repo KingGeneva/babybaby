@@ -40,7 +40,7 @@ const wrapWithLayout = (Component: React.ComponentType, variant: 'fade' | 'slide
 export const publicRoutes: RouteObject[] = [
   { path: "/", element: <Index /> }, // Index already has MainLayout
   { path: "/auth", element: <AuthPage /> }, // Authentication page typically uses a separate layout
-  { path: "/articles", element: wrapWithLayout(ArticlesPage, 'slide') },
+  { path: "/articles", element: <ArticlesPage /> }, // Page already owns its navbar and footer.
   // ArticleDetailPage gère déjà sa mise en page (NavBar/Footer) : on évite le double layout
   { path: "/articles/:id", element: <ArticleDetailPage /> },
   { path: "/faq", element: wrapWithLayout(FAQPage, 'fade') },

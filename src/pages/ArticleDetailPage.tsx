@@ -31,6 +31,8 @@ const ArticleDetailPage = () => {
   const navigate = useNavigate();
   const [article, setArticle] = useState<Article | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadError, setLoadError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   // Accept both `/articles/123` and `/articles/my-slug-123`.
   // Anything else (legacy FreshStore slugs without trailing id) is treated as Gone.
@@ -44,24 +46,23 @@ const ArticleDetailPage = () => {
       return;
     }
 
+    let active = true;
     const loadArticle = async () => {
       setLoading(true);
-
-      const articleData = await getArticleData(articleId);
-
-      if (!articleData) {
-        // No toast + no redirect: render the 404/410 page so the URL itself
-        // signals "gone" to crawlers.
-        setArticle(undefined);
-      } else {
-        setArticle(articleData);
+      setLoadError(false);
+      try {
+        const articleData = await getArticleData(articleId);
+        if (active) setArticle(articleData);
+      } catch {
+        if (active) setLoadError(true);
+      } finally {
+        if (active) setLoading(false);
       }
-
-      setLoading(false);
     };
 
     loadArticle();
-  }, [articleId, isValidNumericId, getArticleData]);
+    return () => { active = false; };
+  }, [articleId, isValidNumericId, getArticleData, attempt]);
 
   if (loading) {
     return (
@@ -85,6 +86,14 @@ const ArticleDetailPage = () => {
         <Footer />
       </div>
     );
+  }
+
+  if (loadError) {
+    return <div className="min-h-screen"><NavBar /><main className="container pt-32 pb-16" role="alert">
+      <h1 className="text-3xl mb-4">Article temporairement indisponible</h1>
+      <p className="mb-4">La connexion aux articles en ligne a échoué. Réessaie dans quelques instants.</p>
+      <Button onClick={() => setAttempt(v => v + 1)}>Réessayer</Button>
+    </main><Footer /></div>;
   }
 
   if (!article) {

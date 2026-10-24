@@ -1,10 +1,11 @@
 
 import { useCallback } from 'react';
 import { Article } from '@/types/article';
-import { articles } from '@/data/articles';
-import { supabase } from '@/integrations/supabase/client';
+import { useQueryClient } from '@tanstack/react-query';
+import { fetchPublicArticle, fetchPublicArticles, publicArticlesKey, localArticles } from '@/services/publicArticles';
 
 export const useArticle = (articleId: number) => {
+  const queryClient = useQueryClient();
   // Format date for structured data with more robust parsing
   const formatDateForStructuredData = useCallback((dateString: string) => {
     try {
@@ -40,33 +41,11 @@ export const useArticle = (articleId: number) => {
 
   // Get article data
   const getArticleData = useCallback(async (id: number): Promise<Article | undefined> => {
-    try {
-      // First check static articles
-      const staticArticle = articles.find(article => article.id === id);
-      if (staticArticle) return staticArticle;
-
-      // Then check Supabase
-      try {
-        const { data, error } = await supabase
-          .storage
-          .from('articles')
-          .download(`articles/${id}.json`);
-
-        if (error || !data) return undefined;
-
-        const text = await data.text();
-        const article: Article = JSON.parse(text);
-
-        return article;
-      } catch (error) {
-        console.error('Error loading article from Supabase:', error);
-        return undefined;
-      }
-    } catch (error) {
-      console.error('Error fetching article:', error);
-      return undefined;
-    }
-  }, []);
+    const local = localArticles.find(a => a.id === id);
+    if (local) return local;
+    const catalog = await queryClient.fetchQuery({ queryKey: publicArticlesKey, queryFn: fetchPublicArticles, staleTime: 60_000 });
+    return fetchPublicArticle(id, catalog);
+  }, [queryClient]);
 
   return {
     getArticleData,
